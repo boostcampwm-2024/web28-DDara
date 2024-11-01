@@ -39,6 +39,7 @@
 |J060_김주원|J174_이동율|J210_임재도|J234_정혜인|
 |:--:|:--:|:--:|:--:|
 |<a href="https://github.com/juwon5272"><img src="https://avatars.githubusercontent.com/u/98096178?v=4" width="150px;" alt=""/></a>|<a href="https://github.com/leedongyull"><img src="https://avatars.githubusercontent.com/u/75784807?v=4" width="150px;" alt=""/></a>|<a href="https://github.com/effozen"><img src="https://avatars.githubusercontent.com/u/107134031?v=4" width="150px;" alt=""/></a>|<a href="https://github.com/happyhyep"><img src="https://avatars.githubusercontent.com/u/103382269?v=4" width="150px;" alt=""/></a>|
+|FE|FE|FE|Full Stack (FE + BE)|
 |<a href="https://github.com/juwon5272">@juwon5272</a>|<a href="https://github.com/leedongyull">@leedongyull</a>|<a href="https://github.com/effozen">@effozen</a>|<a href="https://github.com/happyhyep">@happyhyep</a>|
 
 <br />
