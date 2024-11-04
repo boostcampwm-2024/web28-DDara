@@ -1,0 +1,8 @@
+addReviewers: true
+addAssignees: author
+reviewers:
+  - effozen
+  - happyhyep
+  - juwon5272
+  - leedongyull
+numberOfReviewers: 2

@@ -20,11 +20,5 @@ jobs:
         if: steps.label_check.outputs.result == 'true'
         uses: kentaro-m/auto-assign-action@v2.0.0
         with:
-          addReviewers: true
-          addAssignees: true
-          reviewers:
-            effozen
-            happyhyep
-            juwon5272
-            leedongyull
-          numberOfReviewers: 2
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          configuration-path: '.github/auto_assign_config.yml' # 이부분은 차후 생성하겠습니다
