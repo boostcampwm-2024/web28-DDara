@@ -34,11 +34,13 @@
 <div align="center">
 <br /><br /><br />
 
+
+
 ## 🌱 팀원 소개
 
 |J060_김주원|J174_이동율|J210_임재도|J234_정혜인|
 |:--:|:--:|:--:|:--:|
-|<a href="https://github.com/juwon5272"><img src="https://avatars.githubusercontent.com/u/98096178?v=4" width="150px;" alt=""/></a>|<a href="https://github.com/leedongyull"><img src="https://avatars.githubusercontent.com/u/75784807?v=4" width="150px;" alt=""/></a>|<a href="https://github.com/effozen"><img src="https://avatars.githubusercontent.com/u/107134031?v=4" width="150px;" alt=""/></a>|<a href="https://github.com/happyhyep"><img src="https://avatars.githubusercontent.com/u/103382269?v=4" width="150px;" alt=""/></a>|
+|<a href="https://github.com/juwon5272"><img src="https://github.com/user-attachments/assets/f774ff48-8831-490f-b0fe-b18b024f7916" width="150px;" alt=""/></a>|<a href="https://github.com/leedongyull"><img src="https://github.com/user-attachments/assets/4d682b1f-0f91-4547-8a7d-1f6b00bee674" width="150px;" alt=""/></a>|<a href="https://github.com/effozen"><img src="https://github.com/user-attachments/assets/92bddae1-19ce-4b06-811e-52df15ac726c" width="150px;" alt=""/></a>|<a href="https://github.com/happyhyep"><img src="https://github.com/user-attachments/assets/40ac933c-3e19-4884-a5e9-da2f2298dd72" width="150px;" alt=""/></a>|
 |FE|FE|FE|Full Stack (FE + BE)|
 |<a href="https://github.com/juwon5272">@juwon5272</a>|<a href="https://github.com/leedongyull">@leedongyull</a>|<a href="https://github.com/effozen">@effozen</a>|<a href="https://github.com/happyhyep">@happyhyep</a>|
 
