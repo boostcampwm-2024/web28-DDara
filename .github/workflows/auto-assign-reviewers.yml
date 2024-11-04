@@ -18,11 +18,13 @@ jobs:
             return labels.some(label => label.name === '확인 요청');
       - name: 'Assign Reviewers'
         if: steps.label_check.outputs.result == 'true'
-        uses: kentaro-m/auto-assign-action@v1
+        uses: kentaro-m/auto-assign-action@v2.0.0
         with:
-          reviewers: |
+          addReviewers: true
+          addAssignees: true
+          reviewers:
             effozen
             happyhyep
             juwon5272
             leedongyull
-          number_of_reviewers: 2
+          numberOfReviewers: 2
