@@ -1,0 +1,43 @@
+#리뷰 과정에서 반려될 경우 라벨을 "수정 요청"으로 변경하고 작업자에게 알림 보내기
+name: 'Handle Requested Changes'
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  request_changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check if Changes Requested'
+        id: check
+        uses: actions/github-script@v6
+        with:
+          script: |
+            return context.payload.review.state === 'CHANGES_REQUESTED';
+      - name: 'Change Label to 수정 요청'
+        if: steps.check.outputs.result == 'true'
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: '수정 요청'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Remove Label 확인 요청'
+        if: steps.check.outputs.result == 'true'
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: '확인 요청'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Notify Assignee via Comment'
+        if: steps.check.outputs.result == 'true'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const assignee = context.payload.pull_request.user.login;
+            const body = `@${assignee} 리뷰에서 수정 요청이 있습니다. 확인 부탁드립니다.`;
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: body,
+            });

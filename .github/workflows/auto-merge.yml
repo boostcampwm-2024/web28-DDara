@@ -1,0 +1,59 @@
+# Reviewer 2명이 리뷰를 남기고 승인한 뒤, 라벨이 "작업 완료"로 변경되고 자동으로 특정 브랜치에 Merge하기
+name: 'Auto Merge Approved PRs'
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  auto_merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Get Pull Request'
+        id: pr
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const { data: pr } = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+            return JSON.stringify(pr);
+      - name: 'Check Approvals and Labels'
+        id: check
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pr = JSON.parse(steps.pr.outputs.result);
+            const reviews = await github.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+            });
+            const approvals = reviews.data.filter(review => review.state === 'APPROVED');
+            const hasLabel = pr.labels.some(label => label.name === '확인 요청');
+            return approvals.length >= 2 && hasLabel;
+      - name: 'Change Label to 작업 완료'
+        if: steps.check.outputs.result == 'true'
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: '작업 완료'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Remove Label 확인 요청'
+        if: steps.check.outputs.result == 'true'
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: '확인 요청'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Merge PR'
+        if: steps.check.outputs.result == 'true'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
