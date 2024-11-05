@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 'node'  # 항상 최신 안정 버전의 Node.js 사용
+          node-version: 'lts/*'  # 항상 최신 안정 버전의 Node.js 사용
 
       - name: Install pnpm
         run: npm install -g pnpm  # pnpm 설치
