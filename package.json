@@ -4,6 +4,7 @@
   "private": true,
   "description": "중장년층을 위한 접근성을 바탕으로 한 위치 기반 서비스",
   "scripts": {
+    "prepare": "husky",
     "front": "pnpm --filter ddara-frontend dev",
     "backend": "pnpm --filter ddara-backend dev",
     "build": "pnpm --filter ddara-frontend build",
