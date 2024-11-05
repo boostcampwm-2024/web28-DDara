@@ -3,7 +3,7 @@ name: 'Auto Assign Reviewers'
 
 on:
   pull_request:
-    types: [opened, labeled]
+    types: [ opened, labeled ]
 
 jobs:
   assign_reviewers:
