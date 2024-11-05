@@ -6,6 +6,7 @@
   "scripts": {
     "front": "pnpm --filter ddara-frontend dev",
     "backend": "pnpm --filter ddara-backend dev",
+    "build": "pnpm --filter ddara-frontend build",
     "dev": "pnpm -r dev",
     "lint": "pnpm lint-staged",
     "test": "vitest",
