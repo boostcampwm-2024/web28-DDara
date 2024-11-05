@@ -12,6 +12,23 @@ export interface IHeaderProps {
   onCreateAccount?: () => void;
 }
 
+/**
+ * The header component.
+ * @param user - The current user.
+ * @param onLogin - The login event handler.
+ * @param onLogout - The logout event handler.
+ * @param onCreateAccount - The create account event handler.
+ * @returns The header component.
+ * @example
+ * ```tsx
+ * <Header
+ *  user={{ name: 'Jane Doe' }}
+ *  onLogin={() => console.log('login')}
+ *  onLogout={() => console.log('logout')}
+ *  onCreateAccount={() => console.log('create account')}
+ *  />
+ *  ```
+ */
 export const Header = ({ user, onLogin, onLogout, onCreateAccount }: IHeaderProps) => (
   <header>
     <div className="storybook-header">
