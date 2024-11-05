@@ -1,6 +1,10 @@
 {
   "name": "ddara-frontend",
   "private": true,
+  "workspaces": [
+    "FrontEnd",
+    "BackEnd"
+  ],
   "version": "0.0.0",
   "type": "module",
   "scripts": {
