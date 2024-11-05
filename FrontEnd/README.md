@@ -30,7 +30,7 @@ export default tseslint.config({
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
 ```js
-// eslint.config.js
+// eslint.config.mjs
 import react from 'eslint-plugin-react'
 
 export default tseslint.config({
