@@ -8,6 +8,9 @@
     "backend": "pnpm --filter ddara-backend dev",
     "dev": "pnpm -r dev",
     "lint": "pnpm lint-staged",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
     "typedoc": "typedoc --options typedoc.json",
     "jsdoc": "jsdoc -c jsdoc.json"
   },
