@@ -1,13 +1,18 @@
 {
   "name": "web28-ddara",
   "version": "0.0.0",
+  "private": true,
   "description": "중장년층을 위한 접근성을 바탕으로 한 위치 기반 서비스",
   "scripts": {
-    "front": "pnpm -F @web28-DDara/front",
-    "backend": "pnpm -F @web28-DDara/backend",
+    "front": "pnpm --filter ddara-frontend dev",
+    "backend": "pnpm --filter ddara-backend dev",
     "dev": "pnpm -r dev",
     "lint": "pnpm lint-staged"
   },
+  "workspaces": [
+    "FrontEnd",
+    "BackEnd"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
