@@ -9,6 +9,12 @@
     "rootDir": ".",
     "outDir": "dist",
 
+    // path
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    },
+
     /* Bundler mode */
     "moduleResolution": "Bundler",
     "allowImportingTsExtensions": true,
