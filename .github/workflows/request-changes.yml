@@ -3,7 +3,7 @@ name: 'Handle Requested Changes'
 
 on:
   pull_request_review:
-    types: [submitted]
+    types: [ submitted ]
 
 jobs:
   request_changes:

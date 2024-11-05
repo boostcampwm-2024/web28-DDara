@@ -2,3 +2,4 @@
 packages:
   - 'BackEnd'
   - 'FrontEnd'
+packageManager: "pnpm"

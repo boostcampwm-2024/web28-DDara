@@ -1,0 +1,8 @@
+{
+  "entryPoints": ["./FrontEnd/src"],
+  "entryPointStrategy": "expand",
+  "out": "./docs/FrontEnd",
+  "tsconfig": "./FrontEnd/tsconfig.json",
+  "includeVersion": true,
+  "exclude": ["**/.storybook","**/*.stories.ts", "**/*.stories.tsx", "**/*.test.ts", "**/*.test.tsx"]
+}
