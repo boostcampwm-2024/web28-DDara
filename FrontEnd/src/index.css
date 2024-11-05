@@ -17,6 +17,10 @@
   box-sizing: border-box; /* padding과 border를 box 크기에 포함 */
 }
 
+body {
+  font-family: 'Pretendard', sans-serif;
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
