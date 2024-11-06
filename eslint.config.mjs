@@ -1,19 +1,19 @@
 // Airbnb 스타일 가이드를 기반으로 ESLint 설정을 ESM(ECMAScript Module) 방식으로 구성한 파일입니다.
-import { FlatCompat } from '@eslint/eslintrc';
-import airbnbBase from 'eslint-config-airbnb-base';
-import airbnbReact from 'eslint-config-airbnb';
-import importPlugin from 'eslint-plugin-import';
-import reactPlugin from 'eslint-plugin-react';
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
-import prettierPlugin from 'eslint-plugin-prettier';
-import prettierConfig from 'eslint-config-prettier';
+import { FlatCompat } from "@eslint/eslintrc";
+import airbnbBase from "eslint-config-airbnb-base";
+import airbnbReact from "eslint-config-airbnb";
+import importPlugin from "eslint-plugin-import";
+import reactPlugin from "eslint-plugin-react";
+import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
+import prettierPlugin from "eslint-plugin-prettier";
+import prettierConfig from "eslint-config-prettier";
 // eslint-disable-next-line import/no-unresolved
-import typescriptPlugin from '@typescript-eslint/eslint-plugin';
+import typescriptPlugin from "@typescript-eslint/eslint-plugin";
 // eslint-disable-next-line import/no-unresolved
-import typescriptParser from '@typescript-eslint/parser';
-import storybook from 'eslint-plugin-storybook';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import typescriptParser from "@typescript-eslint/parser";
+import storybook from "eslint-plugin-storybook";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -40,14 +40,16 @@ export default [
       'public/', // public 폴더 제외
       '**/*.min.js', // 모든 .min.js 파일 제외
       path.join(__dirname, 'eslint.config.mjs'), // 절대 경로로 무시
-      path.join(__dirname, 'FrontEnd', 'vite.config.ts'), // 추가로 무시할 파일이 있으면 동일하게 추가
+      path.join(__dirname, 'frontend', 'vite.config.ts'), // 추가로 무시할 파일이 있으면 동일하게 추가
     ],
     plugins: {
       import: importPlugin,
       prettier: prettierPlugin,
     },
     rules: {
-      'import/no-extraneous-dependencies': 'error',
+      'import/no-extraneous-dependencies': ['error', {
+        "packageDir": ["./", "./backend", "./frontend"]
+      }],
       'import/prefer-default-export': 'off',
       'import/no-default-export': 'warn',
       'prettier/prettier': 'error',
@@ -73,18 +75,18 @@ export default [
     },
   },
 
-  // 2. BackEnd 설정 - JavaScript 전용 규칙 적용
+  // 2. backend 설정 - JavaScript 전용 규칙 적용
   {
-    files: ['BackEnd/**/*.js'],
+    files: ['backend/**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
     },
   },
 
-  // 3. FrontEnd 설정 - React 및 TypeScript 전용 규칙 적용
+  // 3. frontend 설정 - React 및 TypeScript 전용 규칙 적용
   {
-    files: ['FrontEnd/**/*.ts', 'FrontEnd/**/*.tsx'],
+    files: ['frontend/**/*.ts', 'frontend/**/*.tsx'],
     languageOptions: {
       parser: typescriptParser,
       ecmaVersion: 'latest',

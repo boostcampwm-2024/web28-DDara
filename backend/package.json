@@ -1,6 +1,12 @@
 {
-  "name": "@web28-ddara/backend",
+  "name": "ddara-backend",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "version": "0.0.0",
+  "type": "module",
   "description": "따라따라의 선따라길따라 BackEnd 코드",
   "main": "index.js",
   "scripts": {
@@ -12,5 +18,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
 }
