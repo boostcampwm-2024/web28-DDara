@@ -21,12 +21,13 @@
   
 <p>  
   <a href="https://www.notion.so/127b1b2b649180e88f70d6a4648924a0?pvs=4">팀 노션</a>   |   
+  <a href="https://github.com/boostcampwm-2024/web28-DDara/wiki">팀 위키</a> |
   <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897">기획서</a>   |   
   <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929">디자인</a>
-  <br />
+<!--   <br />
   <a href="https://www.notion.so/127b1b2b6491805b9055d480ab56e432?v=ee8c766f016148d7bfd6c6f49d782b10&pvs=4">회의록</a>   |  
   <a href="https://www.notion.so/129b1b2b649180ef8ad6f356251f2dec?pvs=4">그라운드 룰</a>   |   
-  <a href="https://www.notion.so/812667c55af84dba8d18f4902b56a85e?pvs=4">기능 명세</a>
+  <a href="https://www.notion.so/812667c55af84dba8d18f4902b56a85e?pvs=4">기능 명세</a> -->
 </p>
 
 </div>
