@@ -1,5 +1,5 @@
 # pnpm에게 어떤 디렉토리를 워크스페이스 패키지로 포함할지 알려준다.
 packages:
-  - 'BackEnd'
-  - 'FrontEnd'
+  - 'backend'
+  - 'frontend'
 packageManager: "pnpm"

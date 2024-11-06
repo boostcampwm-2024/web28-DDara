@@ -2,8 +2,8 @@
   "name": "ddara-frontend",
   "private": true,
   "workspaces": [
-    "FrontEnd",
-    "BackEnd"
+    "frontend",
+    "backend"
   ],
   "version": "0.0.0",
   "type": "module",
