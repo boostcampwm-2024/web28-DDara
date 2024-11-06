@@ -1,4 +1,3 @@
-# Reviewer 2명이 리뷰를 남기고 승인한 뒤, 라벨이 "작업 완료"로 변경되고 자동으로 특정 브랜치에 Merge하기
 name: 'Auto Merge Approved PRs'
 
 on:
@@ -21,6 +20,7 @@ jobs:
               pull_number: context.payload.pull_request.number,
             });
             return JSON.stringify(pr);
+
       - name: 'Check Approvals and Labels'
         id: check
         uses: actions/github-script@v6
@@ -34,19 +34,25 @@ jobs:
             });
             const approvals = reviews.data.filter(review => review.state === 'APPROVED');
             const hasLabel = pr.labels.some(label => label.name === '확인 요청');
-            return approvals.length >= 2 && hasLabel;
+
+            // 메인 브랜치로 향하는 PR인 경우 리뷰어 3명, 다른 브랜치인 경우 2명 필요
+            const requiredApprovals = pr.base.ref === 'main' ? 3 : 2;
+            return approvals.length >= requiredApprovals && hasLabel;
+
       - name: 'Change Label to 작업 완료'
         if: steps.check.outputs.result == 'true'
         uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: '작업 완료'
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: 'Remove Label 확인 요청'
         if: steps.check.outputs.result == 'true'
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: '확인 요청'
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: 'Merge PR'
         if: steps.check.outputs.result == 'true'
         uses: actions/github-script@v6
@@ -56,4 +62,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
+              merge_method: 'merge', # 'squash' 또는 'rebase'로도 설정 가능
+              commit_title: `자동 머지: PR #${context.payload.pull_request.number}`
             });

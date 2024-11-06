@@ -1,24 +1,50 @@
-# PR 이벤트 발생 시(opened), 라벨이 붙는 이벤트 발생 시(labeled) 자동으로 팀원 중 Reviewer 2명 지정
 name: 'Auto Assign Reviewers'
 
 on:
   pull_request:
-    types: [ opened, labeled ]
+    types: [opened, labeled]
 
 jobs:
   assign_reviewers:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Check for label'
+      - name: 'Set Assignee to Author'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              assignees: [context.payload.pull_request.user.login],
+            });
+
+      - name: 'Add "확인 요청" Label if not present'
         uses: actions/github-script@v6
         id: label_check
         with:
           script: |
             const labels = context.payload.pull_request.labels;
-            return labels.some(label => label.name === '확인 요청');
+            if (!labels.some(label => label.name === '확인 요청')) {
+              await github.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: ['확인 요청'],
+              });
+            }
+
+      - name: 'Determine Number of Reviewers'
+        id: determine_reviewers
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const targetBranch = context.payload.pull_request.base.ref;
+            return targetBranch === 'main' ? 3 : 2;
+
       - name: 'Assign Reviewers'
-        if: steps.label_check.outputs.result == 'true'
         uses: kentaro-m/auto-assign-action@v2.0.0
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
-          configuration-path: '.github/auto_assign_config.yml' # 이부분은 차후 생성하겠습니다
+          configuration-path: '.github/auto_assign_config.yml'
+          numberOfReviewers: ${{ steps.determine_reviewers.outputs.result }}
