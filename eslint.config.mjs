@@ -1,19 +1,19 @@
 // Airbnb 스타일 가이드를 기반으로 ESLint 설정을 ESM(ECMAScript Module) 방식으로 구성한 파일입니다.
-import { FlatCompat } from "@eslint/eslintrc";
-import airbnbBase from "eslint-config-airbnb-base";
-import airbnbReact from "eslint-config-airbnb";
-import importPlugin from "eslint-plugin-import";
-import reactPlugin from "eslint-plugin-react";
-import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
-import prettierPlugin from "eslint-plugin-prettier";
-import prettierConfig from "eslint-config-prettier";
+import { FlatCompat } from '@eslint/eslintrc';
+import airbnbBase from 'eslint-config-airbnb-base';
+import airbnbReact from 'eslint-config-airbnb';
+import importPlugin from 'eslint-plugin-import';
+import reactPlugin from 'eslint-plugin-react';
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
+import prettierPlugin from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 // eslint-disable-next-line import/no-unresolved
-import typescriptPlugin from "@typescript-eslint/eslint-plugin";
+import typescriptPlugin from '@typescript-eslint/eslint-plugin';
 // eslint-disable-next-line import/no-unresolved
-import typescriptParser from "@typescript-eslint/parser";
-import storybook from "eslint-plugin-storybook";
-import path from "path";
-import { fileURLToPath } from "url";
+import typescriptParser from '@typescript-eslint/parser';
+import storybook from 'eslint-plugin-storybook';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -47,11 +47,9 @@ export default [
       prettier: prettierPlugin,
     },
     rules: {
-      'import/no-extraneous-dependencies': ['error', {
-        "packageDir": ["./", "./backend", "./frontend"]
-      }],
+      'import/no-extraneous-dependencies': 'off',
       'import/prefer-default-export': 'off',
-      'import/no-default-export': 'warn',
+      'import/no-default-export': 'error',
       'prettier/prettier': 'error',
       'no-underscore-dangle': 'warn',
       'no-undef': 'off',
@@ -75,12 +73,40 @@ export default [
     },
   },
 
+  {
+    files: [
+      '**/*.stories.*', // 모든 스토리 파일
+      '**/.storybook/**/*.*', // .storybook 폴더 내 모든 파일
+      '**/eslint.config.mjs', // eslint 설정 파일
+      '**/*.test.{js,ts,tsx}', // 테스트 파일
+      '**/*.spec.{js,ts,tsx}', // 스펙 파일
+      '**/webpack.config.{js,ts}', // Webpack 설정 파일
+      '**/jest.setup.{js,ts}', // Jest 설정 파일
+      '**/vite.config.{js,ts}', // Vite 설정 파일
+      '**/*.tsdoc.{js,ts}', // TSDoc 관련 파일
+      '**/*.jsdoc.{js,ts}', // JSDoc 관련 파일
+      '**/*.vitest.{js,ts}', // Vitest 관련 파일
+      '**/swagger.config.{js,ts}', // Swagger 설정 파일
+      '**/*.swagger.{js,ts}', // Swagger 관련 파일
+      '**/*.config.*', // Swagger 관련 파일
+    ],
+    rules: {
+      'import/no-extraneous-dependencies': 'off', // 해당 파일에서 규칙 비활성화
+      'import/no-default-export': 'off', // 해당 파일에서 규칙 비활성화
+    },
+  },
+
   // 2. backend 설정 - JavaScript 전용 규칙 적용
   {
     files: ['backend/**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
+    },
+    rules: {
+      'import/prefer-default-export': 'off',
+      'import/no-unresolved': 'warn',
+      'no-console': 'off', // 백앤드에서는 console 사용 허용
     },
   },
 
@@ -143,6 +169,7 @@ export default [
       'react/require-default-props': 'off',
       'react/jsx-props-no-spreading': 'warn',
       'react/no-unescaped-entities': 'off',
+      'import/no-unresolved': 'error',
     },
   },
 
@@ -150,27 +177,6 @@ export default [
     files: ['**/*.test.{js,ts,tsx}', '**/*.spec.{js,ts,tsx}'],
     rules: {
       'no-console': 'off', // 테스트 파일에서는 console 사용 허용
-    },
-  },
-
-  {
-    files: [
-      '**/*.stories.*', // 모든 스토리 파일
-      '**/.storybook/**/*.*', // .storybook 폴더 내 모든 파일
-      '**/eslint.config.mjs', // eslint 설정 파일
-      '**/*.test.{js,ts,tsx}', // 테스트 파일
-      '**/*.spec.{js,ts,tsx}', // 스펙 파일
-      '**/webpack.config.{js,ts}', // Webpack 설정 파일
-      '**/jest.setup.{js,ts}', // Jest 설정 파일
-      '**/vite.config.{js,ts}', // Vite 설정 파일
-      '**/*.tsdoc.{js,ts}', // TSDoc 관련 파일
-      '**/*.jsdoc.{js,ts}', // JSDoc 관련 파일
-      '**/*.vitest.{js,ts}', // Vitest 관련 파일
-      '**/swagger.config.{js,ts}', // Swagger 설정 파일
-      '**/*.swagger.{js,ts}', // Swagger 관련 파일
-    ],
-    rules: {
-      'import/no-extraneous-dependencies': 'off', // 해당 파일에서 규칙 비활성화
     },
   },
 ];
