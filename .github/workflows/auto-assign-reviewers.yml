@@ -12,19 +12,23 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            await github.issues.addAssignees({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              assignees: [context.payload.pull_request.user.login],
-            });
+            if (context.payload.pull_request) {
+              await github.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                assignees: [context.payload.pull_request.user.login],
+              });
+            } else {
+              console.log('No pull_request data found in context.payload');
+            }
 
       - name: 'Add "확인 요청" Label if not present'
         uses: actions/github-script@v6
         id: label_check
         with:
           script: |
-            const labels = context.payload.pull_request.labels;
+            const labels = context.payload.pull_request.labels || [];
             if (!labels.some(label => label.name === '확인 요청')) {
               await github.issues.addLabels({
                 owner: context.repo.owner,
