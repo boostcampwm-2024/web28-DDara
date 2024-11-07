@@ -169,6 +169,7 @@ export default [
       'react/require-default-props': 'off',
       'react/jsx-props-no-spreading': 'warn',
       'react/no-unescaped-entities': 'off',
+      'react/destructuring-assignment': 'off',
       'import/no-unresolved': 'error',
     },
   },
