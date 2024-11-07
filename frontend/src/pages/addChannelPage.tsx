@@ -1,0 +1,1 @@
+export default const App () => {<div>hello</div>}
