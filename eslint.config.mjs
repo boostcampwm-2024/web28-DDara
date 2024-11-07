@@ -87,6 +87,7 @@ export default [
       '**/*.jsdoc.{js,ts}', // JSDoc 관련 파일
       '**/*.vitest.{js,ts}', // Vitest 관련 파일
       '**/swagger.config.{js,ts}', // Swagger 설정 파일
+      '**/swaggerConfig.{js,ts}', // Swagger 설정 파일
       '**/*.swagger.{js,ts}', // Swagger 관련 파일
       '**/*.config.*', // Swagger 관련 파일
     ],
@@ -169,6 +170,8 @@ export default [
       'react/require-default-props': 'off',
       'react/jsx-props-no-spreading': 'warn',
       'react/no-unescaped-entities': 'off',
+      'react/destructuring-assignment': 'off',
+      'react/button-has-type': 'warn',
       'import/no-unresolved': 'error',
     },
   },
