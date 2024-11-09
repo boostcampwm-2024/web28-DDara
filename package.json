@@ -8,6 +8,7 @@
     "front": "pnpm --filter ddara-frontend dev",
     "backend": "pnpm --filter ddara-backend dev",
     "build": "pnpm --filter ddara-frontend build",
+    "build:docusaurus": "pnpm --filter docusaurus build",
     "dev": "pnpm -r dev",
     "lint": "pnpm lint-staged",
     "test": "vitest",
