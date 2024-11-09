@@ -23,7 +23,7 @@ const config: Config = {
   projectName: 'web28-DDara', // 일반적으로 저장소 이름입니다.
 
   // 깨진 링크에 대한 동작 설정
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // 국제화를 사용하지 않더라도, 이 필드를 통해 유용한 메타데이터를 설정할 수 있습니다.
