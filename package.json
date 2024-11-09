@@ -18,7 +18,8 @@
   },
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "docs"
   ],
   "keywords": [],
   "author": "",
@@ -58,10 +59,13 @@
     "typescript-eslint": "^8.11.0",
     "vitest": "^2.1.4"
   },
+
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
-      "prettier --write"
-    ]
+      "git add"
+    ],
+    "!docs/**/*.{js,jsx,ts,tsx}": "eslint --fix"
   }
+
 }

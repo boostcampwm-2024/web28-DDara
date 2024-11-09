@@ -1,0 +1,24 @@
+tech:
+  label: Tech
+  permalink: /tech
+  description: 기술적인 시도와 도전을 담은 내용입니다.
+
+troubleshooting:
+  label: Troubleshooting
+  permalink: /troubleshooting
+  description: 문제 해결과 디버깅을 다루는 내용입니다.
+
+boostcamp:
+  label: Boostcamp
+  permalink: /boostcamp
+  description: 네이버 부스트캠프 9기 웹⋅모바일 과정과 관련된 내용입니다.
+
+retrospective:
+    label: Retrospective
+    permalink: /retrospective
+    description: 회고와 배운 점을 정리한 내용입니다.
+
+growth:
+    label: Growth
+    permalink: /growth
+    description: 성장과 발전에 대한 내용입니다.

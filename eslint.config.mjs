@@ -39,8 +39,12 @@ export default [
       'dist/',
       'public/', // public 폴더 제외
       '**/*.min.js', // 모든 .min.js 파일 제외
+      'docs/', // 루트의 docs 디렉토리 제외
+      'docs/**/*', // docs 하위 모든 파일 제외
+      'docs/docusaurus/**/*',
       path.join(__dirname, 'eslint.config.mjs'), // 절대 경로로 무시
       path.join(__dirname, 'frontend', 'vite.config.ts'), // 추가로 무시할 파일이 있으면 동일하게 추가
+      path.join(__dirname, 'docs', 'docusaurus', 'docusaurus.config.ts'),
     ],
     plugins: {
       import: importPlugin,
@@ -89,7 +93,7 @@ export default [
       '**/swagger.config.{js,ts}', // Swagger 설정 파일
       '**/swaggerConfig.{js,ts}', // Swagger 설정 파일
       '**/*.swagger.{js,ts}', // Swagger 관련 파일
-      '**/*.config.*', // Swagger 관련 파일
+      '**/*.config.*', // 설정 관련 파일
     ],
     rules: {
       'import/no-extraneous-dependencies': 'off', // 해당 파일에서 규칙 비활성화
@@ -119,6 +123,7 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module',
     },
+    ignores: ['docs/**/*'],
     plugins: {
       import: importPlugin,
       react: reactPlugin,
