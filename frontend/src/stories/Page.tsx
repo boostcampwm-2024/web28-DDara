@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Header } from './Header';
+import { Header } from './Header.tsx';
 import './page.css';
 
 interface IUser {
