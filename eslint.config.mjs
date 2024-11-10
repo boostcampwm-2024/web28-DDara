@@ -115,12 +115,13 @@ export default [
   },
 
   // Frontend 설정: React 및 TypeScript 전용 규칙
+  // Frontend 설정: React 및 TypeScript 전용 규칙
   {
     files: ['frontend/**/*.ts', 'frontend/**/*.tsx'],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
-        project: './docs/docusaurus/tsconfig.json',
+        project: './frontend/tsconfig.eslint.json',
         tsconfigRootDir: __dirname,
         ecmaVersion: 'latest',
         sourceType: 'module',
@@ -135,6 +136,12 @@ export default [
       '@typescript-eslint': typescriptPlugin,
     },
     settings: {
+      'import/resolver': {
+        typescript: {
+          project: path.resolve(__dirname, 'frontend/tsconfig.eslint.json'),
+          extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        },
+      },
       react: {
         version: 'detect',
       },
@@ -174,13 +181,10 @@ export default [
       'react/destructuring-assignment': 'off',
       'react/button-has-type': 'warn',
       'import/no-unresolved': 'error',
-    },
-  },
-
-  {
-    files: ['**/*.test.{js,ts,tsx}', '**/*.spec.{js,ts,tsx}'],
-    rules: {
-      'no-console': 'off',
+      'import/extensions': 'off', // 규칙 비활성화
+      'prettier/prettier': 'error',
+      'no-underscore-dangle': 'warn',
+      'no-undef': 'off',
     },
   },
 

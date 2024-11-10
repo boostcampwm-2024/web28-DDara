@@ -1,0 +1,20 @@
+// frontend/tsconfig.eslint.json
+// eslint에서 참조를 허용하지 않기에, eslint를 위한 tsconfig 파일을 별도로 생성했음.
+// 추후 tsconfig 간의 교통정리 및 통합할 필요성이 있어 보임.
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "moduleResolution": "node"
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
+    "tmp/**/*.ts",
+    "tmp/**/*.tsx",
+    "vite.config.ts",
+    "vite-env.d.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}
