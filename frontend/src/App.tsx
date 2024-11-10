@@ -1,1 +1,3 @@
-export const App = () => <div>Hello</div>;
+import { AddChannelPage } from './pages/addChannelPage';
+
+export const App = () => <AddChannelPage />;
