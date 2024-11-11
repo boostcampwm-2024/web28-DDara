@@ -21,7 +21,8 @@
   "dependencies": {
     "@fontsource/pretendard": "^5.1.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.2",
@@ -36,6 +37,7 @@
     "@types/navermaps": "^3.7.8",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "classnames": "^2.5.1",
