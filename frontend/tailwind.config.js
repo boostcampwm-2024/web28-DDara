@@ -10,7 +10,7 @@ module.exports = {
         grayscale: {
           white: '#FFFFFF',
           50: 'rgba(60, 60, 67, 0.36)',
-          100: '#EDF2F7',
+          100: '#B7B7B7',
           200: '#6D6D6D',
           400: '#555555',
           800: '#3E3E3E',
@@ -42,6 +42,10 @@ module.exports = {
         '4xl': '2.25rem',
         '5xl': '3rem',
         '6xl': '4rem',
+      },
+      boxShadow: {
+        float: '0 4px 20px rgba(0, 0, 0, 0.13)',
+        basic: 'inset 0 0 3px rgba(0, 0, 0, 0.11)',
       },
     }, // 필요한 커스터마이징을 여기서 설정 가능
   },
