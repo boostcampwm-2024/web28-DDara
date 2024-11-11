@@ -8,6 +8,7 @@
     "front": "pnpm --filter ddara-frontend dev",
     "backend": "pnpm --filter ddara-backend dev",
     "build": "pnpm --filter ddara-frontend build",
+    "build:docusaurus": "pnpm --filter docusaurus build",
     "dev": "pnpm -r dev",
     "lint": "pnpm lint-staged",
     "test": "vitest",
@@ -18,7 +19,8 @@
   },
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "docs"
   ],
   "keywords": [],
   "author": "",
@@ -58,10 +60,13 @@
     "typescript-eslint": "^8.11.0",
     "vitest": "^2.1.4"
   },
+
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
-      "prettier --write"
-    ]
+      "git add"
+    ],
+    "!docs/**/*.{js,jsx,ts,tsx}": "eslint --fix"
   }
+
 }

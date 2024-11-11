@@ -1,0 +1,29 @@
+mentoring:
+  label: 멘토링 일지
+  permalink: /mentoring
+  description: 멘토링 관련 문서 태그입니다.
+
+minutes:
+  label: 회의록
+  permalink: /minutes
+  description: 회의록 태그입니다.
+
+summary:
+  label: 정리본
+  permalink: /summary
+  description: 진행상황이나 각종 문서의 정리본에 대한 문서 태그입니다.
+
+prepare:
+  label: 사전 준비록
+  permalink: /prepare
+  description: 사전 준비와 관련된 문서 태그입니다.
+
+review:
+  label: 회고록
+  permalink: /review
+  description: 회고와 관련된 문서 태그입니다.
+
+scrum:
+  label: 스크럼 일지
+  permalink: /scrum
+  description: 스크럼과 관련된 문서 태그입니다.
