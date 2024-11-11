@@ -14,20 +14,20 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const { data: pr } = await github.pulls.get({
+            const { data: pr } = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
             });
-            return JSON.stringify(pr);
+            core.setOutput('prResult', JSON.stringify(pr));
 
       - name: 'Check Approvals and Labels'
         id: check
         uses: actions/github-script@v6
         with:
           script: |
-            const pr = JSON.parse(steps.pr.outputs.result);
-            const reviews = await github.pulls.listReviews({
+            const pr = JSON.parse(process.env.PR_RESULT);
+            const reviews = await github.rest.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: pr.number,
@@ -37,7 +37,9 @@ jobs:
 
             // 메인 브랜치로 향하는 PR인 경우 리뷰어 3명, 다른 브랜치인 경우 2명 필요
             const requiredApprovals = pr.base.ref === 'main' ? 3 : 2;
-            return approvals.length >= requiredApprovals && hasLabel;
+
+            // Check 조건 결과를 출력에 설정
+            core.setOutput('result', approvals.length >= requiredApprovals && hasLabel);
 
       - name: 'Change Label to 작업 완료'
         if: steps.check.outputs.result == 'true'
@@ -58,10 +60,10 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            await github.pulls.merge({
+            await github.rest.pulls.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
-              merge_method: 'merge', # 'squash' 또는 'rebase'로도 설정 가능
+              merge_method: 'merge', // 'squash' 또는 'rebase'로도 설정 가능
               commit_title: `자동 머지: PR #${context.payload.pull_request.number}`
             });
