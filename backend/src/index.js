@@ -5,7 +5,7 @@ import { specs } from '../swaggerConfig.js';
 import { pool } from './db/db.js';
 import { PORT } from './constants/constants.js';
 import { initializeWebSocketServer } from './websocketServer.js';
-import authRouter from './routes/authRouter.js';
+import { authRouter } from './routes/authRouter.js';
 
 const app = express();
 app.use(express.json());
