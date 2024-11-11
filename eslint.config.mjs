@@ -56,16 +56,7 @@ export default [
       'prettier/prettier': 'error',
       'no-underscore-dangle': 'warn',
       'no-undef': 'off',
-      'import/extensions': [
-        'error',
-        'ignorePackages',
-        {
-          js: 'never',
-          jsx: 'never',
-          ts: 'never',
-          tsx: 'never',
-        },
-      ],
+      'import/extensions': 'off',
     },
     settings: {
       'import/resolver': {
@@ -111,6 +102,10 @@ export default [
       'import/prefer-default-export': 'off',
       'import/no-unresolved': 'warn',
       'no-console': 'off',
+      'import/extensions': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/consistent-type-definitions': 'off',
+      '@typescript-eslint/naming-convention': 'off',
     },
   },
 
@@ -185,6 +180,7 @@ export default [
       'prettier/prettier': 'error',
       'no-underscore-dangle': 'warn',
       'no-undef': 'off',
+      'arrow-body-style': 'off',
     },
   },
 
