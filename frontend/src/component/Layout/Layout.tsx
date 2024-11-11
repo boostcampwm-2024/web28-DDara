@@ -1,14 +1,14 @@
-import React, { ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
 interface ILayoutProps {
-  children: ReactNode;
+  children: ReactElement;
   headerTitle?: string;
   footerTitle?: string;
   isHeaderTransparent?: boolean;
   footerActive?: boolean;
-  headerButton?: ReactNode;
+  headerButton?: ReactElement;
   footerOnClick?: () => void;
 }
 

@@ -1,9 +1,9 @@
-import React, { ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 
 interface IHeaderProps {
   title?: string;
   isTransparency?: boolean;
-  buttonElement?: ReactNode;
+  buttonElement?: ReactElement;
 }
 
 export const Header = (props: IHeaderProps) => {
