@@ -6,7 +6,7 @@ interface IHeaderProps {
   buttonElement?: ReactNode;
 }
 
-export const Header: React.FC<IHeaderProps> = (props: IHeaderProps) => {
+export const Header = (props: IHeaderProps) => {
   const background = props.isTransparency ? '' : 'bg-white';
 
   return (

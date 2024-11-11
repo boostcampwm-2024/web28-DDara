@@ -12,7 +12,7 @@ interface ILayoutProps {
   footerOnClick?: () => void;
 }
 
-export const Layout: React.FC<ILayoutProps> = (props: ILayoutProps) => (
+export const Layout = (props: ILayoutProps) => (
   <div className="flex flex-col items-center w-full h-full bg-gray-400">
     {/* Header */}
     <Header

@@ -6,7 +6,7 @@ interface IFooterProps {
   active?: boolean;
 }
 
-export const Footer: React.FC<IFooterProps> = (props: IFooterProps) => {
+export const Footer = (props: IFooterProps) => {
   const shadow = props.active ? 'shadow-float' : 'shadow-basic';
   const fontColor = props.active ? 'text-gray-900' : 'text-gray-400';
 
