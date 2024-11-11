@@ -6,13 +6,13 @@ interface IHeaderProps {
   buttonElement?: ReactNode;
 }
 
-export const Header: React.FC<IHeaderProps> = ({ title, isTransparency, buttonElement }) => {
-  const background = isTransparency ? '' : 'bg-white';
+export const Header: React.FC<IHeaderProps> = (props: IHeaderProps) => {
+  const background = props.isTransparency ? '' : 'bg-white';
 
   return (
     <header className={`w-full h-16 p-4 flex items-center ${background} text-black gap-[16px]`}>
-      {buttonElement}
-      <h1 className="text-base">{title}</h1>
+      {props.buttonElement}
+      <h1 className="text-base">{props.title}</h1>
     </header>
   );
 };

@@ -12,23 +12,19 @@ interface ILayoutProps {
   footerOnClick?: () => void;
 }
 
-export const Layout: React.FC<ILayoutProps> = ({
-  children,
-  headerTitle,
-  footerTitle,
-  isHeaderTransparent = false,
-  footerActive = true,
-  headerButton,
-  footerOnClick,
-}) => (
+export const Layout: React.FC<ILayoutProps> = (props: ILayoutProps) => (
   <div className="flex flex-col items-center w-full h-full bg-gray-400">
     {/* Header */}
-    <Header title={headerTitle} isTransparency={isHeaderTransparent} buttonElement={headerButton} />
+    <Header
+      title={props.headerTitle}
+      isTransparency={props.isHeaderTransparent}
+      buttonElement={props.headerButton}
+    />
 
     {/* Main content */}
-    <main>{children}</main>
+    <main>{props.children}</main>
 
     {/* Footer */}
-    <Footer title={footerTitle} onClick={footerOnClick} active={footerActive} />
+    <Footer title={props.footerTitle} onClick={props.footerOnClick} active={props.footerActive} />
   </div>
 );
