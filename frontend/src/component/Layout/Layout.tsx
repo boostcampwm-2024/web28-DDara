@@ -9,7 +9,7 @@ interface ILayoutProps {
   isHeaderTransparent?: boolean;
   footerActive?: boolean;
   headerButton?: ReactElement;
-  footerOnClick?: () => void;
+  handleFooterClick?: () => void;
 }
 
 export const Layout = (props: ILayoutProps) => (
@@ -25,6 +25,10 @@ export const Layout = (props: ILayoutProps) => (
     <main>{props.children}</main>
 
     {/* Footer */}
-    <Footer title={props.footerTitle} onClick={props.footerOnClick} active={props.footerActive} />
+    <Footer
+      title={props.footerTitle}
+      onClick={props.handleFooterClick}
+      active={props.footerActive}
+    />
   </div>
 );
