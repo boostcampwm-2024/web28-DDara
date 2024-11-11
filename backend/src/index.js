@@ -1,11 +1,13 @@
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
+import http from 'http';
 import { specs } from '../swaggerConfig';
 import { pool } from './db';
+import { PORT } from './constants';
+import { initializeWebSocketServer } from './websocketServer';
 
 const app = express();
 app.use(express.json());
-const port = 3001;
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
@@ -25,6 +27,12 @@ app.get('/example', (req, res) => {
   res.send('Hello World');
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+// HTTP 서버 생성
+const server = http.createServer(app);
+
+// WebSocket 서버 초기화
+initializeWebSocketServer(server);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
