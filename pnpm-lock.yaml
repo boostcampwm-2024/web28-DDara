@@ -120,6 +120,9 @@ importers:
       swagger-ui-express:
         specifier: ^5.0.1
         version: 5.0.1(express@4.21.1)
+      ws:
+        specifier: ^8.18.0
+        version: 8.18.0
 
   docs/docusaurus:
     dependencies:
