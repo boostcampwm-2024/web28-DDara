@@ -14,14 +14,14 @@ interface ILayoutProps {
 
 export const Layout: React.FC<ILayoutProps> = ({
   children,
-  headerTitle = '사용자 1에 대한 경로 설정',
-  footerTitle = '출발지점 선택',
+  headerTitle,
+  footerTitle,
   isHeaderTransparent = false,
   footerActive = true,
   headerButton,
   footerOnClick,
 }) => (
-  <div className="flex flex-col items-center w-full h-full">
+  <div className="flex flex-col items-center w-full h-full bg-gray-400">
     {/* Header */}
     <Header title={headerTitle} isTransparency={isHeaderTransparent} buttonElement={headerButton} />
 

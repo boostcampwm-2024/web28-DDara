@@ -1,14 +1,14 @@
 import React from 'react';
 
 interface IFooterProps {
-  title: string;
+  title?: string;
   onClick?: () => void;
   active?: boolean;
 }
 
 export const Footer: React.FC<IFooterProps> = ({ title, onClick, active }) => {
   const shadow = active ? 'shadow-float' : 'shadow-basic';
-  const fontColor = active ? 'text-gray-900' : 'text-gray-100';
+  const fontColor = active ? 'text-gray-900' : 'text-gray-400';
 
   return (
     <footer className="absolute bottom-5 w-[95%] h-[6%]">
