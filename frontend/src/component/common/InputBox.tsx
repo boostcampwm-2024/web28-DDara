@@ -2,7 +2,6 @@ import { ChangeEvent, FocusEvent } from 'react';
 
 export interface IInputBoxProps {
   type?: 'text' | 'number' | 'password' | 'email' | 'tel';
-  value?: string;
   placeholder?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
@@ -12,7 +11,6 @@ export interface IInputBoxProps {
 
 export const InputBox = ({
   type = 'text',
-  value = '',
   placeholder = '',
   onChange,
   onFocus,
@@ -21,7 +19,6 @@ export const InputBox = ({
 }: IInputBoxProps) => (
   <input
     type={type}
-    value={value}
     placeholder={placeholder}
     onChange={onChange}
     onFocus={onFocus}

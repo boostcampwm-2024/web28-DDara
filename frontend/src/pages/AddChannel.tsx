@@ -6,34 +6,32 @@ interface IUser {
   name: string;
 }
 
-const Divider: React.FC = () => <hr className="w-[90%] border-gray-300 my-5" />;
+const Divider = () => <hr className="w-[90%] border-gray-300 my-5" />;
 
-export const AddChannelPage = () => {
+export const AddChannel = () => {
   const [users, setUsers] = useState<IUser[]>([{ id: 1, name: '사용자1' }]);
 
   const addUser = () => {
+    if (users.length === 5) return;
     const newUser: IUser = {
       id: users.length + 1,
       name: `사용자${users.length + 1}`,
     };
     setUsers([...users, newUser]);
   };
-
+  // main의 경우 임시로 w와 h 설정
   return (
-    <main className="w-[393px] h-[852px]">
-      <section className="w-full h-[95%] flex flex-col items-center overflow-y-auto">
-        <header className="w-[90%] h-[5%]">
-          <button className="mr-2 text-xl">&lt;</button>
-        </header>
+    <main className="w-[393px] h-[852px] bg-white">
+      <section className="w-full h-[95%] flex flex-col items-center">
         <InputBox
-          className="placeholder:text-sm"
+          className="placeholder:text-xs"
           placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길"
         />
         <Divider />
         <section className="w-[90%] space-y-2">
           {users.map(user => (
             <div className="flex flex-row space-x-5" key={user.id}>
-              <div className="w-[60px] h-[45px] flex items-center justify-center text-sm border-2 border-gray-300 bg-white">
+              <div className="w-[60px] h-[45px] flex items-center justify-center text-sm border border-gray-300">
                 {user.name}
               </div>
               <div className="flex w-[80%] m-0 h-[45px] text-xs text-gray-400 items-center justify-center bg-gray-100 rounded-sm">
@@ -42,7 +40,7 @@ export const AddChannelPage = () => {
             </div>
           ))}
         </section>
-        <section className="flex flex-row my-4 text-[11px] text-gray-400 gap-[10px] items-center justify-center">
+        <section className="flex flex-row my-4 text-2xs text-gray-400 gap-[10px] items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -61,11 +59,6 @@ export const AddChannelPage = () => {
           </button>
         </section>
       </section>
-      <footer className="w-[90%] h-[5%] absolute bottom-10 text-center">
-        <button className="w-[75%] h-full border border-gray-300 text-xs p-2 rounded">
-          제작 완료
-        </button>
-      </footer>
     </main>
   );
 };
