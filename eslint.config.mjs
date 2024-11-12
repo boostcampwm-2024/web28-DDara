@@ -113,6 +113,8 @@ export default [
       'no-console': 'off',
       'consistent-return': 'off',
       'import/extensions': 'off',
+      camelcase: 'off',
+      'no-shadow': 'off',
     },
   },
 
