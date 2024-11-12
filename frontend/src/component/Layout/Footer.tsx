@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { buttonActiveType } from './enumTypes';
 
 interface IFooterProps {
@@ -13,7 +14,15 @@ export const Footer = (props: IFooterProps) => {
   return (
     <footer className="absolute bottom-5 w-[95%] h-[6%]">
       <button
-        className={`w-full h-full bg-white text-black p-2 rounded-lg ${buttonStyle}`}
+        className={classNames(
+          'w-full',
+          'h-full',
+          'bg-white',
+          'text-black',
+          'p-2',
+          'rounded-lg',
+          buttonStyle,
+        )}
         type="button"
         onClick={props.onClick}
       >
