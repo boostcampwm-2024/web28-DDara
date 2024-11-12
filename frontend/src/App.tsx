@@ -7,6 +7,13 @@ import { DrawRoute } from '@/pages/DrawRoute';
 import { HostView } from '@/pages/HostView';
 import { GuestView } from '@/pages/GuestView';
 
+const ChannelRoutes = () => (
+  <Routes>
+    <Route path="host" element={<HostView />} />
+    <Route path="guest/:guestId" element={<GuestView />} />
+  </Routes>
+);
+
 export const App = () => (
   <Routes>
     <Route path="/" element={<Main />} />
@@ -14,7 +21,6 @@ export const App = () => (
     <Route path="/add-channel" element={<AddChannel />} />
     <Route path="/add-channel/:user" element={<UserRoute />} />
     <Route path="/add-channel/:user/draw" element={<DrawRoute />} />
-    <Route path="/channel/:channelId/host/:guestId" element={<HostView />} />
-    <Route path="/channel/:channelId/guest/:guestId" element={<GuestView />} />
+    <Route path="/channel/:channelId/*" element={<ChannelRoutes />} />
   </Routes>
 );
