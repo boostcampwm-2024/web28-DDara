@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { backgroundType } from './enumTypes';
 
 interface IHeaderProps {
   title?: string;
@@ -7,7 +8,7 @@ interface IHeaderProps {
 }
 
 export const Header = (props: IHeaderProps) => {
-  const background = props.isTransparency ? '' : 'bg-white';
+  const background = props.isTransparency ? backgroundType.TRANSPARENCY : backgroundType.WHITE;
 
   return (
     <header className={`w-full h-16 p-4 flex items-center ${background} text-black gap-[16px]`}>
