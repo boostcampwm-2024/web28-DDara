@@ -4,12 +4,13 @@ import classNames from 'classnames';
 interface IDropdownButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   className?: string;
+  onclick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export const DropdownButton = (props: IDropdownButtonProps) => {
   return (
     <button
-      type={props.type ?? 'button'}
+      type="button"
       className={classNames(
         'flex',
         'justify-center',
@@ -19,7 +20,7 @@ export const DropdownButton = (props: IDropdownButtonProps) => {
         'h-6',
         props.className,
       )}
-      {...props}
+      onClick={props.onclick}
     >
       {props.children}
     </button>
