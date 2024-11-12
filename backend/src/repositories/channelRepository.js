@@ -13,3 +13,19 @@ export const createChannelInDB = async (name, host_id) => {
 
   return result.rows[0];
 };
+
+export const getChannelById = async channelId => {
+  const query = `
+    SELECT * 
+    FROM "main"."channel" 
+    WHERE id = $1;
+  `;
+  const values = [channelId];
+  const result = await pool.query(query, values);
+
+  if (result.rows.length === 0) {
+    return null;
+  }
+
+  return result.rows[0];
+};

@@ -163,6 +163,92 @@ const swaggerDefinition = {
           },
         },
       },
+      // 게스트 추가 요청 스키마
+      AddGuestRequest: {
+        type: 'object',
+        properties: {
+          channel_id: {
+            type: 'string',
+            description: '채널 ID (UUID 형태)',
+          },
+          guest: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+                description: '게스트의 이름',
+              },
+              start_location: {
+                type: 'object',
+                properties: {
+                  lat: {
+                    type: 'number',
+                    description: '출발지 마커의 위도',
+                  },
+                  lng: {
+                    type: 'number',
+                    description: '출발지 마커의 경도',
+                  },
+                },
+              },
+              end_location: {
+                type: 'object',
+                properties: {
+                  lat: {
+                    type: 'number',
+                    description: '도착지 마커의 위도',
+                  },
+                  lng: {
+                    type: 'number',
+                    description: '도착지 마커의 경도',
+                  },
+                },
+              },
+              path: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    lat: {
+                      type: 'number',
+                      description: '경로 n번째 지점의 위도',
+                    },
+                    lng: {
+                      type: 'number',
+                      description: '경로 n번째 지점의 경도',
+                    },
+                  },
+                },
+                description: '게스트의 경로 (위도, 경도)를 담은 배열',
+              },
+              marker_style: {
+                type: 'object',
+                properties: {
+                  color: {
+                    type: 'string',
+                    description: '게스트를 구분하는 색상 스타일',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+
+      // 게스트 추가 응답 스키마
+      AddGuestResponse: {
+        type: 'object',
+        properties: {
+          success: {
+            type: 'boolean',
+            description: '요청이 성공적으로 처리되었는지 여부',
+          },
+          message: {
+            type: 'string',
+            description: '응답 메시지',
+          },
+        },
+      },
     },
   },
   paths: {
@@ -234,6 +320,45 @@ const swaggerDefinition = {
           },
           400: {
             description: '입력 데이터 유효성 검증 실패',
+          },
+          500: {
+            description: '서버 에러',
+          },
+        },
+      },
+    },
+    '/channel/guests': {
+      post: {
+        summary: '채널에 게스트 추가 API',
+        description: '주어진 채널에 새로운 게스트를 추가합니다.',
+        operationId: 'addGuest',
+        requestBody: {
+          description: '채널에 게스트를 추가하기 위한 데이터',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/AddGuestRequest',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          200: {
+            description: '게스트 추가 성공',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/AddGuestResponse',
+                },
+              },
+            },
+          },
+          400: {
+            description: '잘못된 요청, 채널 ID나 게스트 정보가 잘못됨',
+          },
+          404: {
+            description: '채널을 찾을 수 없음',
           },
           500: {
             description: '서버 에러',
