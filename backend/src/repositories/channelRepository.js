@@ -14,10 +14,10 @@ export const createChannelInDB = async (name, host_id) => {
   return result.rows[0];
 };
 
-export const getChannelById = async channelId => {
+export const getChannelInfoByIdInDB = async channelId => {
   const query = `
     SELECT * 
-    FROM "main"."channel" 
+    FROM "main"."channel"  
     WHERE id = $1;
   `;
   const values = [channelId];
@@ -28,4 +28,43 @@ export const getChannelById = async channelId => {
   }
 
   return result.rows[0];
+};
+
+export const getChannelWithGuestsByIdFromDB = async id => {
+  try {
+    const channelQuery = 'SELECT * FROM "main"."channel" WHERE id = $1';
+    const guestQuery = 'SELECT * FROM "main"."guest" WHERE channel_id = $1';
+
+    const channelResult = await pool.query(channelQuery, [id]);
+    if (channelResult.rows.length === 0) {
+      return null;
+    }
+
+    const channel = channelResult.rows[0];
+
+    const guestResult = await pool.query(guestQuery, [id]);
+
+    const guests = guestResult.rows;
+
+    return {
+      id: channel.id,
+      name: channel.name,
+      host_id: channel.host_id,
+      guests: guests.map(guest => ({
+        id: guest.id,
+        name: guest.name,
+        start_location: {
+          lat: guest.start_location.lat,
+          lng: guest.start_location.lng,
+        },
+        end_location: {
+          lat: guest.end_location.lat,
+          lng: guest.end_location.lng,
+        },
+      })),
+    };
+  } catch (error) {
+    console.error('Database error:', error);
+    throw error;
+  }
 };

@@ -1,6 +1,10 @@
 import express from 'express';
-import { body } from 'express-validator';
-import { addGuestController, createChannelController } from '../controllers/channelController.js';
+import { body, param } from 'express-validator';
+import {
+  addGuestController,
+  createChannelController,
+  getChannelInfoController,
+} from '../controllers/channelController.js';
 import { validationMiddleware } from '../middleware/validationMiddleware.js';
 
 export const channelRouter = express.Router();
@@ -132,4 +136,38 @@ channelRouter.post(
   [body('guests').isArray().withMessage('Guests must be an array')],
   validationMiddleware,
   addGuestController,
+);
+
+/**
+ * @swagger
+ * /channels/{id}:
+ *   get:
+ *     summary: 'Get channel information'
+ *     description: 'Retrieve information about a specific channel by ID.'
+ *     operationId: 'getChannelInfo'
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: 'ID of the channel to retrieve'
+ *         schema:
+ *           type: string
+ *           example: '123e4567-e89b-12d3-a456-426614174000'
+ *     responses:
+ *       200:
+ *         description: 'Channel information retrieved successfully'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ChannelInfo'
+ *       404:
+ *         description: 'Channel not found'
+ *       500:
+ *         description: 'Server error'
+ */
+channelRouter.get(
+  '/:id',
+  [param('id').notEmpty().withMessage('Channel ID is required')],
+  validationMiddleware,
+  getChannelInfoController,
 );
