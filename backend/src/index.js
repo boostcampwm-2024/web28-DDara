@@ -1,15 +1,18 @@
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import http from 'http';
-import { specs } from '../swaggerConfig';
-import { pool } from './db';
-import { PORT } from './constants';
-import { initializeWebSocketServer } from './websocketServer';
+import { specs } from '../swaggerConfig.js';
+import { pool } from './db/db.js';
+import { PORT } from './constants/constants.js';
+import { initializeWebSocketServer } from './websocketServer.js';
+import { authRouter } from './routes/authRouter.js';
 
 const app = express();
 app.use(express.json());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+app.use('/api/auth', authRouter);
 
 // TODO: 데이터베이스에서 데이터 가져오기 예시
 app.get('/guests', async (req, res) => {
@@ -31,7 +34,12 @@ app.get('/example', (req, res) => {
 const server = http.createServer(app);
 
 // WebSocket 서버 초기화
-initializeWebSocketServer(server);
+try {
+  initializeWebSocketServer(server);
+  console.log('WebSocket server initialized successfully.');
+} catch (error) {
+  console.error('Failed to initialize WebSocket server:', error);
+}
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
