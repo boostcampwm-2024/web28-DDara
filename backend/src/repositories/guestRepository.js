@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { pool } from '../db/db.js';
 
-export const addGuestInDB = async (
+export const addGuestToChannel = async (
   channel_id,
   name,
   start_location,

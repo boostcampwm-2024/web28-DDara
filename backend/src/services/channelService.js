@@ -1,14 +1,12 @@
-import { createChannelInDB } from '../repositories/channelRepository.js';
-import { addGuestInDB } from '../repositories/guestRepository.js';
+import { createChannelInDB, getChannelById } from '../repositories/channelRepository.js';
+import { addGuestToChannel } from '../repositories/guestRepository.js';
 
 export const createChannelService = async (name, host_id, guests) => {
-  // 채널 생성
   const channel = await createChannelInDB(name, host_id);
 
-  // 게스트 추가
   const guestPromises = guests.map(guest => {
     const { name, start_location, end_location, path, marker_style } = guest;
-    return addGuestInDB(
+    return addGuestToChannel(
       channel.id,
       name,
       start_location,
@@ -16,6 +14,28 @@ export const createChannelService = async (name, host_id, guests) => {
       path,
       marker_style,
       host_id,
+    );
+  });
+
+  await Promise.all(guestPromises);
+
+  return channel;
+};
+
+export const addGuestService = async (channelId, guests) => {
+  const channel = await getChannelById(channelId);
+  if (!channel) return null;
+
+  const guestPromises = guests.map(guest => {
+    const { name, start_location, end_location, path, marker_style } = guest;
+    return addGuestToChannel(
+      channelId,
+      name,
+      start_location,
+      end_location,
+      path,
+      marker_style,
+      channel.host_id,
     );
   });
 
