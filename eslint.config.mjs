@@ -58,10 +58,10 @@ export default [
       'no-undef': 'off',
       'import/extensions': [
         'error',
-        'ignorePackages',
+        'always',
         {
-          js: 'never',
-          jsx: 'never',
+          js: 'always',
+          jsx: 'always',
           ts: 'never',
           tsx: 'never',
         },
@@ -111,6 +111,8 @@ export default [
       'import/prefer-default-export': 'off',
       'import/no-unresolved': 'warn',
       'no-console': 'off',
+      'consistent-return': 'off',
+      'import/extensions': 'off',
     },
   },
 
