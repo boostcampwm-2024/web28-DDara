@@ -166,7 +166,7 @@ const swaggerDefinition = {
     },
   },
   paths: {
-    '/login': {
+    '/auth/login': {
       post: {
         summary: '사용자 로그인 API',
         description: '사용자가 로그인할 수 있도록 ID와 비밀번호를 통해 인증 후 토큰을 반환합니다.',
@@ -205,7 +205,7 @@ const swaggerDefinition = {
         },
       },
     },
-    '/channels': {
+    '/channel': {
       post: {
         summary: '새로운 채널 생성 API',
         description: '채널 이름, 주인, 게스트 정보를 포함하여 채널을 생성합니다.',
