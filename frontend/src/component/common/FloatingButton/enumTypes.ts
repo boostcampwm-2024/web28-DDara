@@ -17,3 +17,21 @@ export const IconType = {
   DESTINATION_MARKER: HiOutlineLocationMarker,
   LINE_DRAWING: FaPaintBrush,
 };
+
+export const ToolCategory = [
+  {
+    type: ButtonType.LINE_DRAWING,
+    description: '경로 그리기',
+    icon: IconType.LINE_DRAWING,
+  },
+  {
+    type: ButtonType.START_MARKER,
+    description: '출발지 설정',
+    icon: IconType.START_MARKER,
+  },
+  {
+    type: ButtonType.DESTINATION_MARKER,
+    description: '도착지 설정',
+    icon: IconType.DESTINATION_MARKER,
+  },
+];
