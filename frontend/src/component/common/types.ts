@@ -1,26 +1,11 @@
-import { HiLocationMarker, HiOutlineLocationMarker, HiOutlineDotsHorizontal } from 'react-icons/hi';
 import { FaPaintBrush } from 'react-icons/fa';
+import { HiLocationMarker, HiOutlineDotsHorizontal, HiOutlineLocationMarker } from 'react-icons/hi';
 import { SlLayers } from 'react-icons/sl';
+import { ButtonType } from './enums';
 
 /**
- * @remarks
- * ButtonType Enum은 버튼이 가질 수 있는 모든 종류를 정의합니다.
- * @example
- * const buttonType = ButtonType.OPEN;
- */
-export enum ButtonType {
-  CLOSE = 'CLOSE', // 메뉴 닫기 버튼
-  OPEN = 'OPEN', // 메뉴 열기 버튼
-  START_MARKER = 'START_MARKER', // 출발지 설정 버튼
-  DESTINATION_MARKER = 'DESTINATION_MARKER', // 도착지 설정 버튼
-  LINE_DRAWING = 'LINE_DRAWING', // 경로 그리기 버튼
-}
-
-/**
- * @remarks
- * 이 객체는 ButtonType Enum의 각 항목에 대응하는 아이콘을 매핑합니다.
- * @example
- * const icon = IconType[ButtonType.START_MARKER]; // 출발지 설정 아이콘
+ * IconType 객체는 각 버튼 타입에 해당하는 아이콘 컴포넌트를 매핑합니다.
+ * @type {Record<ButtonType, React.ComponentType>}
  */
 export const IconType = {
   CLOSE: SlLayers, // 닫기 버튼 아이콘
@@ -29,7 +14,6 @@ export const IconType = {
   DESTINATION_MARKER: HiOutlineLocationMarker, // 도착지 설정 아이콘
   LINE_DRAWING: FaPaintBrush, // 경로 그리기 아이콘
 };
-
 /**
  * @remarks
  * ToolCategory 배열은 각 저작도구에 대한 정보를 담고 있습니다.

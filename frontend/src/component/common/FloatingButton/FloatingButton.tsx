@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
-import { IconType, ButtonType, ToolCategory } from './enumTypes';
+import { ButtonType } from '../enums';
+import { IconType, ToolCategory } from '../types';
 
 /**
  * FloatingButton 컴포넌트는 도구 선택 및 메뉴 토글 기능을 제공하는 플로팅 버튼을 렌더링합니다.
@@ -34,8 +35,8 @@ export const FloatingButton = () => {
    * @param {ButtonType} type - 선택된 툴 타입
    */
   const handleMenuClick = (type: ButtonType) => {
-    setIsMenuOpen(false);
     setToolType(type);
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -56,6 +57,7 @@ export const FloatingButton = () => {
           'justify-center',
           'items-center',
           'text-white',
+          'shadow-floatMenuButton',
           'z-10',
         )}
       >
@@ -79,8 +81,12 @@ export const FloatingButton = () => {
             'absolute',
             'transition-all',
             'duration-300',
+            'shadow-floatButton',
+            {
+              'shadow-none': !isMenuOpen,
+            },
           )}
-          style={{ bottom: isMenuOpen ? `${(index + 1) * 60}px` : '0px' }}
+          style={{ bottom: toolType === ButtonType.OPEN ? `${48 * index + 64}px` : '0px' }}
         >
           <div className={classNames('flex', 'items-center')}>
             {React.createElement(icon, { className: 'w-5 h-5' })}
