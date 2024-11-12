@@ -2,11 +2,22 @@ import classNames from 'classnames';
 import React, { useState } from 'react';
 import { IconType, ButtonType, ToolCategory } from './enumTypes';
 
-export const FloatingButton = () => {
+/**
+ * FloatingButton 컴포넌트는 도구 선택 및 메뉴 토글 기능을 제공하는 플로팅 버튼을 렌더링합니다.
+ * 사용자가 메뉴 아이콘을 클릭하면 툴을 변경할 수 있으며, 메뉴가 열리면 각 툴에 대한 설명도 표시됩니다.
+ * @component
+ * @example
+ * return (
+ *   <FloatingButton />
+ * )
+ */
+export const FloatingButton: React.FC = () => {
   const [toolType, setToolType] = useState<ButtonType>(ButtonType.CLOSE);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-  // 메뉴 열기/닫기
+  /**
+   * - 메뉴를 토글하는 함수입니다.
+   */
   const toggleMenu = () => {
     setIsMenuOpen(prev => !prev);
     if (!isMenuOpen) {
@@ -16,7 +27,10 @@ export const FloatingButton = () => {
     }
   };
 
-  // 메뉴 아이콘 클릭 시 툴 변경
+  /**
+   * 툴을 선택하고 메뉴를 닫는 함수입니다.
+   * @param {ButtonType} type - 선택된 툴 타입
+   */
   const handleMenuClick = (type: ButtonType) => {
     setIsMenuOpen(false);
     setToolType(type);
