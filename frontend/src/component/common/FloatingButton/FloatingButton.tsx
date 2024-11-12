@@ -4,18 +4,19 @@ import { IconType, ButtonType, ToolCategory } from './enumTypes';
 
 /**
  * FloatingButton 컴포넌트는 도구 선택 및 메뉴 토글 기능을 제공하는 플로팅 버튼을 렌더링합니다.
- * 사용자가 메뉴 아이콘을 클릭하면 툴을 변경할 수 있으며, 메뉴가 열리면 각 툴에 대한 설명도 표시됩니다.
- * @component
+ * @remarks
+ * 메뉴가 열리면 툴 선택과 설명 표시가 가능하며, 메뉴를 닫을 때 버튼 아이콘이 변경됩니다.
  * @example
  * return (
  *   <FloatingButton />
  * )
  */
-export const FloatingButton: React.FC = () => {
+export const FloatingButton = () => {
   const [toolType, setToolType] = useState<ButtonType>(ButtonType.CLOSE);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   /**
+   * @remarks
    * - 메뉴를 토글하는 함수입니다.
    */
   const toggleMenu = () => {
@@ -28,6 +29,7 @@ export const FloatingButton: React.FC = () => {
   };
 
   /**
+   * @remarks
    * 툴을 선택하고 메뉴를 닫는 함수입니다.
    * @param {ButtonType} type - 선택된 툴 타입
    */
@@ -47,8 +49,8 @@ export const FloatingButton: React.FC = () => {
           'absolute',
           'bottom-0',
           'bg-blueGray-800',
-          'w-[50px]',
-          'h-[50px]',
+          'w-12',
+          'h-12',
           'rounded-full',
           'flex',
           'justify-center',
@@ -57,7 +59,7 @@ export const FloatingButton: React.FC = () => {
           'z-10',
         )}
       >
-        {React.createElement(IconType[toolType], { className: 'w-[24px] h-[24px]' })}
+        {React.createElement(IconType[toolType], { className: 'w-6 h-6' })}
       </button>
 
       {ToolCategory.map(({ type, description, icon }, index) => (
@@ -66,8 +68,8 @@ export const FloatingButton: React.FC = () => {
           onClick={() => handleMenuClick(type)}
           key={type}
           className={classNames(
-            'w-[40px]',
-            'h-[40px]',
+            'w-10',
+            'h-10',
             'bg-blueGray-200',
             'text-white',
             'rounded-full',
@@ -81,12 +83,12 @@ export const FloatingButton: React.FC = () => {
           style={{ bottom: isMenuOpen ? `${(index + 1) * 60}px` : '0px' }}
         >
           <div className={classNames('flex', 'items-center')}>
-            {React.createElement(icon, { className: 'w-[20px] h-[20px]' })}
+            {React.createElement(icon, { className: 'w-5 h-5' })}
             {isMenuOpen && (
               <div
                 className={classNames(
-                  'w-[78px]',
-                  'h-[30px]',
+                  'w-20',
+                  'h-8',
                   'bg-blueGray-200',
                   'absolute',
                   'right-12',
