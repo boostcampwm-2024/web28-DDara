@@ -2,7 +2,7 @@ import { WebSocketServer } from 'ws';
 
 const activeConnections = {}; // token별로 연결을 관리하기 위한 객체
 
-export function initializeWebSocketServer(server) {
+export const initializeWebSocketServer = server => {
   const wss = new WebSocketServer({ server });
 
   wss.on('connection', (ws, req) => {
@@ -38,4 +38,4 @@ export function initializeWebSocketServer(server) {
       delete activeConnections[token];
     });
   });
-}
+};
