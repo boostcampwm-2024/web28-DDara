@@ -3,37 +3,34 @@ import { body, param } from 'express-validator';
 import {
   addGuestController,
   createChannelController,
+  getChannelGuestInfoController,
   getChannelInfoController,
 } from '../controllers/channelController.js';
 import { validationMiddleware } from '../middleware/validationMiddleware.js';
 
 export const channelRouter = express.Router();
 
+// 채널 생성 API 경로
 /**
  * @swagger
- * /channels:
- *   post:
- *     summary: 'Create a new channel'
- *     description: 'Create a new channel with guests and their respective locations and paths.'
- *     operationId: 'createChannel'
- *     requestBody:
- *       description: 'Channel data to be created'
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreateChannelRequest'
- *       required: true
- *     responses:
- *       201:
- *         description: 'Channel created successfully'
+ * paths:
+ *   /channel:
+ *     post:
+ *       summary: '새로운 채널 생성 API'
+ *       description: '채널 이름, 주인, 게스트 정보를 포함하여 채널을 생성합니다.'
+ *       requestBody:
+ *         required: true
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/CreateChannelResponse'
- *       400:
- *         description: 'Invalid input data'
- *       500:
- *         description: 'Server error'
+ *               $ref: '#/components/schemas/CreateChannelRequest'
+ *       responses:
+ *         201:
+ *           description: '채널 생성 성공'
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/CreateChannelResponse'
  */
 channelRouter.post(
   '/',
@@ -45,91 +42,34 @@ channelRouter.post(
   createChannelController,
 );
 
+// 게스트 추가 API 경로
 /**
  * @swagger
- * /channels/{channelId}/guests:
- *   post:
- *     summary: 'Add guests to an existing channel'
- *     description: 'Add new guests to an existing channel by providing guest information.'
- *     operationId: 'addGuest'
- *     parameters:
- *       - in: path
- *         name: channelId
- *         required: true
- *         description: 'ID of the channel to which guests are being added'
- *         schema:
- *           type: string
- *           example: '123e4567-e89b-12d3-a456-426614174000'
- *     requestBody:
- *       description: 'Guest data to be added to the channel'
- *       content:
- *         application/json:
+ * paths:
+ *   /channel/{channelId}/guests:
+ *     post:
+ *       summary: '게스트 추가 API'
+ *       description: '특정 채널에 게스트를 추가합니다.'
+ *       parameters:
+ *         - name: 'channelId'
+ *           in: 'path'
+ *           required: true
  *           schema:
- *             type: object
- *             properties:
- *               guests:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     name:
- *                       type: string
- *                       description: 'Guest\'s name'
- *                     start_location:
- *                       type: object
- *                       properties:
- *                         lat:
- *                           type: number
- *                           description: 'Latitude of the start location'
- *                         lng:
- *                           type: number
- *                           description: 'Longitude of the start location'
- *                     end_location:
- *                       type: object
- *                       properties:
- *                         lat:
- *                           type: number
- *                           description: 'Latitude of the end location'
- *                         lng:
- *                           type: number
- *                           description: 'Longitude of the end location'
- *                     path:
- *                       type: array
- *                       items:
- *                         type: object
- *                         properties:
- *                           lat:
- *                             type: number
- *                             description: 'Latitude of a waypoint'
- *                           lng:
- *                             type: number
- *                             description: 'Longitude of a waypoint'
- *                     marker_style:
- *                       type: object
- *                       properties:
- *                         color:
- *                           type: string
- *                           description: 'Color for the guest marker'
- *     responses:
- *       200:
- *         description: 'Guests added successfully'
+ *             type: 'string'
+ *           description: '채널의 고유 ID'
+ *       requestBody:
+ *         required: true
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: 'Guests added successfully'
- *       400:
- *         description: 'Invalid input data'
- *       404:
- *         description: 'Channel not found'
- *       500:
- *         description: 'Server error'
+ *               $ref: '#/components/schemas/AddGuestRequest'
+ *       responses:
+ *         200:
+ *           description: '게스트 추가 성공'
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/AddGuestResponse'
  */
 channelRouter.post(
   '/:channelId/guests',
@@ -138,36 +78,71 @@ channelRouter.post(
   addGuestController,
 );
 
+// 채널 정보 조회 API 경로
 /**
  * @swagger
- * /channels/{id}:
- *   get:
- *     summary: 'Get channel information'
- *     description: 'Retrieve information about a specific channel by ID.'
- *     operationId: 'getChannelInfo'
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: 'ID of the channel to retrieve'
- *         schema:
- *           type: string
- *           example: '123e4567-e89b-12d3-a456-426614174000'
- *     responses:
- *       200:
- *         description: 'Channel information retrieved successfully'
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ChannelInfo'
- *       404:
- *         description: 'Channel not found'
- *       500:
- *         description: 'Server error'
+ * paths:
+ *   /channel/{id}:
+ *     get:
+ *       summary: '채널 정보 조회 API'
+ *       description: '특정 채널의 정보를 조회합니다.'
+ *       parameters:
+ *         - name: 'id'
+ *           in: 'path'
+ *           required: true
+ *           schema:
+ *             type: 'string'
+ *           description: '채널의 고유 ID'
+ *       responses:
+ *         200:
+ *           description: '채널 정보 조회 성공'
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/ChannelResponse'
  */
 channelRouter.get(
   '/:id',
   [param('id').notEmpty().withMessage('Channel ID is required')],
   validationMiddleware,
   getChannelInfoController,
+);
+
+// 게스트 정보 조회 API 경로
+/**
+ * @swagger
+ * paths:
+ *   /channel/{channelId}/guest/{guestId}:
+ *     get:
+ *       summary: '게스트 정보 조회 API'
+ *       description: '특정 채널 내의 게스트 정보를 조회합니다.'
+ *       parameters:
+ *         - name: 'channelId'
+ *           in: 'path'
+ *           required: true
+ *           schema:
+ *             type: 'string'
+ *           description: '채널의 고유 ID'
+ *         - name: 'guestId'
+ *           in: 'path'
+ *           required: true
+ *           schema:
+ *             type: 'string'
+ *           description: '게스트의 고유 ID'
+ *       responses:
+ *         200:
+ *           description: '게스트 정보 조회 성공'
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/GuestResponse'
+ */
+channelRouter.get(
+  '/:channelId/guest/:guestId',
+  [
+    param('channelId').notEmpty().withMessage('Channel ID is required'),
+    param('guestId').notEmpty().withMessage('Guest ID is required'),
+  ],
+  validationMiddleware,
+  getChannelGuestInfoController,
 );

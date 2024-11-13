@@ -61,7 +61,60 @@ export const getChannelWithGuestsByIdFromDB = async id => {
           lat: guest.end_location.lat,
           lng: guest.end_location.lng,
         },
+        path: guest.path,
+        marker_style: guest.marker_style,
       })),
+    };
+  } catch (error) {
+    console.error('Database error:', error);
+    throw error;
+  }
+};
+
+export const getGuestByChannelAndGuestIdFromDB = async (channelId, guestId) => {
+  try {
+    const channelQuery = `
+        SELECT *
+        FROM "main"."channel"
+        WHERE id = $1;
+    `;
+    const channelResult = await pool.query(channelQuery, [channelId]);
+    if (channelResult.rows.length === 0) {
+      return null;
+    }
+
+    const guestQuery = `
+        SELECT *
+        FROM "main"."guest"
+        WHERE channel_id = $1
+          AND id = $2;
+    `;
+    const guestResult = await pool.query(guestQuery, [channelId, guestId]);
+    if (guestResult.rows.length === 0) {
+      return null;
+    }
+
+    const channel = channelResult.rows[0];
+    const guest = guestResult.rows[0];
+
+    return {
+      id: channel.id,
+      name: channel.name,
+      host_id: channel.host_id,
+      guest: {
+        id: guest.id,
+        name: guest.name,
+        start_location: {
+          lat: guest.start_location.lat,
+          lng: guest.start_location.lng,
+        },
+        end_location: {
+          lat: guest.end_location.lat,
+          lng: guest.end_location.lng,
+        },
+        path: guest.path,
+        marker_style: guest.marker_style,
+      },
     };
   } catch (error) {
     console.error('Database error:', error);
