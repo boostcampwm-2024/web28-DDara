@@ -3,6 +3,7 @@ import {
   createChannelService,
   getChannelByIdService,
   getChannelGuestInfoService,
+  getUserChannels,
 } from '../services/channelService.js';
 
 export const createChannelController = async (req, res) => {
@@ -82,9 +83,29 @@ export const getChannelGuestInfoController = async (req, res) => {
         data: result,
       });
     } else {
-      res.status(404).json({ message: 'Channel or guest not found' });
+      res.status(404).json({ success: false, message: 'Channel or guest not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+export const getUserChannelsController = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const channels = await getUserChannels(userId);
+    if (!channels.length) {
+      return res.status(404).json({ success: false, message: 'No channels found for this user.' });
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Get channels successfully',
+      data: channels,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: 'Server error' });
   }
 };

@@ -121,3 +121,28 @@ export const getGuestByChannelAndGuestIdFromDB = async (channelId, guestId) => {
     throw error;
   }
 };
+
+export const getChannelsByUserIdFromDB = async userId => {
+  try {
+    const query = `
+      SELECT id, name, generated_at 
+      FROM "main"."channel"
+      WHERE host_id = $1;
+    `;
+    const values = [userId];
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return [];
+    }
+
+    return result.rows.map(channel => ({
+      id: channel.id,
+      name: channel.name,
+      generated_at: channel.generated_at,
+    }));
+  } catch (error) {
+    console.error('Database error:', error);
+    throw error;
+  }
+};
