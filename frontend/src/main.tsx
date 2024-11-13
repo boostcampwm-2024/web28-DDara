@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
-import { App } from './App';
+import { App } from './App2';
 // 우선은 폰트 다 포함시켰는데, 나중에 사용할 것들만 따로 뺴자.
 import '@fontsource/pretendard/100.css';
 import '@fontsource/pretendard/200.css';

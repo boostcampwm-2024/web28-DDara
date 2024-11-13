@@ -9,6 +9,7 @@ module.exports = {
       colors: {
         grayscale: {
           white: '#FFFFFF',
+          25: '#FEFEFEF2',
           50: 'rgba(60, 60, 67, 0.36)',
           100: '#B7B7B7',
           200: '#6D6D6D',
@@ -44,8 +45,21 @@ module.exports = {
         '6xl': '4rem',
       },
       boxShadow: {
+        floatButton: '0 5px 10px rgba(0,0,0,0.3)',
+        floatMenuButton: '0 4px 4px rgba(0,0,0,0.25)',
         float: '0 4px 20px rgba(0, 0, 0, 0.13)',
         basic: 'inset 0 0 3px rgba(0, 0, 0, 0.11)',
+        dark: '0px -6px 20px 0px rgba(0, 0, 0, 0.25)',
+      },
+      keyframes: {
+        smoothAppear: {
+          '0%': { opacity: '0', transform: 'translateY(-5%)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        smoothAppear: 'smoothAppear 0.5s ease-out', // 0.5s는 원하는 지속 시간
+        smoothDisappear: 'smoothAppear 0.5s reverse ease-out', // 0.5s는 원하는 지속 시간
       },
     }, // 필요한 커스터마이징을 여기서 설정 가능
   },
