@@ -6,6 +6,9 @@ import {
   getUserChannels,
 } from '../services/channelService.js';
 
+/**
+ * @description 채널 생성 컨트롤러
+ */
 export const createChannelController = async (req, res) => {
   try {
     const { name, host_id, guests } = req.body;
@@ -26,6 +29,9 @@ export const createChannelController = async (req, res) => {
   }
 };
 
+/**
+ * @description 채널에 게스트 추가 컨트롤러
+ */
 export const addGuestController = async (req, res) => {
   try {
     const { channelId } = req.params;
@@ -53,6 +59,9 @@ export const addGuestController = async (req, res) => {
   }
 };
 
+/**
+ * @description 채널 정보 조회 컨트롤러
+ */
 export const getChannelInfoController = async (req, res) => {
   const { id } = req.params;
 
@@ -72,6 +81,9 @@ export const getChannelInfoController = async (req, res) => {
   }
 };
 
+/**
+ * @description 채널에 특정 게스트 정보 조회 컨트롤러
+ */
 export const getChannelGuestInfoController = async (req, res) => {
   const { channelId, guestId } = req.params;
   try {
@@ -91,6 +103,9 @@ export const getChannelGuestInfoController = async (req, res) => {
   }
 };
 
+/**
+ * @description 사용자의 채널 리스트 조회 컨트롤러
+ */
 export const getUserChannelsController = async (req, res) => {
   const { userId } = req.params;
 

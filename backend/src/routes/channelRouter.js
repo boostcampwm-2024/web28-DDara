@@ -19,6 +19,7 @@ export const channelRouter = express.Router();
  *     post:
  *       summary: '새로운 채널 생성 API'
  *       description: '채널 이름, 주인, 게스트 정보를 포함하여 채널을 생성합니다.'
+ *       tags: [Channel]
  *       requestBody:
  *         required: true
  *         content:
@@ -51,6 +52,7 @@ channelRouter.post(
  *     post:
  *       summary: '게스트 추가 API'
  *       description: '특정 채널에 게스트를 추가합니다.'
+ *       tags: [Channel]
  *       parameters:
  *         - name: 'channelId'
  *           in: 'path'
@@ -87,6 +89,7 @@ channelRouter.post(
  *     get:
  *       summary: '채널 정보 조회 API'
  *       description: '특정 채널의 정보를 조회합니다.'
+ *       tags: [Channel]
  *       parameters:
  *         - name: 'id'
  *           in: 'path'
@@ -117,6 +120,7 @@ channelRouter.get(
  *     get:
  *       summary: '게스트 정보 조회 API'
  *       description: '특정 채널 내의 게스트 정보를 조회합니다.'
+ *       tags: [Channel]
  *       parameters:
  *         - name: 'channelId'
  *           in: 'path'
@@ -155,6 +159,7 @@ channelRouter.get(
  *     get:
  *       summary: '사용자가 host인 채널 목록 반환 API'
  *       description: 'userId를 기준으로 해당 사용자가 host인 채널 목록을 반환합니다.'
+ *       tags: [Channel]
  *       parameters:
  *         - in: path
  *           name: userId
