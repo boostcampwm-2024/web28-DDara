@@ -39,10 +39,9 @@ export const BottomSheet = (props: IBottomSheetProps) => {
   return (
     <div
       ref={sheet}
-      className="shadow-dark fixed left-0 right-0 z-[101] flex h-full flex-col rounded-t-lg transition-transform duration-700"
+      className="bg-grayscale-25 shadow-dark fixed left-0 right-0 z-[101] flex h-full flex-col rounded-t-lg transition-transform duration-700"
       style={{
         top: `calc(100% - ${props.minHeight * 100}%)`,
-        background: '#FEFEFEF2',
       }}
     >
       <div className="flex items-center justify-center pb-1 pt-2">

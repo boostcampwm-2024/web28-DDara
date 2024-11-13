@@ -9,6 +9,7 @@ module.exports = {
       colors: {
         grayscale: {
           white: '#FFFFFF',
+          25: '#FEFEFEF2',
           50: 'rgba(60, 60, 67, 0.36)',
           100: '#B7B7B7',
           200: '#6D6D6D',
@@ -46,6 +47,7 @@ module.exports = {
       boxShadow: {
         float: '0 4px 20px rgba(0, 0, 0, 0.13)',
         basic: 'inset 0 0 3px rgba(0, 0, 0, 0.11)',
+        dark: '0px -6px 20px 0px rgba(0, 0, 0, 0.25)',
       },
     }, // 필요한 커스터마이징을 여기서 설정 가능
   },
