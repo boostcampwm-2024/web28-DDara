@@ -24,6 +24,7 @@ export const DropdownTrigger = (props: IDropdownTriggerProps) => {
         'w-fit',
         'h-fit',
       )}
+      data-component="DropdownTrigger"
       onClick={handleOnClick}
     >
       {props.children}

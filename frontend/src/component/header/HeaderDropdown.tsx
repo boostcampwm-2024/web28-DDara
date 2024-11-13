@@ -20,16 +20,17 @@ export const HeaderDropdown = () => {
             '사용자 3 보기',
             '사용자 4 보기',
             '사용자 5 보기',
-          ].map((e, i) => (
-            <DropdownItem key={e}>
-              {/* 위치 자동으로 채워지게 하는 방법 찾기 */}
-              <div className="flex w-28 items-start justify-between">
+          ].map((e, i) => {
+            return (
+              <DropdownItem key={e}>
                 {e}
-                <MdLocationOn className={classNames('w-5', 'h-5', `color-marker-user${i + 1}`)} />
-                {/* 아이콘 색 변경 로직 찾기 + 아이콘 높이 맞추기 */}
-              </div>
-            </DropdownItem>
-          ))}
+                <MdLocationOn
+                  className={classNames('w-5', 'h-5', `text-marker-user${i + 1}`, 'fill-current')}
+                />
+                {/* 아이콘 색 변경 로직 찾기, 현재는 아이콘색이 반영이 안됨 수정할 사 */}
+              </DropdownItem>
+            );
+          })}
         </Dropdown.Menu>
       </Dropdown>
     </div>
