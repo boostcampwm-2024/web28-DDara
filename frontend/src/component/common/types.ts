@@ -1,11 +1,11 @@
 import { FaPaintBrush } from 'react-icons/fa';
 import { HiLocationMarker, HiOutlineDotsHorizontal, HiOutlineLocationMarker } from 'react-icons/hi';
 import { SlLayers } from 'react-icons/sl';
-import { ButtonType } from './enums';
+import { ButtonState } from './enums';
 
 /**
  * IconType 객체는 각 버튼 타입에 해당하는 아이콘 컴포넌트를 매핑합니다.
- * @type {Record<ButtonType, React.ComponentType>}
+ * @type {Record<ButtonState, React.ComponentType>}
  */
 export const IconType = {
   CLOSE: SlLayers, // 닫기 버튼 아이콘
@@ -25,17 +25,17 @@ export const IconType = {
  */
 export const ToolCategory = [
   {
-    type: ButtonType.LINE_DRAWING, // 경로 그리기 툴
+    type: ButtonState.LINE_DRAWING, // 경로 그리기 툴
     description: '경로 그리기', // 툴 설명
     icon: IconType.LINE_DRAWING, // 툴 아이콘
   },
   {
-    type: ButtonType.START_MARKER, // 출발지 설정 툴
+    type: ButtonState.START_MARKER, // 출발지 설정 툴
     description: '출발지 설정', // 툴 설명
     icon: IconType.START_MARKER, // 툴 아이콘
   },
   {
-    type: ButtonType.DESTINATION_MARKER, // 도착지 설정 툴
+    type: ButtonState.DESTINATION_MARKER, // 도착지 설정 툴
     description: '도착지 설정', // 툴 설명
     icon: IconType.DESTINATION_MARKER, // 툴 아이콘
   },

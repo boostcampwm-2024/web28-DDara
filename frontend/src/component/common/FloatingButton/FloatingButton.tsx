@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
-import { ButtonType } from '../enums';
+import { ButtonState } from '../enums';
 import { IconType, ToolCategory } from '../types';
 
 /**
@@ -13,7 +13,7 @@ import { IconType, ToolCategory } from '../types';
  * )
  */
 export const FloatingButton = () => {
-  const [toolType, setToolType] = useState<ButtonType>(ButtonType.CLOSE);
+  const [toolType, setToolType] = useState<ButtonState>(ButtonState.CLOSE);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   /**
@@ -23,18 +23,18 @@ export const FloatingButton = () => {
   const toggleMenu = () => {
     setIsMenuOpen(prev => !prev);
     if (!isMenuOpen) {
-      setToolType(ButtonType.OPEN);
+      setToolType(ButtonState.OPEN);
     } else {
-      setToolType(ButtonType.CLOSE);
+      setToolType(ButtonState.CLOSE);
     }
   };
 
   /**
    * @remarks
    * 툴을 선택하고 메뉴를 닫는 함수입니다.
-   * @param {ButtonType} type - 선택된 툴 타입
+   * @param {ButtonState} type - 선택된 툴 타입
    */
-  const handleMenuClick = (type: ButtonType) => {
+  const handleMenuClick = (type: ButtonState) => {
     setToolType(type);
     setIsMenuOpen(!isMenuOpen);
   };
@@ -86,7 +86,7 @@ export const FloatingButton = () => {
               'shadow-none': !isMenuOpen,
             },
           )}
-          style={{ bottom: toolType === ButtonType.OPEN ? `${48 * index + 64}px` : '0px' }}
+          style={{ bottom: toolType === ButtonState.OPEN ? `${48 * index + 64}px` : '0px' }}
         >
           <div className={classNames('flex', 'items-center')}>
             {React.createElement(icon, { className: 'w-5 h-5' })}
