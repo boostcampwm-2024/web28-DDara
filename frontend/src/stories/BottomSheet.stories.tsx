@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Meta, Story } from '@storybook/react';
 import { BottomSheet } from '@/component/bottomsheet/BottomSheet';
 import { Content } from '@/component/content/Content';
@@ -16,7 +16,7 @@ const contentData = [
     id: '1',
     title: '아들네 집으로',
     time: '0시간 30분',
-    person: '2명',
+    person: 2,
     link: '/a',
   },
   {
@@ -29,25 +29,18 @@ const contentData = [
     id: '3',
     title: '회사로',
     time: '1시간 10분',
-    person: '1명',
+    person: 1,
     link: '/c',
   },
 ];
 
 const ExampleContent = (
   <>
-    <div className="flex items-center justify-center pb-1 pt-2">
-      <div className="h-1.5 w-12 rounded-full bg-gray-300" />
-    </div>
-
     {contentData.map(item => (
-      <Content
-        key={item.id}
-        title={item.title}
-        time={item.time}
-        person={item.person}
-        link={item.link}
-      />
+      <Fragment key={item.id}>
+        <Content title={item.title} time={item.time} person={item.person} link={item.link} />
+        <hr />
+      </Fragment>
     ))}
   </>
 );
@@ -56,6 +49,8 @@ const Template: Story<typeof BottomSheet> = args => <BottomSheet {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
+  minHeight: 0.5,
+  maxHeight: 0.85,
   children: ExampleContent,
 };
 Default.parameters = {
