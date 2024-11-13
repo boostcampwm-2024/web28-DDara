@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { useBottomSheet } from '@/hooks/useBottomSheet';
 
 interface IBottomSheetProps {
@@ -38,9 +37,9 @@ export const BottomSheet = (props: IBottomSheetProps) => {
   const { sheet } = useBottomSheet({ minHeight: props.minHeight, maxHeight: props.maxHeight });
 
   return (
-    <motion.div
+    <div
       ref={sheet}
-      className="z-100 fixed left-0 right-0 flex h-full flex-col rounded-t-lg transition-transform duration-700"
+      className="shadow-dark fixed left-0 right-0 z-[101] flex h-full flex-col rounded-t-lg transition-transform duration-700"
       style={{
         top: `calc(100% - ${props.minHeight * 100}%)`,
         background: '#FEFEFEF2',
@@ -50,6 +49,6 @@ export const BottomSheet = (props: IBottomSheetProps) => {
         <div className="h-1.5 w-12 rounded-full bg-gray-300" />
       </div>
       {props.children}
-    </motion.div>
+    </div>
   );
 };
