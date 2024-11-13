@@ -1,4 +1,8 @@
-import { createChannelInDB, getChannelById } from '../repositories/channelRepository.js';
+import {
+  createChannelInDB,
+  getChannelInfoByIdInDB,
+  getChannelWithGuestsByIdFromDB,
+} from '../repositories/channelRepository.js';
 import { addGuestToChannel } from '../repositories/guestRepository.js';
 
 export const createChannelService = async (name, host_id, guests) => {
@@ -23,7 +27,7 @@ export const createChannelService = async (name, host_id, guests) => {
 };
 
 export const addGuestService = async (channelId, guests) => {
-  const channel = await getChannelById(channelId);
+  const channel = await getChannelInfoByIdInDB(channelId);
   if (!channel) return null;
 
   const guestPromises = guests.map(guest => {
@@ -42,4 +46,13 @@ export const addGuestService = async (channelId, guests) => {
   await Promise.all(guestPromises);
 
   return channel;
+};
+
+export const getChannelByIdService = async id => {
+  try {
+    return await getChannelWithGuestsByIdFromDB(id);
+  } catch (error) {
+    console.error('Error fetching channel:', error);
+    throw error;
+  }
 };
