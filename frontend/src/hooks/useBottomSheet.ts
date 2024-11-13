@@ -1,5 +1,9 @@
 import { useRef, useEffect } from 'react';
-import { MIN_Y, MAX_Y } from '@/component/bottomsheet/BottomSheetOption';
+
+interface IUseBottomSheet {
+  minHeight: number;
+  maxHeight: number;
+}
 
 interface IBottomSheetMetrics {
   touchStart: {
@@ -13,7 +17,10 @@ interface IBottomSheetMetrics {
   isContentAreaTouched: boolean;
 }
 
-export function useBottomSheet() {
+export function useBottomSheet(props: IUseBottomSheet) {
+  const MIN_Y = window.innerHeight * props.minHeight;
+  const MAX_Y = window.innerHeight * props.maxHeight;
+
   const sheet = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
 
