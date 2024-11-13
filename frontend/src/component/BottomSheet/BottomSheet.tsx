@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useBottomSheet } from '@/hooks/useBottomSheet';
-import { BOTTOM_SHEET_HEIGHT } from '@/component/BottomSheet/BottomSheetOption';
+import { BOTTOM_SHEET_HEIGHT } from '@/component/bottomsheet/BottomSheetOption';
 
 interface IBottomSheetProps {
   children: React.ReactNode;

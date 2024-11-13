@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
-import { BottomSheet } from '@/component/BottomSheet/BottomSheet';
-import { Content } from '@/component/BottomSheet/Content';
+import { BottomSheet } from '@/component/bottomsheet/BottomSheet';
+import { Content } from '@/component/content/Content';
 
 export default {
   title: 'Components/BottomSheet',
