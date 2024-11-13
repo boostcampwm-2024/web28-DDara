@@ -409,6 +409,20 @@ const swaggerDefinition = {
         },
         description: '특정 게스트의 정보',
       },
+
+      // 사용자별 채널 가져오기 응답 스키마
+      GetUserChannelsResponse: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            name: { type: 'string' },
+            generated_at: { type: 'string', format: 'date-time' },
+          },
+          required: ['id', 'name', 'generated_at'],
+        },
+      },
     },
   },
 };

@@ -1,6 +1,7 @@
 import {
   createChannelInDB,
   getChannelInfoByIdInDB,
+  getChannelsByUserIdFromDB,
   getChannelWithGuestsByIdFromDB,
   getGuestByChannelAndGuestIdFromDB,
 } from '../repositories/channelRepository.js';
@@ -64,5 +65,13 @@ export const getChannelGuestInfoService = async (channelId, guestId) => {
   } catch (error) {
     console.error('Error fetching channel:', error);
     throw error;
+  }
+};
+
+export const getUserChannels = async userId => {
+  try {
+    return await getChannelsByUserIdFromDB(userId);
+  } catch (error) {
+    throw new Error('Failed to fetch channels', error);
   }
 };
