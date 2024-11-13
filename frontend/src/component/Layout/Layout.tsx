@@ -14,9 +14,7 @@ interface ILayoutProps {
 }
 
 export const Layout = (props: ILayoutProps) => (
-  <div
-    className={classNames('flex', 'flex-col', 'items-center', 'w-full', 'h-full', 'bg-gray-400')}
-  >
+  <div className={classNames('flex', 'flex-col', 'items-center', 'h-[852px]', 'w-[393px]')}>
     {/* Header */}
     <Header
       title={props.headerTitle}

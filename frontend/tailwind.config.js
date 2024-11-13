@@ -9,9 +9,11 @@ module.exports = {
       colors: {
         grayscale: {
           white: '#FFFFFF',
-          25: '#FEFEFEF2',
-          50: 'rgba(60, 60, 67, 0.36)',
-          100: '#B7B7B7',
+          25: '#FBFBFB',
+          50: '#A0AEC0',
+          75: '#E2E8F0',
+          100: '#EDF2F7',
+          150: '#AAB6C7',
           200: '#6D6D6D',
           400: '#555555',
           800: '#3E3E3E',
@@ -48,6 +50,7 @@ module.exports = {
         floatButton: '0 5px 10px rgba(0,0,0,0.3)',
         floatMenuButton: '0 4px 4px rgba(0,0,0,0.25)',
         float: '0 4px 20px rgba(0, 0, 0, 0.13)',
+        userName: '5px 4px 7.1px rgba(0, 0, 0, 0.05)',
         basic: 'inset 0 0 3px rgba(0, 0, 0, 0.11)',
         dark: '0px -6px 20px 0px rgba(0, 0, 0, 0.25)',
       },

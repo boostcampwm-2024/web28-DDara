@@ -23,6 +23,6 @@ export const InputBox = ({
     onChange={onChange}
     onFocus={onFocus}
     onBlur={onBlur}
-    className={`border-input flex h-10 w-80 rounded-sm border px-3 py-2 ${className}`}
+    className={`border-grayscale-75 focus:border-grayscale-400 flex h-11 w-full rounded border px-3 text-xs focus:border-2 focus:outline-none ${className}`}
   />
 );
