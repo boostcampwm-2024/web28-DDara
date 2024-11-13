@@ -2,6 +2,7 @@ import {
   addGuestService,
   createChannelService,
   getChannelByIdService,
+  getChannelGuestInfoService,
 } from '../services/channelService.js';
 
 export const createChannelController = async (req, res) => {
@@ -67,5 +68,23 @@ export const getChannelInfoController = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+export const getChannelGuestInfoController = async (req, res) => {
+  const { channelId, guestId } = req.params;
+  try {
+    const result = await getChannelGuestInfoService(channelId, guestId);
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'Get guest data successfully',
+        data: result,
+      });
+    } else {
+      res.status(404).json({ message: 'Channel or guest not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
   }
 };

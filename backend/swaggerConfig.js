@@ -249,6 +249,8 @@ const swaggerDefinition = {
           },
         },
       },
+
+      // 채널 정보 가져오기 응답 스키마
       ChannelResponse: {
         type: 'object',
         properties: {
@@ -303,167 +305,109 @@ const swaggerDefinition = {
                     },
                   },
                 },
+                path: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      lat: {
+                        type: 'number',
+                        description: '경로 n번째 지점의 위도',
+                      },
+                      lng: {
+                        type: 'number',
+                        description: '경로 n번째 지점의 경도',
+                      },
+                    },
+                  },
+                  description: '게스트의 경로를 나타내는 배열',
+                },
+                marker_style: {
+                  type: 'object',
+                  properties: {
+                    color: {
+                      type: 'string',
+                      description: '게스트를 구분하는 색상 스타일',
+                    },
+                  },
+                  description: '게스트 마커의 스타일 정보',
+                },
               },
             },
             description: '해당 채널의 게스트 목록',
           },
         },
       },
-    },
-  },
-  paths: {
-    '/auth/login': {
-      post: {
-        summary: '사용자 로그인 API',
-        description: '사용자가 로그인할 수 있도록 ID와 비밀번호를 통해 인증 후 토큰을 반환합니다.',
-        operationId: 'login',
-        requestBody: {
-          description: '로그인을 위한 ID와 비밀번호를 포함한 요청 body',
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/LoginRequest',
+
+      // 특정 게스트의 정보 가져오기 응답 스키마
+      GuestResponse: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            description: '게스트의 ID (UUID 형식)',
+          },
+          name: {
+            type: 'string',
+            description: '게스트 이름',
+          },
+          start_location: {
+            type: 'object',
+            properties: {
+              lat: {
+                type: 'number',
+                description: '출발지 마커의 위도',
+              },
+              lng: {
+                type: 'number',
+                description: '출발지 마커의 경도',
               },
             },
+            description: '출발 위치 정보',
           },
-          required: true,
-        },
-        responses: {
-          200: {
-            description: '로그인 성공, 토큰 및 사용자 정보 반환',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/LoginResponse',
+          end_location: {
+            type: 'object',
+            properties: {
+              lat: {
+                type: 'number',
+                description: '도착지 마커의 위도',
+              },
+              lng: {
+                type: 'number',
+                description: '도착지 마커의 경도',
+              },
+            },
+            description: '도착 위치 정보',
+          },
+          path: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                lat: {
+                  type: 'number',
+                  description: '경로 지점의 위도',
+                },
+                lng: {
+                  type: 'number',
+                  description: '경로 지점의 경도',
                 },
               },
             },
+            description: '게스트의 경로 (위도, 경도)를 담은 배열',
           },
-          400: {
-            description: '잘못된 요청, 필수 정보 누락 또는 형식 오류',
-          },
-          401: {
-            description: '잘못된 ID나 비밀번호',
-          },
-          500: {
-            description: '서버 에러',
-          },
-        },
-      },
-    },
-    '/channel': {
-      post: {
-        summary: '새로운 채널 생성 API',
-        description: '채널 이름, 주인, 게스트 정보를 포함하여 채널을 생성합니다.',
-        operationId: 'createChannel',
-        requestBody: {
-          description: '채널 생성에 필요한 데이터',
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/CreateChannelRequest',
+          marker_style: {
+            type: 'object',
+            properties: {
+              color: {
+                type: 'string',
+                description: '게스트를 구분하는 색상 스타일',
               },
             },
-          },
-          required: true,
-        },
-        responses: {
-          201: {
-            description: '채널 생성 성공',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/CreateChannelResponse',
-                },
-              },
-            },
-          },
-          400: {
-            description: '입력 데이터 유효성 검증 실패',
-          },
-          500: {
-            description: '서버 에러',
+            description: '마커 스타일 정보',
           },
         },
-      },
-    },
-    '/channel/guests': {
-      post: {
-        summary: '채널에 게스트 추가 API',
-        description: '주어진 채널에 새로운 게스트를 추가합니다.',
-        operationId: 'addGuest',
-        requestBody: {
-          description: '채널에 게스트를 추가하기 위한 데이터',
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/AddGuestRequest',
-              },
-            },
-          },
-          required: true,
-        },
-        responses: {
-          200: {
-            description: '게스트 추가 성공',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/AddGuestResponse',
-                },
-              },
-            },
-          },
-          400: {
-            description: '잘못된 요청, 채널 ID나 게스트 정보가 잘못됨',
-          },
-          404: {
-            description: '채널을 찾을 수 없음',
-          },
-          500: {
-            description: '서버 에러',
-          },
-        },
-      },
-    },
-    '/channel/{id}': {
-      get: {
-        summary: '채널 정보 조회 API',
-        description:
-          '채널의 ID를 통해 해당 채널에 속한 게스트들의 정보를 포함한 채널 정보를 조회합니다.',
-        operationId: 'getChannelInfo',
-        parameters: [
-          {
-            name: 'id',
-            in: 'path',
-            description: '채널의 고유 ID (UUID 형식)',
-            required: true,
-            schema: {
-              type: 'string',
-            },
-          },
-        ],
-        responses: {
-          200: {
-            description: '채널 정보 조회 성공',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/ChannelResponse',
-                },
-              },
-            },
-          },
-          400: {
-            description: '잘못된 요청, 잘못된 채널 ID 형식',
-          },
-          404: {
-            description: '채널을 찾을 수 없음',
-          },
-          500: {
-            description: '서버 에러',
-          },
-        },
+        description: '특정 게스트의 정보',
       },
     },
   },
@@ -471,7 +415,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: ['./routes/*.js'],
+  apis: ['./src/routes/**/*.js'],
 };
 
 export const specs = swaggerJSDoc(options);
