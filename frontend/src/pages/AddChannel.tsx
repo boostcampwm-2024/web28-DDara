@@ -6,7 +6,7 @@ interface IUser {
   name: string;
 }
 
-const Divider = () => <hr className="w-[90%] border-gray-300 my-5" />;
+const Divider = () => <hr className="my-5 w-[90%] border-gray-300" />;
 
 export const AddChannel = () => {
   const [users, setUsers] = useState<IUser[]>([{ id: 1, name: '사용자1' }]);
@@ -21,8 +21,8 @@ export const AddChannel = () => {
   };
   // main의 경우 임시로 w와 h 설정
   return (
-    <main className="w-[393px] h-[852px] bg-white">
-      <section className="w-full h-[95%] flex flex-col items-center">
+    <main className="h-[852px] w-[393px] bg-white">
+      <section className="flex h-[95%] w-full flex-col items-center">
         <InputBox
           className="placeholder:text-xs"
           placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길"
@@ -31,16 +31,16 @@ export const AddChannel = () => {
         <section className="w-[90%] space-y-2">
           {users.map(user => (
             <div className="flex flex-row space-x-5" key={user.id}>
-              <div className="w-[60px] h-[45px] flex items-center justify-center text-sm border border-gray-300">
+              <div className="flex h-[45px] w-[60px] items-center justify-center border border-gray-300 text-sm">
                 {user.name}
               </div>
-              <div className="flex w-[80%] m-0 h-[45px] text-xs text-gray-400 items-center justify-center bg-gray-100 rounded-sm">
+              <div className="m-0 flex h-[45px] w-[80%] items-center justify-center rounded-sm bg-gray-100 text-xs text-gray-400">
                 클릭시 출발지/도착지, 경로 설정 가능
               </div>
             </div>
           ))}
         </section>
-        <section className="flex flex-row my-4 text-2xs text-gray-400 gap-[10px] items-center justify-center">
+        <section className="text-2xs my-4 flex flex-row items-center justify-center gap-[10px] text-gray-400">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -53,8 +53,8 @@ export const AddChannel = () => {
           </svg>
           사용자 별로 출발지/도착지(마커), 경로(그림)을 설정할 수 있습니다.
         </section>
-        <section className="w-[90%] flex justify-end">
-          <button onClick={addUser} className="w-[75%] border border-gray-300 text-xs p-2 rounded">
+        <section className="flex w-[90%] justify-end">
+          <button onClick={addUser} className="w-[75%] rounded border border-gray-300 p-2 text-xs">
             사용자 추가
           </button>
         </section>

@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import classNames from 'classnames';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
@@ -13,7 +14,9 @@ interface ILayoutProps {
 }
 
 export const Layout = (props: ILayoutProps) => (
-  <div className="flex flex-col items-center w-full h-full bg-gray-400">
+  <div
+    className={classNames('flex', 'flex-col', 'items-center', 'w-full', 'h-full', 'bg-gray-400')}
+  >
     {/* Header */}
     <Header
       title={props.headerTitle}
