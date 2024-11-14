@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { login } from '../controllers/authController.js';
+import { loginController, registerUserController } from '../controllers/authController.js';
 import { validationMiddleware } from '../middleware/validationMiddleware.js';
 
 export const authRouter = express.Router();
@@ -11,6 +11,7 @@ export const authRouter = express.Router();
  *   post:
  *     summary: 사용자 로그인 API
  *     description: 사용자가 로그인할 수 있도록 ID와 비밀번호를 통해 인증 후 토큰을 반환합니다.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       description: 로그인을 위한 ID와 비밀번호를 포함한 요청 body
@@ -41,5 +42,42 @@ authRouter.post(
       .withMessage('Password must be at least 6 characters long'),
   ],
   validationMiddleware,
-  login,
+  loginController,
+);
+
+/**
+ * @swagger
+ * /user/register:
+ *   post:
+ *     summary: "회원가입 API"
+ *     description: "사용자가 회원가입을 통해 계정을 생성합니다."
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterRequest'
+ *     responses:
+ *       "201":
+ *         description: "회원가입 성공"
+ *       "400":
+ *         description: "유효성 검사 실패"
+ *       "409":
+ *         description: "중복된 사용자 ID"
+ *       "500":
+ *         description: "서버 오류"
+ */
+authRouter.post(
+  '/register',
+  [
+    body('id').isLength({ min: 4 }).withMessage('User ID must be at least 4 characters long'),
+    body('name').notEmpty().withMessage('Name is required'),
+    body('password')
+      .isLength({ min: 6 })
+      .withMessage('Password must be at least 6 characters long'),
+    body('email').isEmail().withMessage('Valid email is required'),
+  ],
+  validationMiddleware,
+  registerUserController,
 );

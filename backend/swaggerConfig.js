@@ -43,6 +43,31 @@ const swaggerDefinition = {
         },
       },
 
+      // 회원가입 요청 스키마
+      RegisterRequest: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            description: '사용자 고유 ID (중복 불가)',
+          },
+          name: {
+            type: 'string',
+            description: '사용자 이름',
+          },
+          password: {
+            type: 'string',
+            description: '사용자 비밀번호 (최소 6자 이상)',
+          },
+          email: {
+            type: 'string',
+            format: 'email',
+            description: '사용자 이메일 주소',
+          },
+        },
+        required: ['id', 'name', 'password', 'email'],
+      },
+
       // 채널 생성 요청 스키마
       CreateChannelRequest: {
         type: 'object',
