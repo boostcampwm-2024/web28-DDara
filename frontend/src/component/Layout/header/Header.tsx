@@ -1,36 +1,37 @@
 import { ReactNode } from 'react';
 import { HeaderDropdown } from '@/component/Layout/header/HeaderDropdown.tsx';
-import { useNavigate } from 'react-router-dom';
-import { BackButton } from '@/component/Layout/header/BackButton.tsx';
-import { MdArrowBackIos } from 'react-icons/md';
+import { HeaderBackButton } from '@/component/Layout/header/HeaderBackButton.tsx';
+import { HeaderTitle } from '@/component/Layout/header/HeaderTitle.tsx';
+import { HeaderMainLayout } from '@/component/Layout/header/HeaderMainLayout.tsx';
+import { HeaderSubtitle } from '@/component/Layout/header/HeaderSubtitle.tsx';
+import classNames from 'classnames';
 
 interface IHeaderProps {
-  title?: ReactNode;
-  subTitle?: ReactNode;
+  children: ReactNode;
+  className?: string;
 }
 
-// Todo: z-index에 대한 협의도 필요
 export const Header = (props: IHeaderProps) => {
-  const navigate = useNavigate();
-
-  const handleButtonClick = () => {
-    // TODO: 뒤로가기이지만, 크게 좋은 방법은 아님, Path거는게 맞으며 라우터에 따라 다시 걸기
-    navigate(-1);
-  };
-
-  // TODO: h1으로 걸거나, h2로 거는건 어케걸지 생각좀 하기
   return (
-    <header className="absolute z-[2000] flex w-full flex-col gap-2.5 bg-transparent p-4">
-      <div className="flex justify-between">
-        <div className="flex gap-1">
-          <BackButton onClick={handleButtonClick}>
-            <MdArrowBackIos className="h-6 w-6" />
-          </BackButton>
-          {props.title}
-        </div>
-        <HeaderDropdown />
-      </div>
-      <div>{props.subTitle}</div>
+    <header
+      className={classNames(
+        'absolute',
+        'z-[2000]',
+        'flex w-full',
+        'flex-col',
+        'gap-2.5',
+        'bg-transparent',
+        'p-4',
+        props.className?.split(' '),
+      )}
+    >
+      {props.children}
     </header>
   );
 };
+
+Header.BackButton = HeaderBackButton;
+Header.Dropdown = HeaderDropdown;
+Header.Title = HeaderTitle;
+Header.MainLayout = HeaderMainLayout;
+Header.Subtitle = HeaderSubtitle;
