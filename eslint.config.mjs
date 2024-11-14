@@ -189,6 +189,7 @@ export default [
       'prettier/prettier': 'error',
       'no-underscore-dangle': 'warn',
       'no-undef': 'off',
+      'arrow-body-style': 'off',
     },
   },
 
