@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import classNames from 'classnames';
+import { IoClose } from 'react-icons/io5';
 import { InputBox } from '../component/common/InputBox';
 
 interface IUser {
@@ -59,6 +61,11 @@ export const AddChannel = () => {
     setUsers([...users, newUser]);
   };
 
+  const deleteUser = (id: number) => {
+    const updatedUsers = users.filter(user => user.id !== id);
+    setUsers(updatedUsers);
+  };
+
   return (
     <main className="flex h-full w-full flex-col items-center px-8">
       <InputBox placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길" />
@@ -69,9 +76,19 @@ export const AddChannel = () => {
             <div className="shadow-userName border-grayscale-200 flex h-12 w-16 items-center justify-center rounded-lg border text-xs">
               {user.name}
             </div>
-            <div className="text-grayscale-150 m-0 flex h-11 w-64 items-center justify-center rounded-md bg-gray-100 text-xs font-semibold">
+            <div
+              className={classNames(
+                'text-grayscale-150 m-0 flex h-11 items-center justify-center rounded-md bg-gray-100 text-xs font-semibold',
+                user.id > 1 ? 'w-56' : 'w-64',
+              )}
+            >
               클릭시 출발지/도착지, 경로 설정 가능
             </div>
+            {user.id > 1 && (
+              <button onClick={() => deleteUser(user.id)}>
+                <IoClose className="h-6 w-6" />
+              </button>
+            )}
           </div>
         ))}
       </section>
@@ -88,14 +105,16 @@ export const AddChannel = () => {
         </svg>
         사용자 별로 출발지/도착지(마커), 경로(그림)을 설정할 수 있습니다.
       </section>
-      <section className="flex w-full justify-end">
-        <button
-          onClick={addUser}
-          className="bg-grayscale-25 border-gray-75 h-8 w-64 rounded border p-2 text-xs"
-        >
-          사용자 추가
-        </button>
-      </section>
+      {users.length < 5 && (
+        <section className="flex w-full justify-end">
+          <button
+            onClick={addUser}
+            className="bg-grayscale-25 border-gray-75 h-8 w-64 rounded border p-2 text-xs"
+          >
+            사용자 추가
+          </button>
+        </section>
+      )}
     </main>
   );
 };
