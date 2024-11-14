@@ -7,6 +7,7 @@ interface ILayoutProps {
   footerTitle?: string;
   footerActive?: boolean;
   handleFooterClick?: () => void;
+  footerTransperency?: boolean;
 }
 
 export const Layout = (props: ILayoutProps) => {
@@ -25,6 +26,7 @@ export const Layout = (props: ILayoutProps) => {
         title={props.footerTitle}
         onClick={props.handleFooterClick}
         active={props.footerActive}
+        isTranperency={props.footerTransperency}
       />
     </>
   );

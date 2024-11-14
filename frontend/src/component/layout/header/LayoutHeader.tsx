@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Header } from '@/component/header/Header';
 import { NoticeText } from '@/component/text/NoticeText';
-import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider.tsx';
+import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
 
 export const LayoutHeader = () => {
   const { headerOption } = useContext(HeaderContext);

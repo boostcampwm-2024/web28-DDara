@@ -1,4 +1,4 @@
-import { Footer } from '@/component/Layout/Footer';
+import { Footer } from '@/component/layout/Footer';
 import { Map } from '@/component/maps/Map';
 import { MdArrowBack } from 'react-icons/md';
 import { Linedrawer } from '@/component/linedrawer/Linedrawer';
