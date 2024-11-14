@@ -6,12 +6,13 @@ interface IFooterProps {
   title?: string;
   onClick?: () => void;
   active?: boolean;
+  isTranperency?: boolean;
 }
 
-export const Footer = (props: IFooterProps) => {
-  const buttonStyle = props.active ? buttonActiveType.ACTIVE : buttonActiveType.PASSIVE;
+export const Footer = ({ title, onClick, active = false, isTranperency = true }: IFooterProps) => {
+  const buttonStyle = active ? buttonActiveType.ACTIVE : buttonActiveType.PASSIVE;
 
-  return (
+  return isTranperency ? (
     <footer className="absolute bottom-5 h-[6%] w-[95%]">
       <button
         className={classNames(
@@ -24,10 +25,12 @@ export const Footer = (props: IFooterProps) => {
           buttonStyle,
         )}
         type="button"
-        onClick={props.onClick}
+        onClick={onClick}
       >
-        {props.title}
+        {title}
       </button>
     </footer>
+  ) : (
+    <div />
   );
 };

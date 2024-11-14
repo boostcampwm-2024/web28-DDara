@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Meta, Story } from '@storybook/react';
-import { BottomSheet } from '@/component/bottomsheet/BottomSheet';
+import { BottomSheet } from '@/component/BottomSheet/BottomSheet';
 import { Content } from '@/component/content/Content';
 
 export default {

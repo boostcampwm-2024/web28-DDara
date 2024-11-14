@@ -1,5 +1,5 @@
 import { Map } from '@/component/maps/Map.tsx';
-import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider.tsx';
+import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
 import { useContext, useEffect } from 'react';
 
 export const GuestView = () => {
