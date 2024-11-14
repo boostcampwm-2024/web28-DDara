@@ -64,6 +64,13 @@ module.exports = {
         smoothAppear: 'smoothAppear 0.5s ease-out', // 0.5s는 원하는 지속 시간
         smoothDisappear: 'smoothAppear 0.5s reverse ease-out', // 0.5s는 원하는 지속 시간
       },
+      zIndex: {
+        0: '0', // 메인 화면
+        1000: '1000', // 레이아웃
+        4000: '4000', // 캔버스
+        6000: '6000', // 모달, 알림 등 오버레이 요소
+        // 필요에 따라 추가적인 z-index 값을 더 추가할 수 있습니다.
+      },
     }, // 필요한 커스터마이징을 여기서 설정 가능
   },
   plugins: [],

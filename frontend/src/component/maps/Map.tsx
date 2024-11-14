@@ -7,6 +7,7 @@ interface IMapProps {
   lng: number;
   className?: string;
   type: string;
+  zoom?: number;
 }
 
 /**
@@ -39,7 +40,7 @@ export const Map = (props: IMapProps) => {
 
   useEffect(() => {
     if (props.type === 'naver') {
-      setMapComponent(<NaverMap lat={props.lat} lng={props.lng} />);
+      setMapComponent(<NaverMap lat={props.lat} lng={props.lng} zoom={props.zoom} />);
     }
   }, []);
 

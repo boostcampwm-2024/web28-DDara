@@ -54,6 +54,7 @@ export const DropdownMenu = (props: IDropdownMenuProps) => {
           'p-2.5',
           'shadow-2xl',
           'w-fit',
+          'bg-white',
         )}
       >
         {props.children}
