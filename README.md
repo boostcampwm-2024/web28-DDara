@@ -21,7 +21,7 @@
   
 <p>  
   <a href="https://www.notion.so/127b1b2b649180e88f70d6a4648924a0?pvs=4">팀 노션</a>   |   
-  <a href="https://github.com/boostcampwm-2024/web28-DDara/wiki">팀 위키</a> |
+  <a href="https://ddara-docs.vercel.app/">팀 위키</a> |
   <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897">기획서</a>   |   
   <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929">디자인</a>
 <!--   <br />

@@ -45,6 +45,8 @@ module.exports = {
         '6xl': '4rem',
       },
       boxShadow: {
+        floatButton: '0 5px 10px rgba(0,0,0,0.3)',
+        floatMenuButton: '0 4px 4px rgba(0,0,0,0.25)',
         float: '0 4px 20px rgba(0, 0, 0, 0.13)',
         basic: 'inset 0 0 3px rgba(0, 0, 0, 0.11)',
         dark: '0px -6px 20px 0px rgba(0, 0, 0, 0.25)',
