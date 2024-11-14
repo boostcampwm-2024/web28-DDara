@@ -1,14 +1,21 @@
 import { ReactNode } from 'react';
-import { HeaderDropdown } from '@/component/Layout/header/HeaderDropdown.tsx';
-import { HeaderBackButton } from '@/component/Layout/header/HeaderBackButton.tsx';
-import { HeaderTitle } from '@/component/Layout/header/HeaderTitle.tsx';
-import { HeaderMainLayout } from '@/component/Layout/header/HeaderMainLayout.tsx';
-import { HeaderSubtitle } from '@/component/Layout/header/HeaderSubtitle.tsx';
+import { HeaderDropdown } from '@/component/header/HeaderDropdown.tsx';
+import { HeaderBackButton } from '@/component/header/HeaderBackButton.tsx';
+import { HeaderTitle } from '@/component/header/HeaderTitle.tsx';
+import { HeaderMainLayout } from '@/component/header/HeaderMainLayout.tsx';
+import { HeaderSubtitle } from '@/component/header/HeaderSubtitle.tsx';
 import classNames from 'classnames';
 
 interface IHeaderProps {
   children: ReactNode;
   className?: string;
+}
+
+export interface IHeaderOption {
+  leftButton?: string;
+  rightButton?: string;
+  title?: ReactNode;
+  subtitle?: string;
 }
 
 export const Header = (props: IHeaderProps) => {

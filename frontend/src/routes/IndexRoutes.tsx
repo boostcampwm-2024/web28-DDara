@@ -6,7 +6,7 @@ import { UserRoute } from '@/pages/UserRoute';
 import { DrawRoute } from '@/pages/DrawRoute';
 import { HostView } from '@/pages/HostView';
 import { GuestView } from '@/pages/GuestView';
-import { Layout } from '@/component/Layout/Layout';
+import { Layout } from '@/component/layout/Layout';
 
 export const IndexRoutes = () => (
   <Routes>

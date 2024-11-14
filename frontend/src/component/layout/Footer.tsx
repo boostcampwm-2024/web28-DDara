@@ -12,7 +12,7 @@ export const Footer = (props: IFooterProps) => {
   const buttonStyle = props.active ? buttonActiveType.ACTIVE : buttonActiveType.PASSIVE;
 
   return (
-    <footer className="absolute bottom-5 w-[95%] h-[6%]">
+    <footer className="absolute bottom-5 h-[6%] w-[95%]">
       <button
         className={classNames(
           'w-full',

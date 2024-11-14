@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Header } from '@/component/Layout/header/Header.tsx';
+import { Header } from '@/component/header/Header.tsx';
 
 interface IHeaderMainLayoutProps {
   leftButton?: string;
@@ -20,8 +20,8 @@ export const HeaderMainLayout = (props: IHeaderMainLayoutProps) => {
   };
 
   return (
-    <div className="flex justify-between">
-      <div className="flex gap-1">
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-1">
         {props.leftButton && chooseButton(props.leftButton)}
         {props.title}
       </div>
