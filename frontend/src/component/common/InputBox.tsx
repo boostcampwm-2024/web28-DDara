@@ -23,6 +23,6 @@ export const InputBox = ({
     onChange={onChange}
     onFocus={onFocus}
     onBlur={onBlur}
-    className={`border-grayscale-75 focus:border-grayscale-400 flex h-11 w-full rounded border px-3 text-xs focus:border-2 focus:outline-none ${className}`}
+    className={`border-grayscale-75 placeholder:text-grayscale-50 focus:border-grayscale-400 text-grayscale-400 flex h-11 w-full rounded border px-3 text-xs focus:border-2 focus:outline-none ${className}`}
   />
 );

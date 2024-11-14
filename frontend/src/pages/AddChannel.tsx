@@ -104,12 +104,12 @@ export const AddChannel = () => {
       <section className="w-full space-y-4">
         {users.map(user => (
           <div className="flex flex-row items-center justify-center space-x-2" key={user.id}>
-            <div className="shadow-userName border-grayscale-200 flex h-12 w-16 items-center justify-center rounded-lg border text-xs">
+            <div className="shadow-userName border-grayscale-400 flex h-12 w-16 items-center justify-center rounded-lg border text-xs">
               {user.name}
             </div>
             <div
               className={classNames(
-                'text-grayscale-150 m-0 flex h-11 items-center justify-center rounded-md bg-gray-100 text-xs font-semibold',
+                'text-grayscale-150 bg-grayscale-100 m-0 flex h-11 items-center justify-center rounded-md text-xs font-semibold',
                 user.id > 1 ? 'w-56' : 'w-64',
               )}
             >
@@ -117,14 +117,14 @@ export const AddChannel = () => {
             </div>
             {user.id > 1 && (
               <button onClick={() => deleteUser(user.id)}>
-                <IoClose className="h-6 w-6" />
+                <IoClose className="text-grayscale-400 h-6 w-6" />
               </button>
             )}
           </div>
         ))}
       </section>
       <section className="text-grayscale-400 my-4 flex flex-row items-center justify-center gap-[2px] text-xs">
-        <HiMiniInformationCircle className="h-4 w-4" />
+        <HiMiniInformationCircle className="h-4 w-4 text-black" />
         사용자 별로 출발지/도착지(마커), 경로(그림)을 설정할 수 있습니다.
       </section>
       {users.length < 5 && (
