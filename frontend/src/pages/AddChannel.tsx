@@ -63,6 +63,24 @@ export const AddChannel = () => {
     setUsers([...users, newUser]);
   };
 
+  /**
+   * 사용자 추가 함수
+   *
+   * 현재 사용자 목록에 사용자를 삭제합니다.
+   * 최대 4명까지 삭제할 수 있으며, 첫 사용자는 삭제할 수 없습니다.
+   *
+   * @return {void} 반환값이 없습니다.
+   *
+   * @remarks
+   * 사용자 2번 부터 삭제 버튼이 생깁니다.
+   * 사용자가 삭제되면 id를 다시 부여하여 빈 부분을 당겨와 채웁니다.
+   *
+   * @example
+   * ```
+   * deleteUser(3); // 3번 id 사용자 삭제
+   * ```
+   */
+
   const deleteUser = (id: number) => {
     const updatedUsers = users
       .filter(user => user.id !== id)
