@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { IoClose } from 'react-icons/io5';
 import { InputBox } from '../component/common/InputBox';
@@ -6,6 +6,7 @@ import { InputBox } from '../component/common/InputBox';
 interface IUser {
   id: number;
   name: string;
+  mockData?: number;
 }
 
 /**
@@ -33,7 +34,7 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
  */
 
 export const AddChannel = () => {
-  const [users, setUsers] = useState<IUser[]>([{ id: 1, name: '사용자1' }]);
+  const [users, setUsers] = useState<IUser[]>([{ id: 1, name: '사용자1', mockData: 10 }]);
 
   /**
    * 사용자 추가 함수
@@ -57,14 +58,25 @@ export const AddChannel = () => {
     const newUser: IUser = {
       id: users.length + 1,
       name: `사용자${users.length + 1}`,
+      mockData: Math.floor(Math.random() * 100),
     };
     setUsers([...users, newUser]);
   };
 
   const deleteUser = (id: number) => {
-    const updatedUsers = users.filter(user => user.id !== id);
+    const updatedUsers = users
+      .filter(user => user.id !== id)
+      .map((user, index) => ({
+        ...user,
+        id: index + 1,
+        name: `사용자${index + 1}`,
+      }));
     setUsers(updatedUsers);
   };
+
+  useEffect(() => {
+    console.log(users);
+  }, [users]);
 
   return (
     <main className="flex h-full w-full flex-col items-center px-8">
