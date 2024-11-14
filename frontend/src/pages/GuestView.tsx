@@ -1,8 +1,9 @@
 import { Header } from '@/component/Layout/header/Header.tsx';
 // import { MdInfo } from 'react-icons/md';
+import { NaverMap } from '@/component/maps/NaverMap.tsx';
 
 export const GuestView = () => {
-  // TODO: 헤더 테스트 로직 추후 범용 Header로 제작시 제거 예정
+  // // TODO: 헤더 테스트 로직 추후 범용 Header로 제작시 제거 예정
   // // Todo: 사용자 경로 받는 로직이 필요함. 우선은 하드코딩해두고 나중에 수정
   // // Todo: Header를 좀 더 범용적으로 가져갈 필요가 있음
   // const title = (
@@ -19,5 +20,12 @@ export const GuestView = () => {
   //   </div>
   // );
 
-  return <Header />;
+  return (
+    <>
+      <Header />
+      <div className="h-screen">
+        <NaverMap lat={37.3595704} lng={127.105399} zoom={3} />
+      </div>
+    </>
+  );
 };

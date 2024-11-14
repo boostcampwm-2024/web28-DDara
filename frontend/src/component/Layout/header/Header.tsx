@@ -9,6 +9,7 @@ interface IHeaderProps {
   subTitle?: ReactNode;
 }
 
+// Todo: z-index에 대한 협의도 필요
 export const Header = (props: IHeaderProps) => {
   const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ export const Header = (props: IHeaderProps) => {
 
   // TODO: h1으로 걸거나, h2로 거는건 어케걸지 생각좀 하기
   return (
-    <header className="flex flex-col gap-2.5 p-4">
+    <header className="absolute z-[2000] flex w-full flex-col gap-2.5 bg-transparent p-4">
       <div className="flex justify-between">
         <div className="flex gap-1">
           <BackButton onClick={handleButtonClick}>

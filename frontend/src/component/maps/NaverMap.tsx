@@ -29,5 +29,5 @@ export const NaverMap = (props: INaverMapOptions) => {
     }
   }, []);
 
-  return <section ref={mapRef} className="w-full h-full" />;
+  return <section ref={mapRef} className="h-full w-full" />;
 };
