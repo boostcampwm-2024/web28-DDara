@@ -1,0 +1,37 @@
+---
+slug: postgress_schema_error_solving
+title: PostgreSQL 스키마로 인한 오류 해결하기
+authors: [happyhyep]
+---
+
+![](https://velog.velcdn.com/images/happyhyep/post/966e169c-fc8a-468d-912c-adf19a5c7b38/image.png)
+###  🔍 PostgreSQL 스키마 문제로 인한 `relation "user" does not exist` 오류 해결하기
+백엔드 개발 중 `relation "user" does not exist` 오류를 만났습니다. PostgreSQL에서는 대소문자나 스키마 이름 등 세부 사항이 쿼리에 영향을 미칠 수 있어, 이를 해결하기 위해 몇 가지를 시도해보았고, 이번 포스팅에서는 문제의 원인과 해결 과정을 정리했습니다.
+### 💡 문제 상황
+로그인 API에서 `user` 테이블을 쿼리하는 과정에서 아래와 같은 오류가 발생했습니다.
+```go
+Login error: error: relation "user" does not exist
+```
+PostgreSQL에서 "relation does not exist" 오류는 특정 테이블이나 컬럼이 존재하지 않거나, 대소문자/스키마 이슈로 인해 발생할 수 있습니다. 저의 경우 테이블 이름이 정확하게 `user`임에도 불구하고 오류가 발생했기 때문에 다른 가능성을 살펴보았습니다.
+물론 `user`는 예약어이기 때문에 그대로 적어서는 안된다는 것을 잘 알고 있었고, 그래서 큰 따옴표 (`”` )를 넣어 테이블을 제대로 명시해주었는데, 그래도 해결되지 않았기에 문제를 찾아보았습니다.
+### 🔍 시도해본 해결 방안들
+오류의 원인을 찾기 위해 다음과 같은 단계를 거쳤습니다.
+1. **테이블 확인**: `psql`에서 `\dt` 명령을 통해 `user` 테이블이 데이터베이스에 실제로 존재하는지 확인했습니다.
+2. **대소문자 문제 해결**: PostgreSQL에서는 소문자로만 구성된 테이블명은 쿼리에서 이중 따옴표로 묶어주어야 합니다. 따라서 쿼리문을 `'SELECT * FROM "user" WHERE id = $1'`로 수정해보았습니다.
+3. **스키마 확인**: `user` 테이블이 `public`이 아닌 다른 스키마(`main`)에 만들어두었다는 것을 기억해냈습니다. (db 잘 다룰 줄 몰라서… 새로운 스키마를 만들어야 하는 줄 알고 초기에 `main` 스키마를 만들어서 그 안에 구현해두었습니다……)
+### ✅ 최종 해결 방법
+어쟀든 테이블이 `main` 스키마에 있었기 때문에 스키마 이름을 명시한 쿼리로 수정하여 문제를 해결할 수 있었습니다.
+```jsx
+// repositories/authRepository.js
+import { pool } from '../db/db.js';
+export const findUserById = async (id) => {
+  const result = await pool.query('SELECT * FROM "main"."user" WHERE id = $1', [id]);
+  return result.rows[0];
+};
+```
+이렇게 스키마를 명시하니 오류가 사라지고 정상적으로 쿼리가 수행되었습니다.
+
+---
+
+### 📝 결론
+이 오류는 스키마를 잘못 지정해 발생한 것이었습니다. PostgreSQL에서는 특정 테이블이 `public` 이외의 스키마에 있을 경우 반드시 스키마 이름을 명시해야 한다는 점을 꼭 기억해두어야겠습니다. (다음번에는… `public` 스키마에 db를 구축해야 할 것 같습니다);;

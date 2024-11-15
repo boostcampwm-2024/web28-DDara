@@ -5,7 +5,12 @@
  */
 
 /* You can override the default Infima variables here. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
+  /* Primary Colors (Atlassian Blue Palette) */
   --ifm-color-primary: #0052CC; /* Atlassian 파란색 */
   --ifm-color-primary-dark: #0041a8; /* 더 어두운 Atlassian 파란색 */
   --ifm-color-primary-darker: #00338a; /* 한층 더 어두운 파란색 */
@@ -14,7 +19,7 @@
   --ifm-color-primary-lighter: #3385ff; /* 한층 더 밝은 파란색 */
   --ifm-color-primary-lightest: #669eff; /* 가장 밝은 파란색 */
 
-  /* 보라색 계열 (Atlassian 팔레트 기반) */
+  /* Secondary Colors (Atlassian Purple Palette) */
   --ifm-color-secondary: #6554C0; /* Atlassian 보라색 */
   --ifm-color-secondary-dark: #5243AA; /* 더 어두운 보라색 */
   --ifm-color-secondary-darker: #403294; /* 한층 더 어두운 보라색 */
@@ -23,7 +28,7 @@
   --ifm-color-secondary-lighter: #998DD9; /* 한층 더 밝은 보라색 */
   --ifm-color-secondary-lightest: #B3A7E6; /* 가장 밝은 보라색 */
 
-  /* Teal 계열 (Atlassian 팔레트 기반) */
+  /* Tertiary Colors (Atlassian Teal Palette) */
   --ifm-color-tertiary: #00B8D9; /* Atlassian Teal */
   --ifm-color-tertiary-dark: #00A3BF; /* 더 어두운 Teal */
   --ifm-color-tertiary-darker: #008DA6; /* 한층 더 어두운 Teal */
@@ -32,7 +37,7 @@
   --ifm-color-tertiary-lighter: #66D9FF; /* 한층 더 밝은 Teal */
   --ifm-color-tertiary-lightest: #99E3FF; /* 가장 밝은 Teal */
 
-  /* 주황색 계열 (Atlassian 팔레트 기반) */
+  /* Quaternary Colors (Atlassian Orange Palette) */
   --ifm-color-quaternary: #FF5630; /* Atlassian 주황색 */
   --ifm-color-quaternary-dark: #E44A26; /* 더 어두운 주황색 */
   --ifm-color-quaternary-darker: #CC3D1D; /* 한층 더 어두운 주황색 */
@@ -41,7 +46,7 @@
   --ifm-color-quaternary-lighter: #FF8C70; /* 한층 더 밝은 주황색 */
   --ifm-color-quaternary-lightest: #FFAAA0; /* 가장 밝은 주황색 */
 
-  /* 녹색 계열 (Atlassian 팔레트 기반) */
+  /* Quinary Colors (Atlassian Green Palette) */
   --ifm-color-quinary: #36B37E; /* Atlassian 녹색 */
   --ifm-color-quinary-dark: #2E9A69; /* 더 어두운 녹색 */
   --ifm-color-quinary-darker: #257D55; /* 한층 더 어두운 녹색 */
@@ -50,12 +55,76 @@
   --ifm-color-quinary-lighter: #79E3B8; /* 한층 더 밝은 녹색 */
   --ifm-color-quinary-lightest: #9FEFD0; /* 가장 밝은 녹색 */
 
+  /* Success Colors */
+  --ifm-color-success: #36B37E; /* 성공 색상 */
+  --ifm-color-success-dark: #2E9A69; /* 더 어두운 성공 색상 */
+  --ifm-color-success-darker: #257D55; /* 한층 더 어두운 성공 색상 */
+  --ifm-color-success-darkest: #1E6344; /* 가장 어두운 성공 색상 */
+  --ifm-color-success-light: #57D9A3; /* 더 밝은 성공 색상 */
+  --ifm-color-success-lighter: #79E3B8; /* 한층 더 밝은 성공 색상 */
+  --ifm-color-success-lightest: #9FEFD0; /* 가장 밝은 성공 색상 */
+
+  /* Information Colors */
+  --ifm-color-info: #00B8D9; /* 정보 색상 */
+  --ifm-color-info-dark: #00A3BF; /* 더 어두운 정보 색상 */
+  --ifm-color-info-darker: #008DA6; /* 한층 더 어두운 정보 색상 */
+  --ifm-color-info-darkest: #00758C; /* 가장 어두운 정보 색상 */
+  --ifm-color-info-light: #33CFFF; /* 더 밝은 정보 색상 */
+  --ifm-color-info-lighter: #66D9FF; /* 한층 더 밝은 정보 색상 */
+  --ifm-color-info-lightest: #99E3FF; /* 가장 밝은 정보 색상 */
+
+  /* Warning Colors */
+  --ifm-color-warning: #FFAB00; /* 경고 색상 */
+  --ifm-color-warning-dark: #E09B00; /* 더 어두운 경고 색상 */
+  --ifm-color-warning-darker: #CC8A00; /* 한층 더 어두운 경고 색상 */
+  --ifm-color-warning-darkest: #B37700; /* 가장 어두운 경고 색상 */
+  --ifm-color-warning-light: #FFBF33; /* 더 밝은 경고 색상 */
+  --ifm-color-warning-lighter: #FFCC66; /* 한층 더 밝은 경고 색상 */
+  --ifm-color-warning-lightest: #FFE0B3; /* 가장 밝은 경고 색상 */
+
+  /* Danger Colors */
+  --ifm-color-danger: #FF5630; /* 위험 색상 */
+  --ifm-color-danger-dark: #E44A26; /* 더 어두운 위험 색상 */
+  --ifm-color-danger-darker: #CC3D1D; /* 한층 더 어두운 위험 색상 */
+  --ifm-color-danger-darkest: #B33315; /* 가장 어두운 위험 색상 */
+  --ifm-color-danger-light: #FF7452; /* 더 밝은 위험 색상 */
+  --ifm-color-danger-lighter: #FF8C70; /* 한층 더 밝은 위험 색상 */
+  --ifm-color-danger-lightest: #FFAAA0; /* 가장 밝은 위험 색상 */
+
+  /* Neutral Colors */
+  --ifm-color-neutral-0: #FFFFFF; /* 가장 밝은 중립 색상 */
+  --ifm-color-neutral-100: #091E42; /* 어두운 중립 색상 */
+  --ifm-color-neutral-200: #172B4D; /* 더 어두운 중립 색상 */
+  --ifm-color-neutral-300: #253858; /* 더 어두운 중립 색상 */
+  --ifm-color-neutral-400: #344563; /* 더 어두운 중립 색상 */
+  --ifm-color-neutral-500: #5E6C84; /* 중간 중립 색상 */
+  --ifm-color-neutral-600: #7A869A; /* 밝은 중립 색상 */
+  --ifm-color-neutral-700: #A5ADBA; /* 더 밝은 중립 색상 */
+  --ifm-color-neutral-800: #C1C7D0; /* 밝은 중립 색상 */
+  --ifm-color-neutral-900: #DFE1E6; /* 가장 밝은 중립 색상 */
+
+  /* Typography Colors */
+  --ifm-color-text-primary: var(--ifm-color-neutral-100); /* 기본 텍스트 색상 */
+  --ifm-color-text-secondary: var(--ifm-color-neutral-300); /* 보조 텍스트 색상 */
+  --ifm-color-text-tertiary: var(--ifm-color-neutral-500); /* 삼차 텍스트 색상 */
+  --ifm-color-text-placeholder: var(--ifm-color-neutral-600); /* 플레이스홀더 텍스트 색상 */
+
+  /* Background Colors */
+  --ifm-background-color: var(--ifm-color-neutral-0); /* 기본 배경 색상 */
+  --ifm-background-secondary: var(--ifm-color-neutral-900); /* 보조 배경 색상 */
+
+  /* Border Colors */
+  --ifm-border-color: var(--ifm-color-neutral-300); /* 기본 보더 색상 */
+  --ifm-border-color-dark: var(--ifm-color-neutral-400); /* 어두운 보더 색상 */
+
+  /* Code Syntax Highlighting */
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-/* 어두운 모드에서 가독성을 위해 밝은 색상 팔레트를 사용합니다. */
+/* Dark Mode Colors */
 [data-theme='dark'] {
+  /* Primary Colors */
   --ifm-color-primary: #4c9aff; /* 밝은 Atlassian 파란색 */
   --ifm-color-primary-dark: #3b89e6; /* 어두운 파란색 */
   --ifm-color-primary-darker: #2c70cc; /* 더 어두운 파란색 */
@@ -64,7 +133,7 @@
   --ifm-color-primary-lighter: #80b9ff; /* 한층 더 밝은 파란색 */
   --ifm-color-primary-lightest: #99c8ff; /* 가장 밝은 파란색 */
 
-  /* 어두운 모드용 보라색 */
+  /* Secondary Colors */
   --ifm-color-secondary: #8777D9; /* 밝은 보라색 */
   --ifm-color-secondary-dark: #7565C2; /* 어두운 보라색 */
   --ifm-color-secondary-darker: #634FA9; /* 더 어두운 보라색 */
@@ -73,7 +142,7 @@
   --ifm-color-secondary-lighter: #B3A7E6; /* 더 밝은 보라색 */
   --ifm-color-secondary-lightest: #D1C3ED; /* 가장 밝은 보라색 */
 
-  /* 어두운 모드용 Teal */
+  /* Tertiary Colors */
   --ifm-color-tertiary: #33CFFF; /* 밝은 Teal */
   --ifm-color-tertiary-dark: #29B7E6; /* 어두운 Teal */
   --ifm-color-tertiary-darker: #209EBF; /* 더 어두운 Teal */
@@ -82,7 +151,7 @@
   --ifm-color-tertiary-lighter: #99E3FF; /* 더 밝은 Teal */
   --ifm-color-tertiary-lightest: #CCEDFF; /* 가장 밝은 Teal */
 
-  /* 어두운 모드용 주황색 */
+  /* Quaternary Colors */
   --ifm-color-quaternary: #FF7452; /* 밝은 주황색 */
   --ifm-color-quaternary-dark: #E86345; /* 어두운 주황색 */
   --ifm-color-quaternary-darker: #D45338; /* 더 어두운 주황색 */
@@ -91,7 +160,7 @@
   --ifm-color-quaternary-lighter: #FFAAA0; /* 더 밝은 주황색 */
   --ifm-color-quaternary-lightest: #FFC5BE; /* 가장 밝은 주황색 */
 
-  /* 어두운 모드용 녹색 */
+  /* Quinary Colors */
   --ifm-color-quinary: #57D9A3; /* 밝은 녹색 */
   --ifm-color-quinary-dark: #4FC291; /* 어두운 녹색 */
   --ifm-color-quinary-darker: #47AB7E; /* 더 어두운 녹색 */
@@ -100,27 +169,158 @@
   --ifm-color-quinary-lighter: #9FEFD0; /* 더 밝은 녹색 */
   --ifm-color-quinary-lightest: #C4FADF; /* 가장 밝은 녹색 */
 
+  /* Success Colors */
+  --ifm-color-success: #57D9A3; /* 성공 색상 */
+  --ifm-color-success-dark: #4FC291; /* 더 어두운 성공 색상 */
+  --ifm-color-success-darker: #47AB7E; /* 한층 더 어두운 성공 색상 */
+  --ifm-color-success-darkest: #3D926B; /* 가장 어두운 성공 색상 */
+  --ifm-color-success-light: #79E3B8; /* 더 밝은 성공 색상 */
+  --ifm-color-success-lighter: #9FEFD0; /* 한층 더 밝은 성공 색상 */
+  --ifm-color-success-lightest: #C4FADF; /* 가장 밝은 성공 색상 */
+
+  /* Information Colors */
+  --ifm-color-info: #66D9FF; /* 정보 색상 */
+  --ifm-color-info-dark: #5CB3E6; /* 더 어두운 정보 색상 */
+  --ifm-color-info-darker: #4DA3BF; /* 한층 더 어두운 정보 색상 */
+  --ifm-color-info-darkest: #3C92A6; /* 가장 어두운 정보 색상 */
+  --ifm-color-info-light: #99E3FF; /* 더 밝은 정보 색상 */
+  --ifm-color-info-lighter: #CCEDFF; /* 한층 더 밝은 정보 색상 */
+  --ifm-color-info-lightest: #E6F5FF; /* 가장 밝은 정보 색상 */
+
+  /* Warning Colors */
+  --ifm-color-warning: #FFAB00; /* 경고 색상 */
+  --ifm-color-warning-dark: #E09B00; /* 더 어두운 경고 색상 */
+  --ifm-color-warning-darker: #CC8A00; /* 한층 더 어두운 경고 색상 */
+  --ifm-color-warning-darkest: #B37700; /* 가장 어두운 경고 색상 */
+  --ifm-color-warning-light: #FFBF33; /* 더 밝은 경고 색상 */
+  --ifm-color-warning-lighter: #FFCC66; /* 한층 더 밝은 경고 색상 */
+  --ifm-color-warning-lightest: #FFE0B3; /* 가장 밝은 경고 색상 */
+
+  /* Danger Colors */
+  --ifm-color-danger: #FF7452; /* 위험 색상 */
+  --ifm-color-danger-dark: #E86345; /* 어두운 위험 색상 */
+  --ifm-color-danger-darker: #D45338; /* 더 어두운 위험 색상 */
+  --ifm-color-danger-darkest: #BF452D; /* 가장 어두운 위험 색상 */
+  --ifm-color-danger-light: #FF8C70; /* 한층 더 밝은 위험 색상 */
+  --ifm-color-danger-lighter: #FFAAA0; /* 더 밝은 위험 색상 */
+  --ifm-color-danger-lightest: #FFC5BE; /* 가장 밝은 위험 색상 */
+
+  /* Neutral Colors */
+  --ifm-color-neutral-0: #091E42; /* 가장 어두운 중립 색상 */
+  --ifm-color-neutral-100: #DFE1E6; /* 밝은 중립 색상 */
+  --ifm-color-neutral-200: #C1C7D0; /* 더 밝은 중립 색상 */
+  --ifm-color-neutral-300: #A5ADBA; /* 중간 중립 색상 */
+  --ifm-color-neutral-400: #7A869A; /* 어두운 중립 색상 */
+  --ifm-color-neutral-500: #5E6C84; /* 더 어두운 중립 색상 */
+  --ifm-color-neutral-600: #344563; /* 더욱 어두운 중립 색상 */
+  --ifm-color-neutral-700: #253858; /* 어두운 중립 색상 */
+  --ifm-color-neutral-800: #172B4D; /* 매우 어두운 중립 색상 */
+  --ifm-color-neutral-900: #091E42; /* 가장 어두운 중립 색상 */
+
+  /* Typography Colors */
+  --ifm-color-text-primary: var(--ifm-color-neutral-0); /* 기본 텍스트 색상 */
+  --ifm-color-text-secondary: var(--ifm-color-neutral-300); /* 보조 텍스트 색상 */
+  --ifm-color-text-tertiary: var(--ifm-color-neutral-500); /* 삼차 텍스트 색상 */
+  --ifm-color-text-placeholder: var(--ifm-color-neutral-600); /* 플레이스홀더 텍스트 색상 */
+
+  /* Background Colors */
+  --ifm-background-color: var(--ifm-color-neutral-900); /* 기본 배경 색상 */
+  --ifm-background-secondary: var(--ifm-color-neutral-800); /* 보조 배경 색상 */
+
+  /* Border Colors */
+  --ifm-border-color: var(--ifm-color-neutral-700); /* 기본 보더 색상 */
+  --ifm-border-color-dark: var(--ifm-color-neutral-600); /* 어두운 보더 색상 */
+
+  /* Code Syntax Highlighting */
   --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.15);
 }
 
-/* theme-doc-markdown */
+/* Additional Utility Variables */
+:root {
+  /* Example: Link Colors */
+  --ifm-color-link: var(--ifm-color-primary);
+  --ifm-color-link-hover: var(--ifm-color-primary-light);
+
+  /* Example: Button Colors */
+  --ifm-color-button-primary-bg: var(--ifm-color-primary);
+  --ifm-color-button-primary-hover-bg: var(--ifm-color-primary-light);
+  --ifm-color-button-secondary-bg: var(--ifm-color-secondary);
+  --ifm-color-button-secondary-hover-bg: var(--ifm-color-secondary-light);
+
+  /* Example: Alert Colors */
+  --ifm-color-alert-success-bg: var(--ifm-color-success-lightest);
+  --ifm-color-alert-success-border: var(--ifm-color-success);
+  --ifm-color-alert-info-bg: var(--ifm-color-info-lightest);
+  --ifm-color-alert-info-border: var(--ifm-color-info);
+  --ifm-color-alert-warning-bg: var(--ifm-color-warning-lightest);
+  --ifm-color-alert-warning-border: var(--ifm-color-warning);
+  --ifm-color-alert-danger-bg: var(--ifm-color-danger-lightest);
+  --ifm-color-alert-danger-border: var(--ifm-color-danger);
+}
+
+header h1 {
+  font-weight: bold;
+}
+
+a.footer__link-item {
+  display: flex;
+  align-items: center;
+}
+
+a.card {
+  font-weight: bold;
+}
+
+a.navbar__item.navbar__link{
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Reduce title size in blog list */
+.blog-list-page h2[class*="title"]
+{
+  font-size: 2.2em;
+}
+
+
+/* Reduce title size in blog page */
+.blog-post-page h1[class*="title"]
+{
+  font-size: 2rem !important;
+  font-weight: bold;
+}
+
+.markdown header {
+  margin-bottom: 3rem;
+}
 
 .markdown h1 {
   font-size: 2.2rem;
+  font-weight: bold;
 }
 
 .markdown h2 {
-  margin-top: 6.5rem !important;
+  margin-top: 8rem;
   margin-bottom: 2rem;
   font-size: 1.7rem; /* 원하는 크기로 조정 */
   color: var(--ifm-color-secondary-dark); /* 원하는 색상으로 조정 */
+  font-weight: bolder;
 }
 
 .markdown h3 {
-  margin-top: 1.8rem !important;
-  margin-bottom: 1.5rem;
+  margin-top: 1.8rem;
+  margin-bottom: 2rem;
   font-size: 1.5rem; /* 원하는 크기로 조정 */
   color: var(--ifm-color-tertiary-dark); /* 원하는 색상으로 조정 */
+  font-weight: bold;
+}
+
+.markdown h4 {
+  margin-top: 1.6rem;
+  margin-bottom: 2rem;
+  font-size: 1.5rem; /* 원하는 크기로 조정 */
+  color: var(--ifm-color-quinary); /* 원하는 색상으로 조정 */
+  font-weight: bold;
 }
 
 .markdown figure {
@@ -130,13 +330,55 @@
   align-items: center;
 }
 
+.markdown img {
+  margin-top: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30vw;
+}
+
 .markdown figcaption {
-  margin-top: 0.5rem;
+  margin-top: 0.8rem;
+  margin-bottom: 2rem;
   color: var(--ifm-color-primary-light); /* 원하는 색상으로 조정 */
+  font-weight: bold;
 }
 
 .markdown strong {
-  color: var(--ifm-color-quaternary-dark); /* 원하는 색상으로 조정 */
+  color: var(--ifm-color-warning-darker); /* 원하는 색상으로 조정 */
+}
+
+.markdown table {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.markdown tfoot {
+  color: var(--ifm-color-primary-light); /* 원하는 색상으로 조정 */
+  font-weight: bold;
+}
+
+/* 기본 리스트 스타일 제거 */
+.markdown ul {
+  list-style: none;
+  padding-left: 3em; /* 마커 공간 확보 */
+  /* padding-top: 1rem; */
+  /* padding-bottom: 1rem; */
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+  /* border: 1px solid black; */
+  /* border-radius: 10px; */
+}
+
+/* 각 리스트 항목 앞에 ▸ 마커 추가 */
+.markdown ul li::before {
+  content: '▸';
+  color: #007acc; /* 마커 색상 (원하는 색상으로 변경 가능) */
+  display: inline-block;
+  width: 1em; /* 마커와 텍스트 간의 간격 조정 */
+  margin-left: -1.5em; /* 마커 위치 조정 */
 }
 
 header {
@@ -147,8 +389,6 @@ header {
 header h1 {
   font-size: 2.2rem !important;
 }
-
-/* 태그에 대한 CSS */
 
 /* 부모 요소에 Flexbox와 gap 적용 */
 .blog-list-page main {
@@ -193,6 +433,20 @@ header h1 {
   border-radius: 5px;
 }
 
+.container .row nav div.sidebarItemTitle_Sqs_ {
+  font-weight: 900;
+}
+
+main article header h2 a {
+  font-size: 1.85rem;
+  font-weight: bold !important;
+}
+
+/* 블로그 사이드바 2024 */
+.container .row aside div h3 {
+  font-weight: bolder;
+}
+
 .theme-doc-footer {
   margin-top: 10rem !important;
 }
@@ -203,4 +457,47 @@ blockquote {
   margin-left: 0;
   margin-top: 2rem !important;
   margin-bottom: 2rem;
+}
+
+
+
+.theme-doc-sidebar-container {
+  font-size: 0.9rem;
+}
+
+.theme-doc-sidebar-container .menu__link--sublist {
+  font-weight: 900;
+}
+
+/* docs tag 갤러리에 테두리 입히기 */
+#__docusaurus_skipToContent_fallback > .container > .row > main > section > article {
+  border: 1px solid #ccc;
+  padding: 2.5rem;
+  margin-bottom: 3rem !important;
+  border-radius: 5px;
+}
+
+.footer--dark {
+  /* footer 설정 */
+  --ifm-footer-color: white !important;
+  --ifm-footer-link-color: white !important;
+  --ifm-footer-title-color:#8777D9  !important;
+}
+
+.markdown code {
+  color: var( --ifm-color-danger);
+}
+
+.image-row {
+  display: flex;
+  justify-content: space-between; /* 이미지 간의 간격을 조절 */
+  gap: 20px; /* Flexbox의 gap 속성을 사용하여 간격 추가 (브라우저 호환성 확인 필요) */
+  flex-wrap: wrap; /* 화면 크기에 따라 이미지가 다음 줄로 넘어가도록 설정 */
+  margin: 20px 0; /* 위아래 여백 추가 */
+}
+
+.image-row img {
+  max-width: 48%; /* 두 이미지가 한 줄에 배치될 수 있도록 너비 설정 */
+  height: auto; /* 이미지 비율 유지 */
+  border-radius: 8px; /* 이미지 모서리 둥글게 */
 }

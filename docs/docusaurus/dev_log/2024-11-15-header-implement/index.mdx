@@ -1,0 +1,113 @@
+---
+slug: dropdown-implement
+title: '🎨 Header 컴포넌트로 확인하는 내가 컴포넌트를 설계하고 구현하는 방식'
+keywords: [Frontend, intro, react, typescript, dropdown, component, design]
+authors: [zen]
+---
+
+## 📚 정리
+
+완전 범용적인 컴포넌트와, 도메인이 반영된 컴포넌트는 애초에 목적 자체가 다르다고 생각한다.<br/>
+
+범용적일수도 좋겠지만, 당연하게도 사용성은 떨어지기 마련이다. 특히 껍데기만 만들고 모든 의존성을 주입해야하는 경우라면 더더욱. <br/>
+
+이번에는 도메인 종속적이면서, 도메인 곳곳에서 사용되는 컴포넌트를 내가 어떻게 개발하고 있는지 서술하고자 한다.<br/><br/>
+
+## 🔬 개요
+
+네이버 부스트캠프의 그룹 프로젝트를 진행하면서, `Header` 컴포넌트를 구현하게 되었다. <br/>
+
+사실 헤더 구현에는 별 게 없긴 한데 프론트앤드 관점에서 요구사항을 내가 어떻게 분석하고 있으며, 어떻게 이를 코드로 바꾸는지 기록하고자 적게 되었다. <br/><br/>
+
+## 🤔 요구사항
+
+import img1 from './img/header_img1.webp';
+import img2 from './img/header_img2.webp';
+import img3 from './img/header_img3.webp';
+import img8 from './img/header_img8.webp';
+
+<table style={{marginLeft: 'auto', marginRight:'auto'}}>
+  <tbody>
+  <tr>
+    <td><img src={img1} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+    <td><img src={img2} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+    <td><img src={img3} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+    <td><img src={img8} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+  </tr>
+  </tbody>
+  <tfoot>
+  <tr>
+    <th>페이지 1</th>
+    <th>페이지 2</th>
+    <th>페이지 3</th>
+    <th>페이지 4</th>
+  </tr>
+  </tfoot>
+</table>
+
+<br/>
+
+위의 4개의 페이지에서 `Header` 컴포넌트가 사용되고 있음을 파악할 수 있었다. <br/><br/>
+
+## 🤔 공통 요소 분석
+
+먼저 다음과 같은 요소를 추려내었다.<br/>
+
+import img4 from './img/header_img4.webp';
+import img5 from './img/header_img5.webp';
+import img9 from './img/header_img9.webp';
+
+<table style={{marginLeft: 'auto', marginRight:'auto'}}>
+  <tbody>
+  <tr>
+    <td><img src={img4} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+    <td><img src={img5} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+    <td><img src={img9} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+  </tr>
+  </tbody>
+  <tfoot>
+  <tr>
+    <th>헤더 1</th>
+    <th>헤더 2</th>
+    <th>헤더 3</th>
+  </tr>
+  </tfoot>
+</table>
+
+<br/>
+
+그리고 이를 분석한 내용은 다음과 같다. <br/>
+
+import img6 from './img/header_img6.webp';
+
+<figure>
+  <img src={img6}/>
+  <figcaption>분석한 내용 사진</figcaption>
+</figure>
+
+5개의 컴포넌트가 `Header`라는 `Layout` 요소에 필요함을 알게 되었다.<br/>
+
+잘 보면 배치는 일정하다. 그에 따라서, 미리 배치를 해두고 값이 들어올 때는 보여주고, 들어오지 않을때는 보여주지 않는 상태를 유지하면 된다는 것을 확인하였다.<br/>
+
+## 🧑‍💻 구현
+
+리액트에서의 구현 방식은 보통 2가지를 따른다.<br/>
+
+> ▸ `Component Composition Pattern`<br/>
+> ▸ `Atomic Design`<br/>
+
+위 두가지인데, 둘의 핵심은 같다. 최대학 작은 단위의 컴포넌트를 만들고, 레고처럼 부품을 하나씩 조립해서 완성체를 만드는 것.<br/>
+
+작은 것에서 시작해서 점점 큰 요소를 만드는 건데, 일반적인 패턴은 다음과 같은 것 같다.<br/>
+
+import img7 from './img/header_img7.webp';
+
+<figure>
+  <img src={img7}/>
+  <figcaption>Atomic Design Pattern 사진</figcaption>
+</figure>
+
+이런 것처럼 제일 작은 단위로 쪼개고, 이를 합쳐서 최종적으로 페이지를 만든다는 의미의 패턴이다.<br/>
+
+완벽하게 해당 구조를 따라가면 좋겠지만, 이는 좀처럼 쉽지 않기도 하고, 보통 이렇게 까지 필요 없는 경우도 많아서 몇 가지 과정을 스킵하고 사용하는 경우도 있는 것 같다. <br/>
+

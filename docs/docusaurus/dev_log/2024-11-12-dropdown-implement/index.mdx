@@ -1,0 +1,192 @@
+---
+slug: dropdown-implement
+title: '🖥️React, TypeScript, Tailwind로 Dropdown 구현하기'
+keywords: [Frontend, intro, react, typescript, dropdown, component, design]
+authors: [zen]
+---
+
+
+## 📚 정리
+
+## 🔬 개요
+
+네이버 부스트캠프의 그룹 프로젝트를 진행하면서, `Dropdown` 컴포넌트를 구현하게 되었다. <br/>
+
+평소라면 `React`를 사용해서 `HTML`로 드랍다운을 구현하는 것처럼 간단하게 구현했겠지만, 팀의 핵심 가치는 <strong>사용자 관점에서의 완성도</strong> 였기에 좀 더 디테일한 구현을 시도해보게 되었다.<br/>
+
+처음에는 단순하게 이벤트 한두개 정도만 추가하고, 공통 컴포넌트만 뽑아내면 되겠지? 라고 생각하던게 `unmount` 시에 이벤트를 적용하는 문제를 만나고 나서.. 하루종일 고민하고 탐구하는 작업이 되어버렸다...<br/>
+
+그래서 이번 글에서는 `Dropdown`을 구현하면서 배운 것들과 더불어서 `unmount` 시에 이벤트를 적용하는 방법에 대해 정리해보려 한다.<br/><br/>
+
+## 🎯 구현의 목표
+
+import img1 from './img/dropdown_img1.webp';
+
+<figure>
+  <img src={img1} alt="missing" width='60%'/>
+  <figcaption>구현해야만 했던 페이지</figcaption>
+</figure>
+
+내가 구현해야 했던 페이지는 위와 같았다. <br/>
+
+import img2 from './img/dropdown_img2.webp';
+
+<figure>
+  <img src={img2} alt="missing" width='60%'/>
+  <figcaption>구현하고자 했던 컴포넌트</figcaption>
+</figure>
+
+그리고 위에 보이는 `Dropdown` 컴포넌트가 내가 구현하고자 했던 컴포넌트였다. <br/><br/>
+
+## 🤔 구현시 고려해야 했던 점
+
+앞서 말했듯이 우리 팀은 <strong>사용자 관점에서의 완성도</strong>를 중요시하고 있었다. <br/>
+
+여기에 더해서 기본적인 프로젝트 기간 이후에도 지속적으로 이 프로젝트를 유지보수하면서 끌고 가고 싶다는 생각이 있었다.<br/>
+
+이에 따라서 다음의 사항을 고려해야할 필요가 있었다.<br/>
+
+> 1. 완벽하게 까지는 아니더라도, 사용자 관점에서 시각적인 완성도는 개발기한 내에서 최대한 고려해야 한다.
+> 2. 프로젝트 이후의 유지보수를 위해서 컴포넌트 구조는 최대한 작게 쪼개야 한다.
+> 3. 컴포넌트가 재사용 가능하게 만들어져야 한다. (DX 및 협업 관점)
+
+<br/>
+
+그렇게 이런 원칙을 바탕으로 개발을 진행하게 되었다. <br/><br/>
+
+## 🤔 내가 고민했던 구조
+
+
+import img3 from './img/dropdown_img3.webp';
+
+<figure>
+  <img src={img3} alt="missing" width='60%' />
+  <figcaption>내가 고민했던 구조</figcaption>
+</figure>
+
+내가 고민했던 구조는 위와 같았다. <br/>
+
+
+import img4 from './img/dropdown_img4.webp';
+
+<figure>
+  <img src={img4} alt="missing" width='60%'/>
+  <figcaption>분해해서 살펴본 구조</figcaption>
+</figure>
+
+이를 조금 더 뜯어보면 위와 같은 구조가 된다. <br/>
+
+최대한 작은 컴포넌트로 구성하고자 하였으며, 이를 바탕으로 구현하게 되었다. <br/><br/>
+
+
+## 🤔 재사용 범위에 대한 고민
+
+컴포넌트를 작게 나누는 것 까지는 좋았는데, 이들을 어디까지 재사용가능하게 할 것인가에 대한 의문이 생겼다. <br/>
+
+처음에는 [shadcn](https://ui.shadcn.com/examples/cards)처럼 구현을 할까 생각을 했었다.<br/>
+
+최대한 범용적으로 만들고, 나중에 필요한 정보를 따로 외부에서 주입을 받게 하는 식으로 갈까 하는 고민이 있었다. <br/>
+
+다만, 여기서 한 가지가 마음에 걸리게 되었다. `shadcn`은 진짜 범용적인 목적을 갖고 나온 라이브러리이다. 그리고 당연하게도 이게 개발되기까지 정말 많은 컨트리뷰터들의 기여가 있었을 것이다.<br/>
+
+하지만, 프로젝트에서는 이렇게까지 큰 범용성이 필요하지 않았다. 그래서 실제로 기획서 `Figma`를 살펴보았고, 사용되는 부분을 확인할 수 있었다. <br/>
+
+
+import img5 from './img/dropdown_img5.webp';
+
+<div style={{display: "flex", justifyContent: "center"}}>
+  <figure>
+    <img src={img2} alt="missing" width='60%'/>
+    <figcaption>드랍다운이 사용되는 장소 1</figcaption>
+  </figure>
+  <figure>
+    <img src={img5} alt="missing" width='60%'/>
+    <figcaption>드랍다운이 사용되는 장소 2</figcaption>
+  </figure>
+</div>
+
+<br/>
+
+위의 두 경우에서만 사용되는 것을 확인할 수 있었다. <br/>
+
+추후에 뭔가 추가적인 요소가 들어온다고 하지만, 모든 경우를 고려하기 보다는 조금 더 좁혀서 다음과 같은 범위만 고려하면 될 것 같았다. <br/>
+
+> ▸ 버튼의 경우 여러 종류의 아이콘에 대응이 될 수 있어야 한다. 나아가서, 기존의 요소에 영향을 주면 안된다.<br/>
+> ▸ 버튼에 텍스트가 들어왔을 때 배치해줄 수 있도록 `children`으로 받아서 처리하는 로직을 구현한다.<br/>
+> ▸ 드랍다운 아이템은 외부로부터 입력받는다.<br/>
+> ▸ 드랍다운 아이템에 대한 이벤트 처리도 외부로부터 입력받는다. 본 드랍다운은 wrapper에 대한 이벤트 핸들러만 입력받는다. 여기서 `e.target.closest`와 같은 이벤트 버블링 방식을 사용한다.<br/>
+> ▸ 드랍다운에서의 외부로부터 받는 이벤트는 `onClick`에만 적용하도록 한다.<br/>
+> ▸ `Figma`에 표시된 디자인은 전부 구현한다. 추가로 <strong>사용자 편의성</strong>에 대한 부분은 주어진 개발 기한 내에 최대한 고려한다.<br/>
+
+<br/>
+
+위와 같은 생각을 가지고 개발에 착수를 하게 되었다. <br/><br/>
+
+## 🧑‍💻 계층 구조
+
+드랍다운을 구현하기 위해 내가 꾸린 계층 구조는 다음과 같다. <br/>
+
+```typescript
+/dropdown
+  - Dropdown
+  - Trigger
+  - Menu
+  - Item
+```
+
+<br/>
+
+사실 처음부터 이렇게 나온 것은 아니다.<br/>
+
+내 개발 원칙 중 하나인 `2번 구현하기`라는 게 있는데.. 일단 먼저 빠르게 구현을 해보고, 그 다음에 다시 구현하면서 그때 완성도를 높이자는 마인드셋이다.<br/>
+
+하도 개발 기간을 제대로 못맞춰서 내 나름대로 세운 원칙이다.<br/>
+
+사실 처음부터 이런 구조가 나왔던 것은 아니었다.<br/>
+
+기존에 `Dropdown`은 `HTML`이나 `Vanilla JS` 등으로 구현만 해봤고, `React`에서는 만들어지는 컴포넌트를 가져다썼었다.<br/>
+
+이에 따라, 처음 만들어보게 되는 것이었고.. 호기롭게 시작은 했지만.. 재사용성이 높게 만드는 것이 생각보다 쉽지 않음을 깨달았다. <br/>
+
+import img6 from './img/dropdown_img6.webp'
+import img7 from './img/dropdown_img7.webp'
+import img8 from './img/dropdown_img8.webp'
+import img9 from './img/dropdown_img9.webp'
+import img10 from './img/dropdown_img10.webp'
+
+<div style={{display: "flex", justifyContent: "center"}}>
+  <figure>
+    <img src={img7} alt="missing" width='60%'/>
+    <figcaption>코드 1</figcaption>
+  </figure>
+  <figure>
+    <img src={img8} alt="missing" width='60%'/>
+    <figcaption>코드 2</figcaption>
+  </figure>
+  <figure>
+    <img src={img9} alt="missing" width='60%'/>
+    <figcaption>코드 3</figcaption>
+  </figure>
+  <figure>
+    <img src={img10} alt="missing" width='60%'/>
+    <figcaption>코드 4</figcaption>
+  </figure>
+</div>
+
+위는 내가 처음에 작성했던 코드들이다. 보여주기 부끄러워서 일부러 굉장히 작게 표시를 했다.<br/>
+
+<figure>
+  <img src={img6} alt="missing" width='60%'/>
+  <figcaption>처음에 작성한 구조</figcaption>
+</figure>
+
+그리고 이에 따른 구조는 위와 같았다.<br/>
+
+그냥 무턱대고 짜다보니, 나 스스로도 알아보기 어려운 지저분한 코드가 나왔다.<br/>
+
+그에 따라서, 구현했던 것을 바탕으로 다시금 갈아엎을 필요가 있었는데 그게 앞서서 보여준 구조이다. <br/>
+
+이 과정에서 `컴포넌트 컴파운드 패턴`이 뭔지 알게 되었고, 각 컴포넌트를 속성으로 넘겨서 사용하는 방법이 있음을 배울 수 있었다. <br/><br/>
+
+## 🧑‍💻 구현 과정
+

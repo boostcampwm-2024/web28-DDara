@@ -1,0 +1,30 @@
+---
+slug: postgressSql_auto_generate_time
+title: PostgreSQL에서 생성 시간 자동 설정하기 (generated_at의 NOT NULL 제약 조건)
+authors: [happyhyep]
+---
+
+### ⏱️ PostgreSQL에서 생성 시간 자동 설정하기: `generated_at` 필드 오류 해결
+프로젝트를 진행하며 `generated_at` 컬럼에서 `null value` 오류가 발생했습니다. 이 오류는 생성된 시간을 자동으로 기록해야 하는 컬럼에 데이터가 없는 경우 발생하는데, 이 문제를 PostgreSQL에서 해결하는 방법을 정리합니다.
+
+---
+
+### 1️⃣ 문제 상황
+`generated_at` 필드는 각 채널이 생성된 시간을 저장하는데, `NOT NULL` 제약 조건이 적용되어 있었습니다. 새로운 채널을 생성할 때 이 필드에 값을 넣지 않으면 `null value in column "generated_at" of relation "channel" violates not-null constraint`라는 오류가 발생했습니다.
+### 2️⃣ 해결 방법: 기본값으로 `CURRENT_TIMESTAMP` 설정
+이 문제를 해결하기 위해, 데이터베이스에서 `generated_at` 필드의 기본값을 현재 시간으로 설정했습니다. `CURRENT_TIMESTAMP`를 기본값으로 설정하면 새 레코드를 추가할 때 자동으로 현재 시간이 입력됩니다.
+```sql
+ALTER TABLE channel
+ALTER COLUMN generated_at SET DEFAULT CURRENT_TIMESTAMP;
+```
+이 명령어는 `channel` 테이블의 `generated_at` 컬럼에 `CURRENT_TIMESTAMP` 기본값을 설정해줍니다.
+
+---
+
+### 3️⃣ 확인 결과
+기본값 설정 후, 채널 생성 API를 다시 호출했을 때 `generated_at` 필드에 현재 시간이 자동으로 기록되었습니다. 이를 통해 오류 없이 새 채널을 생성할 수 있었습니다.
+### 🔄 앞으로의 적용
+이와 같은 `timestamp` 필드는 기본값을 자동으로 설정하면 편리하게 사용할 수 있는 것 같았습니다. 특히 생성이나 update 시각을 보통 데이터에 넣어두는데,  `created_at`, `updated_at` 등의 컬럼에 `CURRENT_TIMESTAMP`를 활용하면 손쉽게 시간 기록을 관리할 수 있다는 것을 알게 되었습니다.
+결론적으로 PostgreSQL에서 현재 시간을 기본값으로 설정하여 `NOT NULL` 제약 조건을 지킬 수 있었습니다.
+8:05
+

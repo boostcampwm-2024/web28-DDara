@@ -1,0 +1,73 @@
+---
+slug: nodejs_websocket_connect
+title: Node.js WebSocket 연결 문제 해결기
+authors: [happyhyep]
+---
+
+![](https://velog.velcdn.com/images/happyhyep/post/77b9f08d-f9eb-4b32-b6ab-7cf2df16dbb0/image.png)
+## ⚒️ **Node.js WebSocket 연결 문제 해결하기: `node_modules` 폴더 중복으로 인한 오류**
+최근 프로젝트에서 Node.js를 사용하여 **WebSocket** 서버를 구축하는 도중, 이상한 오류에 직면하게 되었습니다. WebSocket 서버가 정상적으로 동작하지 않아서 여러 가지 방법을 시도해 보았고, 결국 원인을 파악하고 해결할 수 있었습니다. 오늘은 그 과정을 공유해보려 합니다.
+참고로 저는 pnpm 모듈을 사용하고 있었고, `ws` 모듈에서 오류가 발생했습니다. (Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './lib/stream.js' is not defined by "exports")
+저의 폴더구조를 설명드리면, 기본적으로 모노레포로 관리하고 있었고,
+```jsx
+root/
+├── backend/
+│   ├── src/
+│   │   ├── index.js
+│   │   ├── websocketServer.js
+│   │   ├── db/
+│   │   │   └── db.js
+│   │   ├── routes/
+│   │   │   └── authRouter.js
+│   │   ├── constants/
+│   │   │   └── constants.js
+│   │   │   └── ...
+│   ├── package.json
+│   ├── swaggerConfig.js
+│   └── node_modules/
+└── frontend/
+    ├── src/
+    │   ├── App.tsx
+    │   ├── index.tsx
+    │   ├── components/
+    │   │   ├── WebSocketClient.tsx
+    │   │   └── ...
+    │   └── assets/
+    ├── package.json
+    ├── node_modules/
+    └── public/
+```
+---
+### 🤔 **문제의 시작**
+저는 `express`와 `ws` 모듈을 사용하여 WebSocket 서버를 구축하고 있었고, 이를 **HTTP 서버와 함께 동작시키기** 위해 `http.createServer`와 `ws.WebSocketServer`를 연결하는 구조로 작업을 진행했습니다.
+하지만 WebSocket 서버를 초기화하려고 하던 중, `initializeWebSocketServer(server)`를 호출하는 코드에서 **예상치 못한 오류**가 발생했습니다. 오류 메시지는 아래와 같았습니다:
+```csharp
+Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './lib/stream.js' is not defined by "exports"
+```
+이 오류는 WebSocket 모듈을 불러오는 과정에서 `node_modules`가 중복된 환경에서 발생한 문제였습니다.
+### :돋보기: **시도한 해결 방법들**
+1. **Node.js 버전 확인**
+먼저 Node.js의 버전이 오래되었을 가능성도 염두에 두고 최신 버전으로 업데이트했습니다. 하지만 여전히 문제가 해결되지 않았습니다.
+2. **`ws` 모듈의 버전 변경**
+`ws` 모듈의 버전이 문제일 수 있다고 판단하여, `pnpm`으로 `ws` 모듈을 8.x에서 7.x로 다운그레이드했습니다. 그런데 이 방법 역시 문제를 해결하지 못했습니다.
+3. **`import`와 `require`의 호환성 문제**
+프로젝트 설정을 살펴본 결과, `import`와 `require` 방식이 혼용된 상태에서 발생한 문제일 가능성이 높다고 생각했습니다. 그래서 **`require`로 모듈을 불러오는 방식**으로 변경해보았습니다. 여전히 오류가 발생했습니다.
+4. **`node_modules` 폴더 중복 문제**
+여러 가지 방법을 시도하던 중, **`node_modules` 폴더가 두 개** 존재한다는 사실을 발견했습니다. 하나는 `backend` 폴더에, 또 하나는 `src` 폴더에 있었습니다. 이 중복된 `node_modules` 폴더가 문제의 원인이라는 사실을 확인한 후, `node_modules` 폴더를 **삭제**하고 **다시 설치**해보았습니다.
+![](https://velog.velcdn.com/images/happyhyep/post/a5148d28-a501-4fea-8b9e-ee48ac0d726b/image.png)
+저조차 믿기지 않는 폴더구조였지만…… 제가 드래그를 잘못해서 복사가 되었는지…. 정말 왜인지 모르겠지만 `src` 폴더 내에 `node_modules` 폴더가 하나 더 존재한다는 것을 발견하였습니다.
+### 🔑 **문제 해결**
+최종적으로 문제는 **`node_modules` 폴더의 중복**으로 인한 의존성 충돌이었습니다. 두 개의 `node_modules` 폴더가 각각 독립적인 의존성 트리를 만들었고, 이로 인해 WebSocket 모듈을 제대로 불러올 수 없었던 것입니다........
+### 해결 방법:
+1. `backend` 폴더와 `src` 폴더에서 중복된 `node_modules` 폴더를 삭제했습니다.
+2. `pnpm install` 명령어로 한 번만 의존성을 설치하여 `node_modules` 폴더를 하나로 통합했습니다.
+3. 이후 `initializeWebSocketServer`를 호출하여 WebSocket 서버를 초기화했더니 모든 것이 정상적으로 동작했습니다.
+
+### ✅ **결론**
+
+이번 문제는 **중복된 `node_modules` 폴더**가 원인이라는 것을 알게 되었습니다. 너무 어이없는 실수이고, 이런 곳에 시간을 허비했다는 것이 황당하지만…  **`node_modules` 폴더가 중복되지 않게 하고, 혹시 이런 의존성 문제가 또 발생하면 이런 기초적인 것부터 확인해야겠다는 생각을 하게 되었습니다.**
+
+
+---
+
+앞으로도 비슷한 문제나 새로운 에러를 만날 때마다 해결 과정을 기록하고 포스팅해보려 합니다. 여태껏 프로젝트를 하면서 새로 알게된 내용들은 종종 포스팅 했었는데, 정작 문제를 어떻게 해결해나갔는지는 포스팅하지 않았던 것 같아 앞으로는 **에러 발생 시 해결 방법을 블로그에 남기는 습관**을 들여가면서 더 나은 개발자가 되어가보려 합니다.
