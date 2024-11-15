@@ -7,7 +7,7 @@ keywords: [ prepare ]
 tags: ['prepare']
 last_update:
   date: 2024-10-22
-  authors: [ zen ]
+  author: zen
 ---
 
 ## 📝 각자의 목표
