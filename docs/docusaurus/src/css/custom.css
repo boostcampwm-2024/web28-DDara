@@ -360,27 +360,6 @@ a.navbar__item.navbar__link{
   font-weight: bold;
 }
 
-/* 기본 리스트 스타일 제거 */
-.markdown ul {
-  list-style: none;
-  padding-left: 3em; /* 마커 공간 확보 */
-  /* padding-top: 1rem; */
-  /* padding-bottom: 1rem; */
-  margin-top: 2rem;
-  margin-bottom: 3rem;
-  /* border: 1px solid black; */
-  /* border-radius: 10px; */
-}
-
-/* 각 리스트 항목 앞에 ▸ 마커 추가 */
-.markdown ul li::before {
-  content: '▸';
-  color: #007acc; /* 마커 색상 (원하는 색상으로 변경 가능) */
-  display: inline-block;
-  width: 1em; /* 마커와 텍스트 간의 간격 조정 */
-  margin-left: -1.5em; /* 마커 위치 조정 */
-}
-
 header {
   padding-bottom: 2rem;
   border-bottom: 1px solid #ccc;
