@@ -13,7 +13,7 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // 사이트의 프로덕션 URL을 설정하세요.
-  url: 'https://fantasmith.com', // URL은 변경하지 않음
+  url: 'https://ddara-docs.vercel.app/', // URL은 변경하지 않음
   // 사이트가 제공되는 /<baseUrl>/ 경로명을 설정하세요.
   baseUrl: '/',
 
@@ -249,36 +249,13 @@ const config: Config = {
     },
     // SEO 및 링크 미리보기를 위한 메타데이터 설정
     metadata: [
-      { name: 'keywords', content: '지도, 저작도구, 실시간 위치' },
-      { name: 'author', content: 'web28' },
-      {
-        name: 'description',
-        content: '중장년층 사용자가 쉽게 길 안내를 받게 해주는 모바일 웹서비스',
-      },
-      { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:title', content: '선따라길따라' },
-      {
-        name: 'twitter:description',
-        content: '중장년층 사용자가 쉽게 길 안내를 받게 해주는 모바일 웹서비스',
-      },
-      { name: 'twitter:url', content: 'YOUR_URL' },
-      {
-        name: 'twitter:image',
-        content:
-          'https://private-user-images.githubusercontent.com/103382269/382040263-f7973fe3-dd8a-4643-9536-53e63db1f6fe.png',
-      },
-      { property: 'og:title', content: '선따라길따라' },
-      {
-        property: 'og:description',
-        content: '중장년층 사용자가 쉽게 길 안내를 받게 해주는 모바일 웹서비스',
-      },
-      { property: 'og:type', content: 'website' },
-      { property: 'og:url', content: 'YOUR_URL' },
-      {
-        property: 'og:image',
-        content:
-          'https://private-user-images.githubusercontent.com/103382269/382040263-f7973fe3-dd8a-4643-9536-53e63db1f6fe.png',
-      },
+      {name: 'author', content: 'Zen'},
+      { name: 'keywords', content: '프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍' },
+      {name: 'twitter:card', content: 'summary_large_image'},
+      // 전역 타이틀 및 설명을 설정하되, 개별 페이지에서 덮어쓸 수 있도록 합니다.
+      {name: 'twitter:url', content: 'https://ddara-docs.vercel.app'},
+      {property: 'og:type', content: 'website'},
+      {property: 'og:url', content: 'https://ddara-docs.vercel.app'},
     ],
   } satisfies Preset.ThemeConfig,
 
