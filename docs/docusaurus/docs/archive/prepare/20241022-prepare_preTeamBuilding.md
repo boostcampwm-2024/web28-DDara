@@ -1,12 +1,12 @@
 ---
-slug: 20241114-dailyscrum
-title: '🏃 [2024-11-14] 3주차 목요일 데일리 스크럼'
-sidebar_position: 4
-sidebar_label: '🏃 [2024-11-14] 3주차 목요일 데일리 스크럼'
-keywords: [ dailyscrum ]
-tags: ['scrum']
+slug: 20241022-prepare_preTeamBuilding
+title: '🏃 [2024-10-22] 사전 팀 미팅 일정 정하기 및 사전 준비'
+sidebar_position: 1
+sidebar_label: '🏃 [2024-10-22] 사전 팀 미팅 일정 정하기 및 사전 준비'
+keywords: [ prepare ]
+tags: ['prepare']
 last_update:
-  date: 2024-11-14
+  date: 2024-10-22
   authors: [ zen ]
 ---
 

@@ -20,19 +20,113 @@ last_update:
   - 길안내를 위한 저작도구
   - 지도와 캔버스 동기화
 
-## 📝 한 주 요약
+## 📝 팀 개발 문화 요약
 
-## 📝 데모 영상 및 주소
+### **팀4명이 FE → 서로의 코드를 이해하기 쉽다**
+
+- PR은 최소 2명이 approve 해야한다
+
+→ 깃허브 액션을 통해 PR이 들어오면, 확인요청 라벨과 함께 랜덤으로 리뷰어 2명씩 할당
+
+![이미지 1](./imgs/20241114-3week-presentation_img1.png);
+
+### **문서화에 신경쓰자**
+
+- 문서를 아예 따로 관리하자. ⇒ 추후 TypeDoc, Storybook, Swagger, JSDoc 등도 이에 통합 계획
+
+[선따라길따라](https://ddara-docs.vercel.app/archive/intro)
+
+- storybook 작성
+
+
+import ReactPlayer from "react-player";
+
+<ReactPlayer playing controls url="/docs/archive/summary/20241113-3week-presentation/video/20241114-3week-presentation_video1.mov"></ReactPlayer>
+
+- TSDoc
+
+```jsx
+  // BottomSheet TSDoc
+
+  /**
+   * `BottomSheet` 컴포넌트는 하단에서 올라오는 시트 형태의 UI를 제공합니다.
+   *
+   * @param {IBottomSheetProps} props - `children`을 포함한 컴포넌트 속성
+   * @param {number} props.minHeight - Bottom Sheet의 최소 높이를 화면 비율로 나타냅니다 (0.0 - 1.0).
+   * @param {number} props.maxHeight - Bottom Sheet의 최대 높이를 화면 비율로 나타냅니다 (0.0 - 1.0).
+   * @param {ReactNode} props.children - Bottom Sheet 내부에 렌더링할 콘텐츠입니다.
+   * @returns {ReactNode} - 하단 시트를 렌더링합니다.
+   *
+   * @remarks
+   * - 드래그 동작을 통해 시트를 열고 닫을 수 있습니다.
+   * - `useBottomSheet` 훅을 사용하여 위치 및 드래그 동작을 관리합니다.
+   * - `minHeight`는 Bottom Sheet가 닫힌 상태의 높이 비율을 나타냅니다.
+   * - `maxHeight`는 Bottom Sheet가 열린 상태의 최대 높이 비율을 나타냅니다.
+   *
+   * @example
+   * ```tsx
+   * <BottomSheet minHeight={0.5} maxHeight={0.85}>
+   *   <div className="p-4">
+   *     <h2>예시 콘텐츠</h2>
+   *     <p>BottomSheet의 children</p>
+   *   </div>
+   * </BottomSheet>
+     * ```
+*/
+```
+
+```tsx
+/**
+   * 사용자 위치를 가져오는 커스텀 Hook입니다.
+   *
+   * @returns {IGetUserLocation} 사용자 위치 (위도, 경도)와 에러 메시지를 포함한 객체를 반환합니다.
+   *
+   * @remarks
+   * - Geolocation API를 사용하여 사용자의 현재 위치를 가져옵니다.
+   * - 위치를 성공적으로 가져오지 못하면 기본 위치 네이버 1784 (37.3595704, 127.105399)로 설정됩니다.
+   * - Geolocation API가 지원되지 않는 경우에도 기본 위치로 설정됩니다.
+   *
+   * @example
+   *
+   * const { lat, lng, error } = getUserLocation();
+   *
+   * if (error) {
+   *   console.error('위치 가져오기 에러:', error);
+   * } else {
+   *   console.log('현재 위치:', lat, lng);
+   * }
+   *
+*/
+```
+
+- 문서 작성 템플릿 만들기
+
+<div style={{width:'40%', marginLeft:'auto', marginRight:'auto',}}>
+
+  ![이미지](./imgs/20241114-3week-presentation_img2.png)
+
+</div>
+
+- 데일리 스크럼, 회의록, 모두 기록
+
+<div style={{width:'60%', marginLeft:'auto', marginRight:'auto',}}>
+
+  ![이미지](./imgs/20241114-3week-presentation_img3.png)
+
+</div>
+
 
 ## 📝 한 주의 계획
 
 ### 🎯 팀 전체의 목표
 
 - UI/UX 구현 및 백앤드 로직 구현 다 해서, 정적파일들 위주로 배포
+- 다음주에는 지도와 캔버스에만 집중할 수 있도록 환경 구축 끝내기
 
 ### 🎯 FE 목표
 
 - UI/UX 피그마에 나온 대로 구현
+- `shadcn` 등을 활용하지 않고, 컴포넌트 하나하나 직접 구현
 
 ### 🎯 BE 목표
 
@@ -53,10 +147,9 @@ last_update:
   - 필요한 모든 api 구현 완료
   - 백엔드 배포 완료 (docker + docker compose + nginx + naver cloud server)
   - swagger 문서 작성 완료
-  - jenkins로 배포 자동화(원래는 할 계획이 없었지만 욕심이 생겨 하게 된…..) 도저히 못하겠어서……. 자동화는 고민 좀 해보겠습니다…..
-  - 거의 다 한 것 같긴 한데… 감이 잡히지 않아 피어세션에서 백엔드 분들의 조언을 조금 듣고 진행 상황 결정 예정
+  - jenkins로 배포 자동화 → 고민중
 
-![이미지](/docs/archive/summary/20241113-3week-presentation/img/20241113-3week-presentation_img1.png)
+![이미지](./imgs/20241113-3week-presentation_img1.png)
 
 
 
@@ -69,7 +162,9 @@ last_update:
 
 ### 💻 메인화면 구축
 
-![이미지](/docs/archive/summary/20241113-3week-presentation/img/20241113-3week-presentation_img2.png)
+
+<ReactPlayer playing controls url="/docs/archive/summary/20241113-3week-presentation/video/20241114-3week-presentation_video2.mov"></ReactPlayer>
+
 - Header, Map → 공통 컴포넌트
 - bottomsheet
   - storybook
@@ -80,13 +175,13 @@ last_update:
 
 ### 💻 선그리기화면 구축
 
-![이미지](/docs/archive/summary/20241113-3week-presentation/img/20241113-3week-presentation_img1.png)
+<ReactPlayer playing controls url="/docs/archive/summary/20241113-3week-presentation/video/20241114-3week-presentation_video3.mov"></ReactPlayer>
 
 ### 💻 손녀화면 구축
 
 <div className="image-row">
-![이미지](/docs/archive/summary/20241113-3week-presentation/img/20241113-3week-presentation_img3.png)
-![이미지](/docs/archive/summary/20241113-3week-presentation/img/20241113-3week-presentation_img4.png)
+![이미지](./imgs/20241113-3week-presentation_img3.png)
+![이미지](./imgs/20241113-3week-presentation_img4.png)
 </div>
 
 - 공통 컴포넌트 및 레이아웃 구현
@@ -94,6 +189,15 @@ last_update:
 
   - [**🎨 Header 컴포넌트로 확인하는 내가 컴포넌트를 설계하고 구현하는 방식**](https://fantasmith.com/react_lab/dev-log/header)
   - [**🖥️React, TypeScript, Tailwind로 Dropdown 구현하기**](https://fantasmith.com/react_lab/dev-log/dropdown)
+
+### 💻 사용자 추가 화면 구축
+
+- 최대 5명의 사용자를 만들 수 있다
+- 사용자를 삭제할 수 있다
+  - 사용자3을 삭제하면 사용자4가 사용자3이 된다
+
+<ReactPlayer playing controls url="/docs/archive/summary/20241113-3week-presentation/video/20241114-3week-presentation_video4.mov"></ReactPlayer>
+
 
 ## 📝 BE 개발 내용
 
@@ -104,8 +208,8 @@ last_update:
 `channel` 테이블의 `게스트 객체 배열`이 비효율적이고 불필요하다는 판단에 제거하였습니다.
 
 <div className="image-row">
-![이미지](/docs/archive/summary/20241113-3week-presentation/img/20241113-3week-presentation_img5.png)
-![이미지](/docs/archive/summary/20241113-3week-presentation/img/20241113-3week-presentation_img6.png)
+![이미지](./imgs/20241113-3week-presentation_img5.png)
+![이미지](./imgs/20241113-3week-presentation_img6.png)
 </div>
 
 - 고민 과정 포스팅 내용
@@ -122,13 +226,50 @@ last_update:
 - 게스트 정보 조회 API
 - 사용자가 host인 채널 목록 반환 API
 
+```javascript
+// 채널 정보
+{
+  "id": "string",
+  "name": "string",
+  "host_id": "string",
+  "guests": [
+    {
+      "id": "string",
+      "name": "string",
+      "start_location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "end_location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "path": [
+        {
+          "lat": 0,
+          "lng": 0
+        }
+      ],
+      "marker_style": {
+        "color": "string"
+      }
+    }
+  ]
+}
+```
+
 ### swagger 문서 작성
 
-![이미지](/docs/archive/summary/20241113-3week-presentation/img/20241113-3week-presentation_img7.png)
+![이미지](./imgs/20241113-3week-presentation_img7.png)
+
+### - 배포 (docker + docker-compose + nginx + ncloud)
+
+`Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'express'`
+
 
 ### 주간 백로그 현황
 
-![이미지](/docs/archive/summary/20241113-3week-presentation/img/20241113-3week-presentation_img8.png)
+![이미지](./imgs/20241113-3week-presentation_img8.png)
 
 ### - [BE] 트러블 슈팅 및 기록
 
@@ -145,3 +286,7 @@ last_update:
 - [Node.js WebSocket 연결 문제 해결기](https://velog.io/@happyhyep/Node.js-WebSocket-%EC%97%B0%EA%B2%B0-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%EA%B8%B0)
 
 ## 📝 다음주 목표
+
+- 지도와 캔버스의 연동
+- 저작도구 기능 완성
+- 로그인
