@@ -262,6 +262,18 @@ header h1 {
   font-weight: bold;
 }
 
+.markdown a {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: var(--ifm-color-link);
+}
+
+.markdown a:hover {
+  font-weight: bold;
+  color: var(--ifm-color-link-hover)
+}
+
 a.footer__link-item {
   display: flex;
   align-items: center;
@@ -291,33 +303,41 @@ a.navbar__item.navbar__link{
 }
 
 .markdown header {
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
 .markdown h1 {
+  display: flex;
+  align-items: center;
   font-size: 2.2rem;
   font-weight: bold;
 }
 
 .markdown h2 {
-  margin-top: 8rem;
-  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  margin-top: 6.5rem;
+  margin-bottom: 1.5rem;
   font-size: 1.7rem; /* 원하는 크기로 조정 */
   color: var(--ifm-color-secondary-dark); /* 원하는 색상으로 조정 */
   font-weight: bolder;
 }
 
 .markdown h3 {
+  display: flex;
+  align-items: center;
   margin-top: 1.8rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-size: 1.5rem; /* 원하는 크기로 조정 */
   color: var(--ifm-color-tertiary-dark); /* 원하는 색상으로 조정 */
   font-weight: bold;
 }
 
 .markdown h4 {
+  display: flex;
+  align-items: center;
   margin-top: 1.6rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-size: 1.5rem; /* 원하는 크기로 조정 */
   color: var(--ifm-color-quinary); /* 원하는 색상으로 조정 */
   font-weight: bold;
@@ -331,7 +351,7 @@ a.navbar__item.navbar__link{
 }
 
 .markdown img {
-  margin-top: 2rem;
+  margin-top: 1.7rem;
   margin-left: auto;
   margin-right: auto;
   width: 30vw;
@@ -339,7 +359,7 @@ a.navbar__item.navbar__link{
 
 .markdown figcaption {
   margin-top: 0.8rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.7rem;
   color: var(--ifm-color-primary-light); /* 원하는 색상으로 조정 */
   font-weight: bold;
 }
@@ -351,8 +371,8 @@ a.navbar__item.navbar__link{
 .markdown table {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 1.7rem;
+  margin-bottom: 1.7rem;
 }
 
 .markdown tfoot {
@@ -360,8 +380,34 @@ a.navbar__item.navbar__link{
   font-weight: bold;
 }
 
+/* 기본 리스트 스타일 제거 */
+.markdown ul {
+  list-style: none;
+  padding-left: 3em; /* 마커 공간 확보 */
+  /* padding-top: 1rem; */
+  /* padding-bottom: 1rem; */
+  /* margin-top: 2rem; */
+  /* margin-bottom: 3rem; */
+  /* border: 1px solid black; */
+  /* border-radius: 10px; */
+}
+
+/* 각 리스트 항목 앞에 ▸ 마커 추가 */
+.markdown ul li::before {
+  content: '▸';
+  color: #007acc; /* 마커 색상 (원하는 색상으로 변경 가능) */
+  /* display: inline-block; */
+  width: 1em; /* 마커와 텍스트 간의 간격 조정 */
+  margin-left: -1.5em; /* 마커 위치 조정 */
+}
+
+.markdown p {
+  margin-bottom: 0.5rem;
+  line-height: 1.7rem;
+}
+
 header {
-  padding-bottom: 2rem;
+  padding-bottom: 1.7rem;
   border-bottom: 1px solid #ccc;
 }
 
@@ -438,8 +484,6 @@ blockquote {
   margin-bottom: 2rem;
 }
 
-
-
 .theme-doc-sidebar-container {
   font-size: 0.9rem;
 }
@@ -467,16 +511,10 @@ blockquote {
   color: var( --ifm-color-danger);
 }
 
-.image-row {
-  display: flex;
-  justify-content: space-between; /* 이미지 간의 간격을 조절 */
-  gap: 20px; /* Flexbox의 gap 속성을 사용하여 간격 추가 (브라우저 호환성 확인 필요) */
-  flex-wrap: wrap; /* 화면 크기에 따라 이미지가 다음 줄로 넘어가도록 설정 */
-  margin: 20px 0; /* 위아래 여백 추가 */
-}
-
-.image-row img {
-  max-width: 48%; /* 두 이미지가 한 줄에 배치될 수 있도록 너비 설정 */
-  height: auto; /* 이미지 비율 유지 */
-  border-radius: 8px; /* 이미지 모서리 둥글게 */
+.theme-code-block {
+  margin-top: 2rem;
+  margin-bottom: 2rem !important;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }
