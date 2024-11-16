@@ -2,7 +2,7 @@ name: 'Auto Assign Reviewers'
 
 on:
   pull_request:
-    types: [opened, labeled]
+    types: [opened]
 
 jobs:
   assign_reviewers:
@@ -44,7 +44,7 @@ jobs:
           script: |
             const targetBranch = context.payload.pull_request.base.ref;
             const reviewers = (targetBranch === 'main' || targetBranch === 'development') ? 3 : 2;
-            core.setOutput('number_of_reviewers', reviewers);
+            return { number_of_reviewers: reviewers };
 
       - name: 'Assign Reviewers'
         uses: kentaro-m/auto-assign-action@v2.0.0
@@ -52,3 +52,4 @@ jobs:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
           configuration-path: '.github/auto_assign_config.yml'
           numberOfReviewers: ${{ steps.determine_reviewers.outputs.number_of_reviewers }}
+
