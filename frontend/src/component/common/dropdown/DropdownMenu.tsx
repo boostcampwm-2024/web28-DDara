@@ -7,7 +7,7 @@ interface IDropdownMenuProps {
 }
 
 export const DropdownMenu = (props: IDropdownMenuProps) => {
-  const { isOpen, setIsOpen } = useContext(ToggleContext);
+  const { isOpen, toggle } = useContext(ToggleContext);
   const ref = useRef<HTMLUListElement | null>(null);
 
   const handleOutSideClick = (event: MouseEvent) => {
@@ -23,7 +23,7 @@ export const DropdownMenu = (props: IDropdownMenuProps) => {
       !ref.current.contains(target) &&
       target.dataset.component !== 'DropdownTrigger'
     ) {
-      setIsOpen(false);
+      toggle();
     }
   };
 
