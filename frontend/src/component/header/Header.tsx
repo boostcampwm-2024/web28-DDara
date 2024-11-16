@@ -16,20 +16,15 @@ export interface IHeaderOption {
   rightButton?: string;
   title?: ReactNode;
   subtitle?: string;
+  items?: string[];
 }
 
 export const Header = (props: IHeaderProps) => {
   return (
     <header
       className={classNames(
-        'absolute',
-        'z-[2000]',
-        'flex w-full',
-        'flex-col',
-        'gap-2.5',
-        'bg-transparent',
-        'p-4',
-        props.className?.split(' '),
+        'z-2000 absolute flex w-full flex-col gap-2.5 bg-transparent p-4',
+        props.className,
       )}
     >
       {props.children}
