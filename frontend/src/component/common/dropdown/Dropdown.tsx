@@ -1,32 +1,17 @@
-import { createContext, ReactNode, useMemo, useState } from 'react';
+import { ReactNode } from 'react';
 import { DropdownTrigger } from '@/component/common/dropdown/DropdownTrigger.tsx';
 import { DropdownItem } from '@/component/common/dropdown/DropdownItem.tsx';
 import { DropdownMenu } from '@/component/common/dropdown/DropdownMenu.tsx';
+import { ToggleProvider } from '@/component/common/dropdown/DropdownContext.tsx';
 
 interface IDropdownProps {
   children: ReactNode;
 }
 
-export interface IToggleContext {
-  isOpen: boolean;
-  toggle: () => void;
-}
-
-export const ToggleContext = createContext<IToggleContext>({
-  isOpen: false,
-  toggle: () => {},
-});
-
 export const Dropdown = (props: IDropdownProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggle = () => setIsOpen(prevIsOpen => !prevIsOpen);
-
-  const toggleContextValue = useMemo(() => ({ isOpen, toggle }), [isOpen]);
-
   return (
     <aside className="relative flex w-fit flex-col">
-      <ToggleContext.Provider value={toggleContextValue}>{props.children}</ToggleContext.Provider>
+      <ToggleProvider>{props.children}</ToggleProvider>
     </aside>
   );
 };

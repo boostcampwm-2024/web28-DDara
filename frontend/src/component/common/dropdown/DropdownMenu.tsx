@@ -1,6 +1,6 @@
 import { ReactNode, useContext, useRef, useEffect } from 'react';
 import classNames from 'classnames';
-import { ToggleContext } from '@/component/common/dropdown/Dropdown.tsx';
+import { ToggleContext } from '@/component/common/dropdown/DropdownContext';
 
 interface IDropdownMenuProps {
   children: ReactNode | ReactNode[];
