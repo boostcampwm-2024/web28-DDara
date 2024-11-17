@@ -17,7 +17,6 @@ export const ToggleContext = createContext<IToggleContext>({
   toggle: () => {},
 });
 
-// Todo : 드랍다운 외부에서 클릭시 창 닫히게 설정
 export const Dropdown = (props: IDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
