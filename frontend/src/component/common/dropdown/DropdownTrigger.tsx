@@ -7,10 +7,10 @@ interface IDropdownTriggerProps {
 }
 
 export const DropdownTrigger = (props: IDropdownTriggerProps) => {
-  const { setIsOpen } = useContext(ToggleContext);
+  const { toggle } = useContext(ToggleContext);
 
   const handleOnClick = () => {
-    setIsOpen(prevIsOpen => !prevIsOpen);
+    toggle();
   };
 
   return (
