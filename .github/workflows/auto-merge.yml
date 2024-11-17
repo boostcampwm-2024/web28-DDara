@@ -19,27 +19,33 @@ jobs:
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
             });
-            core.setOutput('prResult', JSON.stringify(pr));
+            return { prResult: JSON.stringify(pr) }
 
       - name: 'Check Approvals and Labels'
         id: check
         uses: actions/github-script@v6
         with:
+          prResult: ${{ steps.pr.outputs.prResult }}
           script: |
-            const pr = JSON.parse(process.env.PR_RESULT);
+            const pr = JSON.parse(inputs.prResult);
             const reviews = await github.rest.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: pr.number,
             });
-            const approvals = reviews.data.filter(review => review.state === 'APPROVED');
+            const uniqueApprovers = new Set();
+            reviews.data.forEach(review => {
+              if (review.state === 'APPROVED') {
+                uniqueApprovers.add(review.user.login);
+              }
+            });
             const hasLabel = pr.labels.some(label => label.name === '확인 요청');
 
             // 메인 브랜치로 향하는 PR인 경우 리뷰어 3명, 다른 브랜치인 경우 2명 필요
-            const requiredApprovals = pr.base.ref === 'main' ? 3 : 2;
+            const requiredApprovals = (pr.base.ref === 'main' || pr.base.ref === 'development') ? 3 : 2;
 
             // Check 조건 결과를 출력에 설정
-            core.setOutput('result', approvals.length >= requiredApprovals && hasLabel);
+            return { result : uniqueApprovers.size >= requiredApprovals && hasLabel }; 
 
       - name: 'Change Label to 작업 완료'
         if: steps.check.outputs.result == 'true'
