@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react';
-import { FloatingButton } from '@/component/common/FloatingButton/FloatingButton'; // 경로에 맞게 수정하세요.
+import { FloatingButton } from '@/component/common/floatingButton/FloatingButton'; // 경로에 맞게 수정하세요.
 import { ButtonState } from '@/component/common/enums';
 import { useFloatingButton } from '@/hooks/useFloatingButton';
 
