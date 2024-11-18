@@ -28,7 +28,19 @@ export const initializeWebSocketServer = server => {
 
     // 클라이언트로부터 메시지 받았을 때의 이벤트 처리
     ws.on('message', message => {
-      console.log(`Received from ${token}:`, message);
+      try {
+        const data = JSON.parse(message); // 위치 데이터 수신
+        if (data.latitude && data.longitude) {
+          // 브로드캐스트: 모든 클라이언트에게 위치 정보 전달
+          Object.values(activeConnections).forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+              client.send(JSON.stringify({ token, ...data }));
+            }
+          });
+        }
+      } catch (err) {
+        console.error('Invalid message received:', err);
+      }
     });
 
     // 클라이언트 연결 종료 시
