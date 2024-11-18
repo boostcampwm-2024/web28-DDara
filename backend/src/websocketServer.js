@@ -3,7 +3,20 @@ import { WebSocketServer } from 'ws';
 const activeConnections = {}; // token별로 연결을 관리하기 위한 객체
 
 export const initializeWebSocketServer = server => {
-  const wss = new WebSocketServer({ server });
+  const wss = new WebSocketServer({
+    server,
+    verifyClient: (info, done) => {
+      const { origin } = info;
+      if (origin === 'http://localhost:5173') {
+        done(true);
+      } else {
+        done(false, 403, 'Forbidden: Origin not allowed');
+      }
+    },
+  });
+  wss.on('error', err => {
+    console.error('WebSocket Server Error:', err);
+  });
 
   wss.on('connection', (ws, req) => {
     // URL에서 token 추출
@@ -27,7 +40,7 @@ export const initializeWebSocketServer = server => {
     console.log(`Client connected with token: ${token}`);
 
     // 클라이언트로부터 메시지 받았을 때의 이벤트 처리
-    ws.on('message', message => {
+    wss.on('message', message => {
       try {
         const data = JSON.parse(message); // 위치 데이터 수신
         if (data.latitude && data.longitude) {
@@ -44,7 +57,7 @@ export const initializeWebSocketServer = server => {
     });
 
     // 클라이언트 연결 종료 시
-    ws.on('close', (code, reason) => {
+    wss.on('close', (code, reason) => {
       console.log(`Client disconnected with token: ${token}, Code: ${code}, Reason: ${reason}`);
       // 연결이 종료되면 activeConnections에서 해당 token 제거
       delete activeConnections[token];
