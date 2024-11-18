@@ -5,6 +5,7 @@ interface IHeaderMainLayoutProps {
   leftButton?: string;
   rightButton?: string;
   title?: ReactNode;
+  items?: string[];
 }
 
 export const HeaderMainLayout = (props: IHeaderMainLayoutProps) => {
@@ -13,7 +14,8 @@ export const HeaderMainLayout = (props: IHeaderMainLayoutProps) => {
       case 'back':
         return <Header.BackButton />;
       case 'dropdown':
-        return <Header.Dropdown />;
+        if (props.items) return <Header.Dropdown items={props.items} />;
+        return <Header.Dropdown items={['사용자 1']} />;
       default:
         return null;
     }

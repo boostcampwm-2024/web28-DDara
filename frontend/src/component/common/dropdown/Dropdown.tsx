@@ -1,31 +1,42 @@
-import React, { createContext, ReactNode, useMemo, useState } from 'react';
+import { ReactNode } from 'react';
 import { DropdownTrigger } from '@/component/common/dropdown/DropdownTrigger.tsx';
 import { DropdownItem } from '@/component/common/dropdown/DropdownItem.tsx';
 import { DropdownMenu } from '@/component/common/dropdown/DropdownMenu.tsx';
+import { ToggleProvider } from '@/component/common/dropdown/DropdownContext.tsx';
 
 interface IDropdownProps {
+  /** 드롭다운 컴포넌트 내부에 들어갈 컨텐츠 */
   children: ReactNode;
 }
 
-export interface IToggleContext {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+/**
+ * 드롭다운 컴포넌트입니다.
+ *
+ *  @param {ReactNode} children - 드롭다운 컴포넌트 내부에 들어갈 컨텐츠
+ *  @return {JSX.Element} 드롭다운 컴포넌트
+ *
+ *  @remarks
+ *  - 드롭다운 컴포넌트는 드롭다운 메뉴를 제공합니다.
+ *
+ * @example
+ *  ```tsx
+ *  <Dropdown>
+ *    <Dropdown.Trigger>
+ *      <MdMenu className="h-6 w-6" />
+ *      <span>메뉴</span>
+ *    </Dropdown.Trigger>
+ *    <Dropdown.Menu>
+ *      <Dropdown.Item>메뉴 항목 1</Dropdown.Item>
+ *      <Dropdown.Item>메뉴 항목 2</Dropdown.Item>
+ *    </Dropdown.Menu>
+ *  </Dropdown>
+ *  ```
+ */
 
-export const ToggleContext = createContext<IToggleContext>({
-  isOpen: false,
-  setIsOpen: () => {},
-});
-
-// Todo : 드랍다운 외부에서 클릭시 창 닫히게 설정
 export const Dropdown = (props: IDropdownProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleContextValue = useMemo(() => ({ isOpen, setIsOpen }), [isOpen, setIsOpen]);
-
   return (
     <aside className="relative flex w-fit flex-col">
-      <ToggleContext.Provider value={toggleContextValue}>{props.children}</ToggleContext.Provider>
+      <ToggleProvider>{props.children}</ToggleProvider>
     </aside>
   );
 };

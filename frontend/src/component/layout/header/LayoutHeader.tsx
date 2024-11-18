@@ -12,6 +12,7 @@ export const LayoutHeader = () => {
         leftButton={headerOption.leftButton}
         rightButton={headerOption.rightButton}
         title={headerOption.title}
+        items={headerOption.items}
       />
       {headerOption.subtitle && (
         <Header.Subtitle>
