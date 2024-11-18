@@ -1,10 +1,12 @@
 import { Meta, Story } from '@storybook/react';
 import { FloatingButton } from '@/component/common/FloatingButton/FloatingButton'; // 경로에 맞게 수정하세요.
 import { ButtonState } from '@/component/common/enums';
+import { useFloatingButton } from '@/hooks/useFloatingButton';
 
 export default {
   title: 'Components/FloatingButton',
   component: FloatingButton,
+  tags: ['autodocs'],
   parameters: {
     docs: {
       description: {
@@ -13,12 +15,58 @@ export default {
       },
     },
   },
+  argTypes: {
+    isMenuOpen: {
+      control: 'boolean',
+      description: '메뉴가 열려 있는지 여부를 나타냅니다.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    toggleMenu: {
+      action: 'toggleMenu',
+      description: '메뉴를 토글하는 함수입니다.',
+      table: {
+        type: { summary: 'function' },
+      },
+    },
+    toolType: {
+      control: 'select',
+      options: Object.values(ButtonState),
+      description: '도구 버튼의 상태를 나타냅니다.',
+      table: {
+        type: { summary: 'ButtonState' },
+        defaultValue: { summary: 'CLOSE' },
+      },
+    },
+    handleMenuClick: {
+      action: 'handleMenuClick',
+      description: '도구를 선택할 수 있는 함수입니다.',
+      table: {
+        type: { summary: 'function' },
+      },
+    },
+  },
 } as Meta<typeof FloatingButton>;
 
-// 기본 템플릿
-const Template: Story<typeof FloatingButton> = args => <FloatingButton {...args} />;
+const Template2: Story<typeof FloatingButton> = args => <FloatingButton {...args} />;
 
-export const CloseState = Template.bind({});
+const Template: Story = () => {
+  const { isMenuOpen, toolType, toggleMenu, handleMenuClick } = useFloatingButton();
+
+  return (
+    <div>
+      <FloatingButton
+        isMenuOpen={isMenuOpen}
+        toolType={toolType}
+        toggleMenu={toggleMenu}
+        handleMenuClick={handleMenuClick}
+      />
+    </div>
+  );
+};
+export const CloseState = Template2.bind({});
 CloseState.argTypes = {
   isMenuOpen: { table: { disable: true } }, // isMenuOpen을 테이블에서 제외
   toolType: { table: { disable: true } }, // toolType을 테이블에서 제외
@@ -36,7 +84,7 @@ CloseState.parameters = {
   },
 };
 
-export const OpenState = Template.bind({});
+export const OpenState = Template2.bind({});
 OpenState.argTypes = {
   isMenuOpen: { table: { disable: true } }, // isMenuOpen을 테이블에서 제외
   toolType: { table: { disable: true } }, // toolType을 테이블에서 제외
@@ -55,10 +103,6 @@ OpenState.parameters = {
 
 // ToggleState에서는 control을 사용 가능하게 설정
 export const ToggleState = Template.bind({});
-ToggleState.argTypes = {
-  isMenuOpen: { control: 'boolean' }, // isMenuOpen을 control로 사용 가능하게 설정
-  toolType: { control: 'select', options: Object.values(ButtonState) }, // toolType을 select로 사용 가능하게 설정
-};
 ToggleState.args = {
   isMenuOpen: false, // 초기 상태는 닫힘
   toolType: ButtonState.CLOSE, // 닫기 상태
