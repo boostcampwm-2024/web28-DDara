@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { getUserLocation } from '@/hooks/getUserLocation';
 import { Map } from '@/component/maps/Map';
 import { BottomSheet } from '@/component/BottomSheet/BottomSheet';
