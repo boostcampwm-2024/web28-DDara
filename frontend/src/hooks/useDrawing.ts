@@ -50,6 +50,17 @@ export const useDrawing = (props: IUseDrawingProps) => {
       context.moveTo(props.points[0].x, props.points[0].y);
       props.points.slice(1).forEach(point => context.lineTo(point.x, point.y));
       context.stroke();
+    } else if (props.points.length === 1) {
+      context.fillStyle = props.strokeStyle;
+      context.beginPath();
+      context.arc(
+        props.points[0].x,
+        props.points[0].y,
+        (props.lineWidth + 1) / scaleRef.current,
+        0,
+        2 * Math.PI,
+      );
+      context.fill();
     }
   };
 
