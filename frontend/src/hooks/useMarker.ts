@@ -20,6 +20,8 @@ export const useMarker = (props: IUseDrawingProps) => {
   const scaleRef = useRef(STEP_SCALES[7]);
   const viewPosRef = useRef(INITIAL_POSITION);
   const [iconImage, setIconImage] = useState<HTMLImageElement | null>(null);
+  const [markerPoint, setMarkerPoint] = useState<IPoint | null>(props.point);
+  const iconSize = 20;
 
   const getCanvasContext = (): CanvasRenderingContext2D | null =>
     props.canvasRef.current?.getContext('2d') || null;
@@ -37,13 +39,12 @@ export const useMarker = (props: IUseDrawingProps) => {
 
   const loadIconImage = () => {
     const img = new Image();
-    img.src = markerImage; // import한 경로 사용
+    img.src = markerImage;
     img.onload = () => setIconImage(img);
   };
 
   const mark = () => {
-    if (!iconImage) return;
-
+    if (!iconImage || markerPoint === null) return;
     const context = getCanvasContext();
     if (!context) return;
 
@@ -53,26 +54,59 @@ export const useMarker = (props: IUseDrawingProps) => {
     context.clearRect(0, 0, canvas.width, canvas.height);
     setTransform(context);
 
-    // 아이콘 크기 설정
-    const iconSize = (props.lineWidth + 1) / scaleRef.current;
-
-    // 아이콘 이미지를 캔버스에 그리기
     context.drawImage(
       iconImage,
-      props.point.x - iconSize / 2, // 중앙 정렬
-      props.point.y - iconSize / 2,
+      props.point.x - iconSize / 2,
+      props.point.y - iconSize,
       iconSize,
       iconSize,
     );
   };
+  const deleteMarker = (point: IPoint) => {
+    if (point.x === 0 && point.y === 0) return;
+    if (markerPoint) {
+      const iconLeft = markerPoint.x - iconSize / 2;
+      const iconRight = markerPoint.x + iconSize / 2;
+      const iconTop = markerPoint.y - iconSize;
+      const iconBottom = markerPoint.y;
+
+      const isInsideIcon =
+        point.x >= iconLeft && point.x <= iconRight && point.y >= iconTop && point.y <= iconBottom;
+
+      if (isInsideIcon) {
+        setMarkerPoint(null);
+        return;
+      }
+    }
+    setMarkerPoint(point);
+  };
 
   useEffect(() => {
+    setMarkerPoint(props.point);
     loadIconImage();
-  }, []); // 초기 렌더 시 이미지를 로드
+  }, []);
+
+  const clearCanvas = () => {
+    const context = getCanvasContext();
+    const canvas = props.canvasRef.current;
+    if (canvas && context) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  };
 
   useEffect(() => {
-    mark();
-  }, [props.point, iconImage]); // point나 iconImage가 바뀔 때마다 그리기
+    deleteMarker(props.point);
+  }, [props.point]);
+
+  useEffect(() => {
+    if (!iconImage) return;
+
+    if (markerPoint === null) {
+      clearCanvas();
+    } else {
+      mark();
+    }
+  }, [markerPoint, iconImage]);
 
   return { mark, scaleRef, viewPosRef };
 };
