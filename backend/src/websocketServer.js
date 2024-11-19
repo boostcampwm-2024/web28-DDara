@@ -1,12 +1,14 @@
 import { WebSocketServer } from 'ws';
 
 const activeConnections = {}; // token별로 연결을 관리하기 위한 객체
+const clientLocations = {};
 
 export const initializeWebSocketServer = server => {
   const wss = new WebSocketServer({
     server,
     verifyClient: (info, done) => {
       const { origin } = info;
+
       if (origin === 'http://localhost:5173') {
         done(true);
       } else {
@@ -14,6 +16,7 @@ export const initializeWebSocketServer = server => {
       }
     },
   });
+
   wss.on('error', err => {
     console.error('WebSocket Server Error:', err);
   });
@@ -39,28 +42,48 @@ export const initializeWebSocketServer = server => {
 
     console.log(`Client connected with token: ${token}`);
 
+    // 새 클라이언트에게 기존 클라이언트의 위치 전송
+    ws.send(
+      JSON.stringify({
+        type: 'init',
+        clients: Object.entries(clientLocations).map(([clientToken, location]) => ({
+          token: clientToken,
+          location,
+        })),
+      }),
+    );
+
     // 클라이언트로부터 메시지 받았을 때의 이벤트 처리
-    wss.on('message', message => {
+    ws.on('message', message => {
       try {
-        const data = JSON.parse(message); // 위치 데이터 수신
-        if (data.latitude && data.longitude) {
-          // 브로드캐스트: 모든 클라이언트에게 위치 정보 전달
-          Object.values(activeConnections).forEach(client => {
-            if (client.readyState === WebSocket.OPEN) {
-              client.send(JSON.stringify({ token, ...data }));
+        const data = JSON.parse(message);
+        if (data.type === 'location' && data.location) {
+          clientLocations[token] = data.location;
+
+          // 모든 클라이언트에게 위치 정보 전송
+          Object.keys(activeConnections).forEach(otherToken => {
+            if (activeConnections[otherToken].readyState === ws.OPEN) {
+              activeConnections[otherToken].send(
+                JSON.stringify({
+                  type: 'location',
+                  token,
+                  location: data.location,
+                }),
+              );
             }
           });
         }
       } catch (err) {
-        console.error('Invalid message received:', err);
+        console.error('Invalid message format:', err);
       }
     });
 
     // 클라이언트 연결 종료 시
-    wss.on('close', (code, reason) => {
+    ws.on('close', (code, reason) => {
       console.log(`Client disconnected with token: ${token}, Code: ${code}, Reason: ${reason}`);
       // 연결이 종료되면 activeConnections에서 해당 token 제거
       delete activeConnections[token];
+      delete clientLocations[token];
     });
   });
 };
