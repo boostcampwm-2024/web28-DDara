@@ -7,7 +7,7 @@ export const LayoutHeader = () => {
   const { headerOption } = useContext(HeaderContext);
 
   return (
-    <Header className="z-1000">
+    <Header className="z-4000">
       <Header.MainLayout
         leftButton={headerOption.leftButton}
         rightButton={headerOption.rightButton}

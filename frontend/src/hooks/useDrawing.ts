@@ -10,13 +10,13 @@ interface IUseDrawingProps {
   points: IPoint[];
   lineWidth: number;
   strokeStyle: string;
+  initialScale: number;
 }
 
 const INITIAL_POSITION = { x: 0, y: 0 };
-const STEP_SCALES = [100, 50, 30, 20, 10, 5, 3, 1, 0.5, 0.3, 0.1, 0.05, 0.03, 0.02, 0.01, 0.005];
 
 export const useDrawing = (props: IUseDrawingProps) => {
-  const scaleRef = useRef(STEP_SCALES[7]);
+  const scaleRef = useRef(props.initialScale);
   const viewPosRef = useRef(INITIAL_POSITION);
 
   const getCanvasContext = (): CanvasRenderingContext2D | null =>
