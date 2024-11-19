@@ -14,7 +14,7 @@ export const Modal = (props: IModalProps) => {
   if (!props.isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
+    <div className="z-6000 fixed inset-0 flex items-center justify-center bg-black bg-opacity-20">
       <div className="relative w-[22rem] max-w-lg rounded-2xl bg-white px-6 shadow-lg">
         {props.children}
       </div>
