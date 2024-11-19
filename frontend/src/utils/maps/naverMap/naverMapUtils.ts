@@ -39,14 +39,14 @@ export const setNaverMapOption = (mapOptions: INaverMapOptions): INaverMapOption
  *  longitude: 127.105399,
  *  zoom: 10,
  *};
- * const naverMapObj = setNaverMapObj(htmlElement, mapOptions);
+ * const naverMapObj = naverMapUtils(htmlElement, mapOptions);
  * ```
 
  *@example
  *- React 컴포넌트에서 사용하는 예시
  *```tsx
  * import { useEffect, useRef } from 'react';
- * import { setNaverMapObj } from '@/utils/maps/naverMap/setNaverMapObj.ts';
+ * import { naverMapUtils } from '@/utils/maps/naverMap/naverMapUtils.ts';
  *
  * export const NaverMap = () => {
  * const mapRef = useRef<HTMLDivElement>(null);
@@ -58,7 +58,7 @@ export const setNaverMapOption = (mapOptions: INaverMapOptions): INaverMapOption
  *
  * useEffect(() => {
  *  if (mapRef.current) {
- *    setNaverMapObj(mapRef.current, mapOptions);
+ *    naverMapUtils(mapRef.current, mapOptions);
  *  }
  * }, []);
  *
@@ -68,7 +68,7 @@ export const setNaverMapOption = (mapOptions: INaverMapOptions): INaverMapOption
  */
 
 // utils에 있는 일반 함수로 사용
-export const setNaverMapObj = (
+export const setNaverMap = (
   htmlElement: HTMLElement,
   mapOptions: INaverMapOptions,
 ): naver.maps.Map => {
@@ -78,4 +78,20 @@ export const setNaverMapObj = (
     center: new naver.maps.LatLng(lat, lng),
     ...restProps,
   });
+};
+
+export const getVertexLocation = (map: naver.maps.Map) => {
+  const bounds = map.getBounds() as naver.maps.LatLngBounds;
+  const sw = bounds.getSW();
+  const ne = bounds.getNE();
+  return {
+    sw: {
+      lat: sw.lat(),
+      lng: sw.lng(),
+    },
+    ne: {
+      lat: ne.lat(),
+      lng: ne.lng(),
+    },
+  };
 };
