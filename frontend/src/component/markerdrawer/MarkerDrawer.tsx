@@ -11,8 +11,12 @@ interface IPoint {
 const NAVER_STEP_SCALES = [
   100, 50, 30, 20, 10, 5, 3, 1, 0.5, 0.3, 0.1, 0.05, 0.03, 0.02, 0.01, 0.005,
 ];
+// 선의 굵기 상수
 const LINE_WIDTH = 2;
+// 선의 색 상수
 const STROKE_STYLE = 'black';
+// 지도의 처음 확대/축소 비율 단계 index
+const INITIAL_ZOOM_INDEX = 7;
 
 export const MarkerDrawer = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -33,6 +37,7 @@ export const MarkerDrawer = () => {
     viewPosRef,
     draw: mark,
     stepScales: NAVER_STEP_SCALES,
+    initialZoomIndex: INITIAL_ZOOM_INDEX,
   });
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
