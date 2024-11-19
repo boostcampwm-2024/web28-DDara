@@ -1,3 +1,1 @@
-import { MarkerDrawer } from '@/component/markerdrawer/MarkerDrawer';
-
-export const UserRoute = () => <MarkerDrawer />;
+export const UserRoute = () => <>Hello</>;
