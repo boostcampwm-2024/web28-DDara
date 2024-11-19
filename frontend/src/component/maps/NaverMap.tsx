@@ -1,31 +1,34 @@
 import { useEffect, useRef } from 'react';
-import { INaverMapOptions, setNaverMapObj } from '@/utils/maps/naverMap/setNaverMapObj.ts';
+import {
+  getNaverMapVertexPosition,
+  INaverMapOptions,
+  INaverMapVertexPosition,
+  setNaverMap,
+} from '@/utils/maps/naverMap/naverMapUtils.ts';
 
-/**
- * @param {INaverMapOptions} props
- * @returns {ReactNode}
- *
- * @remarks
- * - 네이버 지도를 렌더링합니다.
- *
- * @example
- * - 사용 예시
- * ```tsx
- * <NaverMap lat={37.3595704} long={127.105399} />
- * ```
- */
+interface INaverMapProps {
+  lat: number;
+  lng: number;
+  zoom?: number;
+  setNaverMapLocation: (map: INaverMapVertexPosition) => void;
+}
 
-export const NaverMap = (props: INaverMapOptions) => {
+export const NaverMap = (props: INaverMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapOptions: INaverMapOptions = {
     lat: props.lat,
     lng: props.lng,
     zoom: props.zoom,
   };
+  let map: naver.maps.Map;
+  let mapLoc: INaverMapVertexPosition;
 
   useEffect(() => {
     if (mapRef.current) {
-      setNaverMapObj(mapRef.current, mapOptions);
+      map = setNaverMap(mapRef.current, mapOptions);
+      mapLoc = getNaverMapVertexPosition(map);
+
+      props.setNaverMapLocation(mapLoc);
     }
   }, []);
 
