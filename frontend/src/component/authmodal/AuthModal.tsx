@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Modal } from '@/component/common/modal/Modal';
+import { doLogin } from '@/api/auth.api.ts';
+import { saveLocalData } from '@/utils/common/manageLocalData.ts';
+import { AppConfig } from '@/constants.ts';
 
 interface IAuthModalProps {
   /** 모달이 열려 있는지 여부를 나타냅니다. */
@@ -43,7 +46,13 @@ export const AuthModal = (props: IAuthModalProps) => {
   };
 
   const handleLoginClick = () => {
-    console.log('로그인 데이터:', loginData);
+    doLogin(loginData.id, loginData.pw).then(el => {
+      if (el.data?.token && el.data?.userId) {
+        saveLocalData(AppConfig.KEYS.LOGIN_TOKEN, el.data.token);
+        saveLocalData(AppConfig.KEYS.LOGIN_USER, el.data.userId);
+      }
+      window.location.reload();
+    });
   };
 
   const handleSignUpClick = () => {
@@ -63,7 +72,7 @@ export const AuthModal = (props: IAuthModalProps) => {
   };
 
   return (
-    <Modal isOpen={props.isOpen} onClose={props.onClose}>
+    <Modal isOpen={props.isOpen}>
       {modalType === 'login' ? (
         <>
           <Modal.Header content="Log In" onClose={props.onClose} />
