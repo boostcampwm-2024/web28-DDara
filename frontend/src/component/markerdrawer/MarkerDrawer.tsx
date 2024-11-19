@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { useDrawing } from '@/hooks/useDrawing';
 import { usePanning } from '@/hooks/usePanning';
 import { useZoom } from '@/hooks/useZoom';
+import { useMarker } from '@/hooks/useMarker';
 
 interface IPoint {
   x: number;
@@ -14,21 +14,24 @@ const NAVER_STEP_SCALES = [
 const LINE_WIDTH = 2;
 const STROKE_STYLE = 'black';
 
-export const Linedrawer = () => {
+export const MarkerDrawer = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [points, setPoints] = useState<IPoint[]>([]);
+  const [point, setPoint] = useState<IPoint>({ x: 0, y: 0 });
 
-  const { draw, scaleRef, viewPosRef } = useDrawing({
+  const { mark, scaleRef, viewPosRef } = useMarker({
     canvasRef,
-    points,
+    point,
     lineWidth: LINE_WIDTH,
     strokeStyle: STROKE_STYLE,
   });
-  const { handleMouseMove, handleMouseDown, handleMouseUp } = usePanning({ viewPosRef, draw });
+  const { handleMouseMove, handleMouseDown, handleMouseUp } = usePanning({
+    viewPosRef,
+    draw: mark,
+  });
   const { handleWheel } = useZoom({
     scaleRef,
     viewPosRef,
-    draw,
+    draw: mark,
     stepScales: NAVER_STEP_SCALES,
   });
 
@@ -38,7 +41,7 @@ export const Linedrawer = () => {
 
     const x = (e.clientX - rect.left - viewPosRef.current.x) / scaleRef.current;
     const y = (e.clientY - rect.top - viewPosRef.current.y) / scaleRef.current;
-    setPoints(prevPoints => [...prevPoints, { x, y }]);
+    setPoint({ x, y });
   };
 
   return (
