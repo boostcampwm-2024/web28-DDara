@@ -5,13 +5,13 @@ interface IUseZoomProps {
   viewPosRef: React.MutableRefObject<{ x: number; y: number }>;
   draw: () => void;
   stepScales: number[];
+  initialZoomIndex: number;
 }
 
-const MIN_SCALE_INDEX = 0;
-const MAX_SCALE_INDEX = 15;
-
 export const useZoom = (props: IUseZoomProps) => {
-  const zoomIndexRef = useRef(7);
+  const zoomIndexRef = useRef(props.initialZoomIndex);
+  const MIN_SCALE_INDEX = 0;
+  const MAX_SCALE_INDEX = props.stepScales.length - 1;
 
   const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
     const viewPos = props.viewPosRef;
@@ -28,7 +28,8 @@ export const useZoom = (props: IUseZoomProps) => {
       zoomIndexRef.current += 1;
     }
 
-    const newScale = 1 / props.stepScales[zoomIndexRef.current];
+    const newScale =
+      props.stepScales[props.initialZoomIndex] / props.stepScales[zoomIndexRef.current];
     const xs = (offsetX - viewPos.current.x) / scale.current;
     const ys = (offsetY - viewPos.current.y) / scale.current;
 
