@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { getUserLocation } from '@/hooks/getUserLocation';
 import { Map } from '@/component/maps/Map';
-import { BottomSheet } from '@/component/BottomSheet/BottomSheet';
+import { BottomSheet } from '@/component/bottomSheet/BottomSheet';
 import { Content } from '@/component/content/Content';
 import { MdFormatListBulleted } from 'react-icons/md';
 
