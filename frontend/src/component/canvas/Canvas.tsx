@@ -1,24 +1,23 @@
 import classNames from 'classnames';
-import { useEffect, useRef } from 'react';
-import { getCanvasVertexPosition, ICanvasVertex } from '@/utils/screen/canvasUtils.ts';
-import { ILocationObject } from '@/component/canvas/CanvasWithMap.tsx';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 interface ICanvasProps {
   className?: string;
-  onClick?: () => void;
-  onMouseDown?: () => void;
-  onMouseUp?: () => void;
-  onMouseMove?: () => void;
-  setCanvasLocation?: (canvas: ICanvasVertex) => void;
-  locationObject: ILocationObject;
+  // onClick?: () => void;
+  // onMouseDown?: () => void;
+  // onMouseUp?: () => void;
+  // onMouseMove?: () => void;
 }
 
-export const Canvas = (props: ICanvasProps) => {
-  const { className, setCanvasLocation, locationObject, ...rest } = props;
-  const ref = useRef<HTMLCanvasElement>(null);
+export interface ICanvasRefMethods {
+  getCanvasElement: () => HTMLCanvasElement | null;
+}
+
+export const Canvas = forwardRef<ICanvasRefMethods, ICanvasProps>((props, ref) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = ref.current;
+    const canvas = canvasRef.current;
     if (!canvas) return;
 
     const context = canvas.getContext('2d');
@@ -30,20 +29,23 @@ export const Canvas = (props: ICanvasProps) => {
     context.fillRect(0, 0, 200, 200);
   }, []);
 
-  useEffect(() => {
-    if (ref.current !== null && setCanvasLocation) {
-      setCanvasLocation(getCanvasVertexPosition(ref.current));
-    }
-  }, [locationObject.map]);
+  useImperativeHandle(ref, () => ({
+    getCanvasElement: () => canvasRef.current ?? null,
+  }));
+
+  // example
+  const clickHandler = () => {
+    console.log('canvas clicked!');
+  };
 
   return (
     <canvas
-      ref={ref}
+      ref={canvasRef}
       className={classNames(
         'z-1000 pointer-events-none absolute h-full w-full bg-transparent',
-        className,
+        props.className,
       )}
-      {...rest}
+      onClick={clickHandler} // example
     />
   );
-};
+});
