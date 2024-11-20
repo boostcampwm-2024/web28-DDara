@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { IoClose } from 'react-icons/io5';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
+import { Outlet } from 'react-router-dom';
+import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
+import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
 import { InputBox } from '../component/common/InputBox';
 
 interface IUser {
@@ -36,6 +39,8 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
 
 export const AddChannel = () => {
   const [users, setUsers] = useState<IUser[]>([{ id: 1, name: '사용자1', mockData: 10 }]);
+  const { setFooterTitle, setFooterTransparency } = useContext(FooterContext);
+  const { setLeftButton } = useContext(HeaderContext);
 
   /**
    * 사용자 추가 함수
@@ -92,13 +97,15 @@ export const AddChannel = () => {
       }));
     setUsers(updatedUsers);
   };
-
   useEffect(() => {
-    console.log(users);
-  }, [users]);
+    setLeftButton('back');
+    setFooterTitle('+');
+    setFooterTransparency(false);
+  }, []);
 
   return (
-    <main className="flex h-full w-full flex-col items-center px-8">
+    <main className="flex h-full w-full flex-col items-center px-8 py-16">
+      <Outlet />
       <InputBox placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길" />
       <Divider />
       <section className="w-full space-y-4">

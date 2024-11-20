@@ -1,33 +1,22 @@
 import { Outlet } from 'react-router-dom';
 import { LayoutHeader } from '@/component/layout/header/LayoutHeader.tsx';
 import { LayoutHeaderProvider } from '@/component/layout/header/LayoutHeaderProvider.tsx';
-import { Footer } from './Footer';
+import { LayoutFooterProvider } from '@/component/layout/footer/LayoutFooterProvider';
+import { LayoutFooter } from './footer/LayoutFooter';
 
-interface ILayoutProps {
-  footerTitle?: string;
-  footerActive?: boolean;
-  handleFooterClick?: () => void;
-  footerTransperency?: boolean;
-}
-
-export const Layout = (props: ILayoutProps) => {
+export const Layout = () => {
   return (
-    <>
-      <LayoutHeaderProvider>
+    <LayoutHeaderProvider>
+      <main>
+        {/* LayoutHeader는 HeaderContext를 사용하므로 LayoutHeaderProvider로 감쌈 */}
         <LayoutHeader />
 
-        <main>
+        {/* LayoutFooterProvider로 Outlet을 감싸서 FooterContext도 제공 */}
+        <LayoutFooterProvider>
           <Outlet />
-        </main>
-      </LayoutHeaderProvider>
-
-      {/* TODO : 이동율 - Footer 수정 요청 */}
-      <Footer
-        title={props.footerTitle}
-        onClick={props.handleFooterClick}
-        active={props.footerActive}
-        isTranperency={props.footerTransperency}
-      />
-    </>
+          <LayoutFooter />
+        </LayoutFooterProvider>
+      </main>
+    </LayoutHeaderProvider>
   );
 };

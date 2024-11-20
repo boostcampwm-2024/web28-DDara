@@ -1,4 +1,3 @@
-import { Footer } from '@/component/layout/Footer';
 import { MdArrowBack } from 'react-icons/md';
 import { Linedrawer } from '@/component/linedrawer/Linedrawer';
 
@@ -19,8 +18,6 @@ export const DrawRoute = () => {
         </span>
       </header>
       <Linedrawer />
-
-      <Footer title="사용자 경로 추가 완료" />
     </div>
   );
 };

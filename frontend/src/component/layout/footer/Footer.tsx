@@ -1,18 +1,20 @@
 import classNames from 'classnames';
-import { buttonActiveType } from './enumTypes';
+import { buttonActiveType } from '../enumTypes';
 
-interface IFooterProps {
+export interface IFooterProps {
   title?: string;
   onClick?: () => void;
   active?: boolean;
   isTranperency?: boolean;
 }
 
-export const Footer = ({ title, onClick, active = false, isTranperency = true }: IFooterProps) => {
-  const buttonStyle = active ? buttonActiveType.ACTIVE : buttonActiveType.PASSIVE;
+export const Footer = (props: IFooterProps) => {
+  const buttonStyle = props.active ? buttonActiveType.ACTIVE : buttonActiveType.PASSIVE;
 
-  return isTranperency ? (
-    <footer className="absolute bottom-5 h-[6%] w-[95%]">
+  return props.isTranperency ? (
+    <div />
+  ) : (
+    <footer className="absolute bottom-5 z-[4000] h-[6%] w-[95%]">
       <button
         className={classNames(
           'w-full',
@@ -24,12 +26,10 @@ export const Footer = ({ title, onClick, active = false, isTranperency = true }:
           buttonStyle,
         )}
         type="button"
-        onClick={onClick}
+        onClick={props.onClick}
       >
-        {title}
+        {props.title}
       </button>
     </footer>
-  ) : (
-    <div />
   );
 };
