@@ -1,4 +1,6 @@
 import { useRef, useEffect } from 'react';
+import startmarker from '@/assets/startmarker.png';
+import endmarker from '@/assets/endmarker.png';
 
 interface IPoint {
   x: number;
@@ -8,6 +10,8 @@ interface IPoint {
 interface IUseDrawingProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   points: IPoint[];
+  startPoint: IPoint | null;
+  endPoint: IPoint | null;
   lineWidth: number;
   strokeStyle: string;
   initialScale: number;
@@ -18,6 +22,17 @@ const INITIAL_POSITION = { x: 0, y: 0 };
 export const useDrawing = (props: IUseDrawingProps) => {
   const scaleRef = useRef(props.initialScale);
   const viewPosRef = useRef(INITIAL_POSITION);
+
+  const startImageRef = useRef<HTMLImageElement | null>(null);
+  const endImageRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    startImageRef.current = new Image();
+    startImageRef.current.src = startmarker;
+
+    endImageRef.current = new Image();
+    endImageRef.current.src = endmarker;
+  }, []);
 
   const getCanvasContext = (): CanvasRenderingContext2D | null =>
     props.canvasRef.current?.getContext('2d') || null;
@@ -62,11 +77,35 @@ export const useDrawing = (props: IUseDrawingProps) => {
       );
       context.fill();
     }
+
+    if (props.startPoint && startImageRef.current) {
+      const { x, y } = props.startPoint;
+      const markerSize = 32 / scaleRef.current;
+      context.drawImage(
+        startImageRef.current,
+        x - markerSize / 2,
+        y - markerSize,
+        markerSize,
+        markerSize,
+      );
+    }
+
+    if (props.endPoint && endImageRef.current) {
+      const { x, y } = props.endPoint;
+      const markerSize = 32 / scaleRef.current;
+      context.drawImage(
+        endImageRef.current,
+        x - markerSize / 2,
+        y - markerSize,
+        markerSize,
+        markerSize,
+      );
+    }
   };
 
   useEffect(() => {
     draw();
-  }, [props.points]);
+  }, [props.points, props.startPoint, props.endPoint]);
 
   return { draw, scaleRef, viewPosRef };
 };

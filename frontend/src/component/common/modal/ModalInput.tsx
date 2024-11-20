@@ -1,4 +1,4 @@
-interface IModalInputProps {
+export interface IModalInputProps {
   /** 입력 필드의 제목입니다. */
   title: string;
   /** 입력 필드의 이름 속성입니다. */
