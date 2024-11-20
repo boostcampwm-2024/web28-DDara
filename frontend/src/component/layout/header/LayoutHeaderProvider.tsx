@@ -12,6 +12,7 @@ interface IHeaderOptionContext {
   setLeftButton: (leftButton: string) => void;
   setRightButton: (rightButton: string) => void;
   setItems: (items: string[]) => void;
+  resetHeaderContext: () => void;
 }
 
 const defaultHeaderOption: IHeaderOption = {
@@ -29,6 +30,7 @@ export const HeaderContext = createContext<IHeaderOptionContext>({
   setLeftButton: () => {},
   setRightButton: () => {},
   setItems: () => {},
+  resetHeaderContext: () => {},
 });
 
 type Action =
@@ -78,6 +80,14 @@ export const LayoutHeaderProvider = (props: ILayoutHeaderProviderProps) => {
     dispatch({ type: 'SET_ITEMS', payload: items });
   }, []);
 
+  const resetHeaderContext = () => {
+    setTitle('');
+    setSubTitle('');
+    setLeftButton('');
+    setRightButton('');
+    setItems([]);
+  };
+
   const contextValue = useMemo(
     () => ({
       headerOption,
@@ -86,8 +96,17 @@ export const LayoutHeaderProvider = (props: ILayoutHeaderProviderProps) => {
       setLeftButton,
       setRightButton,
       setItems,
+      resetHeaderContext,
     }),
-    [headerOption, setTitle, setSubTitle, setLeftButton, setRightButton, setItems],
+    [
+      headerOption,
+      setTitle,
+      setSubTitle,
+      setLeftButton,
+      setRightButton,
+      setItems,
+      resetHeaderContext,
+    ],
   );
 
   return <HeaderContext.Provider value={contextValue}>{props.children}</HeaderContext.Provider>;

@@ -11,6 +11,7 @@ interface IFooterOptionContext {
   setFooterActive: (active: boolean) => void;
   setFooterTransparency: (isTransparency: boolean) => void;
   setFooterOnClick: (onClick: () => void) => void;
+  resetFooterContext: () => void;
 }
 
 const defaultFooterOption: IFooterProps = {
@@ -26,6 +27,7 @@ export const FooterContext = createContext<IFooterOptionContext>({
   setFooterActive: () => {},
   setFooterTransparency: () => {},
   setFooterOnClick: () => {},
+  resetFooterContext: () => {},
 });
 
 type Action =
@@ -68,6 +70,13 @@ export const LayoutFooterProvider = (props: ILayoutFooterProviderProps) => {
     dispatch({ type: 'SET_ONCLICK', payload: onClick });
   }, []);
 
+  const resetFooterContext = () => {
+    setFooterTitle('');
+    setFooterActive(false);
+    setFooterTransparency(true);
+    setFooterOnClick(() => {});
+  };
+
   const contextValue = useMemo(
     () => ({
       footerOption,
@@ -75,6 +84,7 @@ export const LayoutFooterProvider = (props: ILayoutFooterProviderProps) => {
       setFooterActive,
       setFooterTransparency,
       setFooterOnClick,
+      resetFooterContext,
     }),
     [footerOption],
   );

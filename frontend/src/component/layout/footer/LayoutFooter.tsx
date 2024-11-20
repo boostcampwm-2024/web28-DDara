@@ -4,7 +4,6 @@ import { Footer } from '@/component/layout/footer/Footer';
 
 export const LayoutFooter = () => {
   const { footerOption } = useContext(FooterContext);
-  console.log(footerOption);
 
   return (
     <Footer
