@@ -37,5 +37,5 @@ try {
 }
 
 server.listen(PORT, () => {
-  console.log(`Server is running on ${AppConfig.API_SERVER}`);
+  console.log(`Server is running`);
 });
