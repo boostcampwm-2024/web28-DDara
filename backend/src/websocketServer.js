@@ -9,7 +9,7 @@ export const initializeWebSocketServer = server => {
     verifyClient: (info, done) => {
       const { origin } = info;
 
-      if (origin === 'http://localhost:5173') {
+      if (origin === 'http://localhost:5173' || origin === 'https://ddara.kro.kr') {
         done(true);
       } else {
         done(false, 403, 'Forbidden: Origin not allowed');
@@ -24,7 +24,7 @@ export const initializeWebSocketServer = server => {
   wss.on('connection', (ws, req) => {
     // URL에서 token 추출
     // TODO: 프론트 라우터 및 token 설정 완료 후 테스트
-    const url = new URL(req.url, `http://${req.headers.host}`);
+    const url = new URL(req.url, `https://${req.headers.host}`);
     const token = url.searchParams.get('token');
 
     if (!token) {

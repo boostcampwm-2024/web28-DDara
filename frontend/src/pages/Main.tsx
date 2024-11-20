@@ -46,7 +46,7 @@ export const Main = () => {
         saveLocalData(AppConfig.KEYS.BROWSER_TOKEN, token);
       }
       const token = loadLocalData(AppConfig.KEYS.BROWSER_TOKEN);
-      const ws = new WebSocket(`ws://localhost:3001/?token=${token}`);
+      const ws = new WebSocket(`wss://ddara.kro.kr:3001/?token=${token}`);
 
       // 초기 위치 전송
       ws.onopen = () => {

@@ -14,7 +14,7 @@ app.use(express.json());
 // TODO: 프론트 배포 후 origin url 변경
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'http://223.130.151.43'],
+    origin: ['http://localhost:5173', 'http://223.130.151.43', 'https://ddara.kro.kr'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
   }),
@@ -37,5 +37,5 @@ try {
 }
 
 server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on ${AppConfig.API_SERVER}`);
 });

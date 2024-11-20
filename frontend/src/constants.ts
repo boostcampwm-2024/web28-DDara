@@ -8,7 +8,7 @@ export const AppConfig = {
   /**
    * API SERVER
    */
-  API_SERVER: 'https://223.130.151.43:3001/api',
+  API_SERVER: 'https://ddara.kro.kr:3001/api',
   // API_SERVER: 'http://localhost:3001/api',
 
   /**
