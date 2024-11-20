@@ -1,4 +1,3 @@
-import React from 'react';
 import { MdGroup, MdMoreVert } from 'react-icons/md';
 
 interface IContentProps {
@@ -36,7 +35,7 @@ export const Content = (props: IContentProps) => {
       className="relative flex w-full flex-row items-center justify-between px-4 py-5"
     >
       <div>
-        <header className="border-b border-gray-200 pb-1 text-lg">{props.title}</header>
+        <header className="border-gray-200 pb-1 text-lg">{props.title}</header>
         <section className="flex items-center text-sm leading-5 text-gray-500">
           <time className="mr-4">시간</time>
           <span className="mr-6">{props.time}</span>

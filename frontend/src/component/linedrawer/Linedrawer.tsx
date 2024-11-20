@@ -1,85 +1,84 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
+import { useDrawing } from '@/hooks/useDrawing';
+import { usePanning } from '@/hooks/usePanning';
+import { useZoom } from '@/hooks/useZoom';
+import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
+import { useUndoRedo } from '@/hooks/useUndoRedo';
 
-interface IPoint {
-  x: number;
-  y: number;
-}
+// 네이버지도 기준 확대/축소 비율 단계
+const NAVER_STEP_SCALES = [
+  100, 50, 30, 20, 10, 5, 3, 1, 0.5, 0.3, 0.1, 0.05, 0.03, 0.02, 0.01, 0.005,
+];
+// 선의 굵기 상수
+const LINE_WIDTH = 2;
+// 선의 색 상수
+const STROKE_STYLE = 'black';
+// 지도의 처음 확대/축소 비율 단계 index
+const INITIAL_ZOOM_INDEX = 7;
 
-interface ILinedrawerProps {
-  width?: number | string;
-  height?: number | string;
-}
-
-export const Linedrawer: React.FC<ILinedrawerProps> = () => {
+export const Linedrawer = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [points, setPoints] = useState<IPoint[]>([]);
-  const [previewPoint, setPreviewPoint] = useState<IPoint | null>(null);
+  const { points, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  const { draw, scaleRef, viewPosRef } = useDrawing({
+    canvasRef,
+    points,
+    lineWidth: LINE_WIDTH,
+    strokeStyle: STROKE_STYLE,
+    initialScale: NAVER_STEP_SCALES[INITIAL_ZOOM_INDEX],
+  });
+  const { handleMouseMove, handleMouseDown, handleMouseUp } = usePanning({ viewPosRef, draw });
+  const { handleWheel } = useZoom({
+    scaleRef,
+    viewPosRef,
+    draw,
+    stepScales: NAVER_STEP_SCALES,
+    initialZoomIndex: INITIAL_ZOOM_INDEX,
+  });
 
-    const context = canvas.getContext('2d');
-    if (!context) return;
+  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
 
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.lineWidth = 2;
-    context.strokeStyle = 'black';
-
-    if (points.length > 1) {
-      context.beginPath();
-      context.moveTo(points[0].x, points[0].y);
-      for (let i = 1; i < points.length; i += 1) {
-        context.lineTo(points[i].x, points[i].y);
-      }
-      context.stroke();
-    }
-
-    if (points.length > 0 && previewPoint) {
-      context.beginPath();
-      context.moveTo(points[points.length - 1].x, points[points.length - 1].y);
-      context.lineTo(previewPoint.x, previewPoint.y);
-      context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-      context.stroke();
-    }
-  }, [points, previewPoint]);
-
-  const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    const newPoint = { x, y };
-
-    setPoints([...points, newPoint]);
-  };
-
-  const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (points.length === 0) return;
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    setPreviewPoint({ x, y });
+    const x = (e.clientX - rect.left - viewPosRef.current.x) / scaleRef.current;
+    const y = (e.clientY - rect.top - viewPosRef.current.y) / scaleRef.current;
+    addPoint({ x, y });
   };
 
   return (
-    <div className="z-11 absolute">
+    <div className="relative h-[600px] w-[800px]">
+      <div className="absolute left-1/2 top-[10px] z-10 flex -translate-x-1/2 transform gap-2">
+        <button
+          type="button"
+          onClick={undo}
+          disabled={undoStack.length === 0}
+          className={`h-[35px] w-[35px] ${
+            undoStack.length === 0 ? 'cursor-not-allowed opacity-50' : ''
+          }`}
+        >
+          <MdArrowCircleLeft size={24} />
+        </button>
+        <button
+          type="button"
+          onClick={redo}
+          disabled={redoStack.length === 0}
+          className={`h-[35px] w-[35px] ${
+            redoStack.length === 0 ? 'cursor-not-allowed opacity-50' : ''
+          }`}
+        >
+          <MdArrowCircleRight size={24} />
+        </button>
+      </div>
       <canvas
         ref={canvasRef}
-        // TODO : canvas의 넓이 높이 지도에 맞게 조절
-        width={typeof width === 'number' ? width : '430'}
-        height={typeof height === 'number' ? height : '862'}
+        width="800"
+        height="600"
+        className="cursor-crosshair border border-gray-300"
         onClick={handleCanvasClick}
         onMouseMove={handleMouseMove}
-        className="border border-gray-300"
-        style={{ backgroundColor: 'transparent' }}
-        data-testid="canvas"
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onWheel={handleWheel}
       />
     </div>
   );

@@ -56,6 +56,7 @@ export default [
       'prettier/prettier': 'error',
       'no-underscore-dangle': 'warn',
       'no-undef': 'off',
+      'max-classes-per-file': 'off',
       'import/extensions': [
         'error',
         'always',
