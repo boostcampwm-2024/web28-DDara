@@ -4,7 +4,7 @@ import { doLogin } from '@/api/auth.api.ts';
 import { saveLocalData } from '@/utils/common/manageLocalData.ts';
 import { AppConfig } from '@/constants.ts';
 
-interface IAuthModalProps {
+export interface IAuthModalProps {
   /** 모달이 열려 있는지 여부를 나타냅니다. */
   isOpen: boolean;
   /** 모달을 닫는 함수입니다. */
