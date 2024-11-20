@@ -4,13 +4,16 @@ import { usePanning } from '@/hooks/usePanning';
 import { useZoom } from '@/hooks/useZoom';
 import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
 import { useUndoRedo } from '@/hooks/useUndoRedo';
+import { ButtonState } from '@/component/common/enums';
+import { useFloatingButton } from '@/hooks/useFloatingButton';
+import { FloatingButton } from '../common/FloatingButton/FloatingButton';
 
 interface IPoint {
   x: number;
   y: number;
 }
 
-// 네이버지도 기준 확대/축소 비율 단계
+// 네이버 지도 기준 확대/축소 비율 단계
 const NAVER_STEP_SCALES = [
   100, 100, 100, 100, 100, 100, 50, 30, 20, 10, 5, 3, 1, 0.5, 0.3, 0.1, 0.05, 0.03, 0.02, 0.01,
   0.005,
@@ -23,18 +26,12 @@ const STROKE_STYLE = 'black';
 // 지도의 처음 확대/축소 비율 단계 index
 const INITIAL_ZOOM_INDEX = 12;
 
-enum Mode {
-  DrawLine,
-  SetStartPoint,
-  SetEndPoint,
-}
-
 export const Linedrawer = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { points, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
   const [startPoint, setStartPoint] = useState<IPoint | null>(null);
   const [endPoint, setEndPoint] = useState<IPoint | null>(null);
-  const [currentMode, setCurrentMode] = useState<Mode>(Mode.DrawLine);
+  const { isMenuOpen, toolType, toggleMenu, handleMenuClick } = useFloatingButton();
 
   const { draw, scaleRef, viewPosRef } = useDrawing({
     canvasRef,
@@ -62,14 +59,14 @@ export const Linedrawer = () => {
     const x = (e.clientX - rect.left - viewPosRef.current.x) / scaleRef.current;
     const y = (e.clientY - rect.top - viewPosRef.current.y) / scaleRef.current;
 
-    switch (currentMode) {
-      case Mode.DrawLine:
+    switch (toolType) {
+      case ButtonState.LINE_DRAWING:
         addPoint({ x, y });
         break;
-      case Mode.SetStartPoint:
+      case ButtonState.START_MARKER:
         setStartPoint({ x, y });
         break;
-      case Mode.SetEndPoint:
+      case ButtonState.DESTINATION_MARKER:
         setEndPoint({ x, y });
         break;
       default:
@@ -116,17 +113,12 @@ export const Linedrawer = () => {
           onWheel={handleWheel}
         />
       </div>
-      <div className="mt-2 flex gap-2">
-        <button type="button" onClick={() => setCurrentMode(Mode.DrawLine)}>
-          선 그리기 모드
-        </button>
-        <button type="button" onClick={() => setCurrentMode(Mode.SetStartPoint)}>
-          시작점 찍기 모드
-        </button>
-        <button type="button" onClick={() => setCurrentMode(Mode.SetEndPoint)}>
-          도착점 찍기 모드
-        </button>
-      </div>
+      <FloatingButton
+        isMenuOpen={isMenuOpen}
+        toggleMenu={toggleMenu}
+        toolType={toolType}
+        handleMenuClick={handleMenuClick}
+      />
     </>
   );
 };
