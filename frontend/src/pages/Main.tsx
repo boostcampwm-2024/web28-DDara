@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { getUserLocation } from '@/hooks/getUserLocation';
 import { Map } from '@/component/maps/Map';
-import { BottomSheet } from '@/component/bottomSheet/BottomSheet';
+import { BottomSheet } from '@/component/bottomsheet/BottomSheet';
 import { Content } from '@/component/content/Content';
 import { MdFormatListBulleted } from 'react-icons/md';
 
@@ -31,7 +31,7 @@ const contentData = [
 
 export const Main = () => {
   const { lat, lng, error } = getUserLocation();
-  const MIN_HEIGHT = 0.5;
+  const MIN_HEIGHT = 0.03;
   const MAX_HEIGHT = 0.8;
 
   return (
