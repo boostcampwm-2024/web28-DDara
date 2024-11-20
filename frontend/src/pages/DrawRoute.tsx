@@ -1,10 +1,6 @@
 import { Footer } from '@/component/layout/Footer';
-import { Map } from '@/component/maps/Map';
 import { MdArrowBack } from 'react-icons/md';
 import { Linedrawer } from '@/component/linedrawer/Linedrawer';
-
-const lat = 37.3595704;
-const lng = 127.105399;
 
 export const DrawRoute = () => {
   return (
@@ -23,15 +19,6 @@ export const DrawRoute = () => {
         </span>
       </header>
       <Linedrawer />
-
-      <div className="relative h-full w-full flex-grow">
-        <div className="absolute inset-0">
-          <Map lat={lat} lng={lng} type="naver" />
-        </div>
-        <div className="absolute inset-0 h-max w-full">
-          <Linedrawer />
-        </div>
-      </div>
 
       <Footer title="사용자 경로 추가 완료" />
     </div>

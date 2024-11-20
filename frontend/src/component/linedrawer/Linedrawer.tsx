@@ -6,7 +6,7 @@ import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
 import { useUndoRedo } from '@/hooks/useUndoRedo';
 import { ButtonState } from '@/component/common/enums';
 import { useFloatingButton } from '@/hooks/useFloatingButton';
-import { FloatingButton } from '../common/FloatingButton/FloatingButton';
+import { FloatingButton } from '@/component/common/FloatingButton/FloatingButton';
 
 interface IPoint {
   x: number;
