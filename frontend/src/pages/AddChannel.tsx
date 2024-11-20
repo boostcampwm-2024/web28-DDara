@@ -38,7 +38,12 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
  */
 
 export const AddChannel = () => {
-  const [users, setUsers] = useState<IUser[]>([{ id: 1, name: '사용자1', mockData: 10 }]);
+  const storedUsers = localStorage.getItem('users');
+  const initialUsers: IUser[] = storedUsers
+    ? JSON.parse(storedUsers)
+    : [{ id: 1, name: '사용자1', mockData: 10 }];
+
+  const [users, setUsers] = useState<IUser[]>(initialUsers);
   const { setFooterTitle, setFooterTransparency } = useContext(FooterContext);
   const { setLeftButton } = useContext(HeaderContext);
   const navigate = useNavigate();
@@ -67,7 +72,9 @@ export const AddChannel = () => {
       name: `사용자${users.length + 1}`,
       mockData: Math.floor(Math.random() * 100),
     };
-    setUsers([...users, newUser]);
+    const updatedUsers = [...users, newUser];
+    setUsers(updatedUsers);
+    localStorage.setItem('users', JSON.stringify(updatedUsers));
   };
 
   /**
@@ -97,6 +104,7 @@ export const AddChannel = () => {
         name: `사용자${index + 1}`,
       }));
     setUsers(updatedUsers);
+    localStorage.setItem('users', JSON.stringify(updatedUsers));
   };
 
   const goToUserDrawRoute = (user: string) => {
