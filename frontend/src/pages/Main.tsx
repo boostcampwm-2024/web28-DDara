@@ -46,7 +46,7 @@ export const Main = () => {
         saveLocalData(AppConfig.KEYS.BROWSER_TOKEN, token);
       }
       const token = loadLocalData(AppConfig.KEYS.BROWSER_TOKEN);
-      const ws = new WebSocket(`wss://ddara.kro.kr:3001/?token=${token}`);
+      const ws = new WebSocket(`${AppConfig.SOCKET_SERVER}/?token=${token}`);
 
       // 초기 위치 전송
       ws.onopen = () => {
@@ -55,7 +55,6 @@ export const Main = () => {
 
       ws.onmessage = event => {
         const data = JSON.parse(event.data);
-        console.log(data);
 
         if (data.type === 'init') {
           // 기존 클라이언트들의 위치 초기화
@@ -73,10 +72,6 @@ export const Main = () => {
     }
   }, [lat, lng]);
 
-  useEffect(() => {
-    console.log('Other locations:', otherLocations);
-  }, [otherLocations]);
-
   return (
     <div className="flex h-screen flex-col">
       <header className="absolute left-0 right-0 top-0 z-10 flex p-4">
@@ -91,8 +86,15 @@ export const Main = () => {
           height: `calc(100% - ${MIN_HEIGHT * 100}%)`,
         }}
       >
+        {/* eslint-disable-next-line no-nested-ternary */}
         {lat && lng ? (
-          <Map otherLocations={otherLocations} lat={lat} lng={lng} type="naver" />
+          otherLocations ? (
+            <Map otherLocations={otherLocations} lat={lat} lng={lng} type="naver" />
+          ) : (
+            <section className="flex h-full items-center justify-center">
+              Loading map data...
+            </section>
+          )
         ) : (
           <section className="flex h-full items-center justify-center">
             {error ? `Error: ${error}` : 'Loading'}
