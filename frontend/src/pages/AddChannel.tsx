@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { IoClose } from 'react-icons/io5';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
 import { InputBox } from '../component/common/InputBox';
@@ -41,6 +41,7 @@ export const AddChannel = () => {
   const [users, setUsers] = useState<IUser[]>([{ id: 1, name: '사용자1', mockData: 10 }]);
   const { setFooterTitle, setFooterTransparency } = useContext(FooterContext);
   const { setLeftButton } = useContext(HeaderContext);
+  const navigate = useNavigate();
 
   /**
    * 사용자 추가 함수
@@ -97,6 +98,11 @@ export const AddChannel = () => {
       }));
     setUsers(updatedUsers);
   };
+
+  const goToUserDrawRoute = (name: string) => {
+    navigate(`/add-channel/${name}/draw`);
+  };
+
   useEffect(() => {
     setLeftButton('back');
     setFooterTitle('제작 완료');
@@ -114,14 +120,16 @@ export const AddChannel = () => {
             <div className="shadow-userName border-grayscale-400 flex h-12 w-16 items-center justify-center rounded-lg border text-xs">
               {user.name}
             </div>
-            <div
-              className={classNames(
-                'text-grayscale-150 bg-grayscale-100 m-0 flex h-11 items-center justify-center rounded-md text-xs font-semibold',
-                user.id > 1 ? 'w-56' : 'w-64',
-              )}
-            >
-              클릭시 출발지/도착지, 경로 설정 가능
-            </div>
+            <button onClick={() => goToUserDrawRoute(user.name)}>
+              <div
+                className={classNames(
+                  'text-grayscale-150 bg-grayscale-100 m-0 flex h-11 items-center justify-center rounded-md text-xs font-semibold',
+                  user.id > 1 ? 'w-56' : 'w-64',
+                )}
+              >
+                클릭시 출발지/도착지, 경로 설정 가능
+              </div>
+            </button>
             {user.id > 1 && (
               <button onClick={() => deleteUser(user.id)}>
                 <IoClose className="text-grayscale-400 h-6 w-6" />
