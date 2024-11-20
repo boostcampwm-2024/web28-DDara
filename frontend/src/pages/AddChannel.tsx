@@ -99,8 +99,8 @@ export const AddChannel = () => {
     setUsers(updatedUsers);
   };
 
-  const goToUserDrawRoute = (name: string) => {
-    navigate(`/add-channel/${name}/draw`);
+  const goToUserDrawRoute = (user: string) => {
+    navigate(`/add-channel/${user}/draw`);
   };
 
   useEffect(() => {
