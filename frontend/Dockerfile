@@ -28,5 +28,4 @@ RUN pnpm build
 # 9. Nginx 이미지를 사용해 정적 파일 제공
 FROM nginx:alpine
 COPY --from=builder /app/frontend/dist /usr/share/nginx/html
-COPY ./nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
