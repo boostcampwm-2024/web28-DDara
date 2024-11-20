@@ -73,8 +73,8 @@ export const Linedrawer: React.FC<ILinedrawerProps> = () => {
       <canvas
         ref={canvasRef}
         // TODO : canvas의 넓이 높이 지도에 맞게 조절
-        width={typeof width === 'number' ? width : '430'}
-        height={typeof height === 'number' ? height : '862'}
+        width="800"
+        height="600"
         onClick={handleCanvasClick}
         onMouseMove={handleMouseMove}
         className="border border-gray-300"

@@ -1,9 +1,12 @@
-import React, { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { getUserLocation } from '@/hooks/getUserLocation';
 import { Map } from '@/component/maps/Map';
 import { BottomSheet } from '@/component/BottomSheet/BottomSheet';
 import { Content } from '@/component/content/Content';
 import { MdFormatListBulleted } from 'react-icons/md';
+import { v4 as uuidv4 } from 'uuid';
+import { AppConfig } from '@/constants.ts';
+import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
 
 const contentData = [
   {
@@ -31,8 +34,48 @@ const contentData = [
 
 export const Main = () => {
   const { lat, lng, error } = getUserLocation();
+  const [otherLocations, setOtherLocations] = useState<any[]>([]);
   const MIN_HEIGHT = 0.5;
   const MAX_HEIGHT = 0.8;
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (lat && lng) {
+      if (!loadLocalData(AppConfig.KEYS.BROWSER_TOKEN)) {
+        const token = uuidv4();
+        saveLocalData(AppConfig.KEYS.BROWSER_TOKEN, token);
+      }
+      const token = loadLocalData(AppConfig.KEYS.BROWSER_TOKEN);
+      const ws = new WebSocket(`ws://localhost:3001/?token=${token}`);
+
+      // 초기 위치 전송
+      ws.onopen = () => {
+        ws.send(JSON.stringify({ type: 'location', location: { lat, lng } }));
+      };
+
+      ws.onmessage = event => {
+        const data = JSON.parse(event.data);
+        console.log(data);
+
+        if (data.type === 'init') {
+          // 기존 클라이언트들의 위치 초기화
+          setOtherLocations(data.clients);
+        } else if (data.type === 'location' && data.token !== token) {
+          // 새로 들어온 위치 업데이트
+          setOtherLocations(prev =>
+            prev.some(loc => loc.token === data.token)
+              ? prev.map(loc => (loc.token === data.token ? data : loc))
+              : [...prev, data],
+          );
+        }
+      };
+      return () => ws.close();
+    }
+  }, [lat, lng]);
+
+  useEffect(() => {
+    console.log('Other locations:', otherLocations);
+  }, [otherLocations]);
 
   return (
     <div className="flex h-screen flex-col">
@@ -49,7 +92,7 @@ export const Main = () => {
         }}
       >
         {lat && lng ? (
-          <Map lat={lat} lng={lng} type="naver" />
+          <Map otherLocations={otherLocations} lat={lat} lng={lng} type="naver" />
         ) : (
           <section className="flex h-full items-center justify-center">
             {error ? `Error: ${error}` : 'Loading'}
