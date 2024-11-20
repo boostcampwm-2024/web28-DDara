@@ -1,9 +1,11 @@
-import { Fragment } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import { getUserLocation } from '@/hooks/getUserLocation';
 import { Map } from '@/component/maps/Map';
 import { BottomSheet } from '@/component/bottomsheet/BottomSheet';
 import { Content } from '@/component/content/Content';
 import { MdFormatListBulleted } from 'react-icons/md';
+import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
+import { useNavigate } from 'react-router-dom';
 
 const contentData = [
   {
@@ -30,10 +32,21 @@ const contentData = [
 ];
 
 export const Main = () => {
+  const { setFooterTitle, setFooterTransparency, setFooterOnClick } = useContext(FooterContext);
   const { lat, lng, error } = getUserLocation();
+  const navigate = useNavigate();
   const MIN_HEIGHT = 0.03;
   const MAX_HEIGHT = 0.8;
 
+  const goToAddChannel = () => {
+    navigate('/add-channel');
+  };
+
+  useState(() => {
+    setFooterOnClick(goToAddChannel);
+    setFooterTitle('+');
+    setFooterTransparency(false);
+  });
   return (
     <div className="flex h-screen flex-col">
       <header className="absolute left-0 right-0 top-0 z-10 flex p-4">

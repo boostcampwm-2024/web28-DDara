@@ -99,7 +99,7 @@ export const AddChannel = () => {
   };
   useEffect(() => {
     setLeftButton('back');
-    setFooterTitle('+');
+    setFooterTitle('제작 완료');
     setFooterTransparency(false);
   }, []);
 

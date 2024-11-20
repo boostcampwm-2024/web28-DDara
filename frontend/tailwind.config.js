@@ -53,6 +53,7 @@ module.exports = {
         userName: '5px 4px 7.1px rgba(0, 0, 0, 0.05)',
         basic: 'inset 0 0 3px rgba(0, 0, 0, 0.11)',
         dark: '0px -6px 20px 0px rgba(0, 0, 0, 0.25)',
+        innerButton: 'inset 0 0 11.3px rgba(0, 0, 0, 0.07)',
       },
       keyframes: {
         smoothAppear: {
