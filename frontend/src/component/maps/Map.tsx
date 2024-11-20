@@ -8,6 +8,7 @@ interface IMapProps {
   className?: string;
   type: string;
   zoom?: number;
+  otherLocations?: Array<{ location: { lat: number; lng: number }; token: string; type: string }>;
 }
 
 /**
@@ -39,10 +40,15 @@ export const Map = (props: IMapProps) => {
   const [MapComponent, setMapComponent] = useState<ReactNode>();
 
   useEffect(() => {
-    if (props.type === 'naver') {
-      setMapComponent(<NaverMap lat={props.lat} lng={props.lng} zoom={props.zoom} />);
-    }
-  }, []);
+    setMapComponent(
+      <NaverMap
+        lat={props.lat}
+        lng={props.lng}
+        zoom={props.zoom}
+        otherLocations={props.otherLocations}
+      />,
+    );
+  }, [props.lat, props.lng, props.otherLocations]);
 
   return (
     <article className={classNames({ 'h-screen': !props.className }, props.className)}>
