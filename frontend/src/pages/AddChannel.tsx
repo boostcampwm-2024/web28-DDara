@@ -1,17 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
-import classNames from 'classnames';
-import { IoClose } from 'react-icons/io5';
+import { useContext, useEffect } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
-import { Outlet, useNavigate } from 'react-router-dom';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
-import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
+import { RouteSettingButton } from '@/component/routebutton/RouteSettingButton';
+import { Outlet } from 'react-router-dom';
+import { RouteResultButton } from '@/component/routebutton/RouteResultButton';
+import { IUser, UserContext } from '@/context/UserContext';
+import { buttonActiveType } from '@/component/layout/enumTypes';
 import { InputBox } from '../component/common/InputBox';
-
-interface IUser {
-  id: number;
-  name: string;
-  mockData?: number;
-}
 
 /**
  * Divider 컴포넌트: 구분선 역할을 하는 컴포넌트입니다.
@@ -38,15 +33,9 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
  */
 
 export const AddChannel = () => {
-  const storedUsers = localStorage.getItem('users');
-  const initialUsers: IUser[] = storedUsers
-    ? JSON.parse(storedUsers)
-    : [{ id: 1, name: '사용자1', mockData: 10 }];
+  const { users, setUsers } = useContext(UserContext);
 
-  const [users, setUsers] = useState<IUser[]>(initialUsers);
-  const { setFooterTitle, setFooterTransparency } = useContext(FooterContext);
-  const { setLeftButton } = useContext(HeaderContext);
-  const navigate = useNavigate();
+  const { setFooterTitle, setFooterTransparency, setFooterActive } = useContext(FooterContext);
 
   /**
    * 사용자 추가 함수
@@ -66,15 +55,26 @@ export const AddChannel = () => {
    * ```
    */
   const addUser = () => {
-    if (users.length === 5) return;
     const newUser: IUser = {
       id: users.length + 1,
       name: `사용자${users.length + 1}`,
-      mockData: Math.floor(Math.random() * 100),
+      start_location: { lat: 0, lng: 0 }, // 초기값으로 빈 좌표
+      end_location: { lat: 0, lng: 0 }, // 초기값으로 빈 좌표
+      path: [], // 초기값으로 빈 배열
+      marker_style: { color: '' }, // 초기값으로 빈 문자열
     };
-    const updatedUsers = [...users, newUser];
-    setUsers(updatedUsers);
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
+    setUsers([...users, newUser]);
+  };
+
+  const isUserDataComplete = (user: IUser): boolean => {
+    return (
+      user.start_location.lat !== 0 &&
+      user.start_location.lng !== 0 &&
+      user.end_location.lat !== 0 &&
+      user.end_location.lng !== 0 &&
+      user.path.length > 0 &&
+      user.marker_style.color !== ''
+    );
   };
 
   /**
@@ -107,15 +107,22 @@ export const AddChannel = () => {
     localStorage.setItem('users', JSON.stringify(updatedUsers));
   };
 
-  const goToUserDrawRoute = (user: string) => {
-    navigate(`/add-channel/${user}/draw`);
-  };
-
   useEffect(() => {
-    setLeftButton('back');
     setFooterTitle('제작 완료');
     setFooterTransparency(false);
+    setFooterActive(buttonActiveType.PASSIVE);
   }, []);
+
+  useEffect(() => {
+    const allUsersComplete = users.every(isUserDataComplete);
+
+    // 모든 사용자가 완전한 데이터라면 Footer를 활성화
+    if (allUsersComplete) {
+      setFooterActive(buttonActiveType.ACTIVE);
+    } else {
+      setFooterActive(buttonActiveType.PASSIVE);
+    }
+  }, [users, setFooterActive]); // users가 변경될 때마다 실행
 
   return (
     <main className="flex h-full w-full flex-col items-center px-8 py-16">
@@ -124,24 +131,11 @@ export const AddChannel = () => {
       <Divider />
       <section className="w-full space-y-4">
         {users.map(user => (
-          <div className="flex flex-row items-center justify-center space-x-2" key={user.id}>
-            <div className="shadow-userName border-grayscale-400 flex h-12 w-16 items-center justify-center rounded-lg border text-xs">
-              {user.name}
-            </div>
-            <button onClick={() => goToUserDrawRoute(user.name)}>
-              <div
-                className={classNames(
-                  'text-grayscale-150 bg-grayscale-100 m-0 flex h-11 items-center justify-center rounded-md text-xs font-semibold',
-                  user.id > 1 ? 'w-56' : 'w-64',
-                )}
-              >
-                클릭시 출발지/도착지, 경로 설정 가능
-              </div>
-            </button>
-            {user.id > 1 && (
-              <button onClick={() => deleteUser(user.id)}>
-                <IoClose className="text-grayscale-400 h-6 w-6" />
-              </button>
+          <div key={user.id}>
+            {isUserDataComplete(user) ? (
+              <RouteResultButton user={user} deleteUser={deleteUser} />
+            ) : (
+              <RouteSettingButton user={user} deleteUser={deleteUser} />
             )}
           </div>
         ))}
