@@ -8,6 +8,7 @@ import {
   getUserChannelsController,
 } from '../controllers/channelController.js';
 import { validationMiddleware } from '../middleware/validationMiddleware.js';
+import { authenticateJWT } from '../middleware/authenticateJWT.js';
 
 export const channelRouter = express.Router();
 
@@ -27,7 +28,7 @@ export const channelRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/CreateChannelRequest'
  *       responses:
- *         201:
+ *         200:
  *           description: '채널 생성 성공'
  *           content:
  *             application/json:
@@ -40,6 +41,7 @@ channelRouter.post(
     body('name').notEmpty().withMessage('Name is required'),
     body('host_id').notEmpty().withMessage('Host ID is required'),
   ],
+  authenticateJWT,
   validationMiddleware,
   createChannelController,
 );
@@ -77,6 +79,7 @@ channelRouter.post(
 channelRouter.post(
   '/:channelId/guests',
   [body('guests').isArray().withMessage('Guests must be an array')],
+  authenticateJWT,
   validationMiddleware,
   addGuestController,
 );
@@ -108,6 +111,7 @@ channelRouter.post(
 channelRouter.get(
   '/:id',
   [param('id').notEmpty().withMessage('Channel ID is required')],
+  authenticateJWT,
   validationMiddleware,
   getChannelInfoController,
 );
@@ -182,6 +186,7 @@ channelRouter.get(
 channelRouter.get(
   '/user/:userId',
   [param('userId').notEmpty().withMessage('User ID is required')],
+  authenticateJWT,
   validationMiddleware,
   getUserChannelsController,
 );
