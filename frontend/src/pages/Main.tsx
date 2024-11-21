@@ -5,7 +5,7 @@ import { Content } from '@/component/content/Content';
 import { MdFormatListBulleted } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
-import { CanvasWithMap } from '@/component/canvas/CanvasWithMap.tsx';
+import { NaverMap } from '@/component/maps/NaverMapSample.tsx';
 
 const contentData = [
   {
@@ -62,7 +62,7 @@ export const Main = () => {
         }}
       >
         {lat && lng ? (
-          <CanvasWithMap lat={lat} lng={lng} zoom={20} mapType="naver" />
+          <NaverMap lat={lat} lng={lng} zoom={20} />
         ) : (
           <section className="flex h-full items-center justify-center">
             {error ? `Error: ${error}` : 'Loading'}
