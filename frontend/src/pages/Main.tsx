@@ -1,11 +1,11 @@
 import { Fragment, useContext, useState } from 'react';
 import { getUserLocation } from '@/hooks/getUserLocation';
-import { Map } from '@/component/maps/Map';
 import { BottomSheet } from '@/component/bottomsheet/BottomSheet';
 import { Content } from '@/component/content/Content';
 import { MdFormatListBulleted } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
+import { CanvasWithMap } from '@/component/canvas/CanvasWithMap.tsx';
 
 const contentData = [
   {
@@ -62,7 +62,7 @@ export const Main = () => {
         }}
       >
         {lat && lng ? (
-          <Map lat={lat} lng={lng} type="naver" />
+          <CanvasWithMap lat={lat} lng={lng} zoom={20} mapType="naver" />
         ) : (
           <section className="flex h-full items-center justify-center">
             {error ? `Error: ${error}` : 'Loading'}
