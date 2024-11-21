@@ -115,8 +115,14 @@ export const AddChannel = () => {
 
   useEffect(() => {
     const allUsersComplete = users.every(isUserDataComplete);
-    if (allUsersComplete) setFooterActive(buttonActiveType.ACTIVE);
-  }, [users]);
+
+    // 모든 사용자가 완전한 데이터라면 Footer를 활성화
+    if (allUsersComplete) {
+      setFooterActive(buttonActiveType.ACTIVE);
+    } else {
+      setFooterActive(buttonActiveType.PASSIVE);
+    }
+  }, [users, setFooterActive]); // users가 변경될 때마다 실행
 
   return (
     <main className="flex h-full w-full flex-col items-center px-8 py-16">

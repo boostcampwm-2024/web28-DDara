@@ -9,8 +9,8 @@ export interface IFooterProps {
 }
 
 export const Footer = (props: IFooterProps) => {
-  const buttonStyle = props.active ? buttonActiveStyle.ACTIVE : buttonActiveStyle.PASSIVE;
-
+  const buttonStyle =
+    props.active === buttonActiveType.ACTIVE ? buttonActiveStyle.ACTIVE : buttonActiveStyle.PASSIVE;
   const handleClick = () => {
     // ACTIVE 상태일 때만 onClick 실행
     if (props.active === buttonActiveType.ACTIVE && props.onClick) {
