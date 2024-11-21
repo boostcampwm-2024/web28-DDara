@@ -117,7 +117,7 @@ export const getUserChannelsController = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Get channels successfully',
-      data: channels,
+      data: { channels },
     });
   } catch (error) {
     console.error(error);
