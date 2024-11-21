@@ -1,21 +1,27 @@
-import { getApiClient } from '@/api/client.api.ts';
 import { ResponseDto } from '@/api/dto/response.dto.ts';
-import { LoginResEntity, RegisterResEntity } from '@/api/dto/auth.dto.ts';
+import {
+  createChannelReqEntity,
+  createChannelResEntity,
+  getUserChannelsResEntity,
+} from '@/api/dto/channel.dto.ts';
+import { getApiClient } from '@/api/client.api.ts';
 
-export const doLogin = (id: string, password: string): Promise<ResponseDto<LoginResEntity>> => {
+export const createChannel = (
+  data: createChannelReqEntity,
+): Promise<ResponseDto<createChannelResEntity>> => {
   const promiseFn = (
-    fnResolve: (value: ResponseDto<LoginResEntity>) => void,
+    fnResolve: (value: ResponseDto<createChannelResEntity>) => void,
     fnReject: (reason?: any) => void,
   ) => {
     const apiClient = getApiClient();
     apiClient
-      .post('/auth/login', { id, password })
+      .post('/channel', data)
       .then(res => {
         if (res.status !== 200) {
           console.error(res);
           fnReject(`msg.${res}`);
         } else {
-          fnResolve(new ResponseDto<LoginResEntity>(res));
+          fnResolve(new ResponseDto<createChannelResEntity>(res));
         }
       })
       .catch(err => {
@@ -26,25 +32,20 @@ export const doLogin = (id: string, password: string): Promise<ResponseDto<Login
   return new Promise(promiseFn);
 };
 
-export const doRegister = (
-  id: string,
-  name: string,
-  password: string,
-  email: string,
-): Promise<ResponseDto<RegisterResEntity>> => {
+export const getUserChannels = (userId: string): Promise<ResponseDto<getUserChannelsResEntity>> => {
   const promiseFn = (
-    fnResolve: (value: ResponseDto<RegisterResEntity>) => void,
+    fnResolve: (value: ResponseDto<getUserChannelsResEntity>) => void,
     fnReject: (reason?: any) => void,
   ) => {
     const apiClient = getApiClient();
     apiClient
-      .post('/auth/register', { id, name, password, email })
+      .get(`/channel/user/${userId}`)
       .then(res => {
         if (res.status !== 200) {
           console.error(res);
           fnReject(`msg.${res}`);
         } else {
-          fnResolve(new ResponseDto<RegisterResEntity>(res));
+          fnResolve(new ResponseDto<getUserChannelsResEntity>(res));
         }
       })
       .catch(err => {

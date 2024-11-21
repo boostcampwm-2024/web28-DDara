@@ -1,5 +1,6 @@
 import { ReactNode, createContext, useReducer, useMemo, useCallback } from 'react';
 import { IFooterProps } from '@/component/layout/footer/Footer';
+import { buttonActiveType } from '../enumTypes';
 
 interface ILayoutFooterProviderProps {
   children: ReactNode;
@@ -8,7 +9,7 @@ interface ILayoutFooterProviderProps {
 interface IFooterOptionContext {
   footerOption: IFooterProps;
   setFooterTitle: (title: string) => void;
-  setFooterActive: (active: boolean) => void;
+  setFooterActive: (active: buttonActiveType) => void;
   setFooterTransparency: (isTransparency: boolean) => void;
   setFooterOnClick: (onClick: () => void) => void;
   resetFooterContext: () => void;
@@ -16,7 +17,7 @@ interface IFooterOptionContext {
 
 const defaultFooterOption: IFooterProps = {
   title: '',
-  active: false,
+  active: buttonActiveType.ACTIVE,
   isTranperency: true,
   onClick: undefined,
 };
@@ -32,9 +33,10 @@ export const FooterContext = createContext<IFooterOptionContext>({
 
 type Action =
   | { type: 'SET_TITLE'; payload: string }
-  | { type: 'SET_ACTIVE'; payload: boolean }
+  | { type: 'SET_ACTIVE'; payload: buttonActiveType }
   | { type: 'SET_TRANSPARENCY'; payload: boolean }
-  | { type: 'SET_ONCLICK'; payload: () => void };
+  | { type: 'SET_ONCLICK'; payload: () => void }
+  | { type: 'SET_CLASSNAME'; payload: string };
 
 const footerReducer = (state: IFooterProps, action: Action): IFooterProps => {
   switch (action.type) {
@@ -58,7 +60,7 @@ export const LayoutFooterProvider = (props: ILayoutFooterProviderProps) => {
     dispatch({ type: 'SET_TITLE', payload: title });
   }, []);
 
-  const setFooterActive = useCallback((active: boolean) => {
+  const setFooterActive = useCallback((active: buttonActiveType) => {
     dispatch({ type: 'SET_ACTIVE', payload: active });
   }, []);
 
@@ -72,7 +74,7 @@ export const LayoutFooterProvider = (props: ILayoutFooterProviderProps) => {
 
   const resetFooterContext = () => {
     setFooterTitle('');
-    setFooterActive(false);
+    setFooterActive(buttonActiveType.PASSIVE);
     setFooterTransparency(true);
     setFooterOnClick(() => {});
   };
