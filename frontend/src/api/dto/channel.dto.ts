@@ -45,3 +45,15 @@ export class createChannelResEntity {
 
   created_at: string | undefined;
 }
+
+export class channelListEntity {
+  id: string | undefined;
+
+  name: string | undefined;
+
+  generated_at: string | undefined;
+}
+
+export class getUserChannelsResEntity {
+  channels: channelListEntity[] | undefined;
+}
