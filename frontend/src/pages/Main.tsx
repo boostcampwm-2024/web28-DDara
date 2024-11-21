@@ -17,21 +17,21 @@ const contentData = [
     title: '아들네 집으로',
     time: '0시간 34분',
     person: 2,
-    link: '/test1',
+    link: '/channel/123/guest/456',
   },
   {
     id: '2',
     title: '손자네 집으로',
     time: '2시간 32분',
     person: 0,
-    link: '/test2',
+    link: '/channel/123/guest/456',
   },
   {
     id: '3',
     title: '마을회관으로',
     time: '0시간 12분',
     person: 1,
-    link: '/test3',
+    link: '/channel/123/guest/456',
   },
 ];
 

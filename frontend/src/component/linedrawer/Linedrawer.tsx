@@ -77,7 +77,7 @@ export const Linedrawer = () => {
   };
 
   return (
-    <div className="relative h-[600px] w-[800px]">
+    <div className="relative h-[600px]">
       <div className="absolute left-1/2 top-[10px] z-10 flex -translate-x-1/2 transform gap-2">
         <button
           type="button"
@@ -102,9 +102,9 @@ export const Linedrawer = () => {
       </div>
       <canvas
         ref={canvasRef}
-        width="800"
+        width="400vw"
         height="600"
-        className="cursor-crosshair border border-gray-300"
+        className="relative left-1/2 -translate-x-1/2 cursor-crosshair border border-gray-300"
         onClick={handleCanvasClick}
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}
