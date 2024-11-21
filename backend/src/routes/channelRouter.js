@@ -28,7 +28,7 @@ export const channelRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/CreateChannelRequest'
  *       responses:
- *         201:
+ *         200:
  *           description: '채널 생성 성공'
  *           content:
  *             application/json:

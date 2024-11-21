@@ -73,8 +73,7 @@ export const getChannelByIdService = async id => {
   try {
     return await getChannelWithGuestsByIdFromDB(id);
   } catch (error) {
-    console.error('Error fetching channel:', error);
-    throw error;
+    throw new Error('Error fetching channel', error);
   }
 };
 
@@ -89,8 +88,7 @@ export const getChannelGuestInfoService = async (channelId, guestId) => {
   try {
     return await getGuestByChannelAndGuestIdFromDB(channelId, guestId);
   } catch (error) {
-    console.error('Error fetching channel:', error);
-    throw error;
+    throw new Error('Error fetching channel', error);
   }
 };
 
