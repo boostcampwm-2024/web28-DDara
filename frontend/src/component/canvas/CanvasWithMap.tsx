@@ -1,4 +1,4 @@
-import { Canvas, ICanvasRefMethods } from '@/component/canvas/LineDrawer_test.tsx';
+import { Canvas, ICanvasRefMethods } from '@/component/canvas/Canvas.tsx';
 import { Map, IMapRefMethods } from '@/component/maps/Map.tsx';
 import classNames from 'classnames';
 import { ICanvasVertex } from '@/utils/screen/canvasUtils.ts';
