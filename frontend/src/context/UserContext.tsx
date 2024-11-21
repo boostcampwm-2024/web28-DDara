@@ -38,14 +38,10 @@ export const UserProvider = (props: IUserContextProps) => {
     {
       id: 1,
       name: '사용자1',
-      start_location: { lat: 37.5665, lng: 126.978 },
-      end_location: { lat: 35.1796, lng: 129.0756 },
-      path: [
-        { lat: 37.5665, lng: 126.978 },
-        { lat: 36.5, lng: 127.5 },
-        { lat: 35.1796, lng: 129.0756 },
-      ],
-      marker_style: { color: 'blue' },
+      start_location: { lat: 0, lng: 0 },
+      end_location: { lat: 0, lng: 0 },
+      path: [],
+      marker_style: { color: '' },
     },
   ]);
   const contextValue = useMemo(() => ({ users, setUsers }), [users, setUsers]);

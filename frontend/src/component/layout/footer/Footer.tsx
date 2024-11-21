@@ -1,15 +1,22 @@
 import classNames from 'classnames';
-import { buttonActiveType } from '../enumTypes';
+import { buttonActiveStyle, buttonActiveType } from '../enumTypes';
 
 export interface IFooterProps {
   title?: string;
   onClick?: () => void;
-  active?: boolean;
+  active?: buttonActiveType;
   isTranperency?: boolean;
 }
 
 export const Footer = (props: IFooterProps) => {
-  const buttonStyle = props.active ? buttonActiveType.ACTIVE : buttonActiveType.PASSIVE;
+  const buttonStyle = props.active ? buttonActiveStyle.ACTIVE : buttonActiveStyle.PASSIVE;
+
+  const handleClick = () => {
+    // ACTIVE 상태일 때만 onClick 실행
+    if (props.active === buttonActiveType.ACTIVE && props.onClick) {
+      props.onClick();
+    }
+  };
 
   return props.isTranperency ? (
     <div />
@@ -27,7 +34,7 @@ export const Footer = (props: IFooterProps) => {
           buttonStyle,
         )}
         type="button"
-        onClick={props.onClick}
+        onClick={handleClick}
       >
         {props.title}
       </button>

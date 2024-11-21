@@ -17,7 +17,6 @@ export const DrawRoute = () => {
   const user = getUser(params.user); // params.user에 해당하는 사용자 찾기
 
   const addMockData = () => {
-    console.log('asdf');
     if (user) {
       const updatedUser = {
         ...user,
@@ -36,6 +35,21 @@ export const DrawRoute = () => {
       setUsers(updatedUsers);
     }
   };
+  const resetMockData = () => {
+    if (user) {
+      const updatedUser = {
+        ...user,
+        start_location: { lat: 0, lng: 0 }, // 초기값으로 리셋
+        end_location: { lat: 0, lng: 0 },
+        path: [],
+        marker_style: { color: '' },
+      };
+
+      // 해당 user의 state를 초기 상태로 업데이트
+      const updatedUsers = users.map(u => (u.name === params.user ? updatedUser : u));
+      setUsers(updatedUsers);
+    }
+  };
 
   useEffect(() => {
     setFooterTitle('사용자 경로 추가 완료');
@@ -43,9 +57,13 @@ export const DrawRoute = () => {
 
   return (
     <div className="flex h-full w-full flex-col py-20">
-      <button className="border-2" onClick={addMockData}>
+      <button className="mb-4 border-2 p-2" onClick={addMockData}>
         Mock 데이터 추가
       </button>
+      <button className="mb-4 border-2 p-2" onClick={resetMockData}>
+        Mock 데이터 초기화
+      </button>
+
       <Linedrawer />
     </div>
   );

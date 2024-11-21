@@ -6,6 +6,7 @@ import { Content } from '@/component/content/Content';
 import { MdFormatListBulleted } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
+import { buttonActiveType } from '@/component/layout/enumTypes';
 
 const contentData = [
   {
@@ -47,7 +48,7 @@ export const Main = () => {
     setFooterOnClick(goToAddChannel);
     setFooterTitle('+');
     setFooterTransparency(false);
-    setFooterActive(true);
+    setFooterActive(buttonActiveType.ACTIVE);
   });
   return (
     <div className="flex h-screen flex-col">

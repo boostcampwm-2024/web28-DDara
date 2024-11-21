@@ -5,6 +5,7 @@ import { RouteSettingButton } from '@/component/routebutton/RouteSettingButton';
 import { Outlet } from 'react-router-dom';
 import { RouteResultButton } from '@/component/routebutton/RouteResultButton';
 import { IUser, UserContext } from '@/context/UserContext';
+import { buttonActiveType } from '@/component/layout/enumTypes';
 import { InputBox } from '../component/common/InputBox';
 
 /**
@@ -109,11 +110,12 @@ export const AddChannel = () => {
   useEffect(() => {
     setFooterTitle('제작 완료');
     setFooterTransparency(false);
-    setFooterActive(false);
+    setFooterActive(buttonActiveType.PASSIVE);
   }, []);
+
   useEffect(() => {
     const allUsersComplete = users.every(isUserDataComplete);
-    setFooterActive(allUsersComplete);
+    if (allUsersComplete) setFooterActive(buttonActiveType.ACTIVE);
   }, [users]);
 
   return (
