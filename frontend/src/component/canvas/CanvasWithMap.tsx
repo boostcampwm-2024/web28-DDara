@@ -11,6 +11,7 @@ interface ICanvasWithMapProps {
   lng: number;
   zoom: number;
   mapType: string;
+  allowCanvas?: boolean;
 }
 
 interface IMouseEventState {
@@ -99,7 +100,7 @@ export const CanvasWithMap = (props: ICanvasWithMapProps) => {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      <Canvas ref={canvasRefMethods} />
+      {props.allowCanvas && <Canvas ref={canvasRefMethods} />}
       <Map
         lat={props.lat}
         lng={props.lng}
