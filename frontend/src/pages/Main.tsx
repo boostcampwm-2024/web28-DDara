@@ -32,7 +32,8 @@ const contentData = [
 ];
 
 export const Main = () => {
-  const { setFooterTitle, setFooterTransparency, setFooterOnClick } = useContext(FooterContext);
+  const { setFooterTitle, setFooterTransparency, setFooterOnClick, setFooterActive } =
+    useContext(FooterContext);
   const { lat, lng, error } = getUserLocation();
   const navigate = useNavigate();
   const MIN_HEIGHT = 0.03;
@@ -46,6 +47,7 @@ export const Main = () => {
     setFooterOnClick(goToAddChannel);
     setFooterTitle('+');
     setFooterTransparency(false);
+    setFooterActive(true);
   });
   return (
     <div className="flex h-screen flex-col">

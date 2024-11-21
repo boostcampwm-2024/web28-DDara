@@ -34,7 +34,8 @@ type Action =
   | { type: 'SET_TITLE'; payload: string }
   | { type: 'SET_ACTIVE'; payload: boolean }
   | { type: 'SET_TRANSPARENCY'; payload: boolean }
-  | { type: 'SET_ONCLICK'; payload: () => void };
+  | { type: 'SET_ONCLICK'; payload: () => void }
+  | { type: 'SET_CLASSNAME'; payload: string };
 
 const footerReducer = (state: IFooterProps, action: Action): IFooterProps => {
   switch (action.type) {
