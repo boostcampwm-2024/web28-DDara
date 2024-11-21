@@ -69,3 +69,15 @@ export const setNaverMap = (
     resolve(map);
   });
 };
+
+export const setNaverMapSync = (
+  htmlElement: HTMLElement,
+  mapOptions: IMapOptions,
+): naver.maps.Map => {
+  const { lat, lng, ...restProps } = setNaverMapOption(mapOptions);
+
+  return new naver.maps.Map(htmlElement, {
+    center: new naver.maps.LatLng(lat, lng),
+    ...restProps,
+  });
+};
