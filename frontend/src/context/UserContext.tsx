@@ -1,5 +1,21 @@
 import React, { createContext, ReactNode, useMemo, useState } from 'react';
-import { IUser } from '@/pages/AddChannel';
+
+export interface IUser {
+  id: number;
+  name: string;
+  start_location: {
+    lat: number;
+    lng: number;
+  };
+  end_location: {
+    lat: number;
+    lng: number;
+  };
+  path: { lat: number; lng: number }[]; // 경로가 여러 개일 수 있도록 수정
+  marker_style: {
+    color: string; // color는 일반적인 문자열로 수정
+  };
+}
 
 interface IUserContextProps {
   children: ReactNode;

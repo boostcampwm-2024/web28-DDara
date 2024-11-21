@@ -1,4 +1,4 @@
-import { IUser } from '@/pages/AddChannel';
+import { IUser } from '@/context/UserContext';
 import { getAddressFromCoordinates } from '@/utils/map/getAddress';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';

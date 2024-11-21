@@ -1,28 +1,11 @@
 import { useContext, useEffect } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
-// import { RouteSettingButton } from '@/component/routebutton/RouteSettingButton';
+import { RouteSettingButton } from '@/component/routebutton/RouteSettingButton';
 import { Outlet } from 'react-router-dom';
 import { RouteResultButton } from '@/component/routebutton/RouteResultButton';
-import { UserContext } from '@/context/UserContext';
+import { IUser, UserContext } from '@/context/UserContext';
 import { InputBox } from '../component/common/InputBox';
-
-export interface IUser {
-  id: number;
-  name: string;
-  start_location: {
-    lat: number;
-    lng: number;
-  };
-  end_location: {
-    lat: number;
-    lng: number;
-  };
-  path: { lat: number; lng: number }[]; // 경로가 여러 개일 수 있도록 수정
-  marker_style: {
-    color: string; // color는 일반적인 문자열로 수정
-  };
-}
 
 /**
  * Divider 컴포넌트: 구분선 역할을 하는 컴포넌트입니다.
@@ -74,17 +57,23 @@ export const AddChannel = () => {
     const newUser: IUser = {
       id: users.length + 1,
       name: `사용자${users.length + 1}`,
-      start_location: { lat: 37.5665 + users.length / 1000, lng: 126.978 },
-      end_location: { lat: 35.1796, lng: 129.0756 },
-      path: [
-        { lat: 37.5665, lng: 126.978 },
-        { lat: 36.5, lng: 127.5 },
-        { lat: 35.1796, lng: 129.0756 },
-      ],
-      marker_style: { color: 'blue' },
+      start_location: { lat: 0, lng: 0 }, // 초기값으로 빈 좌표
+      end_location: { lat: 0, lng: 0 }, // 초기값으로 빈 좌표
+      path: [], // 초기값으로 빈 배열
+      marker_style: { color: '' }, // 초기값으로 빈 문자열
     };
-
     setUsers([...users, newUser]);
+  };
+
+  const isUserDataComplete = (user: IUser): boolean => {
+    return (
+      user.start_location.lat !== 0 &&
+      user.start_location.lng !== 0 &&
+      user.end_location.lat !== 0 &&
+      user.end_location.lng !== 0 &&
+      user.path.length > 0 &&
+      user.marker_style.color !== ''
+    );
   };
 
   /**
@@ -123,7 +112,8 @@ export const AddChannel = () => {
     setFooterActive(false);
   }, []);
   useEffect(() => {
-    console.log(users);
+    const allUsersComplete = users.every(isUserDataComplete);
+    setFooterActive(allUsersComplete);
   }, [users]);
 
   return (
@@ -133,9 +123,12 @@ export const AddChannel = () => {
       <Divider />
       <section className="w-full space-y-4">
         {users.map(user => (
-          <div>
-            {/* <RouteSettingButton key={user.id} user={user} deleteUser={deleteUser} /> */}
-            <RouteResultButton key={user.id} user={user} deleteUser={deleteUser} />
+          <div key={user.id}>
+            {isUserDataComplete(user) ? (
+              <RouteResultButton user={user} deleteUser={deleteUser} />
+            ) : (
+              <RouteSettingButton user={user} deleteUser={deleteUser} />
+            )}
           </div>
         ))}
       </section>

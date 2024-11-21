@@ -1,4 +1,4 @@
-import { IUser } from '@/pages/AddChannel';
+import { IUser } from '@/context/UserContext';
 import classNames from 'classnames';
 import { IoClose } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
