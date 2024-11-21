@@ -30,14 +30,11 @@ export const NaverMap = forwardRef<IMapRefMethods, INaverMapProps>((props, ref) 
     }
   }, [mapOptions]);
 
-  const clickHandler = () => {
-    console.log('clicked!');
-  };
-
   useImperativeHandle(ref, () => ({
     getMapObject: () => naverMapObject.current,
     getMapContainer: () => naverMapContainer.current,
+    onMouseClickHandler: () => {},
   }));
 
-  return <section ref={naverMapContainer} className="h-full w-full" onClick={clickHandler} />;
+  return <section ref={naverMapContainer} className="h-full w-full" />;
 });

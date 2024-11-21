@@ -20,6 +20,7 @@ interface IMapProps extends IMapOptions {
 export interface IMapRefMethods {
   getMapObject: () => naver.maps.Map | null;
   getMapContainer: () => HTMLElement | null;
+  onMouseClickHandler: (event?: React.MouseEvent) => void;
 }
 
 const validateKindOfMap = (type: string) => ['naver'].includes(type);
@@ -59,6 +60,7 @@ export const Map = forwardRef<IMapRefMethods, IMapProps>((props, ref) => {
   useImperativeHandle(ref, () => ({
     getMapObject: () => mapObject,
     getMapContainer: () => mapContainer.current,
+    onMouseClickHandler: () => {},
   }));
 
   return (
