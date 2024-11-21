@@ -1,4 +1,4 @@
-import { Canvas, ICanvasRefMethods } from '@/component/canvas/Canvas.tsx';
+import { Canvas, ICanvasRefMethods } from '@/component/canvas/LineDrawer_test.tsx';
 import { Map, IMapRefMethods } from '@/component/maps/Map.tsx';
 import classNames from 'classnames';
 import { ICanvasVertex } from '@/utils/screen/canvasUtils.ts';
@@ -33,35 +33,36 @@ const MouseEventStateInitialValue = {
 };
 
 export const CanvasWithMap = (props: ICanvasWithMapProps) => {
-  const mapRef = useRef<IMapRefMethods | null>(null);
+  const mapRefMethods = useRef<IMapRefMethods | null>(null);
   const mapElement = useRef<HTMLElement | null>(null);
-  const canvasMethods = useRef<ICanvasRefMethods | null>(null);
+  const canvasRefMethods = useRef<ICanvasRefMethods | null>(null);
   const canvasElement = useRef<HTMLCanvasElement | null>(null);
   const mouseEventState = useRef<IMouseEventState>({ ...MouseEventStateInitialValue });
   const [mapObject, setMapObject] = useState<naver.maps.Map | null>(null);
 
   useEffect(() => {
-    if (canvasMethods.current?.getCanvasElement)
-      canvasElement.current = canvasMethods.current.getCanvasElement();
+    if (canvasRefMethods.current?.getCanvasElement)
+      canvasElement.current = canvasRefMethods.current.getCanvasElement();
   }, []);
 
   useEffect(() => {
-    mapElement.current = mapRef.current?.getMapContainer() ?? null;
+    mapElement.current = mapRefMethods.current?.getMapContainer() ?? null;
   }, [mapObject]);
 
   const initMap = (mapObj: naver.maps.Map | null) => {
     setMapObject(mapObj);
   };
 
-  const handleClick = () => {
-    mapElement.current?.click();
-    canvasElement.current?.click();
+  const handleClick = (event: React.MouseEvent) => {
+    mapRefMethods.current?.onMouseClickHandler(event);
+    canvasRefMethods.current?.onMouseClickHandler(event);
   };
 
   const handleMouseDown = (event: React.MouseEvent<HTMLElement>) => {
     if (!mapElement.current || !canvasElement.current) return;
     mouseEventState.current.isMouseDown = true;
     mouseEventState.current.mouseDownPosition = { x: event.clientX, y: event.clientY };
+    canvasRefMethods.current?.onMouseDownHandler(event);
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,8 +71,8 @@ export const CanvasWithMap = (props: ICanvasWithMapProps) => {
 
     // TODO: 쓰로틀링 걸기
     mouseEventState.current.mouseDeltaPosition = {
-      x: event.clientX - mouseEventState.current.mouseDownPosition.x,
-      y: event.clientY - mouseEventState.current.mouseDownPosition.y,
+      x: -(event.clientX - mouseEventState.current.mouseDownPosition.x),
+      y: -(event.clientY - mouseEventState.current.mouseDownPosition.y),
     };
 
     mapObject?.panBy(
@@ -80,11 +81,14 @@ export const CanvasWithMap = (props: ICanvasWithMapProps) => {
         mouseEventState.current.mouseDeltaPosition.y,
       ),
     );
+
+    canvasRefMethods.current?.onMouseMoveHandler(event);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (event: React.MouseEvent) => {
     if (!mapElement.current || !canvasElement.current) return;
     mouseEventState.current = { ...MouseEventStateInitialValue };
+    canvasRefMethods.current?.onMouseUpHandler(event);
   };
 
   return (
@@ -95,13 +99,13 @@ export const CanvasWithMap = (props: ICanvasWithMapProps) => {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      <Canvas ref={canvasMethods} />
+      <Canvas ref={canvasRefMethods} />
       <Map
         lat={props.lat}
         lng={props.lng}
         type={props.mapType}
         zoom={props.zoom}
-        ref={mapRef}
+        ref={mapRefMethods}
         initMap={initMap}
       />
     </div>

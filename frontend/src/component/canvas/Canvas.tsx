@@ -11,6 +11,7 @@ interface ICanvasProps {
 
 export interface ICanvasRefMethods {
   getCanvasElement: () => HTMLCanvasElement | null;
+  onMouseClickHandler: (event?: React.MouseEvent) => void;
 }
 
 export const Canvas = forwardRef<ICanvasRefMethods, ICanvasProps>((props, ref) => {
@@ -25,12 +26,13 @@ export const Canvas = forwardRef<ICanvasRefMethods, ICanvasProps>((props, ref) =
 
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-
-    context.fillRect(0, 0, 200, 200);
   }, []);
 
   useImperativeHandle(ref, () => ({
     getCanvasElement: () => canvasRef.current ?? null,
+    onMouseClickHandler: event => {
+      console.log(event?.screenX, event?.screenY);
+    },
   }));
 
   return (

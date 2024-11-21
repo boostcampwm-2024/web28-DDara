@@ -11,7 +11,7 @@ export const usePanning = (props: IUsePanningProps) => {
   const panningRef = useRef(false);
   const startPosRef = useRef(INITIAL_POSITION);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseMove = (e: React.MouseEvent) => {
     if (!panningRef.current || !props.viewPosRef.current) return;
 
     const viewPos = props.viewPosRef.current;
@@ -23,7 +23,7 @@ export const usePanning = (props: IUsePanningProps) => {
     props.draw();
   };
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseDown = (e: React.MouseEvent) => {
     if (!props.viewPosRef.current) return;
 
     const viewPos = props.viewPosRef.current;
