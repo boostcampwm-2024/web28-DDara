@@ -33,11 +33,6 @@ export const Canvas = forwardRef<ICanvasRefMethods, ICanvasProps>((props, ref) =
     getCanvasElement: () => canvasRef.current ?? null,
   }));
 
-  // example
-  const clickHandler = () => {
-    console.log('canvas clicked!');
-  };
-
   return (
     <canvas
       ref={canvasRef}
@@ -45,7 +40,6 @@ export const Canvas = forwardRef<ICanvasRefMethods, ICanvasProps>((props, ref) =
         'z-1000 pointer-events-none absolute h-full w-full bg-transparent',
         props.className,
       )}
-      onClick={clickHandler} // example
     />
   );
 });
