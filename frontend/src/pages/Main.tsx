@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from 'react';
+import { Fragment, useContext, useEffect } from 'react';
 import { getUserLocation } from '@/hooks/getUserLocation';
 import { Map } from '@/component/maps/Map';
 import { BottomSheet } from '@/component/bottomsheet/BottomSheet';
@@ -43,13 +43,12 @@ export const Main = () => {
   const goToAddChannel = () => {
     navigate('/add-channel');
   };
-
-  useState(() => {
+  useEffect(() => {
     setFooterOnClick(goToAddChannel);
     setFooterTitle('+');
     setFooterTransparency(false);
     setFooterActive(buttonActiveType.ACTIVE);
-  });
+  }, []);
   return (
     <div className="flex h-screen flex-col">
       <header className="absolute left-0 right-0 top-0 z-10 flex p-4">
