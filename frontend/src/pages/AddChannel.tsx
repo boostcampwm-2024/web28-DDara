@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { IoClose } from 'react-icons/io5';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
+import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
 import { InputBox } from '../component/common/InputBox';
 
 interface IUser {
@@ -35,7 +38,15 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
  */
 
 export const AddChannel = () => {
-  const [users, setUsers] = useState<IUser[]>([{ id: 1, name: '사용자1', mockData: 10 }]);
+  const storedUsers = localStorage.getItem('users');
+  const initialUsers: IUser[] = storedUsers
+    ? JSON.parse(storedUsers)
+    : [{ id: 1, name: '사용자1', mockData: 10 }];
+
+  const [users, setUsers] = useState<IUser[]>(initialUsers);
+  const { setFooterTitle, setFooterTransparency } = useContext(FooterContext);
+  const { setLeftButton } = useContext(HeaderContext);
+  const navigate = useNavigate();
 
   /**
    * 사용자 추가 함수
@@ -61,7 +72,9 @@ export const AddChannel = () => {
       name: `사용자${users.length + 1}`,
       mockData: Math.floor(Math.random() * 100),
     };
-    setUsers([...users, newUser]);
+    const updatedUsers = [...users, newUser];
+    setUsers(updatedUsers);
+    localStorage.setItem('users', JSON.stringify(updatedUsers));
   };
 
   /**
@@ -91,14 +104,22 @@ export const AddChannel = () => {
         name: `사용자${index + 1}`,
       }));
     setUsers(updatedUsers);
+    localStorage.setItem('users', JSON.stringify(updatedUsers));
+  };
+
+  const goToUserDrawRoute = (user: string) => {
+    navigate(`/add-channel/${user}/draw`);
   };
 
   useEffect(() => {
-    console.log(users);
-  }, [users]);
+    setLeftButton('back');
+    setFooterTitle('제작 완료');
+    setFooterTransparency(false);
+  }, []);
 
   return (
-    <main className="flex h-full w-full flex-col items-center px-8">
+    <main className="flex h-full w-full flex-col items-center px-8 py-16">
+      <Outlet />
       <InputBox placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길" />
       <Divider />
       <section className="w-full space-y-4">
@@ -107,14 +128,16 @@ export const AddChannel = () => {
             <div className="shadow-userName border-grayscale-400 flex h-12 w-16 items-center justify-center rounded-lg border text-xs">
               {user.name}
             </div>
-            <div
-              className={classNames(
-                'text-grayscale-150 bg-grayscale-100 m-0 flex h-11 items-center justify-center rounded-md text-xs font-semibold',
-                user.id > 1 ? 'w-56' : 'w-64',
-              )}
-            >
-              클릭시 출발지/도착지, 경로 설정 가능
-            </div>
+            <button onClick={() => goToUserDrawRoute(user.name)}>
+              <div
+                className={classNames(
+                  'text-grayscale-150 bg-grayscale-100 m-0 flex h-11 items-center justify-center rounded-md text-xs font-semibold',
+                  user.id > 1 ? 'w-56' : 'w-64',
+                )}
+              >
+                클릭시 출발지/도착지, 경로 설정 가능
+              </div>
+            </button>
             {user.id > 1 && (
               <button onClick={() => deleteUser(user.id)}>
                 <IoClose className="text-grayscale-400 h-6 w-6" />

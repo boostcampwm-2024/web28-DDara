@@ -77,48 +77,48 @@ export const Linedrawer = () => {
   };
 
   return (
-    <>
-      <div className="relative h-[600px] w-[800px]">
-        <div className="absolute left-1/2 top-[10px] z-10 flex -translate-x-1/2 transform gap-2">
-          <button
-            type="button"
-            onClick={undo}
-            disabled={undoStack.length === 0}
-            className={`h-[35px] w-[35px] ${
-              undoStack.length === 0 ? 'cursor-not-allowed opacity-50' : ''
-            }`}
-          >
-            <MdArrowCircleLeft size={24} />
-          </button>
-          <button
-            type="button"
-            onClick={redo}
-            disabled={redoStack.length === 0}
-            className={`h-[35px] w-[35px] ${
-              redoStack.length === 0 ? 'cursor-not-allowed opacity-50' : ''
-            }`}
-          >
-            <MdArrowCircleRight size={24} />
-          </button>
-        </div>
-        <canvas
-          ref={canvasRef}
-          width="800"
-          height="600"
-          className="cursor-crosshair border border-gray-300"
-          onClick={handleCanvasClick}
-          onMouseMove={handleMouseMove}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onWheel={handleWheel}
+    <div className="relative h-[600px] w-[800px]">
+      <div className="absolute left-1/2 top-[10px] z-10 flex -translate-x-1/2 transform gap-2">
+        <button
+          type="button"
+          onClick={undo}
+          disabled={undoStack.length === 0}
+          className={`h-[35px] w-[35px] ${
+            undoStack.length === 0 ? 'cursor-not-allowed opacity-50' : ''
+          }`}
+        >
+          <MdArrowCircleLeft size={24} />
+        </button>
+        <button
+          type="button"
+          onClick={redo}
+          disabled={redoStack.length === 0}
+          className={`h-[35px] w-[35px] ${
+            redoStack.length === 0 ? 'cursor-not-allowed opacity-50' : ''
+          }`}
+        >
+          <MdArrowCircleRight size={24} />
+        </button>
+      </div>
+      <canvas
+        ref={canvasRef}
+        width="800"
+        height="600"
+        className="cursor-crosshair border border-gray-300"
+        onClick={handleCanvasClick}
+        onMouseMove={handleMouseMove}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onWheel={handleWheel}
+      />
+      <div className="relative">
+        <FloatingButton
+          isMenuOpen={isMenuOpen}
+          toggleMenu={toggleMenu}
+          toolType={toolType}
+          handleMenuClick={handleMenuClick}
         />
       </div>
-      <FloatingButton
-        isMenuOpen={isMenuOpen}
-        toggleMenu={toggleMenu}
-        toolType={toolType}
-        handleMenuClick={handleMenuClick}
-      />
-    </>
+    </div>
   );
 };
