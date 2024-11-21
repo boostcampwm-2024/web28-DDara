@@ -57,6 +57,8 @@ export default [
       'no-underscore-dangle': 'warn',
       'no-undef': 'off',
       'max-classes-per-file': 'off',
+      'no-bitwise': 'off',
+      'no-plusplus': 'off',
       'import/extensions': [
         'error',
         'always',

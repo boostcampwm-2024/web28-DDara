@@ -16,7 +16,8 @@
     "lint": "pnpm lint-staged",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "uuid": "^11.0.3"
   },
   "dependencies": {
     "@fontsource/pretendard": "^5.1.0",
