@@ -11,6 +11,14 @@ interface ICanvasWithMapProps {
   lng: number;
   zoom: number;
   mapType: string;
+  allowCanvas?: boolean;
+}
+
+interface IMouseEventState {
+  isMouseDown: boolean;
+  mouseDownPosition: { x: number; y: number };
+  // mouseMovePosition: { x: number; y: number };
+  mouseDeltaPosition: { x: number; y: number };
 }
 
 export interface ILocationObject {
@@ -18,53 +26,88 @@ export interface ILocationObject {
   map: INaverMapVertexPosition;
 }
 
+const MouseEventStateInitialValue = {
+  isMouseDown: false,
+  mouseDownPosition: { x: 0, y: 0 },
+  // mouseMovePosition: { x: 0, y: 0 },
+  mouseDeltaPosition: { x: 0, y: 0 },
+};
+
 export const CanvasWithMap = (props: ICanvasWithMapProps) => {
+  const mapRefMethods = useRef<IMapRefMethods | null>(null);
   const mapElement = useRef<HTMLElement | null>(null);
-  const canvasMethods = useRef<ICanvasRefMethods | null>(null);
+  const canvasRefMethods = useRef<ICanvasRefMethods | null>(null);
   const canvasElement = useRef<HTMLCanvasElement | null>(null);
+  const mouseEventState = useRef<IMouseEventState>({ ...MouseEventStateInitialValue });
   const [mapObject, setMapObject] = useState<naver.maps.Map | null>(null);
 
-  const handleMapRef = (ref: IMapRefMethods | null) => {
-    if (ref) {
-      const mapObj = ref.getMapObject();
-      mapElement.current = ref.getMapContainer();
-      if (mapObj) {
-        setMapObject(mapObj);
-        // TODO: 네이버 지도 객체가 업로드 되고 그 이후에 함수 수행되는 게 맞는지 개선 필요. 지금은 로딩은 비동기인데, 작업은 동기라서 이에 대한 에러가 존재함.
-        // console.log('Map 객체:', mapObj);
-        // console.log('Canvas 엘리먼트:', canvasMethods.current?.getCanvasElement());
-      }
-    }
-  };
-
   useEffect(() => {
-    if (canvasMethods.current?.getCanvasElement)
-      canvasElement.current = canvasMethods.current.getCanvasElement();
+    if (canvasRefMethods.current?.getCanvasElement)
+      canvasElement.current = canvasRefMethods.current.getCanvasElement();
   }, []);
 
   useEffect(() => {
-    if (mapObject) {
-      // mapObject를 사용하여 추가적인 작업을 수행할 수 있습니다.
-      console.log('Map 객체:', mapObject);
-      console.log('Canvas 엘리먼트:', canvasElement.current);
-    }
+    mapElement.current = mapRefMethods.current?.getMapContainer() ?? null;
   }, [mapObject]);
 
-  // example
-  const clickHandler = () => {
-    mapElement.current?.click();
-    canvasElement.current?.click();
+  const initMap = (mapObj: naver.maps.Map | null) => {
+    setMapObject(mapObj);
+  };
+
+  const handleClick = (event: React.MouseEvent) => {
+    mapRefMethods.current?.onMouseClickHandler(event);
+    canvasRefMethods.current?.onMouseClickHandler(event);
+  };
+
+  const handleMouseDown = (event: React.MouseEvent<HTMLElement>) => {
+    if (!mapElement.current || !canvasElement.current) return;
+    mouseEventState.current.isMouseDown = true;
+    mouseEventState.current.mouseDownPosition = { x: event.clientX, y: event.clientY };
+    canvasRefMethods.current?.onMouseDownHandler(event);
+  };
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLElement>) => {
+    if (!mapElement.current || !canvasElement.current || !mouseEventState.current.isMouseDown)
+      return;
+
+    // TODO: 쓰로틀링 걸기
+    mouseEventState.current.mouseDeltaPosition = {
+      x: -(event.clientX - mouseEventState.current.mouseDownPosition.x),
+      y: -(event.clientY - mouseEventState.current.mouseDownPosition.y),
+    };
+
+    mapObject?.panBy(
+      new naver.maps.Point(
+        mouseEventState.current.mouseDeltaPosition.x,
+        mouseEventState.current.mouseDeltaPosition.y,
+      ),
+    );
+
+    canvasRefMethods.current?.onMouseMoveHandler(event);
+  };
+
+  const handleMouseUp = (event: React.MouseEvent) => {
+    if (!mapElement.current || !canvasElement.current) return;
+    mouseEventState.current = { ...MouseEventStateInitialValue };
+    canvasRefMethods.current?.onMouseUpHandler(event);
   };
 
   return (
-    <div className={classNames('relative h-screen', props.className)} onClick={clickHandler}>
-      <Canvas ref={canvasMethods} />
+    <div
+      className={classNames('relative h-screen', props.className)}
+      onClick={handleClick}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+    >
+      {props.allowCanvas && <Canvas ref={canvasRefMethods} />}
       <Map
         lat={props.lat}
         lng={props.lng}
         type={props.mapType}
         zoom={props.zoom}
-        ref={handleMapRef}
+        ref={mapRefMethods}
+        initMap={initMap}
       />
     </div>
   );
