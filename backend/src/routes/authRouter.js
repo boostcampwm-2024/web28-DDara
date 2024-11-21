@@ -59,7 +59,7 @@ authRouter.post(
  *           schema:
  *             $ref: '#/components/schemas/RegisterRequest'
  *     responses:
- *       "201":
+ *       "200":
  *         description: "회원가입 성공"
  *       "400":
  *         description: "유효성 검사 실패"
