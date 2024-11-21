@@ -1,4 +1,3 @@
-import React from 'react';
 import '@/index.css';
 import { Meta, StoryFn } from '@storybook/react';
 import { UserBoard } from '@/component/userboard/UserBoard';
