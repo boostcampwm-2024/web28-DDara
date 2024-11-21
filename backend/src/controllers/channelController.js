@@ -5,6 +5,8 @@ import {
   getChannelGuestInfoService,
   getUserChannels,
 } from '../services/channelService.js';
+import { ResponseDto } from '../dto/response.dto.js';
+import { ErrorResponseDto } from '../dto/errorResponse.dto.js';
 
 /**
  * @description 채널 생성 컨트롤러
@@ -15,17 +17,12 @@ export const createChannelController = async (req, res) => {
 
     const channel = await createChannelService(name, host_id, guests);
 
-    return res.status(201).json({
-      success: true,
-      message: 'Channel created successfully',
-      data: channel,
-    });
+    return res
+      .status(200)
+      .json(new ResponseDto({ resultMsg: 'Channel created successfully', data: channel }));
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
-      success: false,
-      message: 'Server error',
-    });
+    return res.status(500).json(new ErrorResponseDto({ message: 'Server error occurred' }));
   }
 };
 
@@ -40,22 +37,15 @@ export const addGuestController = async (req, res) => {
     const updatedChannel = await addGuestService(channelId, guests);
 
     if (!updatedChannel) {
-      return res.status(404).json({
-        success: false,
-        message: 'Channel not found',
-      });
+      return res.status(404).json(new ErrorResponseDto({ message: 'Channel not found' }));
     }
 
-    return res.status(200).json({
-      success: true,
-      message: 'Guests added successfully',
-    });
+    return res
+      .status(200)
+      .json(new ResponseDto({ resultMsg: 'Guests added successfully', data: updatedChannel }));
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
-      success: false,
-      message: 'Server error',
-    });
+    return res.status(500).json(new ErrorResponseDto({ message: 'Server error occurred' }));
   }
 };
 
@@ -68,16 +58,14 @@ export const getChannelInfoController = async (req, res) => {
   try {
     const channel = await getChannelByIdService(id);
     if (!channel) {
-      return res.status(404).json({ success: false, message: 'Channel not found' });
+      return res.status(404).json(new ErrorResponseDto({ message: 'Channel not found' }));
     }
-    return res.status(200).json({
-      success: true,
-      message: 'Get channel successfully',
-      data: channel,
-    });
+    return res
+      .status(200)
+      .json(new ResponseDto({ resultMsg: 'Get channel successfully', data: channel }));
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ success: false, message: 'Server error' });
+    return res.status(500).json(new ErrorResponseDto({ message: 'Server error occurred' }));
   }
 };
 
@@ -89,17 +77,14 @@ export const getChannelGuestInfoController = async (req, res) => {
   try {
     const result = await getChannelGuestInfoService(channelId, guestId);
     if (result) {
-      res.status(200).json({
-        success: true,
-        message: 'Get guest data successfully',
-        data: result,
-      });
-    } else {
-      res.status(404).json({ success: false, message: 'Channel or guest not found' });
+      return res
+        .status(200)
+        .json(new ResponseDto({ resultMsg: 'Get guest data successfully', data: result }));
     }
+    return res.status(404).json(new ErrorResponseDto({ message: 'Channel or guest not found' }));
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    return res.status(500).json(new ErrorResponseDto({ message: 'Server error occurred' }));
   }
 };
 
@@ -112,15 +97,15 @@ export const getUserChannelsController = async (req, res) => {
   try {
     const channels = await getUserChannels(userId);
     if (!channels.length) {
-      return res.status(404).json({ success: false, message: 'No channels found for this user.' });
+      return res
+        .status(404)
+        .json(new ErrorResponseDto({ message: 'No channels found for this user.' }));
     }
-    res.status(200).json({
-      success: true,
-      message: 'Get channels successfully',
-      data: channels,
-    });
+    res
+      .status(200)
+      .json(new ResponseDto({ resultMsg: 'Get channels successfully', data: { channels } }));
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error' });
+    return res.status(500).json(new ErrorResponseDto({ message: 'Server error occurred' }));
   }
 };
