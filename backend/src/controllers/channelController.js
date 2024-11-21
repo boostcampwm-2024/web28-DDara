@@ -103,7 +103,7 @@ export const getUserChannelsController = async (req, res) => {
     }
     res
       .status(200)
-      .json(new ResponseDto({ resultMsg: 'Get channels successfully', data: channels }));
+      .json(new ResponseDto({ resultMsg: 'Get channels successfully', data: { channels } }));
   } catch (error) {
     console.error(error);
     return res.status(500).json(new ErrorResponseDto({ message: 'Server error occurred' }));
