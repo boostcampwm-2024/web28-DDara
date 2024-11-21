@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal } from '@/component/common/modal/Modal';
-import { doLogin } from '@/api/auth.api.ts';
+import { doLogin, doRegister } from '@/api/auth.api.ts';
 import { saveLocalData } from '@/utils/common/manageLocalData.ts';
 import { AppConfig } from '@/constants.ts';
 
@@ -45,14 +45,26 @@ export const AuthModal = (props: IAuthModalProps) => {
     }
   };
 
+  const switchToRegister = () => {
+    setModalType('register');
+  };
+
+  const switchToLogin = () => {
+    setModalType('login');
+  };
+
   const handleLoginClick = () => {
-    doLogin(loginData.id, loginData.pw).then(el => {
-      if (el.data?.token && el.data?.userId) {
-        saveLocalData(AppConfig.KEYS.LOGIN_TOKEN, el.data.token);
-        saveLocalData(AppConfig.KEYS.LOGIN_USER, el.data.userId);
-      }
-      window.location.reload();
-    });
+    doLogin(loginData.id, loginData.pw)
+      .then(el => {
+        if (el.data?.token && el.data?.userId) {
+          saveLocalData(AppConfig.KEYS.LOGIN_TOKEN, el.data.token);
+          saveLocalData(AppConfig.KEYS.LOGIN_USER, el.data.userId);
+        }
+        window.location.reload();
+      })
+      .catch(() => {
+        alert('아이디와 비밀번호를 다시 확인해주세요.');
+      });
   };
 
   const handleSignUpClick = () => {
@@ -60,15 +72,18 @@ export const AuthModal = (props: IAuthModalProps) => {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
-    console.log('회원가입 데이터:', registerData);
-  };
-
-  const switchToRegister = () => {
-    setModalType('register');
-  };
-
-  const switchToLogin = () => {
-    setModalType('login');
+    doRegister(registerData.id, registerData.name, registerData.pw, registerData.email)
+      .then(el => {
+        if (el.data) {
+          alert('회원가입에 성공했습니다. 로그인해주세요.');
+          switchToLogin();
+        }
+      })
+      .catch(() => {
+        alert(
+          '회원가입에 실패했습니다. 다시 확인해주세요.\nid는 4자 이상, 비밀번호는 6자리 이상이어야 합니다.',
+        );
+      });
   };
 
   return (
