@@ -1,12 +1,15 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import { getUserLocation } from '@/hooks/getUserLocation';
-import { Map } from '@/component/maps/Map';
-import { BottomSheet } from '@/component/BottomSheet/BottomSheet';
+import { BottomSheet } from '@/component/bottomsheet/BottomSheet';
 import { Content } from '@/component/content/Content';
 import { MdFormatListBulleted } from 'react-icons/md';
-import { v4 as uuidv4 } from 'uuid';
-import { AppConfig } from '@/constants.ts';
+import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
+import { useNavigate } from 'react-router-dom';
+import { NaverMap } from '@/component/maps/NaverMapSample.tsx';
+import { buttonActiveType } from '@/component/layout/enumTypes';
 import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
+import { AppConfig } from '@/constants.ts';
+import { v4 as uuidv4 } from 'uuid';
 
 const contentData = [
   {
@@ -33,7 +36,10 @@ const contentData = [
 ];
 
 export const Main = () => {
+  const { setFooterTitle, setFooterTransparency, setFooterOnClick, setFooterActive } =
+    useContext(FooterContext);
   const { lat, lng, error } = getUserLocation();
+  const navigate = useNavigate();
   const [otherLocations, setOtherLocations] = useState<any[]>([]);
   const MIN_HEIGHT = 0.5;
   const MAX_HEIGHT = 0.8;
@@ -72,6 +78,15 @@ export const Main = () => {
     }
   }, [lat, lng]);
 
+  const goToAddChannel = () => {
+    navigate('/add-channel');
+  };
+  useEffect(() => {
+    setFooterOnClick(goToAddChannel);
+    setFooterTitle('+');
+    setFooterTransparency(false);
+    setFooterActive(buttonActiveType.ACTIVE);
+  }, []);
   return (
     <div className="flex h-screen flex-col">
       <header className="absolute left-0 right-0 top-0 z-10 flex p-4">
@@ -89,7 +104,7 @@ export const Main = () => {
         {/* eslint-disable-next-line no-nested-ternary */}
         {lat && lng ? (
           otherLocations ? (
-            <Map otherLocations={otherLocations} lat={lat} lng={lng} type="naver" />
+            <NaverMap otherLocations={otherLocations} lat={lat} lng={lng} />
           ) : (
             <section className="flex h-full items-center justify-center">
               Loading map data...

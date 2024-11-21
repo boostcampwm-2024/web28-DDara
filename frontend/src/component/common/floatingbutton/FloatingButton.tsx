@@ -1,7 +1,18 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 import { ButtonState } from '../enums';
 import { IconType, ToolCategory } from '../types';
+
+interface IFloatingButtonProps {
+  /** 메뉴가 열려있는지 여부를 나타냅니다. */
+  isMenuOpen?: boolean;
+  /** 메뉴를 토글할 수 있는 함수입니다. */
+  toggleMenu?: () => void;
+  /** 선택된 도구의 버튼 상태를 의미합니다. */
+  toolType: ButtonState;
+  /** 도구를 선택할 수 있는 함수입니다. */
+  handleMenuClick?: (type: ButtonState) => void;
+}
 
 /**
  * FloatingButton 컴포넌트는 도구 선택 및 메뉴 토글 기능을 제공하는 플로팅 버튼을 렌더링합니다.
@@ -12,40 +23,14 @@ import { IconType, ToolCategory } from '../types';
  *   <FloatingButton />
  * )
  */
-export const FloatingButton = () => {
-  const [toolType, setToolType] = useState<ButtonState>(ButtonState.CLOSE);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-
-  /**
-   * @remarks
-   * - 메뉴를 토글하는 함수입니다.
-   */
-  const toggleMenu = () => {
-    setIsMenuOpen(prev => !prev);
-    if (!isMenuOpen) {
-      setToolType(ButtonState.OPEN);
-    } else {
-      setToolType(ButtonState.CLOSE);
-    }
-  };
-
-  /**
-   * @remarks
-   * 툴을 선택하고 메뉴를 닫는 함수입니다.
-   * @param {ButtonState} type - 선택된 툴 타입
-   */
-  const handleMenuClick = (type: ButtonState) => {
-    setToolType(type);
-    setIsMenuOpen(!isMenuOpen);
-  };
-
+export const FloatingButton = (props: IFloatingButtonProps) => {
   return (
     <div
       className={classNames('absolute', 'bottom-5', 'right-10', 'flex', 'flex-col', 'items-center')}
     >
       <button
         type="button"
-        onClick={toggleMenu}
+        onClick={props.toggleMenu}
         className={classNames(
           'absolute',
           'bottom-0',
@@ -61,13 +46,13 @@ export const FloatingButton = () => {
           'z-10',
         )}
       >
-        {React.createElement(IconType[toolType], { className: 'w-6 h-6' })}
+        {React.createElement(IconType[props.toolType], { className: 'w-6 h-6' })}
       </button>
 
       {ToolCategory.map(({ type, description, icon }, index) => (
         <button
           type="button"
-          onClick={() => handleMenuClick(type)}
+          onClick={() => props.handleMenuClick?.(type)}
           key={type}
           className={classNames(
             'w-10',
@@ -83,14 +68,17 @@ export const FloatingButton = () => {
             'duration-300',
             'shadow-floatButton',
             {
-              'shadow-none': !isMenuOpen,
+              'shadow-none': !props.isMenuOpen,
             },
           )}
-          style={{ bottom: toolType === ButtonState.OPEN ? `${48 * index + 64}px` : '0px' }}
+          style={{
+            bottom: props.isMenuOpen ? `${48 * index + 64}px` : '0px',
+            transition: 'bottom 0.3s ease',
+          }}
         >
           <div className={classNames('flex', 'items-center')}>
             {React.createElement(icon, { className: 'w-5 h-5' })}
-            {isMenuOpen && (
+            {props.isMenuOpen && (
               <div
                 className={classNames(
                   'w-20',

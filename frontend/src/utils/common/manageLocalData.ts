@@ -1,5 +1,5 @@
 /* eslint-disable */
-import lzString from 'lz-string';
+import lzString from 'lz-string'
 
 export function saveLocalData(key: string, val: string): void {
   if (typeof window !== 'undefined') {

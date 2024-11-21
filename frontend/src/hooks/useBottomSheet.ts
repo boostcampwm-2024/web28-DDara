@@ -71,28 +71,6 @@ export function useBottomSheet(props: IUseBottomSheet) {
     sheet.current!.style.transform = `translateY(${nextY - MAX_Y}px)`;
   };
 
-  const handleEnd = () => {
-    const { touchMove } = metrics.current;
-    const currentY = sheet.current!.getBoundingClientRect().y;
-
-    if (touchMove.movingDirection === 'up' && currentY < (MIN_Y + MAX_Y) / 2) {
-      sheet.current!.style.transform = `translateY(${MIN_Y - MAX_Y}px)`;
-    } else {
-      sheet.current!.style.transform = `translateY(0px)`;
-    }
-
-    document.body.style.overflowY = 'auto';
-
-    window.removeEventListener('mousemove', handleMove);
-    window.removeEventListener('mouseup', handleEnd);
-
-    metrics.current = {
-      touchStart: { sheetY: 0, touchY: 0 },
-      touchMove: { prevTouchY: 0, movingDirection: 'none' },
-      isContentAreaTouched: false,
-    };
-  };
-
   useEffect(() => {
     const handleStart = (e: TouchEvent | MouseEvent) => {
       const clientY = getClientY(e);
@@ -103,24 +81,20 @@ export function useBottomSheet(props: IUseBottomSheet) {
 
       if (e instanceof MouseEvent) {
         window.addEventListener('mousemove', handleMove);
-        window.addEventListener('mouseup', handleEnd);
       }
     };
 
     sheet.current?.addEventListener('touchstart', handleStart);
     sheet.current?.addEventListener('touchmove', handleMove);
-    sheet.current?.addEventListener('touchend', handleEnd);
 
     sheet.current?.addEventListener('mousedown', handleStart);
 
     return () => {
       sheet.current?.removeEventListener('touchstart', handleStart);
       sheet.current?.removeEventListener('touchmove', handleMove);
-      sheet.current?.removeEventListener('touchend', handleEnd);
 
       sheet.current?.removeEventListener('mousedown', handleStart);
       window.removeEventListener('mousemove', handleMove);
-      window.removeEventListener('mouseup', handleEnd);
     };
   }, []);
 
