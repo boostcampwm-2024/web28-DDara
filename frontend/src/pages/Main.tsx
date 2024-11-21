@@ -36,7 +36,7 @@ export const Main = () => {
     useContext(FooterContext);
   const { lat, lng, error } = getUserLocation();
   const navigate = useNavigate();
-  const MIN_HEIGHT = 0.03;
+  const MIN_HEIGHT = 0.2;
   const MAX_HEIGHT = 0.8;
 
   const goToAddChannel = () => {
