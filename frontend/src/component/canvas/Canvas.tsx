@@ -44,7 +44,7 @@ export interface ICanvasRefMethods {
 }
 
 export const Canvas = forwardRef<ICanvasRefMethods, ICanvasProps>((props, ref) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null!);
   const { points, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
   const [startPoint, setStartPoint] = useState<IPoint | null>(null);
   const [endPoint, setEndPoint] = useState<IPoint | null>(null);
