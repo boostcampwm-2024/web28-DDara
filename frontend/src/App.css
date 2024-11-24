@@ -40,3 +40,10 @@
 .read-the-docs {
   color: #888;
 }
+
+.disable-drag {
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none
+}
