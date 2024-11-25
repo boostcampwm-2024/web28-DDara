@@ -1,15 +1,15 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
-import { getUserLocation } from '@/hooks/getUserLocation';
-import { BottomSheet } from '@/component/bottomsheet/BottomSheet';
-import { Content } from '@/component/content/Content';
 import { MdFormatListBulleted } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
-import { NaverMap } from '@/component/maps/NaverMapSample.tsx';
 import { buttonActiveType } from '@/component/layout/enumTypes';
+import { MapProviderForDraw } from '@/component/canvasWithMap/MapProviderForDraw.tsx';
+import { BottomSheet } from '@/component/bottomsheet/BottomSheet.tsx';
+import { Content } from '@/component/content/Content.tsx';
 import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
-import { AppConfig } from '@/constants.ts';
+import { AppConfig } from '@/lib/constants/commonConstants.ts';
 import { v4 as uuidv4 } from 'uuid';
+import { getUserLocation } from '@/hooks/getUserLocation.ts';
 
 const contentData = [
   {
@@ -17,21 +17,21 @@ const contentData = [
     title: '아들네 집으로',
     time: '0시간 34분',
     person: 2,
-    link: '/test1',
+    link: '/channel/123/guest/456',
   },
   {
     id: '2',
     title: '손자네 집으로',
     time: '2시간 32분',
     person: 0,
-    link: '/test2',
+    link: '/channel/123/guest/456',
   },
   {
     id: '3',
     title: '마을회관으로',
     time: '0시간 12분',
     person: 1,
-    link: '/test3',
+    link: '/channel/123/guest/456',
   },
 ];
 
@@ -39,8 +39,8 @@ export const Main = () => {
   const { setFooterTitle, setFooterTransparency, setFooterOnClick, setFooterActive } =
     useContext(FooterContext);
   const { lat, lng, error } = getUserLocation();
-  const navigate = useNavigate();
   const [otherLocations, setOtherLocations] = useState<any[]>([]);
+  const navigate = useNavigate();
   const MIN_HEIGHT = 0.5;
   const MAX_HEIGHT = 0.8;
 
@@ -53,15 +53,12 @@ export const Main = () => {
       }
       const token = loadLocalData(AppConfig.KEYS.BROWSER_TOKEN);
       const ws = new WebSocket(`${AppConfig.SOCKET_SERVER}/?token=${token}`);
-
       // 초기 위치 전송
       ws.onopen = () => {
         ws.send(JSON.stringify({ type: 'location', location: { lat, lng } }));
       };
-
       ws.onmessage = event => {
         const data = JSON.parse(event.data);
-
         if (data.type === 'init') {
           // 기존 클라이언트들의 위치 초기화
           setOtherLocations(data.clients);
@@ -77,7 +74,6 @@ export const Main = () => {
       return () => ws.close();
     }
   }, [lat, lng]);
-
   const goToAddChannel = () => {
     navigate('/add-channel');
   };
@@ -104,7 +100,7 @@ export const Main = () => {
         {/* eslint-disable-next-line no-nested-ternary */}
         {lat && lng ? (
           otherLocations ? (
-            <NaverMap otherLocations={otherLocations} lat={lat} lng={lng} />
+            <MapProviderForDraw width={window.innerWidth} height={window.innerHeight} />
           ) : (
             <section className="flex h-full items-center justify-center">
               Loading map data...

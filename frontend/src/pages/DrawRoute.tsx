@@ -1,4 +1,3 @@
-import { Linedrawer } from '@/component/linedrawer/Linedrawer';
 import { useContext, useEffect, useMemo } from 'react';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -6,6 +5,7 @@ import { IUser, UserContext } from '@/context/UserContext';
 import { SearchBox } from '@/component/searchbox/SearchBox';
 import { ToolTypeProvider } from '@/context/ToolTypeContext';
 import { buttonActiveType } from '@/component/layout/enumTypes';
+import { MapProviderForDraw } from '@/component/canvasWithMap/MapProviderForDraw';
 
 export const DrawRoute = () => {
   const { users, setUsers } = useContext(UserContext);
@@ -78,7 +78,10 @@ export const DrawRoute = () => {
           Mock 데이터 초기화
         </button>
 
-        <Linedrawer />
+        <div style={{ position: 'relative', padding: '1rem' }}>
+          {/* TODO: 동율님 mock 데이터 관련 버튼 없애고 나서, height={window.innerHeight - 180} 으로 변경해주시면 됩니다! */}
+          <MapProviderForDraw width={window.innerWidth - 32} height={window.innerHeight - 300} />
+        </div>
       </div>
     </ToolTypeProvider>
   );

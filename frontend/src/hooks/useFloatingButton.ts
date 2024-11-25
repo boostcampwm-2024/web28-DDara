@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { ToolTypeContext } from '@/context/ToolTypeContext';
 
 export const useFloatingButton = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(true);
   const { toolType, setToolType } = useContext(ToolTypeContext);
 
   useEffect(() => {

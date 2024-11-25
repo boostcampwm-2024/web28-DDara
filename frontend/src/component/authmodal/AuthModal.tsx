@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal } from '@/component/common/modal/Modal';
 import { doLogin, doRegister } from '@/api/auth.api.ts';
 import { saveLocalData } from '@/utils/common/manageLocalData.ts';
-import { AppConfig } from '@/constants.ts';
+import { AppConfig } from '@/lib/constants/commonConstants.ts';
 
 export interface IAuthModalProps {
   /** 모달이 열려 있는지 여부를 나타냅니다. */
