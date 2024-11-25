@@ -4,14 +4,11 @@ import classNames from 'classnames';
 import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
 import { FloatingButton } from '@/component/common/floatingbutton/FloatingButton.tsx';
 import { useFloatingButton } from '@/hooks/useFloatingButton.ts';
-import {
-  END_MARKER_COLOR,
-  LINE_WIDTH,
-  START_MARKER_COLOR,
-  STROKE_STYLE,
-} from '@/lib/constants/canvasConstants.ts';
+import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
 import { ICanvasPoint, IMapCanvasProps, IPoint } from '@/lib/types/canvasInterface.ts';
 import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
+import startmarker from '@/assets/startmarker.png';
+import endmarker from '@/assets/endmarker.png';
 
 export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCanvasProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -34,6 +31,17 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
 
   const { isMenuOpen, toolType, toggleMenu, handleMenuClick } = useFloatingButton();
   const { pathPoints, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
+
+  const startImageRef = useRef<HTMLImageElement | null>(null);
+  const endImageRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    startImageRef.current = new Image();
+    startImageRef.current.src = startmarker;
+
+    endImageRef.current = new Image();
+    endImageRef.current.src = endmarker;
+  }, []);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -108,7 +116,6 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
   };
 
   const redrawCanvas = () => {
-    console.log('Redraw');
     if (!canvasRef.current || !map) return;
 
     const canvas = canvasRef.current;
@@ -116,27 +123,35 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.lineWidth = LINE_WIDTH / map.getZoom();
+    ctx.lineWidth = (map.getZoom() / LINE_WIDTH) * 5;
     ctx.strokeStyle = STROKE_STYLE;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
     if (startMarker) {
       const startPoint = latLngToCanvasPoint(startMarker);
-      if (startPoint) {
-        ctx.beginPath();
-        ctx.arc(startPoint.x, startPoint.y, 10, 0, 2 * Math.PI);
-        ctx.fillStyle = START_MARKER_COLOR;
-        ctx.fill();
+      if (startPoint && startImageRef.current) {
+        const markerSize = map.getZoom() * 2;
+        ctx.drawImage(
+          startImageRef.current,
+          startPoint.x - markerSize / 2,
+          startPoint.y - markerSize,
+          markerSize,
+          markerSize,
+        );
       }
     }
     if (endMarker) {
       const endPoint = latLngToCanvasPoint(endMarker);
-      if (endPoint) {
-        ctx.beginPath();
-        ctx.arc(endPoint.x, endPoint.y, 10, 0, 2 * Math.PI);
-        ctx.fillStyle = END_MARKER_COLOR;
-        ctx.fill();
+      if (endPoint && endImageRef.current) {
+        const markerSize = map.getZoom() * 2;
+        ctx.drawImage(
+          endImageRef.current,
+          endPoint.x - markerSize / 2,
+          endPoint.y - markerSize,
+          markerSize,
+          markerSize,
+        );
       }
     }
     if (pathPoints?.length > 0) {
