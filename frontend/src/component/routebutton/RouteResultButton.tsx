@@ -28,11 +28,11 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
             props.user.id > 1 ? '' : 'mr-8',
           )}
         >
-          <div className="h-full w-24 overflow-hidden text-ellipsis whitespace-nowrap rounded border-2 px-2 py-4 text-center text-xs font-normal">
+          <div className="h-full w-24 overflow-hidden text-ellipsis whitespace-nowrap rounded border-2 px-2 py-4 text-start text-xs font-normal">
             {props.user.start_location.title}
           </div>
           <GoArrowRight className="mx-2 h-8 w-8" />
-          <div className="h-full w-24 overflow-hidden text-ellipsis whitespace-nowrap rounded border-2 px-2 py-4 text-center text-xs font-normal">
+          <div className="h-full w-24 overflow-hidden text-ellipsis whitespace-nowrap rounded border-2 px-2 py-4 text-start text-xs font-normal">
             {props.user.end_location.title}
           </div>
         </div>
