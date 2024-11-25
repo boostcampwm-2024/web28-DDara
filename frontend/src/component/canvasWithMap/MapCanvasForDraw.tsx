@@ -10,6 +10,7 @@ import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
 import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
+import { getAddressFromCoordinates } from '@/utils/map/getAddress';
 import { ToolDescription } from '../tooldescription/ToolDescription';
 
 export const MapCanvasForDraw = ({
@@ -53,20 +54,33 @@ export const MapCanvasForDraw = ({
   }, []);
 
   useEffect(() => {
-    setCurrentUser(prevUser => ({
-      ...prevUser,
-      start_location: {
-        title: '',
-        lat: startMarker?.lat ?? 0, // startMarker가 없을 경우 0으로 처리
-        lng: startMarker?.lng ?? 0, // endMarker가 없을 경우 0으로 처리
-      },
-      end_location: {
-        title: '',
-        lat: endMarker?.lat ?? 0, // endMarker가 없을 경우 0으로 처리
-        lng: endMarker?.lng ?? 0, // endMarker가 없을 경우 0으로 처리
-      },
-      path: pathPoints, // 경로 포인트들
-    }));
+    const updateUser = async () => {
+      const startLat = startMarker?.lat ?? 0;
+      const startLng = startMarker?.lng ?? 0;
+      const endLat = endMarker?.lat ?? 0;
+      const endLng = endMarker?.lng ?? 0;
+      console.log('Start coordinates:', startLat, startLng);
+      console.log('End coordinates:', endLat, endLng);
+      const startTitle = await getAddressFromCoordinates(startLat, startLng);
+      const endTitle = await getAddressFromCoordinates(endLat, endLng);
+
+      setCurrentUser(prevUser => ({
+        ...prevUser,
+        start_location: {
+          title: startTitle,
+          lat: startMarker?.lat ?? 0,
+          lng: startMarker?.lng ?? 0,
+        },
+        end_location: {
+          title: endTitle,
+          lat: endMarker?.lat ?? 0,
+          lng: endMarker?.lng ?? 0,
+        },
+        path: pathPoints, // 경로 포인트들
+      }));
+    };
+
+    updateUser(); // 비동기 함수 호출
   }, [startMarker, endMarker, pathPoints, setCurrentUser]);
 
   useEffect(() => {

@@ -23,22 +23,6 @@ export const DrawRoute = () => {
     return users.find(user => user.name === params.user);
   };
 
-  const resetMockData = () => {
-    if (currentUser) {
-      const updatedUser = {
-        ...currentUser,
-        start_location: { title: '', lat: 0, lng: 0 }, // 초기값으로 리셋
-        end_location: { title: '', lat: 0, lng: 0 },
-        path: [],
-        marker_style: { color: '' },
-      };
-
-      // 해당 user의 state를 초기 상태로 업데이트
-      const updatedUsers = users.map(u => (u.name === params.user ? updatedUser : u));
-      setUsers(updatedUsers);
-    }
-  };
-
   const isUserDataComplete = (user: IUser): boolean => {
     return (
       user.start_location.lat !== 0 &&
@@ -92,12 +76,10 @@ export const DrawRoute = () => {
 
   useEffect(() => {
     if (currentUser) {
-      // currentUser가 설정된 후에 footerOnClick을 설정
       setFooterOnClick(() => {
         if (currentUser) {
           console.log('Footer 버튼 클릭 시 currentUser:', currentUser);
 
-          // `users` 배열에서 `currentUser`를 찾아 업데이트
           const updatedUsers = users.map(user => {
             if (user.name === currentUser.name) {
               return { ...user, ...currentUser }; // currentUser 정보로 업데이트
@@ -112,22 +94,13 @@ export const DrawRoute = () => {
     }
   }, [currentUser, users]);
 
-  if (!currentUser) {
-    // currentUser가 없을 경우에는 이 페이지에서 아무것도 렌더링하지 않거나, 에러 메시지를 표시할 수 있습니다.
-    return <div>사용자를 찾을 수 없습니다.</div>;
-  }
-
   return (
     <ToolTypeProvider>
       <div className="flex h-full w-full flex-col py-20">
         <SearchBox />
-        <button className="mb-4 border-2 p-2" onClick={resetMockData}>
-          Mock 데이터 초기화
-        </button>
-
         <div style={{ position: 'relative', padding: '1rem' }}>
           {/* TODO: 동율님 mock 데이터 관련 버튼 없애고 나서, height={window.innerHeight - 180} 으로 변경해주시면 됩니다! */}
-          <MapProviderForDraw width={window.innerWidth - 32} height={window.innerHeight - 300} />
+          <MapProviderForDraw width={window.innerWidth - 32} height={window.innerHeight - 210} />
         </div>
       </div>
     </ToolTypeProvider>

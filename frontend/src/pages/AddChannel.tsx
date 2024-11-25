@@ -71,7 +71,9 @@ export const AddChannel = () => {
       user.start_location.lat !== 0 &&
       user.start_location.lng !== 0 &&
       user.end_location.lat !== 0 &&
-      user.end_location.lng !== 0
+      user.end_location.lng !== 0 &&
+      user.path.length > 0 &&
+      user.marker_style.color !== ''
     );
   };
 
