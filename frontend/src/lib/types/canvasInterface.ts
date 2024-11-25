@@ -19,3 +19,25 @@ export interface ICanvasScreenProps {
   width: number;
   height: number;
 }
+
+export interface IOtherLiveLocations {
+  location: IPoint;
+  token: string;
+}
+
+export interface IGuestDataInMapProps {
+  guestName: string;
+  guestUUID: string;
+  startPoint: IPoint;
+  endPoint: IPoint;
+  paths: IPoint[];
+}
+
+export interface IMapCanvasViewProps {
+  lat: number;
+  lng: number;
+  otherLocations?: IOtherLiveLocations[] | null;
+  guests?: IGuestDataInMapProps[] | null;
+  width: string;
+  height: string;
+}

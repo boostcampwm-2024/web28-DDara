@@ -9,3 +9,6 @@ export const DEFAULT_CENTER = {
   lat: (KOREA_BOUNDS.sw.lat + KOREA_BOUNDS.ne.lat) / 2,
   lng: (KOREA_BOUNDS.sw.lng + KOREA_BOUNDS.ne.lng) / 2,
 };
+
+export const MIN_ZOOM = 7; // 대한민국 전체가 보이는 최소 줌 레벨
+export const MAX_ZOOM = 19; // 네이버 지도 최대 줌 레벨
