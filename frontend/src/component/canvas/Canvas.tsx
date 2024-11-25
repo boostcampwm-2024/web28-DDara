@@ -1,170 +1,245 @@
-import classNames from 'classnames';
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { useDrawing } from '@/hooks/useDrawing.ts';
-import { usePanning } from '@/hooks/usePanning.ts';
-import { useZoom } from '@/hooks/useZoom.ts';
-import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
-import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
-import { ButtonState } from '@/component/common/enums.ts';
-import { useFloatingButton } from '@/hooks/useFloatingButton.ts';
-import { FloatingButton } from '@/component/common/floatingbutton/FloatingButton.tsx';
+// /* eslint-disable */
+// import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+// import classNames from 'classnames';
+// import { ButtonState } from '@/component/common/enums';
+// import { useFloatingButton } from '@/hooks/useFloatingButton';
+// import { FloatingButton } from '@/component/common/floatingbutton/FloatingButton';
+// import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
+//
+// interface ICanvasProps {
+//   className?: string;
+//   onPointConverted?: (latLng: { lat: number; lng: number }) => { x: number; y: number } | null;
+//   onPointReverted?: (point: { x: number; y: number }) => { lat: number; lng: number } | null;
+// }
+//
+// interface IPoint {
+//   x: number;
+//   y: number;
+//   latLng?: { lat: number; lng: number };
+// }
+//
+// interface ICanvasRefMethods {
+//   getCanvasElement: () => HTMLCanvasElement | null;
+//   setScale: (scale: number) => void;
+//   setPosition: (x: number, y: number) => void;
+//   clear: () => void;
+//   redraw: () => void;
+// }
+//
+// // 선의 스타일 상수
+// const LINE_WIDTH = 2;
+// const STROKE_STYLE = 'black';
+// const START_MARKER_COLOR = '#4CAF50';
+// const END_MARKER_COLOR = '#F44336';
+// const MARKER_RADIUS = 6;
+//
+// export const Canvas = forwardRef<ICanvasRefMethods, ICanvasProps>((props, ref) => {
+//   const canvasRef = useRef<HTMLCanvasElement>(null);
+//   const [points, setPoints] = useState<IPoint[]>([]);
+//   const [undoStack, setUndoStack] = useState<IPoint[][]>([]);
+//   const [redoStack, setRedoStack] = useState<IPoint[][]>([]);
+//   const [startPoint, setStartPoint] = useState<IPoint | null>(null);
+//   const [endPoint, setEndPoint] = useState<IPoint | null>(null);
+//   const { isMenuOpen, toolType, toggleMenu, handleMenuClick } = useFloatingButton();
+//
+//   // Transform state
+//   const scaleRef = useRef<number>(1);
+//   const offsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+//
+//   useEffect(() => {
+//     const canvas = canvasRef.current;
+//     if (!canvas) return;
+//
+//     canvas.width = canvas.offsetWidth;
+//     canvas.height = canvas.offsetHeight;
+//
+//     redraw();
+//   }, []);
+//
+//   const clear = () => {
+//     const canvas = canvasRef.current;
+//     const context = canvas?.getContext('2d');
+//     if (!canvas || !context) return;
+//
+//     context.clearRect(0, 0, canvas.width, canvas.height);
+//   };
+//
+//   const drawMarker = (context: CanvasRenderingContext2D, point: IPoint, color: string) => {
+//     const scaledRadius = MARKER_RADIUS / scaleRef.current;
+//
+//     context.beginPath();
+//     context.arc(
+//       (point.x - offsetRef.current.x) / scaleRef.current,
+//       (point.y - offsetRef.current.y) / scaleRef.current,
+//       scaledRadius,
+//       0,
+//       2 * Math.PI,
+//     );
+//     context.fillStyle = color;
+//     context.fill();
+//     context.strokeStyle = 'white';
+//     context.lineWidth = 2 / scaleRef.current;
+//     context.stroke();
+//   };
+//
+//   const redraw = () => {
+//     const canvas = canvasRef.current;
+//     const context = canvas?.getContext('2d');
+//     if (!canvas || !context) return;
+//
+//     clear();
+//
+//     // Set line style
+//     context.lineWidth = LINE_WIDTH / scaleRef.current;
+//     context.strokeStyle = STROKE_STYLE;
+//     context.lineCap = 'round';
+//     context.lineJoin = 'round';
+//
+//     // Draw lines
+//     if (points.length > 0) {
+//       context.beginPath();
+//       points.forEach((point, index) => {
+//         const x = (point.x - offsetRef.current.x) / scaleRef.current;
+//         const y = (point.y - offsetRef.current.y) / scaleRef.current;
+//
+//         if (index === 0) {
+//           context.moveTo(x, y);
+//         } else {
+//           context.lineTo(x, y);
+//         }
+//       });
+//       context.stroke();
+//     }
+//
+//     // Draw markers
+//     if (startPoint) {
+//       drawMarker(context, startPoint, START_MARKER_COLOR);
+//     }
+//     if (endPoint) {
+//       drawMarker(context, endPoint, END_MARKER_COLOR);
+//     }
+//   };
+//
+//   const addPoint = (point: IPoint) => {
+//     setPoints(prev => {
+//       const newPoints = [...prev, point];
+//       setUndoStack(stack => [...stack, prev]);
+//       setRedoStack([]);
+//       return newPoints;
+//     });
+//   };
+//
+//   const undo = () => {
+//     if (undoStack.length === 0) return;
+//
+//     const previousPoints = undoStack[undoStack.length - 1];
+//     setPoints(previousPoints);
+//     setUndoStack(stack => stack.slice(0, -1));
+//     setRedoStack(stack => [...stack, points]);
+//     redraw();
+//   };
+//
+//   const redo = () => {
+//     if (redoStack.length === 0) return;
+//
+//     const nextPoints = redoStack[redoStack.length - 1];
+//     setPoints(nextPoints);
+//     setRedoStack(stack => stack.slice(0, -1));
+//     setUndoStack(stack => [...stack, points]);
+//     redraw();
+//   };
+//
+//   const handleCanvasClick = (e: React.MouseEvent) => {
+//     const canvas = canvasRef.current;
+//     if (!canvas) return;
+//
+//     const rect = canvas.getBoundingClientRect();
+//     const x = (e.clientX - rect.left) * scaleRef.current + offsetRef.current.x;
+//     const y = (e.clientY - rect.top) * scaleRef.current + offsetRef.current.y;
+//
+//     // Convert to lat/lng if converter is provided
+//     let latLng;
+//     if (props.onPointReverted) {
+//       latLng = props.onPointReverted({ x, y });
+//     }
+//
+//     // @ts-ignore
+//     const point: IPoint = { x, y, latLng };
+//
+//     switch (toolType) {
+//       case ButtonState.LINE_DRAWING:
+//         addPoint(point);
+//         break;
+//       case ButtonState.START_MARKER:
+//         setStartPoint(point);
+//         break;
+//       case ButtonState.DESTINATION_MARKER:
+//         setEndPoint(point);
+//         break;
+//       default:
+//         addPoint(point);
+//         break;
+//     }
+//
+//     redraw();
+//   };
+//
+//   useImperativeHandle(ref, () => ({
+//     getCanvasElement: () => canvasRef.current,
+//     setScale: (scale: number) => {
+//       scaleRef.current = scale;
+//       redraw();
+//     },
+//     setPosition: (x: number, y: number) => {
+//       offsetRef.current = { x, y };
+//       redraw();
+//     },
+//     clear,
+//     redraw,
+//   }));
+//
+//   return (
+//     <div className="absolute left-0 top-0 h-full w-full">
+//       <div className="absolute left-1/2 top-[10px] z-10 flex -translate-x-1/2 transform gap-2">
+//         <button
+//           type="button"
+//           onClick={undo}
+//           disabled={undoStack.length === 0}
+//           className={classNames(
+//             'h-[35px] w-[35px]',
+//             undoStack.length === 0 ? 'cursor-not-allowed opacity-50' : '',
+//           )}
+//         >
+//           <MdArrowCircleLeft size={24} />
+//         </button>
+//         <button
+//           type="button"
+//           onClick={redo}
+//           disabled={redoStack.length === 0}
+//           className={classNames(
+//             'h-[35px] w-[35px]',
+//             redoStack.length === 0 ? 'cursor-not-allowed opacity-50' : '',
+//           )}
+//         >
+//           <MdArrowCircleRight size={24} />
+//         </button>
+//       </div>
+//
+//       <canvas
+//         ref={canvasRef}
+//         className={classNames('absolute h-full w-full bg-transparent', props.className)}
+//         onClick={handleCanvasClick}
+//       />
+//
+//       <div className="absolute">
+//         <FloatingButton
+//           isMenuOpen={isMenuOpen}
+//           toggleMenu={toggleMenu}
+//           toolType={toolType}
+//           handleMenuClick={handleMenuClick}
+//         />
+//       </div>
+//     </div>
+//   );
+// });
 
-interface ICanvasProps {
-  className?: string;
-  // onClick?: () => void;
-  // onMouseDown?: () => void;
-  // onMouseUp?: () => void;
-  // onMouseMove?: () => void;
-}
-
-interface IPoint {
-  x: number;
-  y: number;
-}
-
-// 네이버 지도 기준 확대/축소 비율 단계
-const NAVER_STEP_SCALES = [
-  100, 100, 100, 100, 100, 100, 50, 30, 20, 10, 5, 3, 1, 0.5, 0.3, 0.1, 0.05, 0.03, 0.02, 0.01,
-  0.005,
-];
-
-// 선의 굵기 상수
-const LINE_WIDTH = 2;
-// 선의 색 상수
-const STROKE_STYLE = 'black';
-// 지도의 처음 확대/축소 비율 단계 index
-const INITIAL_ZOOM_INDEX = 12;
-
-export interface ICanvasRefMethods {
-  getCanvasElement: () => HTMLCanvasElement | null;
-  onMouseClickHandler: (event: React.MouseEvent) => void;
-  onMouseDownHandler: (event: React.MouseEvent) => void;
-  onMouseMoveHandler: (event: React.MouseEvent) => void;
-  onMouseUpHandler: (event: React.MouseEvent) => void;
-}
-
-export const Canvas = forwardRef<ICanvasRefMethods, ICanvasProps>((props, ref) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null!);
-  const { points, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
-  const [startPoint, setStartPoint] = useState<IPoint | null>(null);
-  const [endPoint, setEndPoint] = useState<IPoint | null>(null);
-  const { isMenuOpen, toolType, toggleMenu, handleMenuClick } = useFloatingButton();
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const context = canvas.getContext('2d');
-    if (!context) return;
-
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-  }, []);
-
-  const { draw, scaleRef, viewPosRef } = useDrawing({
-    canvasRef,
-    points,
-    startPoint,
-    endPoint,
-    lineWidth: LINE_WIDTH,
-    strokeStyle: STROKE_STYLE,
-    initialScale: NAVER_STEP_SCALES[INITIAL_ZOOM_INDEX],
-  });
-
-  const { handleMouseMove, handleMouseDown, handleMouseUp } = usePanning({ viewPosRef, draw });
-  const { handleWheel } = useZoom({
-    scaleRef,
-    viewPosRef,
-    draw,
-    stepScales: NAVER_STEP_SCALES,
-    initialZoomIndex: INITIAL_ZOOM_INDEX,
-  });
-
-  const handleCanvasClick = (e: React.MouseEvent) => {
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return;
-
-    const x = (e.clientX - rect.left - viewPosRef.current.x) / scaleRef.current;
-    const y = (e.clientY - rect.top - viewPosRef.current.y) / scaleRef.current;
-
-    switch (toolType) {
-      case ButtonState.LINE_DRAWING:
-        addPoint({ x, y });
-        break;
-      case ButtonState.START_MARKER:
-        setStartPoint({ x, y });
-        break;
-      case ButtonState.DESTINATION_MARKER:
-        setEndPoint({ x, y });
-        break;
-      default:
-        addPoint({ x, y });
-        break;
-    }
-
-    draw();
-  };
-
-  useImperativeHandle(ref, () => ({
-    getCanvasElement: () => canvasRef.current ?? null,
-    onMouseClickHandler: event => {
-      handleCanvasClick(event);
-    },
-    onMouseDownHandler: event => {
-      handleMouseDown(event);
-    },
-    onMouseUpHandler: () => {
-      handleMouseUp();
-    },
-    onMouseMoveHandler: event => {
-      handleMouseMove(event);
-    },
-  }));
-
-  return (
-    <div className="absolute h-full w-full">
-      <div className="absolute left-1/2 top-[10px] z-10 flex -translate-x-1/2 transform gap-2">
-        <button
-          type="button"
-          onClick={undo}
-          disabled={undoStack.length === 0}
-          className={`h-[35px] w-[35px] ${
-            undoStack.length === 0 ? 'cursor-not-allowed opacity-50' : ''
-          }`}
-        >
-          <MdArrowCircleLeft size={24} />
-        </button>
-        <button
-          type="button"
-          onClick={redo}
-          disabled={redoStack.length === 0}
-          className={`h-[35px] w-[35px] ${
-            redoStack.length === 0 ? 'cursor-not-allowed opacity-50' : ''
-          }`}
-        >
-          <MdArrowCircleRight size={24} />
-        </button>
-      </div>
-      <canvas
-        ref={canvasRef}
-        className={classNames(
-          'z-1000 pointer-events-none absolute h-full w-full bg-transparent',
-          props.className,
-        )}
-        onClick={handleCanvasClick}
-        onMouseMove={handleMouseMove}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onWheel={handleWheel}
-      />
-      <div className="absolute">
-        <FloatingButton
-          isMenuOpen={isMenuOpen}
-          toggleMenu={toggleMenu}
-          toolType={toolType}
-          handleMenuClick={handleMenuClick}
-        />
-      </div>
-    </div>
-  );
-});

@@ -1,71 +1,80 @@
-import { ReactNode, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import { NaverMap } from '@/component/maps/NaverMap.tsx';
-import { IMapObject, IMapOptions, IMapRefMethods } from '@/component/maps/Map.types.ts';
-import classNames from 'classnames';
-
-const validateKindOfMap = (type: string) => ['naver'].includes(type);
-
-interface IMapProps extends IMapOptions {
-  className?: string;
-  type: string;
-  initMap: (mapObject: IMapObject) => void;
-}
-
-export const Map = forwardRef<IMapRefMethods, IMapProps>((props, ref) => {
-  if (!validateKindOfMap(props.type))
-    throw new Error('🚀 지도 로딩 오류 : 알 수 없는 지도 타입이 인자로 들어 왔습니다.');
-
-  const mapRefMethods = useRef<IMapRefMethods | null>(null);
-  const mapContainer = useRef<HTMLElement | null>(null);
-
-  const [mapObject, setMapObject] = useState<IMapObject>();
-  const [MapComponent, setMapComponent] = useState<ReactNode>();
-
-  const onMapInit = (mapObj: IMapObject) => {
-    setMapObject(mapObj);
-  };
-
-  useEffect(() => {
-    if (props.type === 'naver') {
-      const mapComponent = (
-        <NaverMap
-          lat={props.lat}
-          lng={props.lng}
-          zoom={props.zoom}
-          ref={mapRefMethods}
-          onMapInit={onMapInit}
-        />
-      );
-      setMapComponent(mapComponent);
-    }
-  }, []);
-
-  useEffect(() => {
-    mapContainer.current = mapRefMethods.current?.getMapContainer() ?? null;
-    if (mapObject) props.initMap(mapObject);
-  }, [mapObject]);
-
-  useImperativeHandle(ref, () => ({
-    getMapObject: () => {
-      if (mapObject) return mapObject;
-      throw new Error('🚀 지도 로딩 오류 : 지도 객체가 존재하지 않습니다.');
-    },
-    getMapContainer: () => mapContainer.current,
-    onMouseClickHandler: () => {},
-  }));
-
-  return (
-    <article
-      className={classNames(
-        'h-full',
-        'w-full',
-        'absolute',
-        'z-0',
-        'pointer-events-none',
-        props.className,
-      )}
-    >
-      {MapComponent}
-    </article>
-  );
-});
+// import { NaverMap } from '@/component/maps/NaverMap.tsx';
+// import { ReactNode, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+// import classNames from 'classnames';
+//
+// type IMapObject = naver.maps.Map | null;
+//
+// export interface IMapOptions {
+//   lat: number;
+//   lng: number;
+//   zoom?: number;
+// }
+//
+// interface IMapProps extends IMapOptions {
+//   className?: string;
+//   type: string;
+//   initMap: (mapObject: IMapObject) => void;
+// }
+//
+// // 부모 컴포넌트가 접근할 수 있는 메서드들을 정의한 인터페이스
+// export interface IMapRefMethods {
+//   getMapObject: () => naver.maps.Map | null;
+//   getMapContainer: () => HTMLElement | null;
+//   onMouseClickHandler: (event?: React.MouseEvent) => void;
+// }
+//
+// const validateKindOfMap = (type: string) => ['naver'].includes(type);
+//
+// export const Map = forwardRef<IMapRefMethods, IMapProps>((props, ref) => {
+//   if (!validateKindOfMap(props.type)) throw new Error('Invalid map type');
+//
+//   const mapRef = useRef<IMapRefMethods | null>(null);
+//   const mapContainer = useRef<HTMLElement | null>(null);
+//   const [mapObject, setMapObject] = useState<IMapObject>(null);
+//   const [MapComponent, setMapComponent] = useState<ReactNode>();
+//
+//   const onMapInit = (mapObj: IMapObject) => {
+//     setMapObject(mapObj);
+//   };
+//
+//   useEffect(() => {
+//     if (props.type === 'naver') {
+//       const mapComponent = (
+//         <NaverMap
+//           lat={props.lat}
+//           lng={props.lng}
+//           zoom={props.zoom}
+//           ref={mapRef}
+//           onMapInit={onMapInit}
+//         />
+//       );
+//       setMapComponent(mapComponent);
+//     }
+//   }, [props.lat, props.lng, props.zoom, props.type]);
+//
+//   useEffect(() => {
+//     mapContainer.current = mapRef.current?.getMapContainer() ?? null;
+//     props.initMap(mapObject);
+//   }, [mapObject]);
+//
+//   useImperativeHandle(ref, () => ({
+//     getMapObject: () => mapObject,
+//     getMapContainer: () => mapContainer.current,
+//     onMouseClickHandler: () => {},
+//   }));
+//
+//   return (
+//     <article
+//       className={classNames(
+//         'h-full',
+//         'w-full',
+//         'absolute',
+//         'z-0',
+//         'pointer-events-none',
+//         props.className,
+//       )}
+//     >
+//       {MapComponent}
+//     </article>
+//   );
+// });
