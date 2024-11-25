@@ -5,7 +5,7 @@ import { IUser, UserContext } from '@/context/UserContext';
 import { SearchBox } from '@/component/searchbox/SearchBox';
 import { ToolTypeProvider } from '@/context/ToolTypeContext';
 import { buttonActiveType } from '@/component/layout/enumTypes';
-import { MapProviderForDraw } from '@/component/canvasWithMap/MapProviderForDraw';
+import { MapProviderForDraw } from '@/component/canvasWithMap/canvasWithMapforDraw/MapProviderForDraw.tsx';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { getAddressFromCoordinates } from '@/utils/map/getAddress';
 

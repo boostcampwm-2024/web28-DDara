@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MapCanvasForDraw } from '@/component/canvasWithMap/MapCanvasForDraw.tsx';
+import { MapCanvasForDraw } from '@/component/canvasWithMap/canvasWithMapforDraw/MapCanvasForDraw.tsx';
 import { DEFAULT_CENTER } from '@/lib/constants/mapConstants.ts';
 import { ICanvasScreenProps } from '@/lib/types/canvasInterface.ts';
 

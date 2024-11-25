@@ -10,7 +10,7 @@ import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
 import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
-import { ToolDescription } from '../tooldescription/ToolDescription';
+import { ToolDescription } from '@/component/tooldescription/ToolDescription';
 
 export const MapCanvasForDraw = ({
   width,
