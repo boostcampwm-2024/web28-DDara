@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
 import { MapCanvas } from '@/component/maps/MapCanvas.tsx';
 import { DEFAULT_CENTER } from '@/lib/constants/mapConstants.ts';
+import { ICanvasScreenProps } from '@/lib/types/canvasInterface.ts';
 
-export const FullScreenMap = () => {
+export const FullScreenMap = ({ width, height }: ICanvasScreenProps) => {
   const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width,
+    height,
   });
 
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width,
+        height,
       });
     };
 
@@ -43,13 +44,11 @@ export const FullScreenMap = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 h-full w-full">
-      <MapCanvas
-        width={windowSize.width}
-        height={windowSize.height}
-        initialCenter={DEFAULT_CENTER}
-        initialZoom={7}
-      />
-    </div>
+    <MapCanvas
+      width={windowSize.width}
+      height={windowSize.height}
+      initialCenter={DEFAULT_CENTER}
+      initialZoom={7}
+    />
   );
 };

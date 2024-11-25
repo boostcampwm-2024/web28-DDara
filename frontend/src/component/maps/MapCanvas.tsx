@@ -11,6 +11,7 @@ import {
   STROKE_STYLE,
 } from '@/lib/constants/canvasConstants.ts';
 import { ICanvasPoint, IMapCanvasProps, IPoint } from '@/lib/types/canvasInterface.ts';
+import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
 
 export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCanvasProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -21,7 +22,6 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
 
   const [startMarker, setStartMarker] = useState<IPoint | null>(null);
   const [endMarker, setEndMarker] = useState<IPoint | null>(null);
-  const [pathPoints, setPathPoints] = useState<IPoint[]>([]);
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -32,10 +32,8 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
   const [touchStartDistance, setTouchStartDistance] = useState<number | null>(null);
   const [touchCenter, setTouchCenter] = useState<{ x: number; y: number } | null>(null);
 
-  const [undoStack, setUndoStack] = useState<IPoint[][]>([]);
-  const [redoStack, setRedoStack] = useState<IPoint[][]>([]);
-
   const { isMenuOpen, toolType, toggleMenu, handleMenuClick } = useFloatingButton();
+  const { pathPoints, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -110,6 +108,7 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
   };
 
   const redrawCanvas = () => {
+    console.log('Redraw');
     if (!canvasRef.current || !map) return;
 
     const canvas = canvasRef.current;
@@ -140,13 +139,13 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
         ctx.fill();
       }
     }
-    if (pathPoints.length > 0) {
+    if (pathPoints?.length > 0) {
       ctx.beginPath();
       const firstPoint = latLngToCanvasPoint(pathPoints[0]);
 
       if (firstPoint) {
         ctx.moveTo(firstPoint.x, firstPoint.y);
-        for (let i = 1; i < pathPoints.length; i++) {
+        for (let i = 1; i < pathPoints?.length; i++) {
           const point = latLngToCanvasPoint(pathPoints[i]);
           if (point) {
             ctx.lineTo(point.x, point.y);
@@ -155,14 +154,6 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
         ctx.stroke();
       }
     }
-  };
-
-  const addPoint = (point: IPoint) => {
-    setUndoStack(stack => [...stack, [...pathPoints, point]]);
-    setRedoStack([]);
-    setPathPoints(prev => {
-      return [...prev, point];
-    });
   };
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -344,23 +335,23 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
     }
   };
 
-  const undo = () => {
-    if (undoStack.length === 0) return;
-    const previousPoints = undoStack[undoStack.length - 2];
-    setPathPoints(previousPoints);
-    setUndoStack(stack => stack.slice(0, -1));
-    setRedoStack(stack => [...stack, pathPoints]);
-    redrawCanvas();
-  };
-
-  const redo = () => {
-    if (redoStack.length === 0) return;
-    const nextPoints = redoStack[redoStack.length - 1];
-    setPathPoints(nextPoints);
-    setRedoStack(stack => stack.slice(0, -1));
-    setUndoStack(stack => [...stack, pathPoints]);
-    redrawCanvas();
-  };
+  // const undo = () => {
+  //   if (undoStack.length === 0) return;
+  //   const previousPoints = undoStack[undoStack.length - 2];
+  //   setPathPoints(previousPoints);
+  //   setUndoStack(stack => stack.slice(0, -1));
+  //   setRedoStack(stack => [...stack, pathPoints]);
+  //   redrawCanvas();
+  // };
+  //
+  // const redo = () => {
+  //   if (redoStack.length === 0) return;
+  //   const nextPoints = redoStack[redoStack.length - 1];
+  //   setPathPoints(nextPoints);
+  //   setRedoStack(stack => stack.slice(0, -1));
+  //   setUndoStack(stack => [...stack, pathPoints]);
+  //   redrawCanvas();
+  // };
 
   useEffect(() => {
     if (isDragging) {
@@ -394,30 +385,32 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
       onTouchEnd={handleTouchEnd}
     >
       <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
-      <div className="z-1000 absolute left-1/2 top-[100px] flex -translate-x-1/2 transform gap-2">
-        <button
-          type="button"
-          onClick={undo}
-          disabled={undoStack.length === 1}
-          className={classNames(
-            'h-[35px] w-[35px]',
-            undoStack.length === 1 ? 'cursor-not-allowed opacity-50' : '',
-          )}
-        >
-          <MdArrowCircleLeft size={24} />
-        </button>
-        <button
-          type="button"
-          onClick={redo}
-          disabled={redoStack.length === 0}
-          className={classNames(
-            'h-[35px] w-[35px]',
-            redoStack.length === 0 ? 'cursor-not-allowed opacity-50' : '',
-          )}
-        >
-          <MdArrowCircleRight size={24} />
-        </button>
-      </div>
+      {toolType === ButtonState.LINE_DRAWING ? (
+        <div className="z-1000 absolute left-1/2 top-[10px] flex -translate-x-1/2 transform gap-2">
+          <button
+            type="button"
+            onClick={undo}
+            disabled={undoStack.length === 0}
+            className={classNames(
+              'h-[35px] w-[35px]',
+              undoStack.length === 0 ? 'cursor-not-allowed opacity-50' : '',
+            )}
+          >
+            <MdArrowCircleLeft size={24} />
+          </button>
+          <button
+            type="button"
+            onClick={redo}
+            disabled={redoStack.length === 0}
+            className={classNames(
+              'h-[35px] w-[35px]',
+              redoStack.length === 0 ? 'cursor-not-allowed opacity-50' : '',
+            )}
+          >
+            <MdArrowCircleRight size={24} />
+          </button>
+        </div>
+      ) : null}
       <canvas
         ref={canvasRef}
         style={{
@@ -428,7 +421,7 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
         }}
         onClick={handleCanvasClick}
       />
-      <div className="relative bottom-40 z-10 flex gap-2">
+      <div className="relative z-10 flex gap-2">
         <FloatingButton
           isMenuOpen={isMenuOpen}
           toggleMenu={toggleMenu}
