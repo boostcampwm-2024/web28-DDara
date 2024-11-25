@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '@/context/UserContext';
-import { FullScreenMap } from '@/component/maps/Canvas.tsx';
+import { MapProviderForDraw } from '@/component/canvasWithMap/MapProviderForDraw.tsx';
 
 export const DrawRoute = () => {
   const { users, setUsers } = useContext(UserContext);
@@ -66,7 +66,7 @@ export const DrawRoute = () => {
 
       <div style={{ position: 'relative', padding: '1rem' }}>
         {/* TODO: 동율님 mock 데이터 관련 버튼 없애고 나서, height={window.innerHeight - 180} 으로 변경해주시면 됩니다! */}
-        <FullScreenMap width={window.innerWidth - 32} height={window.innerHeight - 300} />
+        <MapProviderForDraw width={window.innerWidth - 32} height={window.innerHeight - 300} />
       </div>
     </div>
   );

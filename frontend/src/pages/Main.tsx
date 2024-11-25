@@ -3,7 +3,7 @@ import { MdFormatListBulleted } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
 import { buttonActiveType } from '@/component/layout/enumTypes';
-import { FullScreenMap } from '@/component/maps/Canvas.tsx';
+import { MapProviderForDraw } from '@/component/canvasWithMap/MapProviderForDraw.tsx';
 import { BottomSheet } from '@/component/bottomsheet/BottomSheet.tsx';
 import { Content } from '@/component/content/Content.tsx';
 import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
@@ -100,7 +100,7 @@ export const Main = () => {
         {/* eslint-disable-next-line no-nested-ternary */}
         {lat && lng ? (
           otherLocations ? (
-            <FullScreenMap width={window.innerWidth} height={window.innerHeight} />
+            <MapProviderForDraw width={window.innerWidth} height={window.innerHeight} />
           ) : (
             <section className="flex h-full items-center justify-center">
               Loading map data...
