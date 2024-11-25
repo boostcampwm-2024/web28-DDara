@@ -17,7 +17,7 @@ const defaultToolContext: IToolContextType = {
 export const ToolTypeContext = createContext<IToolContextType>(defaultToolContext);
 
 export const ToolTypeProvider = (props: IToolTypeProps) => {
-  const [toolType, setToolType] = useState<ButtonState>(ButtonState.CLOSE);
+  const [toolType, setToolType] = useState<ButtonState>(ButtonState.OPEN);
   const contextValue = useMemo(() => ({ toolType, setToolType }), [toolType, setToolType]);
 
   return <ToolTypeContext.Provider value={contextValue}>{props.children}</ToolTypeContext.Provider>;
