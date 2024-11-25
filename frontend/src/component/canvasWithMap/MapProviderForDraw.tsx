@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { MapCanvas } from '@/component/maps/MapCanvas.tsx';
+import { MapCanvasForDraw } from '@/component/canvasWithMap/MapCanvasForDraw.tsx';
 import { DEFAULT_CENTER } from '@/lib/constants/mapConstants.ts';
 import { ICanvasScreenProps } from '@/lib/types/canvasInterface.ts';
 
-export const FullScreenMap = ({ width, height }: ICanvasScreenProps) => {
+export const MapProviderForDraw = ({ width, height }: ICanvasScreenProps) => {
   const [windowSize, setWindowSize] = useState({
     width,
     height,
@@ -44,7 +44,7 @@ export const FullScreenMap = ({ width, height }: ICanvasScreenProps) => {
   }, []);
 
   return (
-    <MapCanvas
+    <MapCanvasForDraw
       width={windowSize.width}
       height={windowSize.height}
       initialCenter={DEFAULT_CENTER}

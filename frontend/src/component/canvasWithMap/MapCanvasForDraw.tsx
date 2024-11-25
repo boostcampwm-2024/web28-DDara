@@ -10,7 +10,12 @@ import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
 import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
 
-export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCanvasProps) => {
+export const MapCanvasForDraw = ({
+  width,
+  height,
+  initialCenter,
+  initialZoom,
+}: IMapCanvasProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [projection, setProjection] = useState<naver.maps.MapSystemProjection | null>(null);
@@ -349,24 +354,6 @@ export const MapCanvas = ({ width, height, initialCenter, initialZoom }: IMapCan
       setIsTouching(false);
     }
   };
-
-  // const undo = () => {
-  //   if (undoStack.length === 0) return;
-  //   const previousPoints = undoStack[undoStack.length - 2];
-  //   setPathPoints(previousPoints);
-  //   setUndoStack(stack => stack.slice(0, -1));
-  //   setRedoStack(stack => [...stack, pathPoints]);
-  //   redrawCanvas();
-  // };
-  //
-  // const redo = () => {
-  //   if (redoStack.length === 0) return;
-  //   const nextPoints = redoStack[redoStack.length - 1];
-  //   setPathPoints(nextPoints);
-  //   setRedoStack(stack => stack.slice(0, -1));
-  //   setUndoStack(stack => [...stack, pathPoints]);
-  //   redrawCanvas();
-  // };
 
   useEffect(() => {
     if (isDragging) {
