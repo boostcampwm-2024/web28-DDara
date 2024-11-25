@@ -1,5 +1,5 @@
 import { ToolTypeContext } from '@/context/ToolTypeContext';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { IoMdClose, IoMdSearch } from 'react-icons/io';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { ButtonState } from '../common/enums';
@@ -39,13 +39,14 @@ export const SearchBox = () => {
 
   const handleSearch = async () => {
     if (!inputValue.trim()) return;
+    setSearchResults([]);
     setLoading(true);
     setError(null);
 
     try {
       const apiUrl = `https://cors-anywhere.herokuapp.com/https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
         inputValue,
-      )}&display=10&start=1&sort=random`;
+      )}&display=5&start=1&sort=random`;
 
       // const apiUrl = `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
       //   inputValue,
@@ -78,6 +79,16 @@ export const SearchBox = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (inputValue.trim()) {
+        handleSearch();
+      }
+    }, 1000);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [inputValue]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value); // 상태 업데이트
