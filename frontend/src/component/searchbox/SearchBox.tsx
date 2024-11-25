@@ -64,13 +64,13 @@ export const SearchBox = (props: ISearchBox) => {
     setError(null);
 
     try {
-      //   const apiUrl = `https://cors-anywhere.herokuapp.com/https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
-      //     inputValue,
-      //   )}&display=10&start=1&sort=random`;
-
-      const apiUrl = `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
+      const apiUrl = `https://cors-anywhere.herokuapp.com/https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
         inputValue,
       )}&display=10&start=1&sort=random`;
+
+      //   const apiUrl = `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
+      //     inputValue,
+      //   )}&display=10&start=1&sort=random`;
 
       const response = await fetch(apiUrl, {
         headers: {

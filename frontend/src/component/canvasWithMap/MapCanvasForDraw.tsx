@@ -9,6 +9,7 @@ import { ICanvasPoint, IMapCanvasProps, IPoint } from '@/lib/types/canvasInterfa
 import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
 import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
+import { ToolDescription } from '../tooldescription/ToolDescription';
 
 export const MapCanvasForDraw = ({
   width,
@@ -430,6 +431,9 @@ export const MapCanvasForDraw = ({
           toolType={toolType}
           handleMenuClick={handleMenuClick}
         />
+      </div>
+      <div className="relative flex">
+        <ToolDescription />
       </div>
 
       {/* TODO: 줌인 줌아웃 버튼으로도 접근 가능하도록 추가 */}
