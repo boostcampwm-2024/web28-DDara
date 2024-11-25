@@ -1,10 +1,12 @@
 import { ReactNode } from 'react';
+import classNames from 'classnames';
 
 interface IDropdownItemProps {
   /** 드롭다운 아이템 내용 */
   children: ReactNode;
   /** 버튼 클릭 시 실행할 함수 */
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  className?: string;
 }
 
 /**
@@ -28,7 +30,7 @@ interface IDropdownItemProps {
 
 export const DropdownItem = (props: IDropdownItemProps) => {
   return (
-    <li className="list-none px-3 py-1.5 text-base">
+    <li className={classNames('list-none px-3 py-1.5 text-base', props.className)}>
       <button
         type="button"
         className="flex w-full items-center justify-between whitespace-nowrap bg-transparent"
