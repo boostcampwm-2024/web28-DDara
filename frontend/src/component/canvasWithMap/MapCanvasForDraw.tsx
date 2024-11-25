@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ButtonState } from '@/component/common/enums';
 import classNames from 'classnames';
 import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
@@ -9,6 +9,7 @@ import { ICanvasPoint, IMapCanvasProps, IPoint } from '@/lib/types/canvasInterfa
 import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
 import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
+import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { ToolDescription } from '../tooldescription/ToolDescription';
 
 export const MapCanvasForDraw = ({
@@ -38,6 +39,8 @@ export const MapCanvasForDraw = ({
   const { isMenuOpen, toolType, toggleMenu, handleMenuClick } = useFloatingButton();
   const { pathPoints, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
 
+  const { setCurrentUser } = useContext(CurrentUserContext);
+
   const startImageRef = useRef<HTMLImageElement | null>(null);
   const endImageRef = useRef<HTMLImageElement | null>(null);
 
@@ -48,6 +51,23 @@ export const MapCanvasForDraw = ({
     endImageRef.current = new Image();
     endImageRef.current.src = endmarker;
   }, []);
+
+  useEffect(() => {
+    setCurrentUser(prevUser => ({
+      ...prevUser,
+      start_location: {
+        title: '',
+        lat: startMarker?.lat ?? 0, // startMarker가 없을 경우 0으로 처리
+        lng: startMarker?.lng ?? 0, // endMarker가 없을 경우 0으로 처리
+      },
+      end_location: {
+        title: '',
+        lat: endMarker?.lat ?? 0, // endMarker가 없을 경우 0으로 처리
+        lng: endMarker?.lng ?? 0, // endMarker가 없을 경우 0으로 처리
+      },
+      path: pathPoints, // 경로 포인트들
+    }));
+  }, [startMarker, endMarker, pathPoints, setCurrentUser]);
 
   useEffect(() => {
     if (!mapRef.current) return;

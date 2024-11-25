@@ -21,13 +21,17 @@ export const SearchBox = () => {
 
   const { users, setUsers } = useContext(UserContext);
   const { toolType } = useContext(ToolTypeContext);
-  const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
 
   const updateUser = (title: string, lat: number, lng: number) => {
+    // `currentUser`의 정보를 사용하여 대상 사용자를 찾아서 업데이트
     const targetUser = currentUser;
+    console.log(targetUser);
+
+    // `users` 배열을 순회하면서 `currentUser`에 해당하는 사용자를 찾고, 업데이트
     const updatedUsers = users.map(user => {
-      if (user === targetUser) {
-        // toolType에 따라 start_location 또는 end_location을 업데이트
+      if (user.id === targetUser.id) {
+        // `targetUser`와 같은 id를 가진 사용자를 찾음
         if (toolType === ButtonState.START_MARKER) {
           return {
             ...user,
@@ -53,7 +57,20 @@ export const SearchBox = () => {
     });
 
     console.log(updatedUsers);
+
+    // `setUsers`를 사용해 업데이트된 사용자 목록으로 상태를 갱신
     setUsers(updatedUsers);
+
+    // `currentUser`도 갱신 (선택적, 필요 시)
+    setCurrentUser({
+      ...currentUser,
+      start_location:
+        toolType === ButtonState.START_MARKER ? { title, lat, lng } : currentUser.start_location,
+      end_location:
+        toolType === ButtonState.DESTINATION_MARKER
+          ? { title, lat, lng }
+          : currentUser.end_location,
+    });
   };
 
   const handleSearch = async () => {

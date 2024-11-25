@@ -18,6 +18,7 @@ export const DrawRoute = () => {
   const goToAddChannelRoute = () => {
     navigate(`/add-channel/`);
   };
+
   const getUser = () => {
     return users.find(user => user.name === params.user);
   };
@@ -43,7 +44,9 @@ export const DrawRoute = () => {
       user.start_location.lat !== 0 &&
       user.start_location.lng !== 0 &&
       user.end_location.lat !== 0 &&
-      user.end_location.lng !== 0
+      user.end_location.lng !== 0 &&
+      user.path.length > 0 &&
+      user.marker_style.color !== ''
     );
   };
 
@@ -62,13 +65,52 @@ export const DrawRoute = () => {
 
   useEffect(() => {
     setFooterTitle('사용자 경로 추가 완료');
-    setFooterOnClick(goToAddChannelRoute);
     setFooterActive(buttonActiveType.PASSIVE);
     const user = getUser();
     if (user) {
-      setCurrentUser(user);
+      // userId에 따른 Tailwind 색상 클래스를 설정
+      const markerColors: { [key: number]: string } = {
+        1: 'marker:user1', // tailwind의 custom color class로 설정
+        2: 'marker:user2',
+        3: 'marker:user3',
+        4: 'marker:user4',
+        5: 'marker:user5',
+      };
+
+      // user.id에 맞는 marker 스타일 적용
+      const updatedUser = {
+        ...user,
+        marker_style: {
+          ...user.marker_style,
+          color: markerColors[user.id] || 'marker:user1', // 기본값은 user1 색상
+        },
+      };
+
+      setCurrentUser(updatedUser);
     }
   }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      // currentUser가 설정된 후에 footerOnClick을 설정
+      setFooterOnClick(() => {
+        if (currentUser) {
+          console.log('Footer 버튼 클릭 시 currentUser:', currentUser);
+
+          // `users` 배열에서 `currentUser`를 찾아 업데이트
+          const updatedUsers = users.map(user => {
+            if (user.name === currentUser.name) {
+              return { ...user, ...currentUser }; // currentUser 정보로 업데이트
+            }
+            return user;
+          });
+
+          setUsers(updatedUsers); // 업데이트된 users 배열 설정
+          goToAddChannelRoute(); // 경로 추가 페이지로 이동
+        }
+      });
+    }
+  }, [currentUser, users]);
 
   if (!currentUser) {
     // currentUser가 없을 경우에는 이 페이지에서 아무것도 렌더링하지 않거나, 에러 메시지를 표시할 수 있습니다.
