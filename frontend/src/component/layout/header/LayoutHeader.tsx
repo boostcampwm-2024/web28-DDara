@@ -1,13 +1,15 @@
+import { useContext } from 'react';
 import { Header } from '@/component/header/Header';
 import { NoticeText } from '@/component/text/NoticeText';
 import { useLocation, useParams } from 'react-router-dom';
 import { getHeaderInfo } from '@/utils/mapping/HeaderMapping';
+import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider.tsx';
 
 export const LayoutHeader = () => {
-  // const { headerOption } = useContext(HeaderContext);
   const params = useParams<Record<string, string | undefined>>();
   const urlPath = useLocation();
   const headerOption = getHeaderInfo(urlPath.pathname);
+  const headerContext = useContext(HeaderContext);
 
   return (
     <Header className="z-4000">
@@ -15,7 +17,7 @@ export const LayoutHeader = () => {
         leftButton={headerOption.leftButton}
         rightButton={headerOption.rightButton}
         title={`${params.user || ''}${headerOption.title}`}
-        // items={headerOption.items} 이부분 어떻게 해야할까요?
+        items={headerContext.headerOption.items}
       />
       {headerOption.subtitle && (
         <Header.Subtitle>

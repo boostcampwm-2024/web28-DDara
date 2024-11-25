@@ -21,7 +21,7 @@ export const createChannel = (
           console.error(res);
           fnReject(`msg.${res}`);
         } else {
-          fnResolve(new ResponseDto<createChannelResEntity>(res));
+          fnResolve(new ResponseDto<createChannelResEntity>(res.data));
         }
       })
       .catch(err => {
@@ -45,7 +45,31 @@ export const getUserChannels = (userId: string): Promise<ResponseDto<getUserChan
           console.error(res);
           fnReject(`msg.${res}`);
         } else {
-          fnResolve(new ResponseDto<getUserChannelsResEntity>(res));
+          fnResolve(new ResponseDto<getUserChannelsResEntity>(res.data));
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        fnReject('msg.RESULT_FAILED');
+      });
+  };
+  return new Promise(promiseFn);
+};
+
+export const getChannelInfo = (userId: string): Promise<ResponseDto<createChannelReqEntity>> => {
+  const promiseFn = (
+    fnResolve: (value: ResponseDto<createChannelReqEntity>) => void,
+    fnReject: (reason?: any) => void,
+  ) => {
+    const apiClient = getApiClient();
+    apiClient
+      .get(`/channel/${userId}`)
+      .then(res => {
+        if (res.status !== 200) {
+          console.error(res);
+          fnReject(`msg.${res}`);
+        } else {
+          fnResolve(new ResponseDto<createChannelReqEntity>(res.data));
         }
       })
       .catch(err => {
