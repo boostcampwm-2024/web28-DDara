@@ -1,7 +1,5 @@
 import { IUser } from '@/context/UserContext';
-import { getAddressFromCoordinates } from '@/utils/map/getAddress';
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
 import { GoArrowRight } from 'react-icons/go';
 import { IoClose } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
@@ -13,25 +11,6 @@ interface IRouteResultButtonProps {
 
 export const RouteResultButton = (props: IRouteResultButtonProps) => {
   const navigate = useNavigate();
-  const [start, setStart] = useState<string>('');
-  const [end, setEnd] = useState<string>('');
-  useEffect(() => {
-    // Fetch the addresses asynchronously when component mounts
-    const fetchAddresses = async () => {
-      const startAddress = await getAddressFromCoordinates(
-        props.user.start_location.lat,
-        props.user.start_location.lng,
-      );
-      const endAddress = await getAddressFromCoordinates(
-        props.user.end_location.lat,
-        props.user.end_location.lng,
-      );
-      setStart(startAddress); // Set start address
-      setEnd(endAddress); // Set end address
-    };
-
-    fetchAddresses();
-  }, [props.user.start_location, props.user.end_location]);
 
   const goToUserDrawRoute = (user: string) => {
     navigate(`/add-channel/${user}/draw`);
@@ -50,11 +29,11 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
           )}
         >
           <div className="flex h-full w-28 items-center rounded border-2 px-2 text-xs font-normal">
-            {start}
+            {props.user.start_location.title}
           </div>
           <GoArrowRight className="mx-2 h-6 w-6" />
           <div className="flex h-full w-28 items-center rounded border-2 px-2 text-xs font-normal">
-            {end}
+            {props.user.end_location.title}
           </div>
         </div>
       </button>

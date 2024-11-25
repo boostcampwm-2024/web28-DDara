@@ -1,9 +1,14 @@
 import { ButtonState } from '@/component/common/enums';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { ToolTypeContext } from '@/context/ToolTypeContext';
 
 export const useFloatingButton = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [toolType, setToolType] = useState<ButtonState>(ButtonState.CLOSE);
+  const { toolType, setToolType } = useContext(ToolTypeContext);
+
+  useEffect(() => {
+    setIsMenuOpen(toolType === ButtonState.OPEN);
+  }, [toolType]);
 
   const toggleMenu = () => {
     setIsMenuOpen(prev => !prev);

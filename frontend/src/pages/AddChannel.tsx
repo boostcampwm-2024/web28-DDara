@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { RouteSettingButton } from '@/component/routebutton/RouteSettingButton';
@@ -33,8 +33,8 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
  */
 
 export const AddChannel = () => {
+  const [channelName, setChannelName] = useState<string>('');
   const { users, setUsers } = useContext(UserContext);
-
   const { setFooterTitle, setFooterTransparency, setFooterActive } = useContext(FooterContext);
 
   /**
@@ -58,8 +58,8 @@ export const AddChannel = () => {
     const newUser: IUser = {
       id: users.length + 1,
       name: `사용자${users.length + 1}`,
-      start_location: { lat: 0, lng: 0 }, // 초기값으로 빈 좌표
-      end_location: { lat: 0, lng: 0 }, // 초기값으로 빈 좌표
+      start_location: { title: '', lat: 0, lng: 0 }, // 초기값으로 빈 좌표
+      end_location: { title: '', lat: 0, lng: 0 }, // 초기값으로 빈 좌표
       path: [], // 초기값으로 빈 배열
       marker_style: { color: '' }, // 초기값으로 빈 문자열
     };
@@ -71,9 +71,7 @@ export const AddChannel = () => {
       user.start_location.lat !== 0 &&
       user.start_location.lng !== 0 &&
       user.end_location.lat !== 0 &&
-      user.end_location.lng !== 0 &&
-      user.path.length > 0 &&
-      user.marker_style.color !== ''
+      user.end_location.lng !== 0
     );
   };
 
@@ -104,13 +102,17 @@ export const AddChannel = () => {
         name: `사용자${index + 1}`,
       }));
     setUsers(updatedUsers);
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
+  };
+
+  const handleChangeChannelName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChannelName(event.target.value);
   };
 
   useEffect(() => {
     setFooterTitle('제작 완료');
     setFooterTransparency(false);
     setFooterActive(buttonActiveType.PASSIVE);
+    console.log(users);
   }, []);
 
   useEffect(() => {
@@ -127,7 +129,11 @@ export const AddChannel = () => {
   return (
     <main className="flex h-full w-full flex-col items-center px-8 py-16">
       <Outlet />
-      <InputBox placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길" />
+      <InputBox
+        placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길"
+        onChange={handleChangeChannelName}
+        value={channelName}
+      />
       <Divider />
       <section className="w-full space-y-4">
         {users.map(user => (
