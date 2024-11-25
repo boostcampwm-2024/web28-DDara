@@ -3,13 +3,13 @@ import { MdFormatListBulleted } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
 import { buttonActiveType } from '@/component/layout/enumTypes';
-import { MapProviderForDraw } from '@/component/canvasWithMap/MapProviderForDraw.tsx';
 import { BottomSheet } from '@/component/bottomsheet/BottomSheet.tsx';
 import { Content } from '@/component/content/Content.tsx';
 import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
 import { AppConfig } from '@/lib/constants/commonConstants.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
+import { MapProviderForDraw } from '@/component/canvasWithMap/canvasWithMapforDraw/MapProviderForDraw';
 
 const contentData = [
   {
