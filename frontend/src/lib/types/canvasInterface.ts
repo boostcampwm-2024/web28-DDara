@@ -14,3 +14,8 @@ export interface ICanvasPoint {
   x: number;
   y: number;
 }
+
+export interface ICanvasScreenProps {
+  width: number;
+  height: number;
+}
