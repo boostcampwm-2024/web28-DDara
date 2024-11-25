@@ -56,10 +56,11 @@ export const AuthModal = (props: IAuthModalProps) => {
   const handleLoginClick = () => {
     doLogin(loginData.id, loginData.pw)
       .then(el => {
-        if (el.data?.token && el.data?.userId) {
-          saveLocalData(AppConfig.KEYS.LOGIN_TOKEN, el.data.token);
-          saveLocalData(AppConfig.KEYS.LOGIN_USER, el.data.userId);
+        if (el.data?.data.token && el.data?.data.userId) {
+          saveLocalData(AppConfig.KEYS.LOGIN_TOKEN, el.data?.data.token);
+          saveLocalData(AppConfig.KEYS.LOGIN_USER, el.data?.data.userId);
         }
+        props.onClose(); // 부모 컴포넌트의 로그인 상태를 변경
         window.location.reload();
       })
       .catch(() => {
