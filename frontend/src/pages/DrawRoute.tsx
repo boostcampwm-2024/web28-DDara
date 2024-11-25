@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '@/context/UserContext';
-import { MapProviderForDraw } from '@/component/canvasWithMap/MapProviderForDraw.tsx';
+import { MapProviderForDraw } from '@/component/canvasWithMap/canvasWithMapforDraw/MapProviderForDraw.tsx';
 
 export const DrawRoute = () => {
   const { users, setUsers } = useContext(UserContext);

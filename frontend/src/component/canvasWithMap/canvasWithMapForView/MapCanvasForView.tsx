@@ -1,29 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ButtonState } from '@/component/common/enums';
-import classNames from 'classnames';
-import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
-import { FloatingButton } from '@/component/common/floatingbutton/FloatingButton.tsx';
-import { useFloatingButton } from '@/hooks/useFloatingButton.ts';
-import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
-import { ICanvasPoint, IMapCanvasProps, IPoint } from '@/lib/types/canvasInterface.ts';
-import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
+import { ICanvasPoint, IMapCanvasViewProps, IPoint } from '@/lib/types/canvasInterface.ts';
 import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
+import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
 
-export const MapCanvasForDraw = ({
+export const MapCanvasForView = ({
+  lat,
+  lng,
+  otherLocations,
+  guests,
   width,
   height,
-  initialCenter,
-  initialZoom,
-}: IMapCanvasProps) => {
+}: IMapCanvasViewProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [projection, setProjection] = useState<naver.maps.MapSystemProjection | null>(null);
 
   const [map, setMap] = useState<naver.maps.Map | null>(null);
-
-  const [startMarker, setStartMarker] = useState<IPoint | null>(null);
-  const [endMarker, setEndMarker] = useState<IPoint | null>(null);
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -33,9 +26,6 @@ export const MapCanvasForDraw = ({
   const [isTouchZooming, setIsTouchZooming] = useState(false);
   const [touchStartDistance, setTouchStartDistance] = useState<number | null>(null);
   const [touchCenter, setTouchCenter] = useState<{ x: number; y: number } | null>(null);
-
-  const { isMenuOpen, toolType, toggleMenu, handleMenuClick } = useFloatingButton();
-  const { pathPoints, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
 
   const startImageRef = useRef<HTMLImageElement | null>(null);
   const endImageRef = useRef<HTMLImageElement | null>(null);
@@ -52,8 +42,8 @@ export const MapCanvasForDraw = ({
     if (!mapRef.current) return;
 
     const mapInstance = new naver.maps.Map(mapRef.current, {
-      center: new naver.maps.LatLng(initialCenter.lat, initialCenter.lng),
-      zoom: initialZoom,
+      center: new naver.maps.LatLng(lat, lng),
+      zoom: 10,
       minZoom: 7,
       maxBounds: new naver.maps.LatLngBounds(
         new naver.maps.LatLng(33.0, 124.5),
@@ -64,23 +54,27 @@ export const MapCanvasForDraw = ({
     setMap(mapInstance);
     setProjection(mapInstance.getProjection());
 
-    // TODO: 필요 없을 것으로 예상, 혹시나해서 남겨둔 것이니 필요 없다 판단되면 제거 필요
-    // naver.maps.Event.addListener(mapInstance, 'zoom_changed', () => {
-    //   setProjection(mapInstance.getProjection());
-    //   updateCanvasSize();
-    //   redrawCanvas();
-    // });
-    //
-    // naver.maps.Event.addListener(mapInstance, 'center_changed', () => {
-    //   setProjection(mapInstance.getProjection());
-    //   redrawCanvas();
-    // });
-
     // eslint-disable-next-line consistent-return
     return () => {
       mapInstance.destroy();
     };
   }, []);
+
+  const getMarkerColor = (token: string) => {
+    // 문자열 해싱을 통해 고유 숫자 생성
+    let hash = 0;
+    for (let i = 0; i < token.length; i++) {
+      hash = token.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    // 해시 값을 기반으로 RGB 값 생성
+    const r = (hash >> 16) & 0xff;
+    const g = (hash >> 8) & 0xff;
+    const b = hash & 0xff;
+
+    // RGB를 HEX 코드로 변환
+    return `rgb(${r}, ${g}, ${b})`;
+  };
 
   const latLngToCanvasPoint = (latLng: IPoint): ICanvasPoint | null => {
     if (!map || !projection || !canvasRef.current) return null;
@@ -91,22 +85,6 @@ export const MapCanvasForDraw = ({
     return {
       x: coord.x - (centerPoint.x - mapSize.width / 2),
       y: coord.y - (centerPoint.y - mapSize.height / 2),
-    };
-  };
-
-  const canvasPointToLatLng = (point: ICanvasPoint): IPoint | null => {
-    if (!map || !projection || !canvasRef.current) return null;
-    const mapSize = map.getSize();
-    const mapCenter = map.getCenter();
-    const centerPoint = projection.fromCoordToOffset(mapCenter);
-    const coordPoint = new naver.maps.Point(
-      point.x + (centerPoint.x - mapSize.width / 2),
-      point.y + (centerPoint.y - mapSize.height / 2),
-    );
-    const latLng = projection.fromOffsetToCoord(coordPoint);
-    return {
-      lat: latLng.y,
-      lng: latLng.x,
     };
   };
 
@@ -133,81 +111,72 @@ export const MapCanvasForDraw = ({
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    if (startMarker) {
-      const startPoint = latLngToCanvasPoint(startMarker);
-      if (startPoint && startImageRef.current) {
-        const markerSize = map.getZoom() * 2;
-        ctx.drawImage(
-          startImageRef.current,
-          startPoint.x - markerSize / 2,
-          startPoint.y - markerSize,
-          markerSize,
-          markerSize,
-        );
+    // TODO: 사용자 현재 위치 디자인 변경
+    if (lat && lng) {
+      const currentLocation = latLngToCanvasPoint({ lat, lng });
+      if (currentLocation) {
+        ctx.beginPath();
+        ctx.arc(currentLocation.x, currentLocation.y, 10, 0, 2 * Math.PI);
+        ctx.fillStyle = 'blue';
+        ctx.fill();
       }
     }
-    if (endMarker) {
-      const endPoint = latLngToCanvasPoint(endMarker);
-      if (endPoint && endImageRef.current) {
-        const markerSize = map.getZoom() * 2;
-        ctx.drawImage(
-          endImageRef.current,
-          endPoint.x - markerSize / 2,
-          endPoint.y - markerSize,
-          markerSize,
-          markerSize,
-        );
-      }
-    }
-    if (pathPoints?.length > 0) {
-      ctx.beginPath();
-      const firstPoint = latLngToCanvasPoint(pathPoints[0]);
 
-      if (firstPoint) {
-        ctx.moveTo(firstPoint.x, firstPoint.y);
-        for (let i = 1; i < pathPoints?.length; i++) {
-          const point = latLngToCanvasPoint(pathPoints[i]);
-          if (point) {
-            ctx.lineTo(point.x, point.y);
+    if (otherLocations) {
+      otherLocations.forEach(({ location, token }) => {
+        const markerColor = getMarkerColor(token);
+        const currentLocation = latLngToCanvasPoint(location);
+        if (currentLocation) {
+          ctx.beginPath();
+          ctx.arc(currentLocation.x, currentLocation.y, 10, 0, 2 * Math.PI);
+          ctx.fillStyle = markerColor;
+          ctx.fill();
+        }
+      });
+    }
+
+    if (guests) {
+      guests.forEach(({ startPoint, endPoint, paths }) => {
+        const startLoctaion = latLngToCanvasPoint(startPoint);
+        if (startLoctaion && startImageRef.current) {
+          const markerSize = map.getZoom() * 2;
+          ctx.drawImage(
+            startImageRef.current,
+            startLoctaion.x - markerSize / 2,
+            startLoctaion.y - markerSize,
+            markerSize,
+            markerSize,
+          );
+        }
+        const endLocation = latLngToCanvasPoint(endPoint);
+        if (endLocation && endImageRef.current) {
+          const markerSize = map.getZoom() * 2;
+          ctx.drawImage(
+            endImageRef.current,
+            endLocation.x - markerSize / 2,
+            endLocation.y - markerSize,
+            markerSize,
+            markerSize,
+          );
+        }
+        if (paths?.length > 0) {
+          ctx.beginPath();
+          const firstPoint = latLngToCanvasPoint(paths[0]);
+
+          if (firstPoint) {
+            ctx.moveTo(firstPoint.x, firstPoint.y);
+            for (let i = 1; i < paths?.length; i++) {
+              const point = latLngToCanvasPoint(paths[i]);
+              if (point) {
+                ctx.lineTo(point.x, point.y);
+              }
+            }
+            ctx.stroke();
           }
         }
-        ctx.stroke();
-      }
+      });
     }
   };
-
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!map || !canvasRef.current) return;
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const clickedPoint = canvasPointToLatLng({ x, y });
-
-    if (!clickedPoint) return;
-    switch (toolType) {
-      case ButtonState.START_MARKER:
-        setStartMarker(clickedPoint);
-        break;
-      case ButtonState.DESTINATION_MARKER:
-        setEndMarker(clickedPoint);
-        break;
-      case ButtonState.LINE_DRAWING:
-        addPoint(clickedPoint);
-        break;
-      default:
-        break;
-    }
-    redrawCanvas();
-  };
-
-  // TODO: 줌인 줌아웃 버튼으로도 접근 가능하도록 추가
-  // const handleZoomChange = (zoomChange: number) => {
-  //   if (!map) return;
-  //   const currentZoom = map.getZoom();
-  //   map.setZoom(currentZoom + zoomChange);
-  //   redrawCanvas();
-  // };
 
   const handleWheel = (e: React.WheelEvent) => {
     if (!map) return;
@@ -219,33 +188,6 @@ export const MapCanvasForDraw = ({
 
     redrawCanvas();
   };
-
-  // TODO: 줌인 줌아웃 버튼으로도 접근 가능하도록 추가
-  // const handleMapPan = (direction: 'up' | 'down' | 'left' | 'right') => {
-  //   if (!map) return;
-  //   const moveAmount = 100;
-  //   let point: naver.maps.Point;
-  //
-  //   switch (direction) {
-  //     case 'up':
-  //       point = new naver.maps.Point(0, -moveAmount);
-  //       break;
-  //     case 'down':
-  //       point = new naver.maps.Point(0, moveAmount);
-  //       break;
-  //     case 'left':
-  //       point = new naver.maps.Point(-moveAmount, 0);
-  //       break;
-  //     case 'right':
-  //       point = new naver.maps.Point(moveAmount, 0);
-  //       break;
-  //     default:
-  //       return;
-  //   }
-  //
-  //   map.panBy(point);
-  //   redrawCanvas();
-  // };
 
   /**
    * @description 마우스 클릭을 시작했을 때 이벤트 (onMouseDown)
@@ -373,7 +315,7 @@ export const MapCanvasForDraw = ({
 
   useEffect(() => {
     redrawCanvas();
-  }, [startMarker, endMarker, pathPoints, map, undoStack, redoStack]);
+  }, [guests, otherLocations, lat, lng, map]);
 
   return (
     <div
@@ -386,33 +328,7 @@ export const MapCanvasForDraw = ({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
-      {toolType === ButtonState.LINE_DRAWING ? (
-        <div className="z-1000 absolute left-1/2 top-[10px] flex -translate-x-1/2 transform gap-2">
-          <button
-            type="button"
-            onClick={undo}
-            disabled={undoStack.length === 0}
-            className={classNames(
-              'h-[35px] w-[35px]',
-              undoStack.length === 0 ? 'cursor-not-allowed opacity-50' : '',
-            )}
-          >
-            <MdArrowCircleLeft size={24} />
-          </button>
-          <button
-            type="button"
-            onClick={redo}
-            disabled={redoStack.length === 0}
-            className={classNames(
-              'h-[35px] w-[35px]',
-              redoStack.length === 0 ? 'cursor-not-allowed opacity-50' : '',
-            )}
-          >
-            <MdArrowCircleRight size={24} />
-          </button>
-        </div>
-      ) : null}
+      <div ref={mapRef} id="map" style={{ width, height }} />
       <canvas
         ref={canvasRef}
         style={{
@@ -421,41 +337,7 @@ export const MapCanvasForDraw = ({
           left: 0,
           pointerEvents: 'auto',
         }}
-        onClick={handleCanvasClick}
       />
-      <div className="relative z-10 flex gap-2">
-        <FloatingButton
-          isMenuOpen={isMenuOpen}
-          toggleMenu={toggleMenu}
-          toolType={toolType}
-          handleMenuClick={handleMenuClick}
-        />
-      </div>
-
-      {/* TODO: 줌인 줌아웃 버튼으로도 접근 가능하도록 추가 */}
-      {/* <div className="absolute left-10 top-10 z-10 flex gap-2"> */}
-      {/*  <div> */}
-      {/*    {isTouchZooming ? 'true' : 'false'} {touchStartDistance} */}
-      {/*  </div> */}
-      {/*  <button onClick={() => handleZoomChange(1)} className="rounded bg-green-500 p-2"> */}
-      {/*    Zoom In */}
-      {/*  </button> */}
-      {/*  <button onClick={() => handleZoomChange(-1)} className="rounded bg-red-500 p-2"> */}
-      {/*    Zoom Out */}
-      {/*  </button> */}
-      {/*  <button onClick={() => handleMapPan('up')} className="rounded bg-blue-500 p-2"> */}
-      {/*    Up */}
-      {/*  </button> */}
-      {/*  <button onClick={() => handleMapPan('down')} className="rounded bg-blue-500 p-2"> */}
-      {/*    Down */}
-      {/*  </button> */}
-      {/*  <button onClick={() => handleMapPan('left')} className="rounded bg-blue-500 p-2"> */}
-      {/*    Left */}
-      {/*  </button> */}
-      {/*  <button onClick={() => handleMapPan('right')} className="rounded bg-blue-500 p-2"> */}
-      {/*    Right */}
-      {/*  </button> */}
-      {/* </div> */}
     </div>
   );
 };
