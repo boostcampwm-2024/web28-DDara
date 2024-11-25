@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useEffect } from 'react';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IUser, UserContext } from '@/context/UserContext';
@@ -6,20 +6,21 @@ import { SearchBox } from '@/component/searchbox/SearchBox';
 import { ToolTypeProvider } from '@/context/ToolTypeContext';
 import { buttonActiveType } from '@/component/layout/enumTypes';
 import { MapProviderForDraw } from '@/component/canvasWithMap/MapProviderForDraw';
+import { CurrentUserContext } from '@/context/CurrentUserContext';
 
 export const DrawRoute = () => {
   const { users, setUsers } = useContext(UserContext);
   const { setFooterTitle, setFooterActive, setFooterOnClick } = useContext(FooterContext);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const params = useParams<Record<string, string | undefined>>(); // userName을 URL 파라미터로 가져옴
   const navigate = useNavigate();
 
   const goToAddChannelRoute = () => {
     navigate(`/add-channel/`);
   };
-
-  const currentUser = useMemo(() => {
+  const getUser = () => {
     return users.find(user => user.name === params.user);
-  }, [users, params.user]);
+  };
 
   const resetMockData = () => {
     if (currentUser) {
@@ -63,6 +64,10 @@ export const DrawRoute = () => {
     setFooterTitle('사용자 경로 추가 완료');
     setFooterOnClick(goToAddChannelRoute);
     setFooterActive(buttonActiveType.PASSIVE);
+    const user = getUser();
+    if (user) {
+      setCurrentUser(user);
+    }
   }, []);
 
   if (!currentUser) {
@@ -73,7 +78,7 @@ export const DrawRoute = () => {
   return (
     <ToolTypeProvider>
       <div className="flex h-full w-full flex-col py-20">
-        <SearchBox user={currentUser} />
+        <SearchBox />
         <button className="mb-4 border-2 p-2" onClick={resetMockData}>
           Mock 데이터 초기화
         </button>

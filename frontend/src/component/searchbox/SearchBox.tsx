@@ -1,7 +1,8 @@
 import { ToolTypeContext } from '@/context/ToolTypeContext';
-import { IUser, UserContext } from '@/context/UserContext';
+import { UserContext } from '@/context/UserContext';
 import React, { useContext, useState } from 'react';
 import { IoMdClose, IoMdSearch } from 'react-icons/io';
+import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { ButtonState } from '../common/enums';
 
 interface ISearchResultItem {
@@ -12,11 +13,7 @@ interface ISearchResultItem {
   lng: number;
 }
 
-interface ISearchBox {
-  user: IUser | undefined;
-}
-
-export const SearchBox = (props: ISearchBox) => {
+export const SearchBox = () => {
   const [inputValue, setInputValue] = useState(''); // 검색 입력값 상태
   const [searchResults, setSearchResults] = useState<ISearchResultItem[]>([]); // 검색 결과 상태
   const [loading, setLoading] = useState(false); // 로딩 상태
@@ -24,9 +21,10 @@ export const SearchBox = (props: ISearchBox) => {
 
   const { users, setUsers } = useContext(UserContext);
   const { toolType } = useContext(ToolTypeContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
   const updateUser = (title: string, lat: number, lng: number) => {
-    const targetUser = props.user;
+    const targetUser = currentUser;
     const updatedUsers = users.map(user => {
       if (user === targetUser) {
         // toolType에 따라 start_location 또는 end_location을 업데이트
