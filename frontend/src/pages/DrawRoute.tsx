@@ -7,6 +7,7 @@ import { ToolTypeProvider } from '@/context/ToolTypeContext';
 import { buttonActiveType } from '@/component/layout/enumTypes';
 import { MapProviderForDraw } from '@/component/canvasWithMap/MapProviderForDraw';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
+import { getAddressFromCoordinates } from '@/utils/map/getAddress';
 
 export const DrawRoute = () => {
   const { users, setUsers } = useContext(UserContext);
@@ -75,20 +76,60 @@ export const DrawRoute = () => {
   }, []);
 
   useEffect(() => {
+    console.log(currentUser);
     if (currentUser) {
       setFooterOnClick(() => {
         if (currentUser) {
-          console.log('Footer 버튼 클릭 시 currentUser:', currentUser);
+          const updateUserLocation = async () => {
+            const updatedUser = { ...currentUser }; // currentUser 복사
 
-          const updatedUsers = users.map(user => {
-            if (user.name === currentUser.name) {
-              return { ...user, ...currentUser }; // currentUser 정보로 업데이트
+            // start_location.title이 비어 있으면 주소를 업데이트
+            if (
+              !updatedUser.start_location.title &&
+              updatedUser.start_location.lat &&
+              updatedUser.start_location.lng
+            ) {
+              try {
+                const startAddress = await getAddressFromCoordinates(
+                  updatedUser.start_location.lat,
+                  updatedUser.start_location.lng,
+                );
+                updatedUser.start_location.title = startAddress; // 주소 업데이트
+              } catch (error) {
+                console.error('Error fetching start location address:', error);
+              }
             }
-            return user;
-          });
 
-          setUsers(updatedUsers); // 업데이트된 users 배열 설정
-          goToAddChannelRoute(); // 경로 추가 페이지로 이동
+            // end_location.title이 비어 있으면 주소를 업데이트
+            if (
+              !updatedUser.end_location.title &&
+              updatedUser.end_location.lat &&
+              updatedUser.end_location.lng
+            ) {
+              try {
+                const endAddress = await getAddressFromCoordinates(
+                  updatedUser.end_location.lat,
+                  updatedUser.end_location.lng,
+                );
+                updatedUser.end_location.title = endAddress; // 주소 업데이트
+              } catch (error) {
+                console.error('Error fetching end location address:', error);
+              }
+            }
+
+            // user 정보를 업데이트
+            const updatedUsers = users.map(user => {
+              if (user.name === updatedUser.name) {
+                return updatedUser; // 주소가 업데이트된 currentUser로 업데이트
+              }
+              return user;
+            });
+
+            setUsers(updatedUsers); // users 배열 업데이트
+            goToAddChannelRoute(); // 경로 추가 페이지로 이동
+          };
+
+          updateUserLocation(); // 위치 업데이트 함수 호출
         }
       });
     }
@@ -99,7 +140,6 @@ export const DrawRoute = () => {
       <div className="flex h-full w-full flex-col py-20">
         <SearchBox />
         <div style={{ position: 'relative', padding: '1rem' }}>
-          {/* TODO: 동율님 mock 데이터 관련 버튼 없애고 나서, height={window.innerHeight - 180} 으로 변경해주시면 됩니다! */}
           <MapProviderForDraw width={window.innerWidth - 32} height={window.innerHeight - 210} />
         </div>
       </div>

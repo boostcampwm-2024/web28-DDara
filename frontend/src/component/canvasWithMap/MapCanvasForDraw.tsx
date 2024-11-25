@@ -10,7 +10,6 @@ import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
 import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
-import { getAddressFromCoordinates } from '@/utils/map/getAddress';
 import { ToolDescription } from '../tooldescription/ToolDescription';
 
 export const MapCanvasForDraw = ({
@@ -54,34 +53,29 @@ export const MapCanvasForDraw = ({
   }, []);
 
   useEffect(() => {
-    const updateUser = async () => {
-      const startLat = startMarker?.lat ?? 0;
-      const startLng = startMarker?.lng ?? 0;
-      const endLat = endMarker?.lat ?? 0;
-      const endLng = endMarker?.lng ?? 0;
-      console.log('Start coordinates:', startLat, startLng);
-      console.log('End coordinates:', endLat, endLng);
-      const startTitle = await getAddressFromCoordinates(startLat, startLng);
-      const endTitle = await getAddressFromCoordinates(endLat, endLng);
-
-      setCurrentUser(prevUser => ({
-        ...prevUser,
-        start_location: {
-          title: startTitle,
-          lat: startMarker?.lat ?? 0,
-          lng: startMarker?.lng ?? 0,
-        },
-        end_location: {
-          title: endTitle,
-          lat: endMarker?.lat ?? 0,
-          lng: endMarker?.lng ?? 0,
-        },
-        path: pathPoints, // 경로 포인트들
-      }));
+    const updateUser = () => {
+      setCurrentUser(prevUser => {
+        return {
+          ...prevUser,
+          start_location: {
+            ...prevUser.start_location, // 기존 start_location 유지
+            title: prevUser.start_location.title ?? '',
+            lat: startMarker?.lat ?? prevUser.start_location.lat,
+            lng: startMarker?.lng ?? prevUser.start_location.lng,
+          },
+          end_location: {
+            ...prevUser.end_location, // 기존 end_location 유지
+            title: prevUser.end_location.title ?? '',
+            lat: endMarker?.lat ?? prevUser.end_location.lat,
+            lng: endMarker?.lng ?? prevUser.end_location.lng,
+          },
+          path: pathPoints, // 경로 포인트들
+        };
+      });
     };
 
-    updateUser(); // 비동기 함수 호출
-  }, [startMarker, endMarker, pathPoints, setCurrentUser]);
+    updateUser(); // 상태 업데이트 함수 호출
+  }, [startMarker, endMarker, pathPoints]); // 필요한 의존성만 포함
 
   useEffect(() => {
     if (!mapRef.current) return;
