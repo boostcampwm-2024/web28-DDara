@@ -55,3 +55,27 @@ export const getUserChannels = (userId: string): Promise<ResponseDto<getUserChan
   };
   return new Promise(promiseFn);
 };
+
+export const getChannelInfo = (userId: string): Promise<ResponseDto<createChannelReqEntity>> => {
+  const promiseFn = (
+    fnResolve: (value: ResponseDto<createChannelReqEntity>) => void,
+    fnReject: (reason?: any) => void,
+  ) => {
+    const apiClient = getApiClient();
+    apiClient
+      .get(`/channel/${userId}`)
+      .then(res => {
+        if (res.status !== 200) {
+          console.error(res);
+          fnReject(`msg.${res}`);
+        } else {
+          fnResolve(new ResponseDto<createChannelReqEntity>(res.data));
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        fnReject('msg.RESULT_FAILED');
+      });
+  };
+  return new Promise(promiseFn);
+};

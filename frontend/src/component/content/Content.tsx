@@ -1,4 +1,5 @@
 import { MdGroup, MdMoreVert } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 interface IContentProps {
   title: string;
@@ -39,9 +40,12 @@ export const Content = (props: IContentProps) => {
     hour: '2-digit',
     minute: '2-digit',
   });
+  const navigate = useNavigate();
   return (
-    <a
-      href={`/${props.link}`}
+    <div
+      onClick={() => {
+        navigate(props.link);
+      }}
       className="relative flex w-full flex-row items-center justify-between px-4 py-5"
     >
       <div>
@@ -64,6 +68,6 @@ export const Content = (props: IContentProps) => {
         </button>
         {/* {isMenuOpen && (드롭다운 메뉴)} */}
       </div>
-    </a>
+    </div>
   );
 };

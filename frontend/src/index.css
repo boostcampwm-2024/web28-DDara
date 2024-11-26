@@ -9,7 +9,10 @@
    License: none (public domain)
 */
 
-*,
+* {
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+}
 *::before,
 *::after {
   margin: 0;
@@ -62,4 +65,10 @@ q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+span, a, img {
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none
 }
