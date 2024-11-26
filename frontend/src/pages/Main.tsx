@@ -2,7 +2,7 @@ import { Fragment, useContext, useEffect, useState } from 'react';
 import { getUserLocation } from '@/hooks/getUserLocation';
 import { BottomSheet } from '@/component/bottomsheet/BottomSheet';
 import { Content } from '@/component/content/Content';
-import { MdFormatListBulleted } from 'react-icons/md';
+import { MdFormatListBulleted, MdLogout } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
 import { NaverMap } from '@/component/maps/NaverMapSample.tsx';
@@ -112,7 +112,7 @@ export const Main = () => {
         </button>
         {isUserLoggedIn && (
           <button type="button" className="ml-auto text-gray-700" onClick={handleLogout}>
-            로그아웃
+            <MdLogout size={24} />
           </button>
         )}
       </header>
@@ -143,7 +143,12 @@ export const Main = () => {
         <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#FFFFFF">
           {channels.map(item => (
             <Fragment key={item.id}>
-              <Content title={item.name} person={item.person} link={item.id} />
+              <Content
+                title={item.name}
+                link={item.id}
+                person={item.guest_count}
+                time={item.generated_at}
+              />
               <hr className="my-2" />
             </Fragment>
           ))}
@@ -151,7 +156,7 @@ export const Main = () => {
       ) : (
         <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#F1F1F1F2">
           <div
-            className="flex h-full cursor-pointer items-center justify-center text-center"
+            className="absolute left-1/2 top-[30%] flex -translate-x-1/2 transform cursor-pointer flex-col text-center"
             onClick={handleLoginRequest}
           >
             <div className="rounded-lg p-6">

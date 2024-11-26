@@ -52,6 +52,8 @@ export class channelListEntity {
   name: string | undefined;
 
   generated_at: string | undefined;
+
+  guest_count: number | undefined;
 }
 
 export class getUserChannelsResEntity {
