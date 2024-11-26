@@ -139,27 +139,29 @@ export const Main = () => {
         )}
       </main>
 
-      <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT}>
-        {isUserLoggedIn ? (
-          channels.map(item => (
+      {isUserLoggedIn ? (
+        <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#FFFFFF">
+          {channels.map(item => (
             <Fragment key={item.id}>
-              <Content title={item.name} time={item.time} person={item.person} link={item.link} />
+              <Content title={item.name} person={item.person} link={item.id} />
               <hr className="my-2" />
             </Fragment>
-          ))
-        ) : (
+          ))}
+        </BottomSheet>
+      ) : (
+        <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#F1F1F1F2">
           <div
-            className="flex h-full cursor-pointer items-center justify-center text-center text-gray-500"
+            className="flex h-full cursor-pointer items-center justify-center text-center"
             onClick={handleLoginRequest}
           >
-            로그인을 진행하여
-            <br />
-            더 많은 기능을
-            <br />
-            사용해보세요
+            <div className="rounded-lg p-6">
+              <p className="text-grayscale-175 mb-5 text-lg font-normal">로그인을 진행하여</p>
+              <p className="text-grayscale-175 mb-5 text-lg font-normal">더 많은 기능을</p>
+              <p className="text-grayscale-175 text-lg font-normal">사용해보세요</p>
+            </div>
           </div>
-        )}
-      </BottomSheet>
+        </BottomSheet>
+      )}
 
       {/* 로그인 모달 */}
       <AuthModal isOpen={showLoginModal} onClose={handleCloseLoginModal} type="login" />
