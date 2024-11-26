@@ -83,11 +83,7 @@ export const DrawRoute = () => {
             const updatedUser = { ...currentUser }; // currentUser 복사
 
             // start_location.title이 비어 있으면 주소를 업데이트
-            if (
-              !updatedUser.start_location.title &&
-              updatedUser.start_location.lat &&
-              updatedUser.start_location.lng
-            ) {
+            if (!updatedUser.start_location.title) {
               try {
                 const startAddress = await getAddressFromCoordinates(
                   updatedUser.start_location.lat,
@@ -100,11 +96,7 @@ export const DrawRoute = () => {
             }
 
             // end_location.title이 비어 있으면 주소를 업데이트
-            if (
-              !updatedUser.end_location.title &&
-              updatedUser.end_location.lat &&
-              updatedUser.end_location.lng
-            ) {
+            if (!updatedUser.end_location.title) {
               try {
                 const endAddress = await getAddressFromCoordinates(
                   updatedUser.end_location.lat,

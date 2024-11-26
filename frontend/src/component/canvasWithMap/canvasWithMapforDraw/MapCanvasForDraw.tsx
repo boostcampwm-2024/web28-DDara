@@ -217,9 +217,27 @@ export const MapCanvasForDraw = ({
     if (!clickedPoint) return;
     switch (toolType) {
       case ButtonState.START_MARKER:
+        setCurrentUser(prevUser => ({
+          ...prevUser,
+          start_location: {
+            ...prevUser.start_location,
+            title: '', // title을 빈 문자열로 초기화 -> 검색창에 보이게 하려고
+            lat: clickedPoint.lat,
+            lng: clickedPoint.lng,
+          },
+        }));
         setStartMarker(clickedPoint);
         break;
       case ButtonState.DESTINATION_MARKER:
+        setCurrentUser(prevUser => ({
+          ...prevUser,
+          end_location: {
+            ...prevUser.end_location,
+            title: '', // title을 빈 문자열로 초기화 -> 검색창에 보이게 하려고
+            lat: clickedPoint.lat,
+            lng: clickedPoint.lng,
+          },
+        }));
         setEndMarker(clickedPoint);
         break;
       case ButtonState.LINE_DRAWING:
@@ -385,9 +403,31 @@ export const MapCanvasForDraw = ({
     }
   };
 
-  const handleMarker = (point: IPoint) => {
-    if (toolType === ButtonState.START_MARKER) setStartMarker(point);
-    setEndMarker(point);
+  const handleCreateMarker = (point: IPoint) => {
+    if (toolType === ButtonState.START_MARKER) {
+      setStartMarker(point);
+      setCurrentUser(prevUser => ({
+        ...prevUser,
+        start_location: {
+          ...prevUser.start_location,
+          title: '',
+        },
+      }));
+    } else {
+      setEndMarker(point);
+      setCurrentUser(prevUser => ({
+        ...prevUser,
+        end_location: {
+          ...prevUser.end_location,
+          title: '',
+        },
+      }));
+    }
+  };
+
+  const handleDeleteMarker = () => {
+    if (toolType === ButtonState.START_MARKER) setStartMarker(null);
+    else setEndMarker(null);
   };
 
   useEffect(() => {
@@ -423,7 +463,12 @@ export const MapCanvasForDraw = ({
     >
       {(toolType === ButtonState.START_MARKER || toolType === ButtonState.DESTINATION_MARKER) && (
         <div className="relative">
-          <SearchBox setMarker={handleMarker} />
+          <SearchBox
+            setMarker={handleCreateMarker}
+            deleteMarker={handleDeleteMarker}
+            startMarker={startMarker}
+            endMarker={endMarker}
+          />
         </div>
       )}
       <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
