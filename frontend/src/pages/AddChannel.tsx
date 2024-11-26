@@ -156,7 +156,7 @@ export const AddChannel = () => {
         <section className="flex w-full justify-end">
           <button
             onClick={addUser}
-            className="bg-grayscale-25 border-gray-75 h-8 w-64 rounded border p-2 text-xs"
+            className="bg-grayscale-25 border-gray-75 font-nomal mr-8 h-8 w-64 rounded border p-2 text-xs"
           >
             사용자 추가
           </button>

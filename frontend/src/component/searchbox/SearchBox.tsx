@@ -85,7 +85,7 @@ export const SearchBox = () => {
       if (inputValue.trim()) {
         handleSearch();
       }
-    }, 1000);
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [inputValue]);

@@ -19,7 +19,7 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
   return (
     <div className="flex flex-row items-center justify-center space-x-2" key={props.user.id}>
       <div className="shadow-userName border-grayscale-400 flex h-11 w-16 items-center justify-center rounded-lg border text-xs">
-        {props.user.name}
+        <p className="font-nomal">{props.user.name}</p>
       </div>
       <button onClick={() => goToUserDrawRoute(props.user.name)}>
         <div
