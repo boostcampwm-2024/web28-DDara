@@ -1,7 +1,11 @@
 export class LoginResEntity {
-  token: string | undefined;
-
-  userId: string | undefined;
+  data: {
+    token: string | undefined;
+    userId: string | undefined;
+  } = {
+    token: undefined,
+    userId: undefined,
+  };
 }
 
 export class RegisterResEntity {
