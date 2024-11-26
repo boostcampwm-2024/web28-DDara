@@ -1,23 +1,24 @@
-export interface ILocation {
-  lat: number | undefined;
-  lng: number | undefined;
+export interface IPoint {
+  lat: number;
+  lng: number;
 }
 
 export interface IGuestMarkerStyle {
-  color: string | undefined;
+  color: string;
 }
 
 export interface IGuest {
-  id: string | undefined;
-  name: string | undefined;
-  start_location: ILocation | undefined;
-  end_location: ILocation | undefined;
-  path: ILocation[] | undefined;
-  marker_style: IGuestMarkerStyle | undefined;
+  id: string;
+  name: string;
+  startPoint: IPoint;
+  endPoint: IPoint;
+  paths: IPoint[];
+  markerStyle: IGuestMarkerStyle;
 }
 
-export interface IUserChannelInfo {
-  host_id: string | undefined;
-  name: string | undefined;
-  guests: IGuest[] | undefined;
+export interface IChannelInfo {
+  channelId: string;
+  hostId: string;
+  name: string;
+  guests: IGuest[];
 }

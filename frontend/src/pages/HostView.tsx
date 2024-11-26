@@ -1,36 +1,25 @@
 import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
-import { useContext, useEffect, useState } from 'react';
-import { IGuest, IUserChannelInfo } from '@/types/channel.types.ts';
+import { ReactNode, useContext, useEffect, useState } from 'react';
+import { IGuest, IChannelInfo } from '@/types/channel.types.ts';
 import { getChannelInfo } from '@/api/channel.api.ts';
 import { useLocation } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { IGuestDataInMapProps, IPoint } from '@/lib/types/canvasInterface.ts';
+import { getChannelResEntity, guestEntity } from '@/api/dto/channel.dto.ts';
 
 export const HostView = () => {
-  const [userChannels, setUserChannels] = useState<IUserChannelInfo>();
+  const [channelInfo, setChannelInfo] = useState<IChannelInfo>();
   const [userNames, setUserNames] = useState<string[]>(['사용자 1']);
-  const [guestList, setGuestList] = useState<IGuest[]>([]);
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
-
-  const [component, setComponent] = useState<any>();
+  const [component, setComponent] = useState<ReactNode>();
 
   const headerContext = useContext(HeaderContext);
 
   const location = useLocation();
 
-  const fetchChannelInfo = (id: string) => {
-    getChannelInfo(id)
-      .then(res => {
-        if (res.data) setUserChannels(res.data as IUserChannelInfo);
-        setGuestList(res.data?.guests as IGuest[]);
-      })
-      .catch((error: any) => {
-        console.error(error);
-      });
-  };
-
-  const transformType = (props: IGuest) => {
+  const transformTypeGuestEntityToIGuest = (props: guestEntity): IGuest => {
     return {
+      id: props.id ?? '',
       name: props.name ?? '',
       startPoint: {
         lat: props.start_location?.lat ?? 0,
@@ -47,6 +36,29 @@ export const HostView = () => {
     };
   };
 
+  const transformTypeFromResToInfo = (props: getChannelResEntity): IChannelInfo => {
+    const guests = props.guests?.map(guest => transformTypeGuestEntityToIGuest(guest)) ?? [];
+
+    return {
+      name: props.name ?? '',
+      hostId: props.host_id ?? '',
+      channelId: props.id ?? '',
+      guests,
+    };
+  };
+
+  const fetchChannelInfo = (userId: string) => {
+    getChannelInfo(userId)
+      .then(res => {
+        if (!res.data) throw new Error('🚀 Fetch Error: responsed undefined');
+        const transfromedData = transformTypeFromResToInfo(res.data);
+        setChannelInfo(transfromedData);
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
+  };
+
   useEffect(() => {
     headerContext.setRightButton('dropdown');
     headerContext.setLeftButton('back');
@@ -56,14 +68,18 @@ export const HostView = () => {
   }, []);
 
   useEffect(() => {
-    if (userChannels?.guests) {
-      const names = userChannels.guests.filter(Boolean).map(guest => guest.name!);
+    if (channelInfo?.guests) {
+      const names = channelInfo.guests.filter(Boolean).map(guest => guest.name!);
       setUserNames(names);
-      guestList.map(el => setMapProps(prev => [...prev, transformType(el)]));
-      // guestList.map(el => mapProps.push(transformType(el)));
-      // console.log(mapProps);
+      channelInfo.guests?.map(guest =>
+        setMapProps(prev => [...prev, guest as IGuestDataInMapProps]),
+      );
     }
-  }, [userChannels]);
+  }, [channelInfo]);
+
+  useEffect(() => {
+    headerContext.setItems(userNames);
+  }, [userNames]);
 
   useEffect(() => {
     if (mapProps.length > 1) {
@@ -77,14 +93,9 @@ export const HostView = () => {
         />,
       );
     }
-    // console.log(mapProps);
   }, [mapProps]);
 
-  useEffect(() => {
-    headerContext.setItems(userNames);
-  }, [userNames]);
-
-  // TODO: geoCoding API를 이용해서 현재 위치나 시작위치를 기반으로 자동 좌표 설정 구현 (현재: 하드코딩)
-  // return <CanvasWithMap lat={37.3595704} lng={127.105399} zoom={21} mapType="naver" allowCanvas />;
-  return <div className="absolute h-full w-screen flex-grow overflow-hidden">{component}</div>;
+  return (
+    <article className="absolute h-full w-screen flex-grow overflow-hidden">{component}</article>
+  );
 };

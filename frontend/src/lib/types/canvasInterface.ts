@@ -30,6 +30,7 @@ export interface IMarkerStyle {
 }
 
 export interface IGuestDataInMapProps {
+  id: string;
   name: string;
   startPoint: IPoint;
   endPoint: IPoint;
