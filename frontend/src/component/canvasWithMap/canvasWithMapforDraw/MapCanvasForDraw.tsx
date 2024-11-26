@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ButtonState } from '@/component/common/enums.ts';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { ButtonState } from '@/component/common/enums';
 import classNames from 'classnames';
 import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
 import { FloatingButton } from '@/component/common/floatingbutton/FloatingButton.tsx';
@@ -9,6 +9,8 @@ import { ICanvasPoint, IMapCanvasProps, IPoint } from '@/lib/types/canvasInterfa
 import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
 import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
+import { CurrentUserContext } from '@/context/CurrentUserContext';
+import { ToolDescription } from '@/component/tooldescription/ToolDescription';
 
 export const MapCanvasForDraw = ({
   width,
@@ -37,6 +39,8 @@ export const MapCanvasForDraw = ({
   const { isMenuOpen, toolType, toggleMenu, handleMenuClick } = useFloatingButton();
   const { pathPoints, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
 
+  const { setCurrentUser } = useContext(CurrentUserContext);
+
   const startImageRef = useRef<HTMLImageElement | null>(null);
   const endImageRef = useRef<HTMLImageElement | null>(null);
 
@@ -47,6 +51,31 @@ export const MapCanvasForDraw = ({
     endImageRef.current = new Image();
     endImageRef.current.src = endmarker;
   }, []);
+
+  useEffect(() => {
+    const updateUser = () => {
+      setCurrentUser(prevUser => {
+        return {
+          ...prevUser,
+          start_location: {
+            ...prevUser.start_location, // 기존 start_location 유지
+            title: prevUser.start_location.title ?? '',
+            lat: startMarker?.lat ?? prevUser.start_location.lat,
+            lng: startMarker?.lng ?? prevUser.start_location.lng,
+          },
+          end_location: {
+            ...prevUser.end_location, // 기존 end_location 유지
+            title: prevUser.end_location.title ?? '',
+            lat: endMarker?.lat ?? prevUser.end_location.lat,
+            lng: endMarker?.lng ?? prevUser.end_location.lng,
+          },
+          path: pathPoints, // 경로 포인트들
+        };
+      });
+    };
+
+    updateUser(); // 상태 업데이트 함수 호출
+  }, [startMarker, endMarker, pathPoints]); // 필요한 의존성만 포함
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -430,6 +459,9 @@ export const MapCanvasForDraw = ({
           toolType={toolType}
           handleMenuClick={handleMenuClick}
         />
+      </div>
+      <div className="relative flex">
+        <ToolDescription />
       </div>
 
       {/* TODO: 줌인 줌아웃 버튼으로도 접근 가능하도록 추가 */}
