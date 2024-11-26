@@ -25,12 +25,16 @@ export interface IOtherLiveLocations {
   token: string;
 }
 
+export interface IMarkerStyle {
+  color: string;
+}
+
 export interface IGuestDataInMapProps {
-  guestName: string;
-  guestUUID: string;
+  name: string;
   startPoint: IPoint;
   endPoint: IPoint;
   paths: IPoint[];
+  markerStyle: IMarkerStyle;
 }
 
 export interface IMapCanvasViewProps {

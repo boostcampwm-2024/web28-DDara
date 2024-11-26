@@ -8,6 +8,7 @@ export interface IGuestMarkerStyle {
 }
 
 export interface IGuest {
+  id: string | undefined;
   name: string | undefined;
   start_location: ILocation | undefined;
   end_location: ILocation | undefined;
