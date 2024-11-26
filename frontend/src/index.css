@@ -9,7 +9,10 @@
    License: none (public domain)
 */
 
-*,
+* {
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+}
 *::before,
 *::after {
   margin: 0;
