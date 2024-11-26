@@ -1,6 +1,5 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { MdFormatListBulleted, MdLogout } from 'react-icons/md';
-import { MdFormatListBulleted } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
 import { buttonActiveType } from '@/component/layout/enumTypes';
@@ -9,12 +8,10 @@ import { AuthModal } from '@/component/authmodal/AuthModal';
 import { getUserChannels } from '@/api/channel.api.ts';
 import { BottomSheet } from '@/component/bottomsheet/BottomSheet.tsx';
 import { Content } from '@/component/content/Content.tsx';
-import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
 import { AppConfig } from '@/lib/constants/commonConstants.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
-
 
 export const Main = () => {
   const { setFooterTitle, setFooterTransparency, setFooterOnClick, setFooterActive } =
