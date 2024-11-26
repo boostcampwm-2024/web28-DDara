@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { IPoint } from '@/lib/types/canvasInterface.ts';
 import { guestEntity } from '@/api/dto/channel.dto.ts';
-import { UserMarker } from '@/component/userMarker/UserMarker.tsx';
+// import { UserMarker } from '@/component/userMarker/UserMarker.tsx';
 
 export const GuestView = () => {
   const [guestInfo, setGuestInfo] = useState<IGuest>({
@@ -23,8 +23,8 @@ export const GuestView = () => {
   const transformTypeGuestEntityToIGuest = (props: guestEntity): IGuest => {
     return {
       id: props.id ?? '',
-      // name: props.name ?? '',
-      name: '현재 내 위치',
+      name: props.name ?? '',
+      // name: '현재 내 위치',
       startPoint: {
         lat: props.start_location?.lat ?? 0,
         lng: props.start_location?.lng ?? 0,
@@ -73,7 +73,7 @@ export const GuestView = () => {
 
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
-      <UserMarker userData={[guestInfo]} />
+      {/* <UserMarker userData={[guestInfo]} /> */}
       {component}
     </article>
   );
