@@ -29,7 +29,7 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
           )}
         >
           <div className="h-full w-24 overflow-hidden text-ellipsis whitespace-nowrap rounded border-2 px-2 py-[16px] text-start text-xs font-normal">
-            {props.user.end_location.title}
+            {props.user.start_location.title}
           </div>
           <GoArrowRight className="mx-2 h-8 w-8" />
           <div className="h-full w-24 overflow-hidden text-ellipsis whitespace-nowrap rounded border-2 px-2 py-[16px] text-start text-xs font-normal">

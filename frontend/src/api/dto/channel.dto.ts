@@ -1,4 +1,12 @@
 export class locationEntity {
+  title: string | undefined;
+
+  lat: number | undefined;
+
+  lng: number | undefined;
+}
+
+export class pathLocationEntity {
   lat: number | undefined;
 
   lng: number | undefined;
@@ -17,7 +25,7 @@ export class guestEntity {
 
   end_location: locationEntity | undefined;
 
-  path: locationEntity[] | undefined;
+  path: pathLocationEntity[] | undefined;
 
   marker_style: guestMarkerStyleEntity | undefined;
 }
