@@ -114,7 +114,6 @@ export const AddChannel = () => {
     setFooterTitle('제작 완료');
     setFooterTransparency(false);
     setFooterActive(buttonActiveType.PASSIVE);
-    console.log(users);
   }, []);
 
   useEffect(() => {
