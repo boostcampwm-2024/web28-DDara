@@ -1,19 +1,27 @@
 import { ToolTypeContext } from '@/context/ToolTypeContext';
 import React, { useContext, useEffect, useState } from 'react';
-import { IoMdClose, IoMdSearch } from 'react-icons/io';
+import { IoMdClose } from 'react-icons/io';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
+import { IPoint } from '@/lib/types/canvasInterface';
+import { getAddressFromCoordinates } from '@/utils/map/getAddress';
 import { ButtonState } from '../common/enums';
 
 interface ISearchResultItem {
   title: string;
   address: string;
-  link: string;
+  roadAddress: string;
   lat: number;
   lng: number;
 }
 
-export const SearchBox = () => {
-  const [inputValue, setInputValue] = useState(''); // 검색 입력값 상태
+interface ISearchBoxProps {
+  startMarker?: IPoint | null;
+  endMarker?: IPoint | null;
+  setMarker: (point: IPoint) => void;
+  deleteMarker: () => void;
+}
+export const SearchBox = (props: ISearchBoxProps) => {
+  const [inputValue, setInputValue] = useState<string>(''); // 검색 입력값 상태
   const [searchResults, setSearchResults] = useState<ISearchResultItem[]>([]); // 검색 결과 상태
   const [loading, setLoading] = useState(false); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // 에러 상태
@@ -68,8 +76,8 @@ export const SearchBox = () => {
         title: item.title.replace(/<\/?[^>]+(>|$)/g, ''), // HTML 태그 제거
         address: item.address || item.roadAddress || '주소 정보 없음',
         link: item.link || '#',
-        lat: parseFloat(item.mapy) / 1e7, // 위도 값 변환
-        lng: parseFloat(item.mapx) / 1e7, // 경도 값 변환
+        lat: parseFloat(item.mapy) / 1e7,
+        lng: parseFloat(item.mapx) / 1e7,
       }));
       console.log(data);
       setSearchResults(formattedResults); // 검색 결과 상태 업데이트
@@ -83,45 +91,79 @@ export const SearchBox = () => {
   /* TODO: 자동검색 로직 수정 필요 */
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (inputValue.trim()) {
-        handleSearch();
+    const getAddress = async () => {
+      if (toolType === ButtonState.START_MARKER && props.startMarker) {
+        if (currentUser.start_location?.title) {
+          // title이 비어있을 때 === 부산역 같은 title이 없을때
+          return;
+        }
+        const value = await getAddressFromCoordinates(props.startMarker.lat, props.startMarker.lng);
+        setInputValue(value);
+      } else if (toolType === ButtonState.DESTINATION_MARKER && props.endMarker) {
+        if (currentUser.end_location?.title) {
+          return;
+        }
+        const value = await getAddressFromCoordinates(props.endMarker.lat, props.endMarker.lng);
+        setInputValue(value);
       }
-    }, 300);
+    };
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [inputValue]);
+    getAddress();
+  }, [toolType, props.startMarker, props.endMarker]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value); // 상태 업데이트
   };
 
+  useEffect(() => {
+    // 마커가 이미 존재하는 경우 더 이상 검색하지 않도록 방지
+    if (toolType === ButtonState.START_MARKER && props.startMarker) {
+      return;
+    }
+
+    if (toolType === ButtonState.DESTINATION_MARKER && props.endMarker) {
+      return;
+    }
+
+    if (inputValue.trim()) {
+      const delayDebounceFn = setTimeout(() => {
+        handleSearch();
+      }, 300);
+
+      // Todo : 요부분 반환값 lint 오류 때문에 해결이 안돼요...
+      // eslint-disable-next-line consistent-return
+      return () => {
+        clearTimeout(delayDebounceFn);
+      };
+    }
+  }, [inputValue, props.startMarker, props.endMarker, toolType]);
+
   const handleSelectResult = (result: ISearchResultItem) => {
-    setInputValue(result.title); // 선택한 결과로 inputValue를 업데이트
-    setSearchResults([]); // 결과 리스트를 닫음
+    setInputValue(result.title);
+    setSearchResults([]);
+    props.setMarker({ lat: result.lat, lng: result.lng });
     updateUser(result.title, result.lat, result.lng);
-    console.log(`위도: ${result.lat}, 경도: ${result.lng}`);
   };
 
   const handleClear = () => {
-    setInputValue(''); // 입력값 초기화
-    setSearchResults([]); // 검색 결과 초기화
+    setInputValue('');
+    setSearchResults([]);
+    props.deleteMarker();
   };
 
   return (
-    <div className="relative">
+    <div className="absolute top-2 z-[6000] w-full px-2">
       {/* 검색 입력 */}
-      <div className="border-grayscale-75 text-grayscale-400 flex h-11 w-full rounded border px-3">
+      <div className="border-grayscale-75 text-grayscale-400 flex h-11 w-full rounded border bg-white px-3">
         <input
           type="text"
           value={inputValue}
           onChange={handleInputChange}
-          placeholder="검색어를 입력하세요"
-          className="placeholder:text-grayscale-50 text-grayscale-400 h-11 w-full px-3 text-xs focus:outline-none"
+          placeholder={
+            toolType === ButtonState.START_MARKER ? '출발지를 입력하세요' : '도착지를 입력하세요'
+          }
+          className="placeholder:text-grayscale-50 text-grayscale-400 h-full w-full px-3 text-xs focus:outline-none"
         />
-        <button className="flex h-full w-8 items-center" onClick={handleSearch}>
-          <IoMdSearch className="h-6 w-6" />
-        </button>
         <button className="jusify-center flex h-full w-8 items-center" onClick={handleClear}>
           <IoMdClose className="h-6 w-6" />
         </button>
@@ -135,7 +177,7 @@ export const SearchBox = () => {
           {searchResults.map(result => (
             <button
               type="button"
-              key={result.link}
+              key={result.roadAddress}
               onClick={() => handleSelectResult(result)}
               className="flex flex-col items-start gap-2 p-2"
             >

@@ -11,6 +11,7 @@ import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { ToolDescription } from '@/component/tooldescription/ToolDescription';
+import { SearchBox } from '@/component/searchbox/SearchBox';
 
 export const MapCanvasForDraw = ({
   width,
@@ -216,9 +217,27 @@ export const MapCanvasForDraw = ({
     if (!clickedPoint) return;
     switch (toolType) {
       case ButtonState.START_MARKER:
+        setCurrentUser(prevUser => ({
+          ...prevUser,
+          start_location: {
+            ...prevUser.start_location,
+            title: '', // title을 빈 문자열로 초기화 -> 검색창에 보이게 하려고
+            lat: clickedPoint.lat,
+            lng: clickedPoint.lng,
+          },
+        }));
         setStartMarker(clickedPoint);
         break;
       case ButtonState.DESTINATION_MARKER:
+        setCurrentUser(prevUser => ({
+          ...prevUser,
+          end_location: {
+            ...prevUser.end_location,
+            title: '', // title을 빈 문자열로 초기화 -> 검색창에 보이게 하려고
+            lat: clickedPoint.lat,
+            lng: clickedPoint.lng,
+          },
+        }));
         setEndMarker(clickedPoint);
         break;
       case ButtonState.LINE_DRAWING:
@@ -384,6 +403,33 @@ export const MapCanvasForDraw = ({
     }
   };
 
+  const handleCreateMarker = (point: IPoint) => {
+    if (toolType === ButtonState.START_MARKER) {
+      setStartMarker(point);
+      setCurrentUser(prevUser => ({
+        ...prevUser,
+        start_location: {
+          ...prevUser.start_location,
+          title: '',
+        },
+      }));
+    } else {
+      setEndMarker(point);
+      setCurrentUser(prevUser => ({
+        ...prevUser,
+        end_location: {
+          ...prevUser.end_location,
+          title: '',
+        },
+      }));
+    }
+  };
+
+  const handleDeleteMarker = () => {
+    if (toolType === ButtonState.START_MARKER) setStartMarker(null);
+    else setEndMarker(null);
+  };
+
   useEffect(() => {
     if (isDragging) {
       if (canvasRef.current) {
@@ -415,6 +461,16 @@ export const MapCanvasForDraw = ({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
+      {(toolType === ButtonState.START_MARKER || toolType === ButtonState.DESTINATION_MARKER) && (
+        <div className="relative">
+          <SearchBox
+            setMarker={handleCreateMarker}
+            deleteMarker={handleDeleteMarker}
+            startMarker={startMarker}
+            endMarker={endMarker}
+          />
+        </div>
+      )}
       <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
       {toolType === ButtonState.LINE_DRAWING ? (
         <div className="z-1000 absolute left-1/2 top-[10px] flex -translate-x-1/2 transform gap-2">

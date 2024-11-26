@@ -2,7 +2,6 @@ import { useContext, useEffect } from 'react';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IUser, UserContext } from '@/context/UserContext';
-import { SearchBox } from '@/component/searchbox/SearchBox';
 import { ToolTypeProvider } from '@/context/ToolTypeContext';
 import { buttonActiveType } from '@/component/layout/enumTypes';
 import { MapProviderForDraw } from '@/component/canvasWithMap/canvasWithMapforDraw/MapProviderForDraw.tsx';
@@ -84,11 +83,7 @@ export const DrawRoute = () => {
             const updatedUser = { ...currentUser }; // currentUser 복사
 
             // start_location.title이 비어 있으면 주소를 업데이트
-            if (
-              !updatedUser.start_location.title &&
-              updatedUser.start_location.lat &&
-              updatedUser.start_location.lng
-            ) {
+            if (!updatedUser.start_location.title) {
               try {
                 const startAddress = await getAddressFromCoordinates(
                   updatedUser.start_location.lat,
@@ -101,11 +96,7 @@ export const DrawRoute = () => {
             }
 
             // end_location.title이 비어 있으면 주소를 업데이트
-            if (
-              !updatedUser.end_location.title &&
-              updatedUser.end_location.lat &&
-              updatedUser.end_location.lng
-            ) {
+            if (!updatedUser.end_location.title) {
               try {
                 const endAddress = await getAddressFromCoordinates(
                   updatedUser.end_location.lat,
@@ -137,10 +128,9 @@ export const DrawRoute = () => {
 
   return (
     <ToolTypeProvider>
-      <div className="flex h-full w-full flex-col py-20">
-        <SearchBox />
+      <div className="flex h-full w-full flex-col py-[75px]">
         <div style={{ position: 'relative', padding: '1rem' }}>
-          <MapProviderForDraw width={window.innerWidth - 32} height={window.innerHeight - 210} />
+          <MapProviderForDraw width={window.innerWidth - 32} height={window.innerHeight - 180} />
         </div>
       </div>
     </ToolTypeProvider>
