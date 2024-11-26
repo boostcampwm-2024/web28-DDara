@@ -80,6 +80,8 @@ export const SearchBox = () => {
     }
   };
 
+  /* TODO: 자동검색 로직 수정 필요 */
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (inputValue.trim()) {
