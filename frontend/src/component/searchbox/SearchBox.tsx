@@ -79,7 +79,6 @@ export const SearchBox = (props: ISearchBoxProps) => {
         lat: parseFloat(item.mapy) / 1e7,
         lng: parseFloat(item.mapx) / 1e7,
       }));
-      console.log(data);
       setSearchResults(formattedResults); // 검색 결과 상태 업데이트
     } catch (err) {
       setError(err instanceof Error ? err.message : '알 수 없는 오류');
@@ -177,7 +176,7 @@ export const SearchBox = (props: ISearchBoxProps) => {
           {searchResults.map(result => (
             <button
               type="button"
-              key={result.roadAddress}
+              key={`${result.lat}-${result.lng}`}
               onClick={() => handleSelectResult(result)}
               className="flex flex-col items-start gap-2 p-2"
             >
