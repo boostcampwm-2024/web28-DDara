@@ -4,10 +4,12 @@ export interface IUser {
   id: number;
   name: string;
   start_location: {
+    title: string;
     lat: number;
     lng: number;
   };
   end_location: {
+    title: string;
     lat: number;
     lng: number;
   };
@@ -38,8 +40,8 @@ export const UserProvider = (props: IUserContextProps) => {
     {
       id: 1,
       name: '사용자1',
-      start_location: { lat: 0, lng: 0 },
-      end_location: { lat: 0, lng: 0 },
+      start_location: { title: '', lat: 0, lng: 0 },
+      end_location: { title: '', lat: 0, lng: 0 },
       path: [],
       marker_style: { color: '' },
     },

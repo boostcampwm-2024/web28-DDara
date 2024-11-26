@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ButtonState } from '@/component/common/enums.ts';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { ButtonState } from '@/component/common/enums';
 import classNames from 'classnames';
 import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
 import { FloatingButton } from '@/component/common/floatingbutton/FloatingButton.tsx';
@@ -9,6 +9,9 @@ import { ICanvasPoint, IMapCanvasProps, IPoint } from '@/lib/types/canvasInterfa
 import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
 import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
+import { CurrentUserContext } from '@/context/CurrentUserContext';
+import { ToolDescription } from '@/component/tooldescription/ToolDescription';
+import { SearchBox } from '@/component/searchbox/SearchBox';
 
 export const MapCanvasForDraw = ({
   width,
@@ -37,6 +40,8 @@ export const MapCanvasForDraw = ({
   const { isMenuOpen, toolType, toggleMenu, handleMenuClick } = useFloatingButton();
   const { pathPoints, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
 
+  const { setCurrentUser } = useContext(CurrentUserContext);
+
   const startImageRef = useRef<HTMLImageElement | null>(null);
   const endImageRef = useRef<HTMLImageElement | null>(null);
 
@@ -47,6 +52,31 @@ export const MapCanvasForDraw = ({
     endImageRef.current = new Image();
     endImageRef.current.src = endmarker;
   }, []);
+
+  useEffect(() => {
+    const updateUser = () => {
+      setCurrentUser(prevUser => {
+        return {
+          ...prevUser,
+          start_location: {
+            ...prevUser.start_location, // 기존 start_location 유지
+            title: prevUser.start_location.title ?? '',
+            lat: startMarker?.lat ?? prevUser.start_location.lat,
+            lng: startMarker?.lng ?? prevUser.start_location.lng,
+          },
+          end_location: {
+            ...prevUser.end_location, // 기존 end_location 유지
+            title: prevUser.end_location.title ?? '',
+            lat: endMarker?.lat ?? prevUser.end_location.lat,
+            lng: endMarker?.lng ?? prevUser.end_location.lng,
+          },
+          path: pathPoints, // 경로 포인트들
+        };
+      });
+    };
+
+    updateUser(); // 상태 업데이트 함수 호출
+  }, [startMarker, endMarker, pathPoints]); // 필요한 의존성만 포함
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -187,9 +217,27 @@ export const MapCanvasForDraw = ({
     if (!clickedPoint) return;
     switch (toolType) {
       case ButtonState.START_MARKER:
+        setCurrentUser(prevUser => ({
+          ...prevUser,
+          start_location: {
+            ...prevUser.start_location,
+            title: '', // title을 빈 문자열로 초기화 -> 검색창에 보이게 하려고
+            lat: clickedPoint.lat,
+            lng: clickedPoint.lng,
+          },
+        }));
         setStartMarker(clickedPoint);
         break;
       case ButtonState.DESTINATION_MARKER:
+        setCurrentUser(prevUser => ({
+          ...prevUser,
+          end_location: {
+            ...prevUser.end_location,
+            title: '', // title을 빈 문자열로 초기화 -> 검색창에 보이게 하려고
+            lat: clickedPoint.lat,
+            lng: clickedPoint.lng,
+          },
+        }));
         setEndMarker(clickedPoint);
         break;
       case ButtonState.LINE_DRAWING:
@@ -355,6 +403,33 @@ export const MapCanvasForDraw = ({
     }
   };
 
+  const handleCreateMarker = (point: IPoint) => {
+    if (toolType === ButtonState.START_MARKER) {
+      setStartMarker(point);
+      setCurrentUser(prevUser => ({
+        ...prevUser,
+        start_location: {
+          ...prevUser.start_location,
+          title: '',
+        },
+      }));
+    } else {
+      setEndMarker(point);
+      setCurrentUser(prevUser => ({
+        ...prevUser,
+        end_location: {
+          ...prevUser.end_location,
+          title: '',
+        },
+      }));
+    }
+  };
+
+  const handleDeleteMarker = () => {
+    if (toolType === ButtonState.START_MARKER) setStartMarker(null);
+    else setEndMarker(null);
+  };
+
   useEffect(() => {
     if (isDragging) {
       if (canvasRef.current) {
@@ -386,6 +461,16 @@ export const MapCanvasForDraw = ({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
+      {(toolType === ButtonState.START_MARKER || toolType === ButtonState.DESTINATION_MARKER) && (
+        <div className="relative">
+          <SearchBox
+            setMarker={handleCreateMarker}
+            deleteMarker={handleDeleteMarker}
+            startMarker={startMarker}
+            endMarker={endMarker}
+          />
+        </div>
+      )}
       <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
       {toolType === ButtonState.LINE_DRAWING ? (
         <div className="z-1000 absolute left-1/2 top-[10px] flex -translate-x-1/2 transform gap-2">
@@ -430,6 +515,9 @@ export const MapCanvasForDraw = ({
           toolType={toolType}
           handleMenuClick={handleMenuClick}
         />
+      </div>
+      <div className="relative flex">
+        <ToolDescription />
       </div>
 
       {/* TODO: 줌인 줌아웃 버튼으로도 접근 가능하도록 추가 */}
