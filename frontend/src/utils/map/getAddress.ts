@@ -10,7 +10,6 @@ export const getAddressFromCoordinates = (lat: number, lng: number): Promise<str
           reject(new Error('Something went wrong!'));
           return; // Add explicit return
         }
-        console.log(`lat, lng:${lat},${lng}`);
         const result = response.v2; // 검색 결과의 컨테이너
         const { address } = result; // 검색 결과로 만든 주소
         resolve(address.jibunAddress); // Resolve the promise with the address
