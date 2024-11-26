@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { IGuestDataInMapProps, IPoint } from '@/lib/types/canvasInterface.ts';
 import { getChannelResEntity, guestEntity } from '@/api/dto/channel.dto.ts';
-import { UserMarker } from '@/component/userMarker/UserMarker.tsx';
+import { HostMarker } from '@/component/IconGuide/HostMarker.tsx';
 
 export const HostView = () => {
   const [channelInfo, setChannelInfo] = useState<IChannelInfo>();
@@ -102,7 +102,7 @@ export const HostView = () => {
 
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
-      <UserMarker userData={guestData} />
+      <HostMarker userData={guestData} />
       {component}
     </article>
   );
