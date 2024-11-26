@@ -12,6 +12,7 @@ import { AppConfig } from '@/lib/constants/commonConstants.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
+import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
 
 export const Main = () => {
   const { setFooterTitle, setFooterTransparency, setFooterOnClick, setFooterActive } =
@@ -125,13 +126,12 @@ export const Main = () => {
               otherLocations={otherLocations}
             />
           ) : (
-            <section className="flex h-full items-center justify-center">
-              Loading map data...
-            </section>
+            <LoadingSpinner />
           )
         ) : (
-          <section className="flex h-full items-center justify-center">
-            {error ? `Error: ${error}` : 'Loading'}
+          <section className="flex h-full flex-col items-center justify-center gap-2 text-xl text-gray-700">
+            <LoadingSpinner />
+            {error ? `Error: ${error}` : 'Loading map data...'}
           </section>
         )}
       </main>
