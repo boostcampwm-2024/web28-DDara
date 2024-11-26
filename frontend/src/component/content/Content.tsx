@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 interface IContentProps {
   title: string;
-  time: string;
   person: number;
   link: string;
+  time: string;
 }
 
 /**
@@ -30,6 +30,16 @@ interface IContentProps {
  */
 
 export const Content = (props: IContentProps) => {
+  const formattedDate = new Date(props.time).toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+  const formattedTime = new Date(props.time).toLocaleTimeString('ko-KR', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
   const navigate = useNavigate();
   return (
     <div
@@ -41,8 +51,9 @@ export const Content = (props: IContentProps) => {
       <div>
         <header className="border-gray-200 pb-1 text-lg">{props.title}</header>
         <section className="flex items-center text-sm leading-5 text-gray-500">
-          <time className="mr-4">시간</time>
-          <span className="mr-6">{props.time}</span>
+          <time className="mr-4">
+            {formattedDate} {formattedTime}
+          </time>
           {props.person > 0 && (
             <>
               <MdGroup className="mr-2 h-5 w-5" aria-label="인원수 아이콘" />
