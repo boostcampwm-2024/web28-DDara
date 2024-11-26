@@ -2,7 +2,6 @@ import { useContext, useEffect } from 'react';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IUser, UserContext } from '@/context/UserContext';
-import { SearchBox } from '@/component/searchbox/SearchBox';
 import { ToolTypeProvider } from '@/context/ToolTypeContext';
 import { buttonActiveType } from '@/component/layout/enumTypes';
 import { MapProviderForDraw } from '@/component/canvasWithMap/canvasWithMapforDraw/MapProviderForDraw.tsx';
@@ -138,9 +137,8 @@ export const DrawRoute = () => {
   return (
     <ToolTypeProvider>
       <div className="flex h-full w-full flex-col py-20">
-        <SearchBox />
         <div style={{ position: 'relative', padding: '1rem' }}>
-          <MapProviderForDraw width={window.innerWidth - 32} height={window.innerHeight - 210} />
+          <MapProviderForDraw width={window.innerWidth - 32} height={window.innerHeight - 180} />
         </div>
       </div>
     </ToolTypeProvider>

@@ -11,6 +11,7 @@ import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { ToolDescription } from '@/component/tooldescription/ToolDescription';
+import { SearchBox } from '@/component/searchbox/SearchBox';
 
 export const MapCanvasForDraw = ({
   width,
@@ -384,6 +385,11 @@ export const MapCanvasForDraw = ({
     }
   };
 
+  const handleMarker = (point: IPoint) => {
+    if (toolType === ButtonState.START_MARKER) setStartMarker(point);
+    setEndMarker(point);
+  };
+
   useEffect(() => {
     if (isDragging) {
       if (canvasRef.current) {
@@ -415,6 +421,11 @@ export const MapCanvasForDraw = ({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
+      {(toolType === ButtonState.START_MARKER || toolType === ButtonState.DESTINATION_MARKER) && (
+        <div className="relative">
+          <SearchBox setMarker={handleMarker} />
+        </div>
+      )}
       <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
       {toolType === ButtonState.LINE_DRAWING ? (
         <div className="z-1000 absolute left-1/2 top-[10px] flex -translate-x-1/2 transform gap-2">

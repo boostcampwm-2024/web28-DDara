@@ -2,6 +2,7 @@ import { ToolTypeContext } from '@/context/ToolTypeContext';
 import React, { useContext, useEffect, useState } from 'react';
 import { IoMdClose, IoMdSearch } from 'react-icons/io';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
+import { IPoint } from '@/lib/types/canvasInterface';
 import { ButtonState } from '../common/enums';
 
 interface ISearchResultItem {
@@ -12,7 +13,10 @@ interface ISearchResultItem {
   lng: number;
 }
 
-export const SearchBox = () => {
+interface ISearchBoxProps {
+  setMarker: (point: IPoint) => void;
+}
+export const SearchBox = (props: ISearchBoxProps) => {
   const [inputValue, setInputValue] = useState(''); // 검색 입력값 상태
   const [searchResults, setSearchResults] = useState<ISearchResultItem[]>([]); // 검색 결과 상태
   const [loading, setLoading] = useState(false); // 로딩 상태
@@ -100,7 +104,7 @@ export const SearchBox = () => {
     setInputValue(result.title); // 선택한 결과로 inputValue를 업데이트
     setSearchResults([]); // 결과 리스트를 닫음
     updateUser(result.title, result.lat, result.lng);
-    console.log(`위도: ${result.lat}, 경도: ${result.lng}`);
+    props.setMarker({ lat: result.lat, lng: result.lng });
   };
 
   const handleClear = () => {
@@ -109,15 +113,15 @@ export const SearchBox = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="absolute top-2 z-[6000] w-full px-2">
       {/* 검색 입력 */}
-      <div className="border-grayscale-75 text-grayscale-400 flex h-11 w-full rounded border px-3">
+      <div className="border-grayscale-75 text-grayscale-400 flex h-11 w-full rounded border bg-white px-3">
         <input
           type="text"
           value={inputValue}
           onChange={handleInputChange}
           placeholder="검색어를 입력하세요"
-          className="placeholder:text-grayscale-50 text-grayscale-400 h-11 w-full px-3 text-xs focus:outline-none"
+          className="placeholder:text-grayscale-50 text-grayscale-400 h-full w-full px-3 text-xs focus:outline-none"
         />
         <button className="flex h-full w-8 items-center" onClick={handleSearch}>
           <IoMdSearch className="h-6 w-6" />
