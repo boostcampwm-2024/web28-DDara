@@ -8,6 +8,8 @@ services:
       - NODE_ENV=production
     networks:
       - app-network
+    volumes:
+      - ./backend:/backend-app
 
   frontend:
     build:
@@ -15,8 +17,8 @@ services:
       dockerfile: frontend/Dockerfile
     networks:
       - app-network
-    depends_on:
-      - backend
+    volumes:
+      - ./frontend:/frontend-app
 
   nginx:
     image: nginx:alpine

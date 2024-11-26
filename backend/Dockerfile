@@ -1,8 +1,8 @@
 # 1. 베이스 이미지 설정 (Node.js 18 버전 사용)
 FROM node:18
 
-# 2. 작업 디렉토리 설정
-WORKDIR /app
+# 2. 작업 디렉토리 설정 (백엔드 디렉토리)
+WORKDIR /backend-app
 
 # 3. root 폴더의 package.json, pnpm-lock.yaml, pnpm-workspace.yaml 파일을 복사
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -14,10 +14,10 @@ RUN npm install -g pnpm
 RUN pnpm install
 
 # 6. backend 폴더를 컨테이너로 복사
-COPY backend /app/backend
+COPY backend /backend-app/backend
 
 # 7. 작업 디렉토리 backend로 이동
-WORKDIR /app/backend
+WORKDIR /backend-app/backend
 
 # 8. backend 의존성 설치
 RUN pnpm install
