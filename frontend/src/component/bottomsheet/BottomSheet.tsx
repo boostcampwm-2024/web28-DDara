@@ -3,10 +3,16 @@ import React, { useState, useRef } from 'react';
 interface IBottomSheetProps {
   minHeight: number;
   maxHeight: number;
+  backgroundColor: string;
   children: React.ReactNode;
 }
 
-export const BottomSheet = ({ minHeight, maxHeight, children }: IBottomSheetProps) => {
+export const BottomSheet = ({
+  minHeight,
+  maxHeight,
+  backgroundColor,
+  children,
+}: IBottomSheetProps) => {
   const [sheetHeight, setSheetHeight] = useState(minHeight);
   const startY = useRef(0);
   const startHeight = useRef(minHeight);
@@ -45,10 +51,15 @@ export const BottomSheet = ({ minHeight, maxHeight, children }: IBottomSheetProp
     window.addEventListener('mouseup', handleMouseUp);
   };
 
+  const handleClose = () => {
+    setSheetHeight(minHeight);
+  };
+
   return (
     <div
       className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl bg-white shadow-lg transition-transform duration-700 ease-out"
       style={{
+        backgroundColor: `${backgroundColor}`,
         height: `${sheetHeight * 100}vh`,
         transform: `translateY(${(1 - sheetHeight) * 100}%)`,
       }}
@@ -58,6 +69,15 @@ export const BottomSheet = ({ minHeight, maxHeight, children }: IBottomSheetProp
     >
       <div className="flex items-center justify-center pb-1 pt-2">
         <div className="h-1.5 w-12 rounded-full bg-gray-300" />
+      </div>
+      <div className="flex items-center justify-end pb-1 pr-5 pt-2">
+        <button
+          type="button"
+          className="bg-grayscale-180 h-[30px] w-[30px] rounded-full text-lg font-semibold text-gray-500"
+          onClick={handleClose}
+        >
+          <p className="text-grayscale-850">✕</p>
+        </button>
       </div>
 
       <div className="h-full overflow-auto">{children}</div>

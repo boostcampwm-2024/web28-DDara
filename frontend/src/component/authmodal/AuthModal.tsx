@@ -57,10 +57,6 @@ export const AuthModal = (props: IAuthModalProps) => {
   };
 
   const handleLoginClick = () => {
-    if (loginData.id || loginData.pw === '') {
-      setError('작성하지 않은 항목이 있습니다.');
-      return;
-    }
     doLogin(loginData.id, loginData.pw)
       .then(el => {
         if (el.data?.data.token && el.data?.data.userId) {
@@ -80,16 +76,6 @@ export const AuthModal = (props: IAuthModalProps) => {
   const handleSignUpClick = () => {
     if (registerData.pw !== registerData.confirmPw) {
       setError('비밀번호가 일치하지 않습니다.');
-      return;
-    }
-    if (
-      registerData.id ||
-      registerData.email ||
-      registerData.pw ||
-      registerData.confirmPw ||
-      registerData.name === ''
-    ) {
-      setError('작성하지 않은 항목이 있습니다.');
       return;
     }
     doRegister(registerData.id, registerData.name, registerData.pw, registerData.email)

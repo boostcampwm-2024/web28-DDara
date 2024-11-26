@@ -21,7 +21,7 @@ export const createChannel = (
           console.error(res);
           fnReject(`msg.${res}`);
         } else {
-          fnResolve(new ResponseDto<createChannelResEntity>(res));
+          fnResolve(new ResponseDto<createChannelResEntity>(res.data));
         }
       })
       .catch(err => {
@@ -45,7 +45,7 @@ export const getUserChannels = (userId: string): Promise<ResponseDto<getUserChan
           console.error(res);
           fnReject(`msg.${res}`);
         } else {
-          fnResolve(new ResponseDto<getUserChannelsResEntity>(res));
+          fnResolve(new ResponseDto<getUserChannelsResEntity>(res.data));
         }
       })
       .catch(err => {
