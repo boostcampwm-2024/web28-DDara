@@ -28,6 +28,7 @@ export const AuthModal = (props: IAuthModalProps) => {
   });
 
   const [modalType, setModalType] = useState<'login' | 'register'>(props.type);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -46,43 +47,60 @@ export const AuthModal = (props: IAuthModalProps) => {
   };
 
   const switchToRegister = () => {
+    setError('');
     setModalType('register');
   };
 
   const switchToLogin = () => {
+    setError('');
     setModalType('login');
   };
 
   const handleLoginClick = () => {
+    if (loginData.id || loginData.pw === '') {
+      setError('작성하지 않은 항목이 있습니다.');
+      return;
+    }
     doLogin(loginData.id, loginData.pw)
       .then(el => {
         if (el.data?.data.token && el.data?.data.userId) {
           saveLocalData(AppConfig.KEYS.LOGIN_TOKEN, el.data?.data.token);
           saveLocalData(AppConfig.KEYS.LOGIN_USER, el.data?.data.userId);
         }
-        props.onClose(); // 부모 컴포넌트의 로그인 상태를 변경
+        setError('');
+        props.onClose();
+
         window.location.reload();
       })
       .catch(() => {
-        alert('아이디와 비밀번호를 다시 확인해주세요.');
+        setError('아이디 혹은 비밀번호를 다시 확인해주세요.');
       });
   };
 
   const handleSignUpClick = () => {
     if (registerData.pw !== registerData.confirmPw) {
-      alert('비밀번호가 일치하지 않습니다.');
+      setError('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+    if (
+      registerData.id ||
+      registerData.email ||
+      registerData.pw ||
+      registerData.confirmPw ||
+      registerData.name === ''
+    ) {
+      setError('작성하지 않은 항목이 있습니다.');
       return;
     }
     doRegister(registerData.id, registerData.name, registerData.pw, registerData.email)
       .then(el => {
         if (el.data) {
-          alert('회원가입에 성공했습니다. 로그인해주세요.');
           switchToLogin();
         }
       })
       .catch(() => {
-        alert(
-          '회원가입에 실패했습니다. 다시 확인해주세요.\nid는 4자 이상, 비밀번호는 6자리 이상이어야 합니다.',
+        setError(
+          `회원가입에 실패했습니다. 다시 확인해주세요.\nid는 4자 이상, 비밀번호는 6자리 이상이어야 합니다.`,
         );
       });
   };
@@ -106,6 +124,7 @@ export const AuthModal = (props: IAuthModalProps) => {
             value={loginData.pw}
             onChange={handleChange}
           />
+          {error ? <p className="pt-2 text-sm font-normal text-red-500">{error}</p> : ''}
           <Modal.Footer
             text="로그인"
             onClick={handleLoginClick}
@@ -151,6 +170,8 @@ export const AuthModal = (props: IAuthModalProps) => {
             value={registerData.confirmPw}
             onChange={handleChange}
           />
+          {error ? <p className="pt-2 text-sm font-normal text-red-500">{error}</p> : ''}
+
           <Modal.Footer
             text="회원가입"
             onClick={handleSignUpClick}
