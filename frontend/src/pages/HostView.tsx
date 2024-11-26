@@ -1,48 +1,101 @@
-// import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
-// import { useContext, useEffect, useState } from 'react';
-// import { IUserChannelInfo } from '@/types/channel.types.ts';
-// import { getChannelInfo } from '@/api/channel.api.ts';
-// import { useLocation } from 'react-router-dom';
-// import { CanvasWithMap } from '@/component/canvas/CanvasWithMap.tsx';
+import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
+import { ReactNode, useContext, useEffect, useState } from 'react';
+import { IGuest, IChannelInfo } from '@/types/channel.types.ts';
+import { getChannelInfo } from '@/api/channel.api.ts';
+import { useLocation } from 'react-router-dom';
+import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
+import { IGuestDataInMapProps, IPoint } from '@/lib/types/canvasInterface.ts';
+import { getChannelResEntity, guestEntity } from '@/api/dto/channel.dto.ts';
 
-// export const HostView = () => {
-//   const [userChannels, setUserChannels] = useState<IUserChannelInfo>();
-//   const [userNames, setUserNames] = useState<string[]>(['사용자 1']);
+export const HostView = () => {
+  const [channelInfo, setChannelInfo] = useState<IChannelInfo>();
+  const [userNames, setUserNames] = useState<string[]>(['사용자 1']);
+  const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
+  const [component, setComponent] = useState<ReactNode>();
 
-//   const headerContext = useContext(HeaderContext);
+  const headerContext = useContext(HeaderContext);
 
-//   const location = useLocation();
+  const location = useLocation();
 
-//   const fetchChannelInfo = (id: string) => {
-//     getChannelInfo(id)
-//       .then(res => {
-//         if (res.data) setUserChannels(res.data);
-//       })
-//       .catch((error: any) => {
-//         console.error(error);
-//       });
-//   };
+  const transformTypeGuestEntityToIGuest = (props: guestEntity): IGuest => {
+    return {
+      id: props.id ?? '',
+      name: props.name ?? '',
+      startPoint: {
+        lat: props.start_location?.lat ?? 0,
+        lng: props.start_location?.lng ?? 0,
+      },
+      endPoint: {
+        lat: props.end_location?.lat ?? 0,
+        lng: props.end_location?.lng ?? 0,
+      },
+      paths: (props.path as IPoint[]) ?? [],
+      markerStyle: {
+        color: props.marker_style?.color ?? '',
+      },
+    };
+  };
 
-//   useEffect(() => {
-//     headerContext.setRightButton('dropdown');
-//     headerContext.setLeftButton('back');
-//     headerContext.setItems(['1']);
+  const transformTypeFromResToInfo = (props: getChannelResEntity): IChannelInfo => {
+    const guests = props.guests?.map(guest => transformTypeGuestEntityToIGuest(guest)) ?? [];
 
-//     fetchChannelInfo(location.pathname.split('/')[2]);
-//   }, []);
+    return {
+      name: props.name ?? '',
+      hostId: props.host_id ?? '',
+      channelId: props.id ?? '',
+      guests,
+    };
+  };
 
-//   useEffect(() => {
-//     if (userChannels?.guests) {
-//       const names = userChannels.guests.filter(Boolean).map(guest => guest.name!);
-//       setUserNames(names);
-//     }
-//   }, [userChannels]);
+  const fetchChannelInfo = (userId: string) => {
+    getChannelInfo(userId)
+      .then(res => {
+        if (!res.data) throw new Error('🚀 Fetch Error: responsed undefined');
+        const transfromedData = transformTypeFromResToInfo(res.data);
+        setChannelInfo(transfromedData);
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
+  };
 
-//   useEffect(() => {
-//     headerContext.setItems(userNames);
-//   }, [userNames]);
+  useEffect(() => {
+    headerContext.setRightButton('dropdown');
+    headerContext.setLeftButton('back');
+    headerContext.setItems(['1']);
 
-//   // TODO: geoCoding API를 이용해서 현재 위치나 시작위치를 기반으로 자동 좌표 설정 구현 (현재: 하드코딩)
-//   return <CanvasWithMap lat={37.3595704} lng={127.105399} zoom={21} mapType="naver" allowCanvas />;
-// };
-export const HostView = () => <>Hello</>;
+    fetchChannelInfo(location.pathname.split('/')[2]);
+  }, []);
+
+  useEffect(() => {
+    if (channelInfo?.guests) {
+      const names = channelInfo.guests.filter(Boolean).map(guest => guest.name!);
+      setUserNames(names);
+      channelInfo.guests?.map(guest =>
+        setMapProps(prev => [...prev, guest as IGuestDataInMapProps]),
+      );
+    }
+  }, [channelInfo]);
+
+  useEffect(() => {
+    headerContext.setItems(userNames);
+  }, [userNames]);
+
+  useEffect(() => {
+    if (mapProps.length > 1) {
+      setComponent(
+        <MapCanvasForView
+          lat={37.3595704}
+          lng={127.105399}
+          width="100%"
+          height="100%"
+          guests={mapProps}
+        />,
+      );
+    }
+  }, [mapProps]);
+
+  return (
+    <article className="absolute h-full w-screen flex-grow overflow-hidden">{component}</article>
+  );
+};
