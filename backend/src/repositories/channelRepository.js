@@ -125,9 +125,15 @@ export const getGuestByChannelAndGuestIdFromDB = async (channelId, guestId) => {
 export const getChannelsByUserIdFromDB = async userId => {
   try {
     const query = `
-      SELECT id, name, generated_at 
-      FROM "main"."channel"
-      WHERE host_id = $1;
+        SELECT
+            c.id,
+            c.name,
+            c.generated_at,
+            COUNT(g.id) AS guest_count
+        FROM "main"."channel" AS c
+                 LEFT JOIN "main"."guest" AS g ON c.id = g.channel_id
+        WHERE c.host_id = $1
+        GROUP BY c.id;
     `;
     const values = [userId];
     const result = await pool.query(query, values);
@@ -140,6 +146,7 @@ export const getChannelsByUserIdFromDB = async userId => {
       id: channel.id,
       name: channel.name,
       generated_at: channel.generated_at,
+      guest_count: Number(channel.guest_count),
     }));
   } catch (error) {
     console.error('Database error:', error);

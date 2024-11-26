@@ -447,6 +447,7 @@ const swaggerDefinition = {
                 id: { type: 'string' },
                 name: { type: 'string' },
                 generated_at: { type: 'string', format: 'date-time' },
+                guest_count: { type: 'number' },
               },
               required: ['id', 'name', 'generated_at'],
             },
