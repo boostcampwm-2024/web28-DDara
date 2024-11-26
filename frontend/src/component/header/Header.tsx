@@ -17,7 +17,7 @@ export interface IHeaderOption {
   rightButton?: string;
   title?: ReactNode;
   subtitle?: string;
-  items?: string[] | IGuestData[];
+  items?: IGuestData[];
 }
 
 export const Header = (props: IHeaderProps) => {
