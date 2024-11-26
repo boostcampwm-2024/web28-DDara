@@ -23,7 +23,7 @@ export const Header = (props: IHeaderProps) => {
   return (
     <header
       className={classNames(
-        'absolute flex w-full flex-col gap-2.5 bg-transparent p-4',
+        'absolute flex w-full flex-col gap-2.5 bg-transparent px-4 pb-2 pt-4',
         props.className,
       )}
     >
