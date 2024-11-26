@@ -1,1 +1,3 @@
-export const App = () => <div>Hello</div>;
+import { IndexRoutes } from '@/routes/IndexRoutes.tsx';
+
+export const App = () => <IndexRoutes />;

@@ -64,4 +64,6 @@ export default {
 
   // JSON에서는 두 개의 스페이스를 사용하여 들여쓰기를 맞춥니다.
   jsonIndent: 2,
+
+  plugins: ['prettier-plugin-tailwindcss'],
 };

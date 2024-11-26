@@ -56,6 +56,9 @@ export default [
       'prettier/prettier': 'error',
       'no-underscore-dangle': 'warn',
       'no-undef': 'off',
+      'max-classes-per-file': 'off',
+      'no-bitwise': 'off',
+      'no-plusplus': 'off',
       'import/extensions': [
         'error',
         'always',
@@ -189,6 +192,9 @@ export default [
       'prettier/prettier': 'error',
       'no-underscore-dangle': 'warn',
       'no-undef': 'off',
+      'arrow-body-style': 'off',
+      'jsx-a11y/click-events-have-key-events': 'warn',
+      'jsx-a11y/no-static-element-interactions': 'warn',
     },
   },
 
