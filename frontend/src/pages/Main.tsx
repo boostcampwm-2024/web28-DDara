@@ -104,10 +104,7 @@ export const Main = () => {
               otherLocations={otherLocations}
             />
           ) : (
-            <section className="flex h-full flex-col items-center justify-center gap-2 text-xl text-gray-700">
-              <LoadingSpinner />
-              Loading map data...
-            </section>
+            <LoadingSpinner />
           )
         ) : (
           <section className="flex h-full flex-col items-center justify-center gap-2 text-xl text-gray-700">
