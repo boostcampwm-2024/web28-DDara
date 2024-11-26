@@ -1,5 +1,6 @@
 import { MdGroup, MdMoreVert } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import { Dropdown } from '../common/dropdown/Dropdown';
 
 interface IContentProps {
   title: string;
@@ -32,13 +33,12 @@ interface IContentProps {
 export const Content = (props: IContentProps) => {
   const navigate = useNavigate();
   return (
-    <div
-      onClick={() => {
-        navigate(props.link);
-      }}
-      className="relative flex w-full flex-row items-center justify-between px-4 py-5"
-    >
-      <div>
+    <div className="relative flex w-full flex-row items-center justify-between px-4 py-5">
+      <div
+        onClick={() => {
+          navigate(props.link);
+        }}
+      >
         <header className="border-gray-200 pb-1 text-lg">{props.title}</header>
         <section className="flex items-center text-sm leading-5 text-gray-500">
           <time className="mr-4">시간</time>
@@ -52,9 +52,15 @@ export const Content = (props: IContentProps) => {
         </section>
       </div>
       <div className="relative">
-        <button type="button" className="p-2">
-          <MdMoreVert className="h-6 w-6" />
-        </button>
+        <Dropdown>
+          <Dropdown.Trigger>
+            <MdMoreVert className="h-6 w-6" />
+          </Dropdown.Trigger>
+          <Dropdown.Menu>
+            <Dropdown.Item className="flex items-start text-base">수정하기</Dropdown.Item>
+            <Dropdown.Item className="flex items-start text-base">삭제하기</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
         {/* {isMenuOpen && (드롭다운 메뉴)} */}
       </div>
     </div>
