@@ -311,6 +311,9 @@ importers:
       vite:
         specifier: ^5.4.10
         version: 5.4.11(@types/node@22.9.0)(terser@5.36.0)
+      vite-plugin-svgr:
+        specifier: ^4.3.0
+        version: 4.3.0(rollup@4.26.0)(typescript@5.6.3)(vite@5.4.11(@types/node@22.9.0)(terser@5.36.0))
       vite-tsconfig-paths:
         specifier: ^5.1.1
         version: 5.1.2(typescript@5.6.3)(vite@5.4.11(@types/node@22.9.0)(terser@5.36.0))
@@ -7632,6 +7635,11 @@ packages:
     resolution: {integrity: sha512-rd0QIgx74q4S1Rd56XIiL2cYEdyWn13cunYBIuqh9mpmQr7gGS0IxXoP8R6OaZtNQQLyXSWbd4rXKYUbhFpK5w==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
+
+  vite-plugin-svgr@4.3.0:
+    resolution: {integrity: sha512-Jy9qLB2/PyWklpYy0xk0UU3TlU0t2UMpJXZvf+hWII1lAmRHrOUKi11Uw8N3rxoNk7atZNYO3pR3vI1f7oi+6w==}
+    peerDependencies:
+      vite: '>=2.6.0'
 
   vite-tsconfig-paths@5.1.2:
     resolution: {integrity: sha512-gEIbKfJzSEv0yR3XS2QEocKetONoWkbROj6hGx0FHM18qKUojhvcokQsxQx5nMkelZq2n37zbSGCJn+FSODSjA==}
@@ -17077,6 +17085,17 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+
+  vite-plugin-svgr@4.3.0(rollup@4.26.0)(typescript@5.6.3)(vite@5.4.11(@types/node@22.9.0)(terser@5.36.0)):
+    dependencies:
+      '@rollup/pluginutils': 5.1.3(rollup@4.26.0)
+      '@svgr/core': 8.1.0(typescript@5.6.3)
+      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.6.3))
+      vite: 5.4.11(@types/node@22.9.0)(terser@5.36.0)
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+      - typescript
 
   vite-tsconfig-paths@5.1.2(typescript@5.6.3)(vite@5.4.11(@types/node@22.9.0)(terser@5.36.0)):
     dependencies:
