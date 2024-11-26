@@ -128,7 +128,7 @@ export const DrawRoute = () => {
 
   return (
     <ToolTypeProvider>
-      <div className="flex h-full w-full flex-col py-20">
+      <div className="flex h-full w-full flex-col py-[75px]">
         <div style={{ position: 'relative', padding: '1rem' }}>
           <MapProviderForDraw width={window.innerWidth - 32} height={window.innerHeight - 180} />
         </div>
