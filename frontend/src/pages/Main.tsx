@@ -152,11 +152,8 @@ export const Main = () => {
         </BottomSheet>
       ) : (
         <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#F1F1F1F2">
-          <div
-            className="absolute left-1/2 top-[30%] flex -translate-x-1/2 transform cursor-pointer flex-col text-center"
-            onClick={handleLoginRequest}
-          >
-            <div className="rounded-lg p-6">
+          <div className="h-full w-full cursor-pointer" onClick={handleLoginRequest}>
+            <div className="absolute left-1/2 top-[35%] flex -translate-x-1/2 transform cursor-pointer flex-col p-6 text-center">
               <p className="text-grayscale-175 mb-5 text-lg font-normal">로그인을 진행하여</p>
               <p className="text-grayscale-175 mb-5 text-lg font-normal">더 많은 기능을</p>
               <p className="text-grayscale-175 text-lg font-normal">사용해보세요</p>
