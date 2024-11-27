@@ -7,6 +7,7 @@ import { GuestView } from '@/pages/GuestView';
 import { Layout } from '@/component/layout/Layout';
 import { UserProvider } from '@/context/UserContext';
 import { CurrentUserProvider } from '@/context/CurrentUserContext';
+import { RequireAuth } from '@/routes/RequireAuth.tsx';
 
 export const IndexRoutes = () => (
   <UserProvider>
@@ -18,15 +19,36 @@ export const IndexRoutes = () => (
 
           {/* 채널 추가를 위한 중첩 라우트 */}
           <Route path="add-channel">
-            <Route index element={<AddChannel />} />
+            <Route
+              index
+              element={
+                <RequireAuth>
+                  <AddChannel />
+                </RequireAuth>
+              }
+            />
             <Route path=":user">
-              <Route path="draw" element={<DrawRoute />} />
+              <Route
+                path="draw"
+                element={
+                  <RequireAuth>
+                    <DrawRoute />
+                  </RequireAuth>
+                }
+              />
             </Route>
           </Route>
 
           {/* 채널별 뷰를 위한 중첩 라우트 */}
           <Route path="channel/:channelId">
-            <Route path="host" element={<HostView />} />
+            <Route
+              path="host"
+              element={
+                <RequireAuth>
+                  <HostView />
+                </RequireAuth>
+              }
+            />
             <Route path="guest/:guestId" element={<GuestView />} />
           </Route>
 
