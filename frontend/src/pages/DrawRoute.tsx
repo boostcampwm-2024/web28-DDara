@@ -54,11 +54,11 @@ export const DrawRoute = () => {
     if (user) {
       // userId에 따른 Tailwind 색상 클래스를 설정
       const markerColors: { [key: number]: string } = {
-        1: 'marker:user1', // tailwind의 custom color class로 설정
-        2: 'marker:user2',
-        3: 'marker:user3',
-        4: 'marker:user4',
-        5: 'marker:user5',
+        1: '#B4D033',
+        2: '#22A751',
+        3: '#2722A7',
+        4: '#8F22A7',
+        5: '#A73D22',
       };
 
       // user.id에 맞는 marker 스타일 적용
