@@ -17,8 +17,8 @@ export const RouteSettingButton = (props: IRouteSettingButtonProps) => {
 
   return (
     <div className="flex flex-row items-center justify-center space-x-2" key={props.user.id}>
-      <div className="shadow-userName border-grayscale-400 flex h-11 w-16 items-center justify-center rounded-lg border text-xs">
-        <p className="font-nomal">{props.user.name}</p>
+      <div className="shadow-userName border-grayscale-400 flex h-11 w-16 items-center justify-center rounded-lg border py-4 text-xs">
+        <p className="font-nomal leading-none">{props.user.name}</p>
       </div>
       <button type="button" onClick={() => goToUserDrawRoute(props.user.name)}>
         <div
