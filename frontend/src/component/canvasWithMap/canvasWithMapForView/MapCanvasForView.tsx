@@ -54,7 +54,6 @@ export const MapCanvasForView = ({
     setMap(mapInstance);
     setProjection(mapInstance.getProjection());
 
-    // eslint-disable-next-line consistent-return
     return () => {
       mapInstance.destroy();
     };
