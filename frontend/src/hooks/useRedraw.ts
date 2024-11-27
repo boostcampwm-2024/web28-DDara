@@ -57,14 +57,60 @@ export const useRedrawCanvas = ({
     endImageRef.current.src = endmarker;
   }, []);
 
-  const getMarkerColor = (token: string) => {
+  const drawMarker = (
+    ctx: CanvasRenderingContext2D,
+    point: { x: number; y: number } | null,
+    image: HTMLImageElement | null,
+    zoom: number,
+  ) => {
+    if (point && image) {
+      const markerSize = zoom * 2;
+      ctx.drawImage(image, point.x - markerSize / 2, point.y - markerSize, markerSize, markerSize);
+    }
+  };
+
+  const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[]) => {
+    if (points.length === 0) return;
+
+    ctx.beginPath();
+    const firstPoint = latLngToCanvasPoint(points[0]);
+    if (firstPoint) {
+      ctx.moveTo(firstPoint.x, firstPoint.y);
+      for (let i = 1; i < points.length; i++) {
+        const point = latLngToCanvasPoint(points[i]);
+        if (point) {
+          ctx.lineTo(point.x, point.y);
+        }
+      }
+      ctx.stroke();
+    }
+  };
+
+  const drawCircle = (
+    ctx: CanvasRenderingContext2D,
+    point: { x: number; y: number } | null,
+    color: string,
+    radius: number,
+  ) => {
+    if (point) {
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, radius, 0, 2 * Math.PI);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+  };
+
+  const getMarkerColor = (token: string): string => {
+    // 문자열 해싱을 통해 고유 숫자 생성
     let hash = 0;
     for (let i = 0; i < token.length; i++) {
       hash = token.charCodeAt(i) + ((hash << 5) - hash);
     }
+    // 해시 값을 기반으로 RGB 값 생성
     const r = (hash >> 16) & 0xff;
     const g = (hash >> 8) & 0xff;
     const b = hash & 0xff;
+    // RGB를 HEX 코드로 변환
     return `rgb(${r}, ${g}, ${b})`;
   };
 
@@ -81,114 +127,43 @@ export const useRedrawCanvas = ({
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    // MapCanvasForDraw
+    const zoom = map.getZoom();
     if (startMarker) {
       const startPoint = latLngToCanvasPoint(startMarker);
-      if (startPoint && startImageRef.current) {
-        const markerSize = map.getZoom() * 2;
-        ctx.drawImage(
-          startImageRef.current,
-          startPoint.x - markerSize / 2,
-          startPoint.y - markerSize,
-          markerSize,
-          markerSize,
-        );
-      }
+      drawMarker(ctx, startPoint, startImageRef.current, zoom);
     }
 
     if (endMarker) {
       const endPoint = latLngToCanvasPoint(endMarker);
-      if (endPoint && endImageRef.current) {
-        const markerSize = map.getZoom() * 2;
-        ctx.drawImage(
-          endImageRef.current,
-          endPoint.x - markerSize / 2,
-          endPoint.y - markerSize,
-          markerSize,
-          markerSize,
-        );
-      }
+      drawMarker(ctx, endPoint, endImageRef.current, zoom);
     }
 
-    if (pathPoints && pathPoints.length > 0) {
-      ctx.beginPath();
-      const firstPoint = latLngToCanvasPoint(pathPoints[0]);
-      if (firstPoint) {
-        ctx.moveTo(firstPoint.x, firstPoint.y);
-        for (let i = 1; i < pathPoints.length; i++) {
-          const point = latLngToCanvasPoint(pathPoints[i]);
-          if (point) {
-            ctx.lineTo(point.x, point.y);
-          }
-        }
-        ctx.stroke();
-      }
+    if (pathPoints) {
+      drawPath(ctx, pathPoints);
     }
 
-    // MapCanvasForView
     if (lat && lng) {
       const currentLocation = latLngToCanvasPoint({ lat, lng });
-      if (currentLocation) {
-        ctx.beginPath();
-        ctx.arc(currentLocation.x, currentLocation.y, 10, 0, 2 * Math.PI);
-        ctx.fillStyle = 'blue';
-        ctx.fill();
-      }
+      drawCircle(ctx, currentLocation, 'blue', 10);
     }
 
-    if (otherLocations && otherLocations.length > 0) {
+    if (otherLocations) {
       otherLocations.forEach(({ location, token }) => {
         const markerColor = getMarkerColor(token);
-        const currentLocation = latLngToCanvasPoint(location);
-        if (currentLocation) {
-          ctx.beginPath();
-          ctx.arc(currentLocation.x, currentLocation.y, 10, 0, 2 * Math.PI);
-          ctx.fillStyle = markerColor;
-          ctx.fill();
-        }
+        const locationPoint = latLngToCanvasPoint(location);
+        drawCircle(ctx, locationPoint, markerColor, 10);
       });
     }
 
-    if (guests && guests.length > 0) {
+    if (guests) {
       guests.forEach(({ startPoint, endPoint, paths }) => {
         const startLocation = latLngToCanvasPoint(startPoint);
-        if (startLocation && startImageRef.current) {
-          const markerSize = map.getZoom() * 2;
-          ctx.drawImage(
-            startImageRef.current,
-            startLocation.x - markerSize / 2,
-            startLocation.y - markerSize,
-            markerSize,
-            markerSize,
-          );
-        }
+        drawMarker(ctx, startLocation, startImageRef.current, zoom);
 
         const endLocation = latLngToCanvasPoint(endPoint);
-        if (endLocation && endImageRef.current) {
-          const markerSize = map.getZoom() * 2;
-          ctx.drawImage(
-            endImageRef.current,
-            endLocation.x - markerSize / 2,
-            endLocation.y - markerSize,
-            markerSize,
-            markerSize,
-          );
-        }
+        drawMarker(ctx, endLocation, endImageRef.current, zoom);
 
-        if (paths.length > 0) {
-          ctx.beginPath();
-          const firstPoint = latLngToCanvasPoint(paths[0]);
-          if (firstPoint) {
-            ctx.moveTo(firstPoint.x, firstPoint.y);
-            for (let i = 1; i < paths.length; i++) {
-              const point = latLngToCanvasPoint(paths[i]);
-              if (point) {
-                ctx.lineTo(point.x, point.y);
-              }
-            }
-            ctx.stroke();
-          }
-        }
+        drawPath(ctx, paths);
       });
     }
   };
