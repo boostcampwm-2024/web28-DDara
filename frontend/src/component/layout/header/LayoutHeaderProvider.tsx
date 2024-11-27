@@ -1,5 +1,6 @@
 import { ReactNode, createContext, useReducer, useMemo, useCallback } from 'react';
 import { IHeaderOption } from '@/component/header/Header.tsx';
+import { IGuestData } from '@/types/channel.types.ts';
 
 interface ILayoutHeaderProviderProps {
   children: ReactNode;
@@ -11,7 +12,7 @@ interface IHeaderOptionContext {
   setSubTitle: (subtitle: string) => void;
   setLeftButton: (leftButton: string) => void;
   setRightButton: (rightButton: string) => void;
-  setItems: (items: string[]) => void;
+  setItems: (items: IGuestData[]) => void;
   resetHeaderContext: () => void;
 }
 
@@ -38,7 +39,7 @@ type Action =
   | { type: 'SET_SUBTITLE'; payload: string }
   | { type: 'SET_LEFT_BUTTON'; payload: string }
   | { type: 'SET_RIGHT_BUTTON'; payload: string }
-  | { type: 'SET_ITEMS'; payload: string[] };
+  | { type: 'SET_ITEMS'; payload: IGuestData[] };
 
 const headerReducer = (state: IHeaderOption, action: Action): IHeaderOption => {
   switch (action.type) {
@@ -76,7 +77,7 @@ export const LayoutHeaderProvider = (props: ILayoutHeaderProviderProps) => {
     dispatch({ type: 'SET_RIGHT_BUTTON', payload: rightButton });
   }, []);
 
-  const setItems = useCallback((items: string[]) => {
+  const setItems = useCallback((items: IGuestData[]) => {
     dispatch({ type: 'SET_ITEMS', payload: items });
   }, []);
 

@@ -5,6 +5,7 @@ import { HeaderTitle } from '@/component/header/HeaderTitle.tsx';
 import { HeaderMainLayout } from '@/component/header/HeaderMainLayout.tsx';
 import { HeaderSubtitle } from '@/component/header/HeaderSubtitle.tsx';
 import classNames from 'classnames';
+import { IGuestData } from '@/types/channel.types.ts';
 
 interface IHeaderProps {
   children: ReactNode;
@@ -16,7 +17,7 @@ export interface IHeaderOption {
   rightButton?: string;
   title?: ReactNode;
   subtitle?: string;
-  items?: string[];
+  items?: IGuestData[];
 }
 
 export const Header = (props: IHeaderProps) => {

@@ -1,15 +1,16 @@
 import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
 import { ReactNode, useContext, useEffect, useState } from 'react';
-import { IGuest, IChannelInfo } from '@/types/channel.types.ts';
+import { IGuest, IChannelInfo, IGuestData } from '@/types/channel.types.ts';
 import { getChannelInfo } from '@/api/channel.api.ts';
 import { useLocation } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { IGuestDataInMapProps, IPoint } from '@/lib/types/canvasInterface.ts';
 import { getChannelResEntity, guestEntity } from '@/api/dto/channel.dto.ts';
+import { HostMarker } from '@/component/IconGuide/HostMarker.tsx';
 
 export const HostView = () => {
   const [channelInfo, setChannelInfo] = useState<IChannelInfo>();
-  const [userNames, setUserNames] = useState<string[]>(['사용자 1']);
+  const [guestData, setGuestData] = useState<IGuestData[]>([]);
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
   const [component, setComponent] = useState<ReactNode>();
 
@@ -62,15 +63,19 @@ export const HostView = () => {
   useEffect(() => {
     headerContext.setRightButton('dropdown');
     headerContext.setLeftButton('back');
-    headerContext.setItems(['1']);
+    headerContext.setItems([{ name: '사용자 1', id: '1', markerStyle: { color: '#000' } }]);
 
     fetchChannelInfo(location.pathname.split('/')[2]);
   }, []);
 
   useEffect(() => {
     if (channelInfo?.guests) {
-      const names = channelInfo.guests.filter(Boolean).map(guest => guest.name!);
-      setUserNames(names);
+      const data: IGuestData[] = channelInfo.guests.filter(Boolean).map(guest => ({
+        name: guest.name,
+        markerStyle: guest.markerStyle,
+        id: guest.id,
+      }));
+      setGuestData(data);
       channelInfo.guests?.map(guest =>
         setMapProps(prev => [...prev, guest as IGuestDataInMapProps]),
       );
@@ -78,8 +83,8 @@ export const HostView = () => {
   }, [channelInfo]);
 
   useEffect(() => {
-    headerContext.setItems(userNames);
-  }, [userNames]);
+    headerContext.setItems(guestData);
+  }, [guestData]);
 
   useEffect(() => {
     if (mapProps.length > 1) {
@@ -96,6 +101,9 @@ export const HostView = () => {
   }, [mapProps]);
 
   return (
-    <article className="absolute h-full w-screen flex-grow overflow-hidden">{component}</article>
+    <article className="absolute h-full w-screen flex-grow overflow-hidden">
+      <HostMarker userData={guestData} />
+      {component}
+    </article>
   );
 };

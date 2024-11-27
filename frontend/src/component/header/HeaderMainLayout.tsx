@@ -1,11 +1,12 @@
 import { ReactNode } from 'react';
 import { Header } from '@/component/header/Header.tsx';
+import { IGuestData } from '@/types/channel.types.ts';
 
 interface IHeaderMainLayoutProps {
   leftButton?: string;
   rightButton?: string;
   title?: ReactNode;
-  items?: string[];
+  items?: IGuestData[];
 }
 
 export const HeaderMainLayout = (props: IHeaderMainLayoutProps) => {
@@ -15,7 +16,7 @@ export const HeaderMainLayout = (props: IHeaderMainLayoutProps) => {
         return <Header.BackButton />;
       case 'dropdown':
         if (props.items) return <Header.Dropdown items={props.items} />;
-        return <Header.Dropdown items={['사용자 1']} />;
+        return <Header.Dropdown items={[]} />;
       default:
         return null;
     }

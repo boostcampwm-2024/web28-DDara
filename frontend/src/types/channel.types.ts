@@ -16,6 +16,12 @@ export interface IGuest {
   markerStyle: IGuestMarkerStyle;
 }
 
+export interface IGuestData {
+  id: string;
+  name: string;
+  markerStyle: IGuestMarkerStyle;
+}
+
 export interface IChannelInfo {
   channelId: string;
   hostId: string;
