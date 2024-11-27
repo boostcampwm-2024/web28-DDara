@@ -1,5 +1,9 @@
 import { MdGroup, MdMoreVert } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import { getChannelInfo } from '@/api/channel.api';
+// import { useContext } from 'react';
+// import { UserContext } from '@/context/UserContext';
+// import { guestEntity, pathLocationEntity } from '@/api/dto/channel.dto';
 import { Dropdown } from '../common/dropdown/Dropdown';
 
 interface IContentProps {
@@ -7,6 +11,7 @@ interface IContentProps {
   person: number;
   link: string;
   time: string;
+  channelId: string;
 }
 
 /**
@@ -42,6 +47,54 @@ export const Content = (props: IContentProps) => {
     minute: '2-digit',
   });
   const navigate = useNavigate();
+  // const { setUsers } = useContext(UserContext);
+
+  // const updateUsers = (guests: guestEntity[]) => {
+  //   const updatedUsers = guests.map((guest, index) => ({
+  //     id: index + 1,
+  //     name: guest.name ?? `사용자${index + 1}`,
+  //     start_location: {
+  //       title: guest.start_location?.title ?? '', // 기본 제목
+  //       lat: guest.start_location?.lat ?? 0,
+  //       lng: guest.start_location?.lng ?? 0,
+  //     },
+  //     end_location: {
+  //       title: guest.end_location?.title ?? '',
+  //       lat: guest.end_location?.lat ?? 0,
+  //       lng: guest.end_location?.lng ?? 0,
+  //     },
+  //     path:
+  //       guest.path?.map((point: pathLocationEntity) => ({
+  //         lat: point.lat ?? 0,
+  //         lng: point.lng ?? 0,
+  //       })) ?? [],
+  //     marker_style: {
+  //       color: guest.marker_style?.color ?? '#000000',
+  //     },
+  //   }));
+
+  //   setUsers(updatedUsers);
+  //   console.log('Users updated:', updatedUsers);
+  // };
+
+  const getUpdateChannelInfo = async () => {
+    try {
+      // `getChannelInfo`로 채널 정보 가져오기
+      const channelInfo = await getChannelInfo(props.channelId);
+      console.log('Channel Info:', channelInfo);
+      // updateUsers(channelInfo.data?.guests);
+      // 이후 필요한 작업 수행
+      // 예: 가져온 데이터를 UI에 반영하거나 상태 관리 스토어에 저장
+    } catch (error) {
+      console.error('Failed to get channel info:', error);
+    }
+  };
+
+  const handleUpdate = () => {
+    getUpdateChannelInfo();
+    navigate('/add-channel/');
+  };
+
   return (
     <div className="relative flex w-full flex-row items-center justify-between px-4 py-5">
       <div
@@ -68,7 +121,9 @@ export const Content = (props: IContentProps) => {
             <MdMoreVert className="h-6 w-6" />
           </Dropdown.Trigger>
           <Dropdown.Menu>
-            <Dropdown.Item className="flex items-start text-base">수정하기</Dropdown.Item>
+            <Dropdown.Item className="flex items-start text-base" onClick={handleUpdate}>
+              수정하기
+            </Dropdown.Item>
             <Dropdown.Item className="flex items-start text-base">삭제하기</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>

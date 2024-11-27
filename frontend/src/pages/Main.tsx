@@ -141,6 +141,7 @@ export const Main = () => {
           {channels.map(item => (
             <Fragment key={item.id}>
               <Content
+                channelId={item.channelId}
                 title={item.name}
                 link={item.id}
                 person={item.guest_count}
