@@ -93,7 +93,7 @@ export const Content = (props: IContentProps) => {
 
   const handleUpdate = () => {
     getUpdateChannelInfo();
-    navigate('/add-channel/');
+    navigate('/update-channel/');
   };
 
   return (

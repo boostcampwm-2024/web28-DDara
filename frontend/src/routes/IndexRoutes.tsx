@@ -9,6 +9,7 @@ import { GuestView } from '@/pages/GuestView';
 import { Layout } from '@/component/layout/Layout';
 import { UserProvider } from '@/context/UserContext';
 import { CurrentUserProvider } from '@/context/CurrentUserContext';
+import { UpdateChannel } from '@/pages/UpdateChannel';
 
 export const IndexRoutes = () => (
   <UserProvider>
@@ -28,6 +29,10 @@ export const IndexRoutes = () => (
               <Route index element={<UserRoute />} />
               <Route path="draw" element={<DrawRoute />} />
             </Route>
+          </Route>
+
+          <Route path="update-channel">
+            <Route index element={<UpdateChannel />} />
           </Route>
 
           {/* 채널별 뷰를 위한 중첩 라우트 */}
