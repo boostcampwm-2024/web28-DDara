@@ -28,6 +28,7 @@ export const MapCanvasForView = ({
         new naver.maps.LatLng(33.0, 124.5),
         new naver.maps.LatLng(38.9, 131.9),
       ),
+      mapDataControl: false,
     });
 
     setMap(mapInstance);
