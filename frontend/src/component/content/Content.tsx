@@ -1,7 +1,7 @@
 import { MdGroup, MdMoreVert } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { getChannelInfo } from '@/api/channel.api';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { UserContext } from '@/context/UserContext';
 import { guestEntity, pathLocationEntity } from '@/api/dto/channel.dto';
 import { ChannelContext } from '@/context/ChannelContext';
@@ -49,7 +49,7 @@ export const Content = (props: IContentProps) => {
   });
   const navigate = useNavigate();
   const { setUsers, resetUsers } = useContext(UserContext);
-  const { setChannelInfo } = useContext(ChannelContext);
+  const { channelInfo, setChannelInfo } = useContext(ChannelContext);
 
   const updateUsers = (guests: guestEntity[]) => {
     const updatedUsers = guests.map((guest, i) => ({
@@ -97,8 +97,13 @@ export const Content = (props: IContentProps) => {
   const handleUpdate = () => {
     resetUsers();
     getUpdateChannelInfo();
-    navigate('/update-channel/');
   };
+
+  useEffect(() => {
+    if (channelInfo?.id) {
+      navigate(`/channelInfo/${channelInfo.id}`);
+    }
+  }, [channelInfo, navigate]);
 
   return (
     <div className="relative flex w-full flex-row items-center justify-between px-4 py-5">

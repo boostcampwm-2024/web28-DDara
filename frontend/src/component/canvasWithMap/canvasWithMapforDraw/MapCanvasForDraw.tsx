@@ -445,6 +445,56 @@ export const MapCanvasForDraw = ({
     updateCanvasSize();
   }, [map]);
 
+  const calculateZoomLevel = (latDiff: number, lngDiff: number) => {
+    const maxDiff = Math.max(latDiff, lngDiff);
+    if (maxDiff < 0.0005) return 19;
+    if (maxDiff < 0.001) return 18;
+    if (maxDiff < 0.004) return 17;
+    if (maxDiff < 0.01) return 15;
+    if (maxDiff < 0.03) return 14;
+    if (maxDiff < 0.05) return 13;
+    if (maxDiff < 0.1) return 12;
+    if (maxDiff < 0.2) return 11;
+    if (maxDiff < 0.5) return 10;
+    if (maxDiff < 1) return 9;
+    if (maxDiff < 2) return 8;
+    if (maxDiff < 5) return 7;
+    if (maxDiff < 10) return 6;
+    return 5;
+  };
+
+  useEffect(() => {
+    if (startMarker && endMarker) {
+      const latitudes = [startMarker.lat, endMarker.lat];
+      const longitudes = [startMarker.lng, endMarker.lng];
+
+      const maxLat = Math.max(...latitudes);
+      const minLat = Math.min(...latitudes);
+      const maxLng = Math.max(...longitudes);
+      const minLng = Math.min(...longitudes);
+
+      const centerLat = (maxLat + minLat) / 2;
+      const centerLng = (maxLng + minLng) / 2;
+
+      map?.setCenter(new window.naver.maps.LatLng(centerLat, centerLng));
+
+      const latDiff = maxLat - minLat;
+      const lngDiff = maxLng - minLng;
+      const zoomLevel = calculateZoomLevel(latDiff, lngDiff);
+
+      map?.setZoom(zoomLevel);
+    } else {
+      if (startMarker) {
+        map?.setCenter({ lat: startMarker.lat, lng: startMarker.lng });
+        map?.setZoom(15);
+      }
+      if (endMarker) {
+        map?.setCenter({ lat: endMarker.lat, lng: endMarker.lng });
+        map?.setZoom(15);
+      }
+    }
+  }, [startMarker, endMarker]);
+
   useEffect(() => {
     redrawCanvas();
   }, [startMarker, endMarker, pathPoints, map, undoStack, redoStack]);
