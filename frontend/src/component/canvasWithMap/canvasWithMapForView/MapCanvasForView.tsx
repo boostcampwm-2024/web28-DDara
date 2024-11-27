@@ -36,6 +36,7 @@ export const MapCanvasForView = ({
 
     endImageRef.current = new Image();
     endImageRef.current.src = endmarker;
+    console.log(guests);
   }, []);
 
   useEffect(() => {

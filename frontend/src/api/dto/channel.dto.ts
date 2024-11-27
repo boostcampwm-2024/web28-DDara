@@ -17,6 +17,20 @@ export class guestMarkerStyleEntity {
 }
 
 export class guestEntity {
+  id: string | undefined;
+
+  name: string | undefined;
+
+  start_location: locationEntity | undefined;
+
+  end_location: locationEntity | undefined;
+
+  path: pathLocationEntity[] | undefined;
+
+  marker_style: guestMarkerStyleEntity | undefined;
+}
+
+export class guestReqEntity {
   name: string | undefined;
 
   start_location: locationEntity | undefined;
@@ -33,7 +47,7 @@ export class createChannelReqEntity {
 
   host_id: string | undefined;
 
-  guests: guestEntity[] | undefined;
+  guests: guestReqEntity[] | undefined;
 }
 
 export class guestSimpleEntity {
@@ -66,4 +80,14 @@ export class channelListEntity {
 
 export class getUserChannelsResEntity {
   channels: channelListEntity[] | undefined;
+}
+
+export class getChannelResEntity {
+  id: string | undefined;
+
+  name: string | undefined;
+
+  host_id: string | undefined;
+
+  guests: guestEntity[] | undefined;
 }

@@ -59,9 +59,9 @@ export const AuthModal = (props: IAuthModalProps) => {
   const handleLoginClick = () => {
     doLogin(loginData.id, loginData.pw)
       .then(el => {
-        if (el.data?.data.token && el.data?.data.userId) {
-          saveLocalData(AppConfig.KEYS.LOGIN_TOKEN, el.data?.data.token);
-          saveLocalData(AppConfig.KEYS.LOGIN_USER, el.data?.data.userId);
+        if (el.data?.token && el.data?.userId) {
+          saveLocalData(AppConfig.KEYS.LOGIN_TOKEN, el.data.token);
+          saveLocalData(AppConfig.KEYS.LOGIN_USER, el.data.userId);
         }
         setError('');
         props.onClose();
@@ -109,6 +109,7 @@ export const AuthModal = (props: IAuthModalProps) => {
             placeholder="PW"
             value={loginData.pw}
             onChange={handleChange}
+            type="password"
           />
           {error ? <p className="pt-2 text-sm font-normal text-red-500">{error}</p> : ''}
           <Modal.Footer
@@ -148,6 +149,7 @@ export const AuthModal = (props: IAuthModalProps) => {
             placeholder="사용할 비밀번호를 입력해주세요."
             value={registerData.pw}
             onChange={handleChange}
+            type="password"
           />
           <Modal.Input
             title=""
@@ -155,6 +157,7 @@ export const AuthModal = (props: IAuthModalProps) => {
             placeholder="비밀번호를 한 번 더 입력해주세요."
             value={registerData.confirmPw}
             onChange={handleChange}
+            type="password"
           />
           {error ? <p className="pt-2 text-sm font-normal text-red-500">{error}</p> : ''}
 
