@@ -30,12 +30,24 @@ export class guestEntity {
   marker_style: guestMarkerStyleEntity | undefined;
 }
 
+export class guestReqEntity {
+  name: string | undefined;
+
+  start_location: locationEntity | undefined;
+
+  end_location: locationEntity | undefined;
+
+  path: pathLocationEntity[] | undefined;
+
+  marker_style: guestMarkerStyleEntity | undefined;
+}
+
 export class createChannelReqEntity {
   name: string | undefined;
 
   host_id: string | undefined;
 
-  guests: guestEntity[] | undefined;
+  guests: guestReqEntity[] | undefined;
 }
 
 export class guestSimpleEntity {
