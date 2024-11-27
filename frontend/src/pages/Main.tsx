@@ -25,7 +25,7 @@ export const Main = () => {
   } = useContext(FooterContext);
   const { lat, lng, error } = getUserLocation();
   const [otherLocations, setOtherLocations] = useState<any[]>([]);
-  const MIN_HEIGHT = 0.35;
+  const MIN_HEIGHT = 0.36;
   const MAX_HEIGHT = 0.9;
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
@@ -156,7 +156,7 @@ export const Main = () => {
               <Content
                 channelId={item.id}
                 title={item.name}
-                link={item.id}
+                link={`/channel/${item.id}/host`}
                 person={item.guest_count}
                 time={item.generated_at}
               />

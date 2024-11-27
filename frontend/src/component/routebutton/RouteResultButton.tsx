@@ -28,8 +28,8 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
       .writeText(url)
       .then(() => {
         alert(
-          `${channelInfo.name} 경로의 링크가 복사되었습니다\n 사용자에게 링크를 보내주세요!\n\n ${url}`,
-        ); // 복사 성공 메시지
+          `${channelInfo.name} 경로의 링크가 복사되었습니다\n사용자에게 링크를 보내주세요!\n\n${url}`,
+        );
       })
       .catch(() => {
         alert('링크 복사에 실패했습니다.'); // 복사 실패 시 처리
@@ -37,26 +37,41 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
   };
 
   return (
-    <div className="flex flex-row items-center justify-start space-x-2" key={props.user.id}>
+    <div className="flex w-full flex-row items-center justify-start" key={props.user.id}>
       <div className="shadow-userName border-grayscale-400 flex h-11 w-16 items-center justify-center rounded-lg border text-xs">
-        <p className="font-nomal">{props.user.name}</p>
+        <p className="font-nomal leading-none">{props.user.name}</p>
       </div>
       <button
+        className="px-2"
         type="button"
         onClick={props.page === Page.ADD ? () => goToUserDrawRoute(props.user.name) : () => {}}
       >
         <div
           className={classNames(
-            'm-0 flex h-11 flex-row items-center justify-center rounded-md text-xs font-semibold',
+            'm-0 flex h-11 flex-row items-center justify-center rounded-md text-xs font-semibold leading-none',
             props.page === Page.ADD ? 'w-56' : 'w-44',
           )}
         >
-          <div className="h-full w-24 overflow-hidden text-ellipsis whitespace-nowrap rounded border-2 px-2 py-[16px] text-start text-xs font-normal">
-            {props.user.start_location.title}
+          <div
+            className={classNames(
+              'jusify-center flex h-full items-center rounded border-2 px-2 text-start text-xs font-normal',
+              props.page === Page.ADD ? 'w-24' : 'w-16',
+            )}
+          >
+            <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
+              {props.user.start_location.title}
+            </div>
           </div>
-          <GoArrowRight className="mx-2 h-8 w-8" />
-          <div className="h-full w-24 overflow-hidden text-ellipsis whitespace-nowrap rounded border-2 px-2 py-[16px] text-start text-xs font-normal">
-            {props.user.end_location.title}
+          <GoArrowRight className="mx-2 h-4 w-4" />
+          <div
+            className={classNames(
+              'jusify-center flex h-full items-center rounded border-2 px-2 text-start text-xs font-normal',
+              props.page === Page.ADD ? 'w-24' : 'w-16',
+            )}
+          >
+            <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
+              {props.user.end_location.title}
+            </div>
           </div>
         </div>
       </button>

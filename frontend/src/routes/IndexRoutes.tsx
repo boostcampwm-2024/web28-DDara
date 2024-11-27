@@ -7,7 +7,7 @@ import { GuestView } from '@/pages/GuestView';
 import { Layout } from '@/component/layout/Layout';
 import { UserProvider } from '@/context/UserContext';
 import { CurrentUserProvider } from '@/context/CurrentUserContext';
-import { UpdateChannel } from '@/pages/UpdateChannel';
+import { ChannelInfoPage } from '@/pages/ChannelInfoPage'; // ChannelInfoPage 컴포넌트 임포트
 import { ChannelProvider } from '@/context/ChannelContext';
 import { RequireAuth } from '@/routes/RequireAuth.tsx';
 
@@ -38,7 +38,17 @@ export const IndexRoutes = () => (
                 />
               </Route>
             </Route>
-            <Route path="update-channel" element={<UpdateChannel />} />
+
+            {/* channelInfo 페이지 경로 설정 */}
+            <Route
+              path="channelInfo/:channelId"
+              element={
+                <RequireAuth>
+                  <ChannelInfoPage />
+                </RequireAuth>
+              }
+            />
+
             <Route path="channel/:channelId">
               <Route
                 path="host"
