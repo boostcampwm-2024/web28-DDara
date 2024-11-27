@@ -58,14 +58,14 @@ export const getUserChannels = (userId: string): Promise<ResponseDto<getUserChan
   return new Promise(promiseFn);
 };
 
-export const getChannelInfo = (userId: string): Promise<ResponseDto<getChannelResEntity>> => {
+export const getChannelInfo = (channelId: string): Promise<ResponseDto<getChannelResEntity>> => {
   const promiseFn = (
     fnResolve: (value: ResponseDto<getChannelResEntity>) => void,
     fnReject: (reason?: any) => void,
   ) => {
     const apiClient = getApiClient();
     apiClient
-      .get(`/channel/${userId}`)
+      .get(`/channel/${channelId}`)
       .then(res => {
         if (res.status !== 200) {
           console.error(res);

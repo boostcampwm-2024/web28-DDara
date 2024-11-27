@@ -82,7 +82,7 @@ export const BottomSheet = ({
         </button>
       </div>
 
-      <div className="h-full overflow-auto">{children}</div>
+      <div className="h-full overflow-auto pb-5">{children}</div>
     </div>
   );
 };
