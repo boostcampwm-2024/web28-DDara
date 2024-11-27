@@ -13,10 +13,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
+import { UserContext } from '@/context/UserContext';
 
 export const Main = () => {
-  const { setFooterTitle, setFooterTransparency, setFooterOnClick, setFooterActive } =
-    useContext(FooterContext);
+  const {
+    setFooterTitle,
+    setFooterTransparency,
+    setFooterOnClick,
+    setFooterActive,
+    resetFooterContext,
+  } = useContext(FooterContext);
   const { lat, lng, error } = getUserLocation();
   const [otherLocations, setOtherLocations] = useState<any[]>([]);
   const MIN_HEIGHT = 0.35;
@@ -24,6 +30,8 @@ export const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
   const [channels, setChannels] = useState<any[]>([]);
+
+  const { resetUsers } = useContext(UserContext);
 
   useEffect(() => {
     const token = loadLocalData(AppConfig.KEYS.LOGIN_TOKEN);
@@ -34,7 +42,9 @@ export const Main = () => {
       if (userId) {
         getUserChannels(userId)
           .then(response => {
-            if (response?.data?.channels) setChannels(response.data.channels);
+            if (response?.data?.channels) {
+              setChannels(response.data.channels);
+            }
           })
           .catch(err => {
             console.error('채널 찾기 실패 : ', err);
@@ -42,6 +52,7 @@ export const Main = () => {
       }
     }
   }, []);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,6 +86,8 @@ export const Main = () => {
     return undefined;
   }, [lat, lng]);
   const goToAddChannel = () => {
+    resetFooterContext();
+    resetUsers();
     navigate('/add-channel');
   };
   useEffect(() => {
@@ -141,7 +154,7 @@ export const Main = () => {
           {channels.map(item => (
             <Fragment key={item.id}>
               <Content
-                channelId={item.channelId}
+                channelId={item.id}
                 title={item.name}
                 link={item.id}
                 person={item.guest_count}
