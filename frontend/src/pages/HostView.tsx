@@ -10,9 +10,10 @@ import { HostMarker } from '@/component/IconGuide/HostMarker.tsx';
 
 export const HostView = () => {
   const [channelInfo, setChannelInfo] = useState<IChannelInfo>();
-  const [guestData, setGuestData] = useState<IGuestData[]>([]);
+  const [guestsData, setGuestsData] = useState<IGuestData[]>([]);
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
   const [component, setComponent] = useState<ReactNode>();
+  const [clickedId, setClickedId] = useState<string>('');
 
   const headerDropdownContext = useContext(HeaderDropdownContext);
 
@@ -60,6 +61,10 @@ export const HostView = () => {
       });
   };
 
+  const handleClickDropdown = (guestId: string) => {
+    setClickedId(guestId);
+  };
+
   useEffect(() => {
     headerDropdownContext.setItems([{ name: '사용자 1', id: '1', markerStyle: { color: '#000' } }]);
 
@@ -70,22 +75,30 @@ export const HostView = () => {
     const markerDefaultColor = ['#B4D033', '#22A751', '#2722A7', '#8F22A7', '#A73D22'];
 
     if (channelInfo?.guests) {
-      const data: IGuestData[] = channelInfo.guests.filter(Boolean).map((guest, index) => ({
+      const data: IGuestData[] = channelInfo.guests.map((guest, index) => ({
         name: guest.name,
-        // markerStyle: guest.markerStyle ?? { color: markerDefaultColor[index] },
-        markerStyle: { color: markerDefaultColor[index] },
+        markerStyle: guest.markerStyle ?? { color: markerDefaultColor[index] },
+        // markerStyle: { color: markerDefaultColor[index] },
         id: guest.id,
       }));
-      setGuestData(data);
-      channelInfo.guests?.map(guest =>
-        setMapProps(prev => [...prev, guest as IGuestDataInMapProps]),
-      );
+
+      setGuestsData(data);
+
+      if (clickedId === '') {
+        setMapProps([]);
+        channelInfo.guests?.map(guest =>
+          setMapProps(prev => [...prev, guest as IGuestDataInMapProps]),
+        );
+      } else {
+        setMapProps(channelInfo.guests?.filter(guest => guest.id === clickedId));
+      }
     }
-  }, [channelInfo]);
+  }, [channelInfo, clickedId]);
 
   useEffect(() => {
-    headerDropdownContext.setItems(guestData);
-  }, [guestData]);
+    headerDropdownContext.setItems(guestsData);
+    headerDropdownContext.setOnClickHandler(handleClickDropdown);
+  }, [guestsData]);
 
   useEffect(() => {
     setComponent(
@@ -101,7 +114,7 @@ export const HostView = () => {
 
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
-      <HostMarker userData={guestData} />
+      <HostMarker guestsData={mapProps} />
       {component}
     </article>
   );

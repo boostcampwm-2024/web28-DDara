@@ -13,7 +13,9 @@ export const DropdownItem = (props: IDropdownItemProps) => {
       <button
         type="button"
         className="flex w-full items-center justify-between gap-2 whitespace-nowrap bg-transparent"
-        onClick={props.onClick ?? (() => {})}
+        onClick={() => {
+          if (props.onClick) props.onClick();
+        }}
       >
         {props.children}
       </button>
