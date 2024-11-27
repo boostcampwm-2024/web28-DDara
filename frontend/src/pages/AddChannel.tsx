@@ -2,10 +2,12 @@ import { useContext, useEffect, useState } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { RouteSettingButton } from '@/component/routebutton/RouteSettingButton';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { RouteResultButton } from '@/component/routebutton/RouteResultButton';
 import { IUser, UserContext } from '@/context/UserContext';
 import { buttonActiveType } from '@/component/layout/enumTypes';
+import { createChannelReqEntity } from '@/api/dto/channel.dto';
+import { createChannel } from '@/api/channel.api';
 import { InputBox } from '../component/common/InputBox';
 
 /**
@@ -35,7 +37,15 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
 export const AddChannel = () => {
   const [channelName, setChannelName] = useState<string>('');
   const { users, setUsers } = useContext(UserContext);
-  const { setFooterTitle, setFooterTransparency, setFooterActive } = useContext(FooterContext);
+  const {
+    setFooterTitle,
+    setFooterTransparency,
+    setFooterActive,
+    footerOption,
+    setFooterOnClick,
+    resetFooterContext,
+  } = useContext(FooterContext);
+  const navigate = useNavigate();
 
   /**
    * 사용자 추가 함수
@@ -114,7 +124,6 @@ export const AddChannel = () => {
     setFooterTitle('제작 완료');
     setFooterTransparency(false);
     setFooterActive(buttonActiveType.PASSIVE);
-    console.log(users);
   }, []);
 
   useEffect(() => {
@@ -127,6 +136,49 @@ export const AddChannel = () => {
       setFooterActive(buttonActiveType.PASSIVE);
     }
   }, [users, setFooterActive]); // users가 변경될 때마다 실행
+
+  const createChannelAPI = async () => {
+    try {
+      const channelData: createChannelReqEntity = {
+        name: channelName,
+        host_id: 'jhi2359',
+        guests: users.map(user => ({
+          name: user.name,
+          start_location: {
+            title: user.start_location.title,
+            lat: user.start_location.lat,
+            lng: user.start_location.lng,
+          },
+          end_location: {
+            title: user.end_location.title,
+            lat: user.end_location.lat,
+            lng: user.end_location.lng,
+          },
+          path: user.path.map(p => ({
+            lat: p.lat,
+            lng: p.lng,
+          })),
+          marker_style: user.marker_style,
+        })),
+      };
+
+      // createChannel 호출
+      const response = await createChannel(channelData);
+      console.log('채널 생성 성공:', response);
+    } catch (error) {
+      console.error('채널 생성 실패:', error);
+    }
+  };
+  const goToMainPage = () => {
+    navigate('/');
+    resetFooterContext();
+  };
+  useEffect(() => {
+    setFooterOnClick(() => {
+      createChannelAPI();
+      goToMainPage();
+    });
+  }, [footerOption.active, channelName]); // channelName이 변경될 때마다 실행
 
   return (
     <main className="flex h-full w-full flex-col items-center px-8 py-16">

@@ -2,6 +2,7 @@ import { ResponseDto } from '@/api/dto/response.dto.ts';
 import {
   createChannelReqEntity,
   createChannelResEntity,
+  getChannelResEntity,
   getUserChannelsResEntity,
 } from '@/api/dto/channel.dto.ts';
 import { getApiClient } from '@/api/client.api.ts';
@@ -56,9 +57,9 @@ export const getUserChannels = (userId: string): Promise<ResponseDto<getUserChan
   return new Promise(promiseFn);
 };
 
-export const getChannelInfo = (userId: string): Promise<ResponseDto<createChannelReqEntity>> => {
+export const getChannelInfo = (userId: string): Promise<ResponseDto<getChannelResEntity>> => {
   const promiseFn = (
-    fnResolve: (value: ResponseDto<createChannelReqEntity>) => void,
+    fnResolve: (value: ResponseDto<getChannelResEntity>) => void,
     fnReject: (reason?: any) => void,
   ) => {
     const apiClient = getApiClient();
@@ -69,7 +70,7 @@ export const getChannelInfo = (userId: string): Promise<ResponseDto<createChanne
           console.error(res);
           fnReject(`msg.${res}`);
         } else {
-          fnResolve(new ResponseDto<createChannelReqEntity>(res.data));
+          fnResolve(new ResponseDto<getChannelResEntity>(res.data));
         }
       })
       .catch(err => {

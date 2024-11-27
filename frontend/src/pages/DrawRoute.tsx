@@ -75,7 +75,6 @@ export const DrawRoute = () => {
   }, []);
 
   useEffect(() => {
-    console.log(currentUser);
     if (currentUser) {
       setFooterOnClick(() => {
         if (currentUser) {
