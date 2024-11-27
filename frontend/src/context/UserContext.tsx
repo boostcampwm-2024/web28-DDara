@@ -1,8 +1,9 @@
 import React, { createContext, ReactNode, useMemo, useState } from 'react';
 
 export interface IUser {
-  id: number;
+  id: string;
   name: string;
+  index: number;
   start_location: {
     title: string;
     lat: number;
@@ -40,7 +41,8 @@ export const UserContext = createContext<IUserOptionContext>(defaultUserContext)
 export const UserProvider = (props: IUserContextProps) => {
   const defaultUsers: IUser[] = [
     {
-      id: 1,
+      id: '',
+      index: 1,
       name: '사용자1',
       start_location: { title: '', lat: 0, lng: 0 },
       end_location: { title: '', lat: 0, lng: 0 },

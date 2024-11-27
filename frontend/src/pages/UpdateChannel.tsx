@@ -51,10 +51,11 @@ export const UpdateChannel = () => {
       {users.length < 5 && (
         <section className="flex w-full justify-end">
           <button
+            type="button"
             onClick={goToAddChannelPage}
-            className="bg-grayscale-25 border-gray-75 font-nomal mr-8 h-8 w-40 rounded border p-2 text-xs"
+            className="bg-grayscale-25 border-gray-75 font-nomal mt-4 h-8 w-40 rounded border p-2 text-xs"
           >
-            사용자 추가하기
+            수정하기
           </button>
         </section>
       )}

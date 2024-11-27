@@ -66,7 +66,7 @@ export const DrawRoute = () => {
         ...user,
         marker_style: {
           ...user.marker_style,
-          color: markerColors[user.id] || 'marker:user1', // 기본값은 user1 색상
+          color: markerColors[user.index] || 'marker:user1', // 기본값은 user1 색상
         },
       };
 

@@ -8,6 +8,7 @@ import { IUser, UserContext } from '@/context/UserContext';
 import { buttonActiveType } from '@/component/layout/enumTypes';
 import { createChannelReqEntity } from '@/api/dto/channel.dto';
 import { createChannel } from '@/api/channel.api';
+import { Page } from '@/component/routebutton/enum';
 import { InputBox } from '../component/common/InputBox';
 
 /**
@@ -66,7 +67,8 @@ export const AddChannel = () => {
    */
   const addUser = () => {
     const newUser: IUser = {
-      id: users.length + 1,
+      id: '',
+      index: users.length + 1,
       name: `사용자${users.length + 1}`,
       start_location: { title: '', lat: 0, lng: 0 }, // 초기값으로 빈 좌표
       end_location: { title: '', lat: 0, lng: 0 }, // 초기값으로 빈 좌표
@@ -105,13 +107,13 @@ export const AddChannel = () => {
    * ```
    */
 
-  const deleteUser = (id: number) => {
+  const deleteUser = (index: number) => {
     const updatedUsers = users
-      .filter(user => user.id !== id)
-      .map((user, index) => ({
+      .filter(user => user.index !== index)
+      .map((user, i) => ({
         ...user,
-        id: index + 1,
-        name: `사용자${index + 1}`,
+        index: i + 1,
+        name: `사용자${i + 1}`,
       }));
     setUsers(updatedUsers);
   };
@@ -189,9 +191,9 @@ export const AddChannel = () => {
       <Divider />
       <section className="w-full space-y-4">
         {users.map(user => (
-          <div key={user.id}>
+          <div key={user.index}>
             {isUserDataComplete(user) ? (
-              <RouteResultButton user={user} deleteUser={deleteUser} />
+              <RouteResultButton user={user} deleteUser={deleteUser} page={Page.ADD} />
             ) : (
               <RouteSettingButton user={user} deleteUser={deleteUser} />
             )}

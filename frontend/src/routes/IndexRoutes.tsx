@@ -10,41 +10,44 @@ import { Layout } from '@/component/layout/Layout';
 import { UserProvider } from '@/context/UserContext';
 import { CurrentUserProvider } from '@/context/CurrentUserContext';
 import { UpdateChannel } from '@/pages/UpdateChannel';
+import { ChannelProvider } from '@/context/ChannelContext';
 
 export const IndexRoutes = () => (
   <UserProvider>
     <CurrentUserProvider>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          {/* 메인 페이지를 위한 인덱스 라우트 */}
-          <Route index element={<Main />} />
+      <ChannelProvider>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            {/* 메인 페이지를 위한 인덱스 라우트 */}
+            <Route index element={<Main />} />
 
-          {/* 공개 라우트 */}
-          <Route path="register" element={<Register />} />
+            {/* 공개 라우트 */}
+            <Route path="register" element={<Register />} />
 
-          {/* 채널 추가를 위한 중첩 라우트 */}
-          <Route path="add-channel">
-            <Route index element={<AddChannel />} />
-            <Route path=":user">
-              <Route index element={<UserRoute />} />
-              <Route path="draw" element={<DrawRoute />} />
+            {/* 채널 추가를 위한 중첩 라우트 */}
+            <Route path="add-channel">
+              <Route index element={<AddChannel />} />
+              <Route path=":user">
+                <Route index element={<UserRoute />} />
+                <Route path="draw" element={<DrawRoute />} />
+              </Route>
             </Route>
-          </Route>
 
-          <Route path="update-channel">
-            <Route index element={<UpdateChannel />} />
-          </Route>
+            <Route path="update-channel">
+              <Route index element={<UpdateChannel />} />
+            </Route>
 
-          {/* 채널별 뷰를 위한 중첩 라우트 */}
-          <Route path="channel/:channelId">
-            <Route path="host" element={<HostView />} />
-            <Route path="guest/:guestId" element={<GuestView />} />
-          </Route>
+            {/* 채널별 뷰를 위한 중첩 라우트 */}
+            <Route path="channel/:channelId">
+              <Route path="host" element={<HostView />} />
+              <Route path="guest/:guestId" element={<GuestView />} />
+            </Route>
 
-          {/* TODO : 정의되지 않은 경로에 대한 폴백 라우트 (선택사항) */}
-          {/* <Route path="*" element={<NotFound />} /> */}
-        </Route>
-      </Routes>
+            {/* TODO : 정의되지 않은 경로에 대한 폴백 라우트 (선택사항) */}
+            {/* <Route path="*" element={<NotFound />} /> */}
+          </Route>
+        </Routes>
+      </ChannelProvider>
     </CurrentUserProvider>
   </UserProvider>
 );

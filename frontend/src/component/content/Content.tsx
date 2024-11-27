@@ -4,6 +4,7 @@ import { getChannelInfo } from '@/api/channel.api';
 import { useContext } from 'react';
 import { UserContext } from '@/context/UserContext';
 import { guestEntity, pathLocationEntity } from '@/api/dto/channel.dto';
+import { ChannelContext } from '@/context/ChannelContext';
 import { Dropdown } from '../common/dropdown/Dropdown';
 
 interface IContentProps {
@@ -47,12 +48,14 @@ export const Content = (props: IContentProps) => {
     minute: '2-digit',
   });
   const navigate = useNavigate();
-  const { setUsers } = useContext(UserContext);
+  const { setUsers, resetUsers } = useContext(UserContext);
+  const { setChannelInfo } = useContext(ChannelContext);
 
   const updateUsers = (guests: guestEntity[]) => {
-    const updatedUsers = guests.map((guest, index) => ({
-      id: index + 1,
-      name: guest.name ?? `사용자${index + 1}`,
+    const updatedUsers = guests.map((guest, i) => ({
+      id: guest?.id ?? '',
+      index: i + 1,
+      name: guest.name ?? `사용자${i + 1}`,
       start_location: {
         title: guest.start_location?.title ?? '', // 기본 제목
         lat: guest.start_location?.lat ?? 0,
@@ -79,19 +82,20 @@ export const Content = (props: IContentProps) => {
 
   const getUpdateChannelInfo = async () => {
     try {
-      const channelInfo = await getChannelInfo(props.channelId);
-      console.log('Channel Info:', channelInfo);
-      if (channelInfo.data?.guests) {
-        updateUsers(channelInfo.data?.guests);
+      const channel = await getChannelInfo(props.channelId);
+      if (channel?.data) {
+        setChannelInfo(channel.data);
+        if (channel.data?.guests) {
+          updateUsers(channel.data?.guests);
+        }
       }
-      // 이후 필요한 작업 수행
-      // 예: 가져온 데이터를 UI에 반영하거나 상태 관리 스토어에 저장
     } catch (error) {
       console.error('Failed to get channel info:', error);
     }
   };
 
   const handleUpdate = () => {
+    resetUsers();
     getUpdateChannelInfo();
     navigate('/update-channel/');
   };
@@ -123,7 +127,7 @@ export const Content = (props: IContentProps) => {
           </Dropdown.Trigger>
           <Dropdown.Menu>
             <Dropdown.Item className="flex items-start text-base" onClick={handleUpdate}>
-              수정하기
+              공유하기
             </Dropdown.Item>
             <Dropdown.Item className="flex items-start text-base">삭제하기</Dropdown.Item>
           </Dropdown.Menu>
