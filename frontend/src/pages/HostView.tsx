@@ -1,4 +1,4 @@
-import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
+import { HeaderDropdownContext } from '@/component/header/HeaderDropdownProvider.tsx';
 import { ReactNode, useContext, useEffect, useState } from 'react';
 import { IGuest, IChannelInfo, IGuestData } from '@/types/channel.types.ts';
 import { getChannelInfo } from '@/api/channel.api.ts';
@@ -10,11 +10,12 @@ import { HostMarker } from '@/component/IconGuide/HostMarker.tsx';
 
 export const HostView = () => {
   const [channelInfo, setChannelInfo] = useState<IChannelInfo>();
-  const [guestData, setGuestData] = useState<IGuestData[]>([]);
+  const [guestsData, setGuestsData] = useState<IGuestData[]>([]);
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
   const [component, setComponent] = useState<ReactNode>();
+  const [clickedId, setClickedId] = useState<string>('');
 
-  const headerContext = useContext(HeaderContext);
+  const headerDropdownContext = useContext(HeaderDropdownContext);
 
   const location = useLocation();
 
@@ -60,49 +61,60 @@ export const HostView = () => {
       });
   };
 
+  const handleClickDropdown = (guestId: string) => {
+    setClickedId(guestId);
+  };
+
   useEffect(() => {
-    headerContext.setRightButton('dropdown');
-    headerContext.setLeftButton('back');
-    headerContext.setItems([{ name: '사용자 1', id: '1', markerStyle: { color: '#000' } }]);
+    headerDropdownContext.setItems([{ name: '사용자 1', id: '1', markerStyle: { color: '#000' } }]);
 
     fetchChannelInfo(location.pathname.split('/')[2]);
   }, []);
 
   useEffect(() => {
+    const markerDefaultColor = ['#B4D033', '#22A751', '#2722A7', '#8F22A7', '#A73D22'];
+
     if (channelInfo?.guests) {
-      const data: IGuestData[] = channelInfo.guests.filter(Boolean).map(guest => ({
+      const data: IGuestData[] = channelInfo.guests.map((guest, index) => ({
         name: guest.name,
-        markerStyle: guest.markerStyle,
+        markerStyle: guest.markerStyle ?? { color: markerDefaultColor[index] },
+        // markerStyle: { color: markerDefaultColor[index] },
         id: guest.id,
       }));
-      setGuestData(data);
-      channelInfo.guests?.map(guest =>
-        setMapProps(prev => [...prev, guest as IGuestDataInMapProps]),
-      );
+
+      setGuestsData(data);
+
+      if (clickedId === '') {
+        setMapProps([]);
+        channelInfo.guests?.map(guest =>
+          setMapProps(prev => [...prev, guest as IGuestDataInMapProps]),
+        );
+      } else {
+        setMapProps(channelInfo.guests?.filter(guest => guest.id === clickedId));
+      }
     }
-  }, [channelInfo]);
+  }, [channelInfo, clickedId]);
 
   useEffect(() => {
-    headerContext.setItems(guestData);
-  }, [guestData]);
+    headerDropdownContext.setItems(guestsData);
+    headerDropdownContext.setOnClickHandler(handleClickDropdown);
+  }, [guestsData]);
 
   useEffect(() => {
-    if (mapProps.length > 1) {
-      setComponent(
-        <MapCanvasForView
-          lat={37.3595704}
-          lng={127.105399}
-          width="100%"
-          height="100%"
-          guests={mapProps}
-        />,
-      );
-    }
+    setComponent(
+      <MapCanvasForView
+        lat={37.3595704}
+        lng={127.105399}
+        width="100%"
+        height="100%"
+        guests={mapProps}
+      />,
+    );
   }, [mapProps]);
 
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
-      <HostMarker userData={guestData} />
+      <HostMarker guestsData={mapProps} />
       {component}
     </article>
   );

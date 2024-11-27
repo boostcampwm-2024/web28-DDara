@@ -73,7 +73,7 @@ export const DropdownMenu = (props: IDropdownMenuProps) => {
           'rounded-xl',
           'p-2.5',
           'shadow-2xl',
-          'w-32',
+          'w-fit',
           'bg-white',
           'list-none',
         )}
