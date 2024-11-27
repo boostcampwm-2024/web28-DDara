@@ -29,7 +29,7 @@ export const ChannelInfoPage = () => {
   };
 
   return (
-    <main className="flex h-full w-full flex-col px-8 py-16">
+    <main className="flex h-full w-full flex-col items-center px-8 py-16">
       <Outlet />
       <InputBox
         placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길"

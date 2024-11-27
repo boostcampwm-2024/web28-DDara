@@ -202,7 +202,7 @@ export const AddChannel = () => {
       </section>
       <section className="text-grayscale-400 my-4 flex flex-row items-center justify-center gap-[2px] text-xs">
         <HiMiniInformationCircle className="h-4 w-4 text-black" />
-        사용자 별로 출발지/도착지(마커), 경로(그림)을 설정할 수 있습니다.
+        사용자 별로 출발지/도착지, 경로을 설정할 수 있습니다.
       </section>
       {users.length < 5 && (
         <section className="flex w-full justify-end">
