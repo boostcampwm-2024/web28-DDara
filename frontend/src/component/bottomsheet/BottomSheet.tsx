@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { MdClear } from 'react-icons/md';
 
 interface IBottomSheetProps {
   minHeight: number;
@@ -63,20 +64,21 @@ export const BottomSheet = ({
         height: `${sheetHeight * 100}vh`,
         transform: `translateY(${(1 - sheetHeight) * 100}%)`,
       }}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onMouseDown={handleMouseDown}
     >
-      <div className="flex items-center justify-center pb-1 pt-2">
+      <div
+        className="flex items-center justify-center pb-6 pt-2"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onMouseDown={handleMouseDown}
+      >
         <div className="h-1.5 w-12 rounded-full bg-gray-300" />
       </div>
       <div className="absolute right-2 top-2">
         <button
-          type="button"
-          className="bg-grayscale-180 h-[30px] w-[30px] rounded-full text-lg font-semibold text-gray-500"
           onClick={handleClose}
+          className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-gray-200"
         >
-          <p className="text-grayscale-850">✕</p>
+          <MdClear size={18} color="grayscale-850" />
         </button>
       </div>
 
