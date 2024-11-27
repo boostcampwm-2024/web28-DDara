@@ -8,6 +8,7 @@ export interface IModalInputProps {
   /** 입력 필드의 현재 값입니다. */
   value: string;
   /** 입력 필드 값이 변경될 때 호출되는 함수입니다. */
+  type?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -20,6 +21,7 @@ export const ModalInput = (props: IModalInputProps) => (
       placeholder={props.placeholder}
       value={props.value}
       onChange={props.onChange}
+      type={props.type}
     />
   </div>
 );
