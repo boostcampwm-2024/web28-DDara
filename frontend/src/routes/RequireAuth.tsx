@@ -14,8 +14,6 @@ export const RequireAuth = ({ children }: { children: JSX.Element }) => {
   useEffect(() => {
     if (!token) {
       setShowAlert(true);
-      const timeout = setTimeout(() => setShouldRedirect(true), 1000);
-      return () => clearTimeout(timeout);
     }
   }, [token]);
 
@@ -28,9 +26,12 @@ export const RequireAuth = ({ children }: { children: JSX.Element }) => {
       {showAlert && (
         <AlertUI
           message="로그인되지 않았습니다. 메인 페이지에서 로그인해주세요."
-          duration={1000}
+          duration={3000}
           autoClose
-          onClose={() => setShowAlert(false)}
+          onClose={() => {
+            setShowAlert(false);
+            setShouldRedirect(true);
+          }}
         />
       )}
       {children}
