@@ -1,8 +1,9 @@
 import React, { createContext, ReactNode, useMemo, useState } from 'react';
 
 export interface IUser {
-  id: number;
+  id: string;
   name: string;
+  index: number;
   start_location: {
     title: string;
     lat: number;
@@ -26,27 +27,36 @@ interface IUserContextProps {
 interface IUserOptionContext {
   users: IUser[];
   setUsers: React.Dispatch<React.SetStateAction<IUser[]>>;
+  resetUsers: () => void;
 }
 
 const defaultUserContext: IUserOptionContext = {
   users: [],
   setUsers: () => {},
+  resetUsers: () => {},
 };
 
 export const UserContext = createContext<IUserOptionContext>(defaultUserContext);
 
 export const UserProvider = (props: IUserContextProps) => {
-  const [users, setUsers] = useState<IUser[]>([
+  const defaultUsers: IUser[] = [
     {
-      id: 1,
+      id: '',
+      index: 1,
       name: '사용자1',
       start_location: { title: '', lat: 0, lng: 0 },
       end_location: { title: '', lat: 0, lng: 0 },
       path: [],
       marker_style: { color: '' },
     },
-  ]);
-  const contextValue = useMemo(() => ({ users, setUsers }), [users, setUsers]);
+  ];
+
+  const [users, setUsers] = useState<IUser[]>(defaultUsers);
+
+  const resetUsers = () => {
+    setUsers(defaultUsers);
+  };
+  const contextValue = useMemo(() => ({ users, setUsers, resetUsers }), [users, setUsers]);
 
   return <UserContext.Provider value={contextValue}>{props.children}</UserContext.Provider>;
 };

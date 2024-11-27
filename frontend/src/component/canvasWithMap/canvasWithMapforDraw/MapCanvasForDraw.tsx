@@ -85,7 +85,6 @@ export const MapCanvasForDraw = ({
     //   redrawCanvas();
     // });
 
-    // eslint-disable-next-line consistent-return
     return () => {
       mapInstance.destroy();
     };
