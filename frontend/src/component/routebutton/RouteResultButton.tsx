@@ -1,7 +1,5 @@
 import { IUser } from '@/context/UserContext';
-import { getAddressFromCoordinates } from '@/utils/map/getAddress';
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
 import { GoArrowRight } from 'react-icons/go';
 import { IoClose } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
@@ -13,25 +11,6 @@ interface IRouteResultButtonProps {
 
 export const RouteResultButton = (props: IRouteResultButtonProps) => {
   const navigate = useNavigate();
-  const [start, setStart] = useState<string>('');
-  const [end, setEnd] = useState<string>('');
-  useEffect(() => {
-    // Fetch the addresses asynchronously when component mounts
-    const fetchAddresses = async () => {
-      const startAddress = await getAddressFromCoordinates(
-        props.user.start_location.lat,
-        props.user.start_location.lng,
-      );
-      const endAddress = await getAddressFromCoordinates(
-        props.user.end_location.lat,
-        props.user.end_location.lng,
-      );
-      setStart(startAddress); // Set start address
-      setEnd(endAddress); // Set end address
-    };
-
-    fetchAddresses();
-  }, [props.user.start_location, props.user.end_location]);
 
   const goToUserDrawRoute = (user: string) => {
     navigate(`/add-channel/${user}/draw`);
@@ -40,7 +19,7 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
   return (
     <div className="flex flex-row items-center justify-center space-x-2" key={props.user.id}>
       <div className="shadow-userName border-grayscale-400 flex h-11 w-16 items-center justify-center rounded-lg border text-xs">
-        {props.user.name}
+        <p className="font-nomal">{props.user.name}</p>
       </div>
       <button onClick={() => goToUserDrawRoute(props.user.name)}>
         <div
@@ -49,12 +28,12 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
             props.user.id > 1 ? '' : 'mr-8',
           )}
         >
-          <div className="flex h-full w-28 items-center rounded border-2 px-2 text-xs font-normal">
-            {start}
+          <div className="h-full w-24 overflow-hidden text-ellipsis whitespace-nowrap rounded border-2 px-2 py-[16px] text-start text-xs font-normal">
+            {props.user.start_location.title}
           </div>
-          <GoArrowRight className="mx-2 h-6 w-6" />
-          <div className="flex h-full w-28 items-center rounded border-2 px-2 text-xs font-normal">
-            {end}
+          <GoArrowRight className="mx-2 h-8 w-8" />
+          <div className="h-full w-24 overflow-hidden text-ellipsis whitespace-nowrap rounded border-2 px-2 py-[16px] text-start text-xs font-normal">
+            {props.user.end_location.title}
           </div>
         </div>
       </button>

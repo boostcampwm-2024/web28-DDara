@@ -1,4 +1,4 @@
-import { AppConfig } from '@/constants';
+import { AppConfig } from '@/lib/constants/commonConstants.ts';
 import { loadLocalData } from '@/utils/common/manageLocalData.ts';
 import axios from 'axios';
 
