@@ -7,12 +7,15 @@ import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView
 import { IGuestDataInMapProps, IPoint } from '@/lib/types/canvasInterface.ts';
 import { getChannelResEntity, guestEntity } from '@/api/dto/channel.dto.ts';
 import { HostMarker } from '@/component/IconGuide/HostMarker.tsx';
+import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
+import { getUserLocation } from '@/hooks/getUserLocation.ts';
 
 export const HostView = () => {
+  const { lat, lng } = getUserLocation();
   const [channelInfo, setChannelInfo] = useState<IChannelInfo>();
   const [guestsData, setGuestsData] = useState<IGuestData[]>([]);
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
-  const [component, setComponent] = useState<ReactNode>();
+  const [component, setComponent] = useState<ReactNode>(<LoadingSpinner />);
   const [clickedId, setClickedId] = useState<string>('');
 
   const headerDropdownContext = useContext(HeaderDropdownContext);
@@ -101,15 +104,10 @@ export const HostView = () => {
   }, [guestsData]);
 
   useEffect(() => {
-    setComponent(
-      <MapCanvasForView
-        lat={37.3595704}
-        lng={127.105399}
-        width="100%"
-        height="100%"
-        guests={mapProps}
-      />,
-    );
+    if (lat && lng)
+      setComponent(
+        <MapCanvasForView lat={lat} lng={lng} width="100%" height="100%" guests={mapProps} />,
+      );
   }, [mapProps]);
 
   return (

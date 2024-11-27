@@ -6,8 +6,11 @@ import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView
 import { IPoint } from '@/lib/types/canvasInterface.ts';
 import { guestEntity } from '@/api/dto/channel.dto.ts';
 import { GusetMarker } from '@/component/IconGuide/GuestMarker.tsx';
+import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
+import { getUserLocation } from '@/hooks/getUserLocation.ts';
 
 export const GuestView = () => {
+  const { lat, lng } = getUserLocation();
   const [guestInfo, setGuestInfo] = useState<IGuest>({
     id: '',
     name: '',
@@ -16,7 +19,7 @@ export const GuestView = () => {
     endPoint: { lat: 0, lng: 0 },
     paths: [],
   });
-  const [component, setComponent] = useState<ReactNode>();
+  const [component, setComponent] = useState<ReactNode>(<LoadingSpinner />);
 
   const location = useLocation();
 
@@ -57,16 +60,9 @@ export const GuestView = () => {
   }, []);
 
   useEffect(() => {
-    console.log(guestInfo);
-    if (guestInfo) {
+    if (guestInfo && lat && lng) {
       setComponent(
-        <MapCanvasForView
-          lat={37.3595704}
-          lng={127.105399}
-          width="100%"
-          height="100%"
-          guests={[guestInfo]}
-        />,
+        <MapCanvasForView lat={lat} lng={lng} width="100%" height="100%" guests={[guestInfo]} />,
       );
     }
   }, [guestInfo]);
