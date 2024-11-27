@@ -4,14 +4,15 @@ import classNames from 'classnames';
 import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
 import { FloatingButton } from '@/component/common/floatingbutton/FloatingButton.tsx';
 import { useFloatingButton } from '@/hooks/useFloatingButton.ts';
-import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
+// import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
 import { ICanvasPoint, IMapCanvasProps, IPoint } from '@/lib/types/canvasInterface.ts';
 import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
-import startmarker from '@/assets/startmarker.png';
-import endmarker from '@/assets/endmarker.png';
+// import startmarker from '@/assets/startmarker.png';
+// import endmarker from '@/assets/endmarker.png';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { ToolDescription } from '@/component/tooldescription/ToolDescription';
 import { SearchBox } from '@/component/searchbox/SearchBox';
+import { useRedrawCanvas } from '@/hooks/useRedraw';
 
 export const MapCanvasForDraw = ({
   width,
@@ -42,16 +43,16 @@ export const MapCanvasForDraw = ({
 
   const { setCurrentUser } = useContext(CurrentUserContext);
 
-  const startImageRef = useRef<HTMLImageElement | null>(null);
-  const endImageRef = useRef<HTMLImageElement | null>(null);
+  // const startImageRef = useRef<HTMLImageElement | null>(null);
+  // const endImageRef = useRef<HTMLImageElement | null>(null);
 
-  useEffect(() => {
-    startImageRef.current = new Image();
-    startImageRef.current.src = startmarker;
+  // useEffect(() => {
+  //   startImageRef.current = new Image();
+  //   startImageRef.current.src = startmarker;
 
-    endImageRef.current = new Image();
-    endImageRef.current.src = endmarker;
-  }, []);
+  //   endImageRef.current = new Image();
+  //   endImageRef.current.src = endmarker;
+  // }, []);
 
   useEffect(() => {
     const updateUser = () => {
@@ -150,61 +151,69 @@ export const MapCanvasForDraw = ({
     canvas.style.height = `${mapSize.height}px`;
   };
 
-  const redrawCanvas = () => {
-    if (!canvasRef.current || !map) return;
+  // const redrawCanvas = () => {
+  //   if (!canvasRef.current || !map) return;
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //   const canvas = canvasRef.current;
+  //   const ctx = canvas.getContext('2d');
+  //   if (!ctx) return;
+  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.lineWidth = (map.getZoom() / LINE_WIDTH) * 5;
-    ctx.strokeStyle = STROKE_STYLE;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+  //   ctx.lineWidth = (map.getZoom() / LINE_WIDTH) * 5;
+  //   ctx.strokeStyle = STROKE_STYLE;
+  //   ctx.lineCap = 'round';
+  //   ctx.lineJoin = 'round';
 
-    if (startMarker) {
-      const startPoint = latLngToCanvasPoint(startMarker);
-      if (startPoint && startImageRef.current) {
-        const markerSize = map.getZoom() * 2;
-        ctx.drawImage(
-          startImageRef.current,
-          startPoint.x - markerSize / 2,
-          startPoint.y - markerSize,
-          markerSize,
-          markerSize,
-        );
-      }
-    }
-    if (endMarker) {
-      const endPoint = latLngToCanvasPoint(endMarker);
-      if (endPoint && endImageRef.current) {
-        const markerSize = map.getZoom() * 2;
-        ctx.drawImage(
-          endImageRef.current,
-          endPoint.x - markerSize / 2,
-          endPoint.y - markerSize,
-          markerSize,
-          markerSize,
-        );
-      }
-    }
-    if (pathPoints?.length > 0) {
-      ctx.beginPath();
-      const firstPoint = latLngToCanvasPoint(pathPoints[0]);
+  //   if (startMarker) {
+  //     const startPoint = latLngToCanvasPoint(startMarker);
+  //     if (startPoint && startImageRef.current) {
+  //       const markerSize = map.getZoom() * 2;
+  //       ctx.drawImage(
+  //         startImageRef.current,
+  //         startPoint.x - markerSize / 2,
+  //         startPoint.y - markerSize,
+  //         markerSize,
+  //         markerSize,
+  //       );
+  //     }
+  //   }
+  //   if (endMarker) {
+  //     const endPoint = latLngToCanvasPoint(endMarker);
+  //     if (endPoint && endImageRef.current) {
+  //       const markerSize = map.getZoom() * 2;
+  //       ctx.drawImage(
+  //         endImageRef.current,
+  //         endPoint.x - markerSize / 2,
+  //         endPoint.y - markerSize,
+  //         markerSize,
+  //         markerSize,
+  //       );
+  //     }
+  //   }
+  //   if (pathPoints?.length > 0) {
+  //     ctx.beginPath();
+  //     const firstPoint = latLngToCanvasPoint(pathPoints[0]);
 
-      if (firstPoint) {
-        ctx.moveTo(firstPoint.x, firstPoint.y);
-        for (let i = 1; i < pathPoints?.length; i++) {
-          const point = latLngToCanvasPoint(pathPoints[i]);
-          if (point) {
-            ctx.lineTo(point.x, point.y);
-          }
-        }
-        ctx.stroke();
-      }
-    }
-  };
+  //     if (firstPoint) {
+  //       ctx.moveTo(firstPoint.x, firstPoint.y);
+  //       for (let i = 1; i < pathPoints?.length; i++) {
+  //         const point = latLngToCanvasPoint(pathPoints[i]);
+  //         if (point) {
+  //           ctx.lineTo(point.x, point.y);
+  //         }
+  //       }
+  //       ctx.stroke();
+  //     }
+  //   }
+  // };
+  const { redrawCanvas } = useRedrawCanvas({
+    canvasRef,
+    map,
+    latLngToCanvasPoint,
+    startMarker,
+    endMarker,
+    pathPoints,
+  });
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!map || !canvasRef.current) return;

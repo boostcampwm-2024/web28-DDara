@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ICanvasPoint, IMapCanvasViewProps, IPoint } from '@/lib/types/canvasInterface.ts';
 import startmarker from '@/assets/startmarker.png';
 import endmarker from '@/assets/endmarker.png';
-import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
+// import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
+import { useRedrawCanvas } from '@/hooks/useRedraw';
 
 export const MapCanvasForView = ({
   lat,
@@ -36,7 +37,6 @@ export const MapCanvasForView = ({
 
     endImageRef.current = new Image();
     endImageRef.current.src = endmarker;
-    console.log(guests);
   }, []);
 
   useEffect(() => {
@@ -61,21 +61,21 @@ export const MapCanvasForView = ({
     };
   }, []);
 
-  const getMarkerColor = (token: string) => {
-    // 문자열 해싱을 통해 고유 숫자 생성
-    let hash = 0;
-    for (let i = 0; i < token.length; i++) {
-      hash = token.charCodeAt(i) + ((hash << 5) - hash);
-    }
+  // const getMarkerColor = (token: string) => {
+  //   // 문자열 해싱을 통해 고유 숫자 생성
+  //   let hash = 0;
+  //   for (let i = 0; i < token.length; i++) {
+  //     hash = token.charCodeAt(i) + ((hash << 5) - hash);
+  //   }
 
-    // 해시 값을 기반으로 RGB 값 생성
-    const r = (hash >> 16) & 0xff;
-    const g = (hash >> 8) & 0xff;
-    const b = hash & 0xff;
+  //   // 해시 값을 기반으로 RGB 값 생성
+  //   const r = (hash >> 16) & 0xff;
+  //   const g = (hash >> 8) & 0xff;
+  //   const b = hash & 0xff;
 
-    // RGB를 HEX 코드로 변환
-    return `rgb(${r}, ${g}, ${b})`;
-  };
+  //   // RGB를 HEX 코드로 변환
+  //   return `rgb(${r}, ${g}, ${b})`;
+  // };
 
   const latLngToCanvasPoint = (latLng: IPoint): ICanvasPoint | null => {
     if (!map || !projection || !canvasRef.current) return null;
@@ -99,85 +99,95 @@ export const MapCanvasForView = ({
     canvas.style.height = `${mapSize.height}px`;
   };
 
-  const redrawCanvas = () => {
-    if (!canvasRef.current || !map) return;
+  const { redrawCanvas } = useRedrawCanvas({
+    canvasRef,
+    map,
+    latLngToCanvasPoint,
+    otherLocations,
+    guests,
+    lat,
+    lng,
+  });
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // const redrawCanvas = () => {
+  //   if (!canvasRef.current || !map) return;
 
-    ctx.lineWidth = (map.getZoom() / LINE_WIDTH) * 5;
-    ctx.strokeStyle = STROKE_STYLE;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+  //   const canvas = canvasRef.current;
+  //   const ctx = canvas.getContext('2d');
+  //   if (!ctx) return;
+  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // TODO: 사용자 현재 위치 디자인 변경
-    if (lat && lng) {
-      const currentLocation = latLngToCanvasPoint({ lat, lng });
-      if (currentLocation) {
-        ctx.beginPath();
-        ctx.arc(currentLocation.x, currentLocation.y, 10, 0, 2 * Math.PI);
-        ctx.fillStyle = 'blue';
-        ctx.fill();
-      }
-    }
+  //   ctx.lineWidth = (map.getZoom() / LINE_WIDTH) * 5;
+  //   ctx.strokeStyle = STROKE_STYLE;
+  //   ctx.lineCap = 'round';
+  //   ctx.lineJoin = 'round';
 
-    if (otherLocations) {
-      otherLocations.forEach(({ location, token }) => {
-        const markerColor = getMarkerColor(token);
-        const currentLocation = latLngToCanvasPoint(location);
-        if (currentLocation) {
-          ctx.beginPath();
-          ctx.arc(currentLocation.x, currentLocation.y, 10, 0, 2 * Math.PI);
-          ctx.fillStyle = markerColor;
-          ctx.fill();
-        }
-      });
-    }
+  //   // TODO: 사용자 현재 위치 디자인 변경
+  //   if (lat && lng) {
+  //     const currentLocation = latLngToCanvasPoint({ lat, lng });
+  //     if (currentLocation) {
+  //       ctx.beginPath();
+  //       ctx.arc(currentLocation.x, currentLocation.y, 10, 0, 2 * Math.PI);
+  //       ctx.fillStyle = 'blue';
+  //       ctx.fill();
+  //     }
+  //   }
 
-    if (guests) {
-      guests.forEach(({ startPoint, endPoint, paths }) => {
-        const startLoctaion = latLngToCanvasPoint(startPoint);
-        if (startLoctaion && startImageRef.current) {
-          const markerSize = map.getZoom() * 2;
-          ctx.drawImage(
-            startImageRef.current,
-            startLoctaion.x - markerSize / 2,
-            startLoctaion.y - markerSize,
-            markerSize,
-            markerSize,
-          );
-        }
-        const endLocation = latLngToCanvasPoint(endPoint);
-        if (endLocation && endImageRef.current) {
-          const markerSize = map.getZoom() * 2;
-          ctx.drawImage(
-            endImageRef.current,
-            endLocation.x - markerSize / 2,
-            endLocation.y - markerSize,
-            markerSize,
-            markerSize,
-          );
-        }
-        if (paths?.length > 0) {
-          ctx.beginPath();
-          const firstPoint = latLngToCanvasPoint(paths[0]);
+  //   if (otherLocations) {
+  //     otherLocations.forEach(({ location, token }) => {
+  //       const markerColor = getMarkerColor(token);
+  //       const currentLocation = latLngToCanvasPoint(location);
+  //       if (currentLocation) {
+  //         ctx.beginPath();
+  //         ctx.arc(currentLocation.x, currentLocation.y, 10, 0, 2 * Math.PI);
+  //         ctx.fillStyle = markerColor;
+  //         ctx.fill();
+  //       }
+  //     });
+  //   }
 
-          if (firstPoint) {
-            ctx.moveTo(firstPoint.x, firstPoint.y);
-            for (let i = 1; i < paths?.length; i++) {
-              const point = latLngToCanvasPoint(paths[i]);
-              if (point) {
-                ctx.lineTo(point.x, point.y);
-              }
-            }
-            ctx.stroke();
-          }
-        }
-      });
-    }
-  };
+  //   if (guests) {
+  //     guests.forEach(({ startPoint, endPoint, paths }) => {
+  //       const startLoctaion = latLngToCanvasPoint(startPoint);
+  //       if (startLoctaion && startImageRef.current) {
+  //         const markerSize = map.getZoom() * 2;
+  //         ctx.drawImage(
+  //           startImageRef.current,
+  //           startLoctaion.x - markerSize / 2,
+  //           startLoctaion.y - markerSize,
+  //           markerSize,
+  //           markerSize,
+  //         );
+  //       }
+  //       const endLocation = latLngToCanvasPoint(endPoint);
+  //       if (endLocation && endImageRef.current) {
+  //         const markerSize = map.getZoom() * 2;
+  //         ctx.drawImage(
+  //           endImageRef.current,
+  //           endLocation.x - markerSize / 2,
+  //           endLocation.y - markerSize,
+  //           markerSize,
+  //           markerSize,
+  //         );
+  //       }
+  //       if (paths?.length > 0) {
+  //         ctx.beginPath();
+  //         const firstPoint = latLngToCanvasPoint(paths[0]);
+
+  //         if (firstPoint) {
+  //           ctx.moveTo(firstPoint.x, firstPoint.y);
+  //           for (let i = 1; i < paths?.length; i++) {
+  //             const point = latLngToCanvasPoint(paths[i]);
+  //             if (point) {
+  //               ctx.lineTo(point.x, point.y);
+  //             }
+  //           }
+  //           ctx.stroke();
+  //         }
+  //       }
+  //     });
+  //   }
+  // };
 
   const handleWheel = (e: React.WheelEvent) => {
     if (!map) return;
