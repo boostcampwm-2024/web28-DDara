@@ -57,7 +57,7 @@
   justify-content: center;
   align-items: center;
   color: #fff;
-  z-index: 100000;
+  z-index: 10000;
 }
 
 .message {
