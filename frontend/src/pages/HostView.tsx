@@ -1,4 +1,4 @@
-import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
+import { HeaderDropdownContext } from '@/component/header/HeaderDropdownProvider.tsx';
 import { ReactNode, useContext, useEffect, useState } from 'react';
 import { IGuest, IChannelInfo, IGuestData } from '@/types/channel.types.ts';
 import { getChannelInfo } from '@/api/channel.api.ts';
@@ -14,7 +14,7 @@ export const HostView = () => {
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
   const [component, setComponent] = useState<ReactNode>();
 
-  const headerContext = useContext(HeaderContext);
+  const headerDropdownContext = useContext(HeaderDropdownContext);
 
   const location = useLocation();
 
@@ -61,18 +61,19 @@ export const HostView = () => {
   };
 
   useEffect(() => {
-    headerContext.setRightButton('dropdown');
-    headerContext.setLeftButton('back');
-    headerContext.setItems([{ name: '사용자 1', id: '1', markerStyle: { color: '#000' } }]);
+    headerDropdownContext.setItems([{ name: '사용자 1', id: '1', markerStyle: { color: '#000' } }]);
 
     fetchChannelInfo(location.pathname.split('/')[2]);
   }, []);
 
   useEffect(() => {
+    const markerDefaultColor = ['#B4D033', '#22A751', '#2722A7', '#8F22A7', '#A73D22'];
+
     if (channelInfo?.guests) {
-      const data: IGuestData[] = channelInfo.guests.filter(Boolean).map(guest => ({
+      const data: IGuestData[] = channelInfo.guests.filter(Boolean).map((guest, index) => ({
         name: guest.name,
-        markerStyle: guest.markerStyle,
+        // markerStyle: guest.markerStyle ?? { color: markerDefaultColor[index] },
+        markerStyle: { color: markerDefaultColor[index] },
         id: guest.id,
       }));
       setGuestData(data);
@@ -83,21 +84,19 @@ export const HostView = () => {
   }, [channelInfo]);
 
   useEffect(() => {
-    headerContext.setItems(guestData);
+    headerDropdownContext.setItems(guestData);
   }, [guestData]);
 
   useEffect(() => {
-    if (mapProps.length > 1) {
-      setComponent(
-        <MapCanvasForView
-          lat={37.3595704}
-          lng={127.105399}
-          width="100%"
-          height="100%"
-          guests={mapProps}
-        />,
-      );
-    }
+    setComponent(
+      <MapCanvasForView
+        lat={37.3595704}
+        lng={127.105399}
+        width="100%"
+        height="100%"
+        guests={mapProps}
+      />,
+    );
   }, [mapProps]);
 
   return (
