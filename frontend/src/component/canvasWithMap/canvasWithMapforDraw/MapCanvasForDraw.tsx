@@ -11,6 +11,7 @@ import { ToolDescription } from '@/component/tooldescription/ToolDescription';
 import { SearchBox } from '@/component/searchbox/SearchBox';
 import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
+import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 
 export const MapCanvasForDraw = ({
   width,
@@ -68,6 +69,7 @@ export const MapCanvasForDraw = ({
         new naver.maps.LatLng(33.0, 124.5),
         new naver.maps.LatLng(38.9, 131.9),
       ),
+      mapDataControl: false,
     });
 
     setMap(mapInstance);
@@ -181,41 +183,6 @@ export const MapCanvasForDraw = ({
     redrawCanvas();
   };
 
-  // TODO: 줌인 줌아웃 버튼으로도 접근 가능하도록 추가
-  // const handleZoomChange = (zoomChange: number) => {
-  //   if (!map) return;
-  //   const currentZoom = map.getZoom();
-  //   map.setZoom(currentZoom + zoomChange);
-  //   redrawCanvas();
-  // };
-
-  // // TODO: 줌인 줌아웃 버튼으로도 접근 가능하도록 추가
-  // // const handleMapPan = (direction: 'up' | 'down' | 'left' | 'right') => {
-  // //   if (!map) return;
-  // //   const moveAmount = 100;
-  // //   let point: naver.maps.Point;
-  // //
-  // //   switch (direction) {
-  // //     case 'up':
-  // //       point = new naver.maps.Point(0, -moveAmount);
-  // //       break;
-  // //     case 'down':
-  // //       point = new naver.maps.Point(0, moveAmount);
-  // //       break;
-  // //     case 'left':
-  // //       point = new naver.maps.Point(-moveAmount, 0);
-  // //       break;
-  // //     case 'right':
-  // //       point = new naver.maps.Point(moveAmount, 0);
-  // //       break;
-  // //     default:
-  // //       return;
-  // //   }
-  // //
-  // //   map.panBy(point);
-  // //   redrawCanvas();
-  // // };
-
   const {
     handleMouseDown,
     handleMouseMove,
@@ -225,7 +192,6 @@ export const MapCanvasForDraw = ({
     handleTouchMove,
     handleTouchEnd,
     isDragging,
-    // isTouching,
   } = useCanvasInteraction(map, canvasRef, redrawCanvas);
 
   const handleCreateMarker = (point: IPoint) => {
@@ -344,31 +310,9 @@ export const MapCanvasForDraw = ({
       <div className="relative flex">
         <ToolDescription />
       </div>
-
-      {/* TODO: 줌인 줌아웃 버튼으로도 접근 가능하도록 추가 */}
-      {/* <div className="absolute left-10 top-10 z-10 flex gap-2"> */}
-      {/*  <div> */}
-      {/*    {isTouchZooming ? 'true' : 'false'} {touchStartDistance} */}
-      {/*  </div> */}
-      {/*  <button onClick={() => handleZoomChange(1)} className="rounded bg-green-500 p-2"> */}
-      {/*    Zoom In */}
-      {/*  </button> */}
-      {/*  <button onClick={() => handleZoomChange(-1)} className="rounded bg-red-500 p-2"> */}
-      {/*    Zoom Out */}
-      {/*  </button> */}
-      {/*  <button onClick={() => handleMapPan('up')} className="rounded bg-blue-500 p-2"> */}
-      {/*    Up */}
-      {/*  </button> */}
-      {/*  <button onClick={() => handleMapPan('down')} className="rounded bg-blue-500 p-2"> */}
-      {/*    Down */}
-      {/*  </button> */}
-      {/*  <button onClick={() => handleMapPan('left')} className="rounded bg-blue-500 p-2"> */}
-      {/*    Left */}
-      {/*  </button> */}
-      {/*  <button onClick={() => handleMapPan('right')} className="rounded bg-blue-500 p-2"> */}
-      {/*    Right */}
-      {/*  </button> */}
-      {/* </div> */}
+      <div className="absolute bottom-3 left-3 z-10 flex gap-2">
+        <ZoomSlider map={map} redrawCanvas={redrawCanvas} />
+      </div>
     </div>
   );
 };
