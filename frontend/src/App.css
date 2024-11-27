@@ -1,5 +1,6 @@
 #root {
   touch-action: pan-y;
+  font-family: Pretendard, 'Pretendard Variable', sans-serif;
 }
 
 .logo {
@@ -45,6 +46,30 @@
   user-select:none
 }
 
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  z-index: 10000;
+}
+
+.message {
+  text-align: center;
+  font-size: 1.5rem;
+  line-height: 3;
+  display: flex;
+  flex-direction: column;
+  span {
+    line-height: 1.5;
+    font-size: 0.8rem;
+    
 .spinner {
   width: 3rem;
   height: 3rem;
