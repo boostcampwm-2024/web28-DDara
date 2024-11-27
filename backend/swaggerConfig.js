@@ -315,6 +315,10 @@ const swaggerDefinition = {
                       type: 'number',
                       description: '출발지 마커의 경도',
                     },
+                    title: {
+                      type: 'string',
+                      description: '출발지의 이름',
+                    },
                   },
                 },
                 end_location: {
@@ -327,6 +331,10 @@ const swaggerDefinition = {
                     lng: {
                       type: 'number',
                       description: '도착지 마커의 경도',
+                    },
+                    title: {
+                      type: 'string',
+                      description: '도착지의 이름',
                     },
                   },
                 },

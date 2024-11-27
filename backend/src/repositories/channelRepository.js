@@ -56,10 +56,12 @@ export const getChannelWithGuestsByIdFromDB = async id => {
         start_location: {
           lat: guest.start_location.lat,
           lng: guest.start_location.lng,
+          title: guest.start_location.title,
         },
         end_location: {
           lat: guest.end_location.lat,
           lng: guest.end_location.lng,
+          title: guest.end_location.title,
         },
         path: guest.path,
         marker_style: guest.marker_style,

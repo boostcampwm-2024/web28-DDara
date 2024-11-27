@@ -12,7 +12,8 @@ interface ICurrentUserOptionContext {
 
 const defaultUserContext: ICurrentUserOptionContext = {
   currentUser: {
-    id: 1,
+    id: '',
+    index: 1,
     name: '사용자1',
     start_location: { title: '', lat: 0, lng: 0 },
     end_location: { title: '', lat: 0, lng: 0 },

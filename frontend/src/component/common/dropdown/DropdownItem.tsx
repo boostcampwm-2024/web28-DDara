@@ -6,6 +6,7 @@ interface IDropdownItemProps {
   children: ReactNode;
   path?: string;
   className?: string;
+  onClick?: () => void;
 }
 
 export const DropdownItem = (props: IDropdownItemProps) => {
@@ -21,7 +22,7 @@ export const DropdownItem = (props: IDropdownItemProps) => {
       <button
         type="button"
         className="flex w-full items-center justify-between gap-2 whitespace-nowrap bg-transparent"
-        onClick={handleClick}
+        onClick={props.onClick ? props.onClick : handleClick}
       >
         {props.children}
       </button>
