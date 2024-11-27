@@ -9,7 +9,7 @@ import { InputBox } from '../component/common/InputBox';
 
 const Divider = () => <hr className="my-6 w-full border-gray-300" />;
 
-export const UpdateChannel = () => {
+export const ChannelInfoPage = () => {
   const [channelName, setChannelName] = useState<string>('');
   const { users } = useContext(UserContext);
   const { setFooterTransparency, resetFooterContext } = useContext(FooterContext);

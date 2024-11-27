@@ -49,7 +49,7 @@ export const Content = (props: IContentProps) => {
   });
   const navigate = useNavigate();
   const { setUsers, resetUsers } = useContext(UserContext);
-  const { setChannelInfo } = useContext(ChannelContext);
+  const { channelInfo, setChannelInfo } = useContext(ChannelContext);
 
   const updateUsers = (guests: guestEntity[]) => {
     const updatedUsers = guests.map((guest, i) => ({
@@ -97,7 +97,7 @@ export const Content = (props: IContentProps) => {
   const handleUpdate = () => {
     resetUsers();
     getUpdateChannelInfo();
-    navigate('/update-channel/');
+    navigate(`/channelInfo/${channelInfo.id}`);
   };
 
   return (
