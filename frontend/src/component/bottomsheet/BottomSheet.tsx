@@ -70,7 +70,7 @@ export const BottomSheet = ({
       <div className="flex items-center justify-center pb-1 pt-2">
         <div className="h-1.5 w-12 rounded-full bg-gray-300" />
       </div>
-      <div className="flex items-center justify-end pb-1 pr-5 pt-2">
+      <div className="absolute right-2 top-2">
         <button
           type="button"
           className="bg-grayscale-180 h-[30px] w-[30px] rounded-full text-lg font-semibold text-gray-500"
@@ -80,7 +80,7 @@ export const BottomSheet = ({
         </button>
       </div>
 
-      <div className="h-full overflow-auto">{children}</div>
+      <div className="h-full overflow-auto pb-5">{children}</div>
     </div>
   );
 };

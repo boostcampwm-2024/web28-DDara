@@ -13,10 +13,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
+import { UserContext } from '@/context/UserContext';
 
 export const Main = () => {
-  const { setFooterTitle, setFooterTransparency, setFooterOnClick, setFooterActive } =
-    useContext(FooterContext);
+  const {
+    setFooterTitle,
+    setFooterTransparency,
+    setFooterOnClick,
+    setFooterActive,
+    resetFooterContext,
+  } = useContext(FooterContext);
   const { lat, lng, error } = getUserLocation();
   const [otherLocations, setOtherLocations] = useState<any[]>([]);
   const MIN_HEIGHT = 0.35;
@@ -24,6 +30,8 @@ export const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
   const [channels, setChannels] = useState<any[]>([]);
+
+  const { resetUsers } = useContext(UserContext);
 
   useEffect(() => {
     const token = loadLocalData(AppConfig.KEYS.LOGIN_TOKEN);
@@ -34,7 +42,9 @@ export const Main = () => {
       if (userId) {
         getUserChannels(userId)
           .then(response => {
-            if (response?.data?.channels) setChannels(response.data.channels);
+            if (response?.data?.channels) {
+              setChannels(response.data.channels);
+            }
           })
           .catch(err => {
             console.error('채널 찾기 실패 : ', err);
@@ -42,6 +52,7 @@ export const Main = () => {
       }
     }
   }, []);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,6 +86,8 @@ export const Main = () => {
     return undefined;
   }, [lat, lng]);
   const goToAddChannel = () => {
+    resetFooterContext();
+    resetUsers();
     navigate('/add-channel');
   };
   useEffect(() => {
@@ -141,6 +154,7 @@ export const Main = () => {
           {channels.map(item => (
             <Fragment key={item.id}>
               <Content
+                channelId={item.id}
                 title={item.name}
                 link={item.id}
                 person={item.guest_count}
@@ -152,11 +166,8 @@ export const Main = () => {
         </BottomSheet>
       ) : (
         <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#F1F1F1F2">
-          <div
-            className="absolute left-1/2 top-[30%] flex -translate-x-1/2 transform cursor-pointer flex-col text-center"
-            onClick={handleLoginRequest}
-          >
-            <div className="rounded-lg p-6">
+          <div className="h-full w-full cursor-pointer" onClick={handleLoginRequest}>
+            <div className="absolute left-1/2 top-[35%] flex -translate-x-1/2 transform cursor-pointer flex-col p-6 text-center">
               <p className="text-grayscale-175 mb-5 text-lg font-normal">로그인을 진행하여</p>
               <p className="text-grayscale-175 mb-5 text-lg font-normal">더 많은 기능을</p>
               <p className="text-grayscale-175 text-lg font-normal">사용해보세요</p>

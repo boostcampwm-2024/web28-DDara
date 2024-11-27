@@ -11,6 +11,7 @@ export const HEADER_LEFTBUTTON: Record<string, string> = {
   '/add-channel/:user': 'back',
   '/add-channel/:user/draw': 'back',
   '/channel/:channelId/host': 'back',
+  '/update-channel': 'back',
   '/register': 'back',
 };
 
