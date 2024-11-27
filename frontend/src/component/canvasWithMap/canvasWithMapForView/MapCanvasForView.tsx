@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ICanvasPoint, IMapCanvasViewProps, IPoint } from '@/lib/types/canvasInterface.ts';
-import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
+import { useRedrawCanvas } from '@/hooks/useRedraw';
 
 export const MapCanvasForView = ({
   lat,

@@ -9,9 +9,9 @@ import { useUndoRedo } from '@/hooks/useUndoRedo.ts';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { ToolDescription } from '@/component/tooldescription/ToolDescription';
 import { SearchBox } from '@/component/searchbox/SearchBox';
-import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
 import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
+import { useRedrawCanvas } from '@/hooks/useRedraw';
 
 export const MapCanvasForDraw = ({
   width,

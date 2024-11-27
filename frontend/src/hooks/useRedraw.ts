@@ -1,7 +1,10 @@
 import { useRef, useEffect, RefObject } from 'react';
 import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
-import startmarker from '@/assets/startmarker.png';
-import endmarker from '@/assets/endmarker.png';
+
+import startmarker from '@/assets/startmarker.svg';
+import endmarker from '@/assets/endmarker.svg';
+import mylocation from '@/assets/mylocation.svg';
+import guestlocationmarker from '@/assets/guestlocationmarker.svg';
 
 interface ILatLng {
   lat: number;
@@ -48,6 +51,8 @@ export const useRedrawCanvas = ({
 }: IUseRedrawCanvasProps) => {
   const startImageRef = useRef<HTMLImageElement | null>(null);
   const endImageRef = useRef<HTMLImageElement | null>(null);
+  const mylocationRef = useRef<HTMLImageElement | null>(null);
+  const guestlocationmarkerRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     startImageRef.current = new Image();
@@ -55,6 +60,12 @@ export const useRedrawCanvas = ({
 
     endImageRef.current = new Image();
     endImageRef.current.src = endmarker;
+
+    mylocationRef.current = new Image();
+    mylocationRef.current.src = mylocation;
+
+    guestlocationmarkerRef.current = new Image();
+    guestlocationmarkerRef.current.src = guestlocationmarker;
   }, []);
 
   const drawMarker = (
@@ -84,34 +95,6 @@ export const useRedrawCanvas = ({
       }
       ctx.stroke();
     }
-  };
-
-  const drawCircle = (
-    ctx: CanvasRenderingContext2D,
-    point: { x: number; y: number } | null,
-    color: string,
-    radius: number,
-  ) => {
-    if (point) {
-      ctx.beginPath();
-      ctx.arc(point.x, point.y, radius, 0, 2 * Math.PI);
-      ctx.fillStyle = color;
-      ctx.fill();
-    }
-  };
-
-  const getMarkerColor = (token: string): string => {
-    // 문자열 해싱을 통해 고유 숫자 생성
-    let hash = 0;
-    for (let i = 0; i < token.length; i++) {
-      hash = token.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    // 해시 값을 기반으로 RGB 값 생성
-    const r = (hash >> 16) & 0xff;
-    const g = (hash >> 8) & 0xff;
-    const b = hash & 0xff;
-    // RGB를 HEX 코드로 변환
-    return `rgb(${r}, ${g}, ${b})`;
   };
 
   const redrawCanvas = () => {
@@ -144,14 +127,13 @@ export const useRedrawCanvas = ({
 
     if (lat && lng) {
       const currentLocation = latLngToCanvasPoint({ lat, lng });
-      drawCircle(ctx, currentLocation, 'blue', 10);
+      drawMarker(ctx, currentLocation, mylocationRef.current, zoom);
     }
 
     if (otherLocations) {
-      otherLocations.forEach(({ location, token }) => {
-        const markerColor = getMarkerColor(token);
+      otherLocations.forEach(({ location }) => {
         const locationPoint = latLngToCanvasPoint(location);
-        drawCircle(ctx, locationPoint, markerColor, 10);
+        drawMarker(ctx, locationPoint, guestlocationmarkerRef.current, zoom);
       });
     }
 
