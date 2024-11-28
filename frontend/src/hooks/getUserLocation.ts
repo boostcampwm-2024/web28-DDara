@@ -37,7 +37,7 @@ export const getUserLocation = (): IGetUserLocation => {
 
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      const watchId = navigator.geolocation.watchPosition(
         position => {
           setLocation({
             lat: position.coords.latitude,
@@ -52,14 +52,16 @@ export const getUserLocation = (): IGetUserLocation => {
             error: error.message,
           });
         },
+        { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 },
       );
-    } else {
-      setLocation({
-        lat: 37.3595704,
-        lng: 127.105399,
-        error: '현재 위치를 불러오지 못했습니다',
-      });
+
+      return () => navigator.geolocation.clearWatch(watchId);
     }
+    setLocation({
+      lat: 37.3595704,
+      lng: 127.105399,
+      error: '현재 위치를 불러오지 못했습니다',
+    });
   }, []);
 
   return location;

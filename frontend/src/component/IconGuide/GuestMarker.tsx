@@ -7,11 +7,15 @@ interface IMarkerData {
   icon: ReactNode;
 }
 
-export const GusetMarker = () => {
+interface IGuestMarkerProps {
+  markerColor: string;
+}
+
+export const GusetMarker = (props: IGuestMarkerProps) => {
   const markerData: IMarkerData[] = [
-    { name: '내 위치', icon: <MdAssistantNavigation color="blue" /> },
-    { name: '도착지', icon: <MdFlag color="purple" /> },
-    { name: '출발지', icon: <MdLocationOn color="red" /> },
+    { name: '내 위치', icon: <MdAssistantNavigation color={props.markerColor && 'black'} /> },
+    { name: '도착지', icon: <MdFlag color={props.markerColor && 'black'} /> },
+    { name: '출발지', icon: <MdLocationOn color={props.markerColor && 'black'} /> },
   ];
 
   const iconContextValue = useMemo(() => ({ color: 'purple', className: 'size-5' }), []);

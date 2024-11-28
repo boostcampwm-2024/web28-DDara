@@ -1,5 +1,5 @@
 import { HeaderDropdownContext } from '@/component/header/HeaderDropdownProvider.tsx';
-import { ReactNode, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { IGuest, IChannelInfo, IGuestData } from '@/types/channel.types.ts';
 import { getChannelInfo } from '@/api/channel.api.ts';
 import { useLocation } from 'react-router-dom';
@@ -7,12 +7,14 @@ import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView
 import { IGuestDataInMapProps, IPoint } from '@/lib/types/canvasInterface.ts';
 import { getChannelResEntity, guestEntity } from '@/api/dto/channel.dto.ts';
 import { HostMarker } from '@/component/IconGuide/HostMarker.tsx';
+import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
+import { getUserLocation } from '@/hooks/getUserLocation.ts';
 
 export const HostView = () => {
+  const { lat, lng, error } = getUserLocation();
   const [channelInfo, setChannelInfo] = useState<IChannelInfo>();
   const [guestsData, setGuestsData] = useState<IGuestData[]>([]);
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
-  const [component, setComponent] = useState<ReactNode>();
   const [clickedId, setClickedId] = useState<string>('');
 
   const headerDropdownContext = useContext(HeaderDropdownContext);
@@ -56,8 +58,8 @@ export const HostView = () => {
         const transfromedData = transformTypeFromResToInfo(res.data);
         setChannelInfo(transfromedData);
       })
-      .catch((error: any) => {
-        console.error(error);
+      .catch((err: any) => {
+        console.error(err);
       });
   };
 
@@ -100,22 +102,22 @@ export const HostView = () => {
     headerDropdownContext.setOnClickHandler(handleClickDropdown);
   }, [guestsData]);
 
-  useEffect(() => {
-    setComponent(
-      <MapCanvasForView
-        lat={37.3595704}
-        lng={127.105399}
-        width="100%"
-        height="100%"
-        guests={mapProps}
-      />,
-    );
-  }, [mapProps]);
-
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
       <HostMarker guestsData={mapProps} />
-      {component}
+      {/* eslint-disable-next-line no-nested-ternary */}
+      {lat && lng ? (
+        mapProps ? (
+          <MapCanvasForView lat={lat} lng={lng} width="100%" height="100%" guests={mapProps} />
+        ) : (
+          <LoadingSpinner />
+        )
+      ) : (
+        <section className="flex h-full flex-col items-center justify-center gap-2 text-xl text-gray-700">
+          <LoadingSpinner />
+          {error ? `Error: ${error}` : 'Loading map data...'}
+        </section>
+      )}
     </article>
   );
 };
