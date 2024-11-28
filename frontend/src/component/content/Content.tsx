@@ -1,9 +1,7 @@
 import { MdGroup, MdMoreVert } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { getChannelInfo } from '@/api/channel.api';
-import { useContext, useEffect } from 'react';
-import { UserContext } from '@/context/UserContext';
-import { guestEntity, pathLocationEntity } from '@/api/dto/channel.dto';
+import { useContext } from 'react';
 import { ChannelContext } from '@/context/ChannelContext';
 import { Dropdown } from '../common/dropdown/Dropdown';
 
@@ -48,66 +46,33 @@ export const Content = (props: IContentProps) => {
     minute: '2-digit',
   });
   const navigate = useNavigate();
-  const { setUsers, resetUsers } = useContext(UserContext);
   const { channelInfo, setChannelInfo } = useContext(ChannelContext);
-
-  const updateUsers = (guests: guestEntity[]) => {
-    const updatedUsers = guests.map((guest, i) => ({
-      id: guest?.id ?? '',
-      index: i + 1,
-      name: guest.name ?? `사용자${i + 1}`,
-      start_location: {
-        title: guest.start_location?.title ?? '', // 기본 제목
-        lat: guest.start_location?.lat ?? 0,
-        lng: guest.start_location?.lng ?? 0,
-      },
-      end_location: {
-        title: guest.end_location?.title ?? '',
-        lat: guest.end_location?.lat ?? 0,
-        lng: guest.end_location?.lng ?? 0,
-      },
-      path:
-        guest.path?.map((point: pathLocationEntity) => ({
-          lat: point.lat ?? 0,
-          lng: point.lng ?? 0,
-        })) ?? [],
-      marker_style: {
-        color: guest.marker_style?.color ?? '#000000',
-      },
-    }));
-
-    setUsers(updatedUsers);
-    console.log('Users updated:', updatedUsers);
-  };
 
   const getUpdateChannelInfo = async () => {
     try {
       const channel = await getChannelInfo(props.channelId);
       if (channel?.data) {
         setChannelInfo(channel.data);
-        if (channel.data?.guests) {
-          updateUsers(channel.data?.guests);
-        }
       }
     } catch (error) {
       console.error('Failed to get channel info:', error);
     }
   };
-
-  const handleUpdate = () => {
-    resetUsers();
-    getUpdateChannelInfo();
-  };
-
-  useEffect(() => {
+  const goToChannelInfoPage = () => {
     if (channelInfo?.id) {
       navigate(`/channelInfo/${channelInfo.id}`);
     }
-  }, [channelInfo, navigate]);
+  };
+
+  const handleUpdate = () => {
+    getUpdateChannelInfo();
+    goToChannelInfoPage();
+  };
 
   return (
     <div className="relative flex w-full flex-row items-center justify-between px-4 py-5">
-      <div
+      <button
+        type="button"
         onClick={() => {
           navigate(props.link);
         }}
@@ -124,7 +89,7 @@ export const Content = (props: IContentProps) => {
             </>
           )}
         </section>
-      </div>
+      </button>
       <div className="relative">
         <Dropdown>
           <Dropdown.Trigger>

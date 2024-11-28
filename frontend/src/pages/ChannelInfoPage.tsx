@@ -5,7 +5,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { RouteResultButton } from '@/component/routebutton/RouteResultButton';
 import { Page } from '@/component/routebutton/enum';
 import { ChannelContext } from '@/context/ChannelContext';
-import { IUser } from '@/context/UserContext';
+import { IUser, UserContext } from '@/context/UserContext';
 import { guestEntity } from '@/api/dto/channel.dto';
 import { InputBox } from '../component/common/InputBox';
 
@@ -14,6 +14,7 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
 export const ChannelInfoPage = () => {
   const { channelInfo } = useContext(ChannelContext);
   const { setFooterTransparency, resetFooterContext } = useContext(FooterContext);
+  const { resetUsers } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export const ChannelInfoPage = () => {
   const goToAddChannelPage = () => {
     navigate(`/guest-add-channel/${channelInfo.id}`);
     resetFooterContext();
+    resetUsers();
   };
 
   const markerColors: { [key: number]: string } = {

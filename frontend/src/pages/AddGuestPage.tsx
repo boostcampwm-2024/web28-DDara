@@ -20,7 +20,7 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
 
 export const AddGuestPage = () => {
   const { channelInfo } = useContext(ChannelContext);
-  const { users, setUsers } = useContext(UserContext);
+  const { users, setUsers, resetUsers } = useContext(UserContext);
   const [guests, setGuests] = useState<IUser[]>([]);
   const {
     setFooterTitle,
@@ -34,6 +34,7 @@ export const AddGuestPage = () => {
   const goToMainPage = () => {
     navigate('/', { replace: true });
     resetFooterContext();
+    resetUsers();
   };
 
   // marker 색상과 인덱스를 매핑하는 객체
