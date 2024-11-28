@@ -70,14 +70,14 @@ export const Content = (props: IContentProps) => {
   };
 
   return (
-    <div className="relative flex w-full flex-row items-center justify-between px-4 py-5">
+    <div className="relative flex w-full flex-row justify-between px-4 py-5">
       <button
         type="button"
         onClick={() => {
           navigate(props.link);
         }}
       >
-        <header className="border-gray-200 pb-1 text-lg">{props.title}</header>
+        <header className="border-gray-200 pb-1 text-start text-lg">{props.title}</header>
         <section className="flex items-center text-sm leading-5 text-gray-500">
           <time className="mr-4">
             {formattedDate} {formattedTime}
