@@ -129,6 +129,9 @@ export const AddChannel = () => {
   }, []);
 
   useEffect(() => {
+    if (users.length === 0) {
+      addUser(); // users가 비어있다면 기본 사용자 추가
+    }
     const allUsersComplete = users.every(isUserDataComplete);
 
     // 모든 사용자가 완전한 데이터라면 Footer를 활성화

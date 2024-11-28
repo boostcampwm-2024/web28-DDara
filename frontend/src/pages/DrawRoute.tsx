@@ -15,8 +15,8 @@ export const DrawRoute = () => {
   const params = useParams<Record<string, string | undefined>>(); // userName을 URL 파라미터로 가져옴
   const navigate = useNavigate();
 
-  const goToAddChannelRoute = () => {
-    navigate(`/add-channel`);
+  const goToRoutePage = () => {
+    navigate(-1);
   };
 
   const getUser = () => {
@@ -116,7 +116,7 @@ export const DrawRoute = () => {
             });
 
             setUsers(updatedUsers); // users 배열 업데이트
-            goToAddChannelRoute(); // 경로 추가 페이지로 이동
+            goToRoutePage(); // 경로 추가 페이지로 이동
           };
 
           updateUserLocation(); // 위치 업데이트 함수 호출

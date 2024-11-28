@@ -10,6 +10,7 @@ import { CurrentUserProvider } from '@/context/CurrentUserContext';
 import { ChannelInfoPage } from '@/pages/ChannelInfoPage'; // ChannelInfoPage 컴포넌트 임포트
 import { ChannelProvider } from '@/context/ChannelContext';
 import { RequireAuth } from '@/routes/RequireAuth.tsx';
+import { AddGuestPage } from '@/pages/AddGuestPage';
 
 export const IndexRoutes = () => (
   <UserProvider>
@@ -45,6 +46,15 @@ export const IndexRoutes = () => (
               element={
                 <RequireAuth>
                   <ChannelInfoPage />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path="guest-add-channel/:channelId"
+              element={
+                <RequireAuth>
+                  <AddGuestPage />
                 </RequireAuth>
               }
             />
