@@ -4,22 +4,31 @@ import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
 import startmarker from '@/assets/startmarker.svg';
 import endmarker from '@/assets/endmarker.svg';
 import mylocation from '@/assets/mylocation.svg';
-import guestlocationmarker from '@/assets/guestlocationmarker.svg';
+import character1 from '@/assets/character1.png';
+import character2 from '@/assets/character2.png';
+import { IMarkerStyle } from '@/lib/types/canvasInterface.ts';
 
 interface ILatLng {
   lat: number;
   lng: number;
 }
 
+interface ILatLngAlpha {
+  lat: number;
+  lng: number;
+  alpha: number;
+}
+
 interface IOtherLocation {
-  location: ILatLng;
-  token: string;
+  location: ILatLngAlpha;
+  color: string;
 }
 
 interface IGuest {
   startPoint: ILatLng;
   endPoint: ILatLng;
   paths: ILatLng[];
+  markerStyle: IMarkerStyle;
 }
 
 interface IUseRedrawCanvasProps {
@@ -35,6 +44,7 @@ interface IUseRedrawCanvasProps {
   guests?: IGuest[] | null;
   lat?: number;
   lng?: number;
+  alpha?: number | null;
 }
 
 export const useRedrawCanvas = ({
@@ -48,11 +58,13 @@ export const useRedrawCanvas = ({
   guests = [],
   lat,
   lng,
+  alpha = 0,
 }: IUseRedrawCanvasProps) => {
   const startImageRef = useRef<HTMLImageElement | null>(null);
   const endImageRef = useRef<HTMLImageElement | null>(null);
   const mylocationRef = useRef<HTMLImageElement | null>(null);
-  const guestlocationmarkerRef = useRef<HTMLImageElement | null>(null);
+  const character1Ref = useRef<HTMLImageElement | null>(null);
+  const character2Ref = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     startImageRef.current = new Image();
@@ -64,19 +76,83 @@ export const useRedrawCanvas = ({
     mylocationRef.current = new Image();
     mylocationRef.current.src = mylocation;
 
-    guestlocationmarkerRef.current = new Image();
-    guestlocationmarkerRef.current.src = guestlocationmarker;
+    character1Ref.current = new Image();
+    character1Ref.current.src = character1;
+
+    character2Ref.current = new Image();
+    character2Ref.current.src = character2;
   }, []);
 
   const drawMarker = (
     ctx: CanvasRenderingContext2D,
     point: { x: number; y: number } | null,
     image: HTMLImageElement | null,
+    zoom: number,
+    rotate: number,
   ) => {
     if (point && image) {
-      const markerSize = 32;
-      ctx.drawImage(image, point.x - markerSize / 2, point.y - markerSize, markerSize, markerSize);
+      const markerSize = zoom * 5;
+      ctx.save();
+      ctx.translate(point.x, point.y);
+      ctx.rotate(rotate);
+      ctx.drawImage(image, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
+      ctx.restore();
     }
+  };
+
+  // eslint-disable-next-line no-shadow
+  const hexToRgba = (hex: string, alpha: number) => {
+    // eslint-disable-next-line no-param-reassign
+    hex = hex.replace(/^#/, '');
+
+    if (hex.length === 3) {
+      // eslint-disable-next-line no-param-reassign
+      hex = hex
+        .split('')
+        .map(char => char + char)
+        .join('');
+    }
+
+    const bigint = parseInt(hex, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
+  const drawNeonCircleAndDirection = (
+    ctx: CanvasRenderingContext2D,
+    point: { x: number; y: number } | null,
+    zoom: number,
+    color: string,
+  ) => {
+    if (!point) return;
+
+    const radius = zoom * 3;
+    const gradient = ctx.createRadialGradient(
+      point.x,
+      point.y + zoom,
+      0,
+      point.x,
+      point.y + zoom,
+      radius,
+    );
+
+    const alphaStart = 0.75;
+    const alphaEnd = 0;
+
+    gradient.addColorStop(0, hexToRgba(color || '#3498db', alphaStart));
+    gradient.addColorStop(1, hexToRgba(color || '#3498db', alphaEnd));
+
+    ctx.beginPath();
+    ctx.arc(point.x, point.y + zoom + 1, radius, 0, 2 * Math.PI);
+    ctx.fillStyle = gradient;
+    ctx.fill();
+
+    ctx.save();
+
+    ctx.restore();
   };
 
   const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[]) => {
@@ -96,20 +172,6 @@ export const useRedrawCanvas = ({
     }
   };
 
-  // const getMarkerColor = (token: string): string => {
-  //   // 문자열 해싱을 통해 고유 숫자 생성
-  //   let hash = 0;
-  //   for (let i = 0; i < token.length; i++) {
-  //     hash = token.charCodeAt(i) + ((hash << 5) - hash);
-  //   }
-  //   // 해시 값을 기반으로 RGB 값 생성
-  //   const r = (hash >> 16) & 0xff;
-  //   const g = (hash >> 8) & 0xff;
-  //   const b = hash & 0xff;
-  //   // RGB를 HEX 코드로 변환
-  //   return `rgb(${r}, ${g}, ${b})`;
-  // };
-
   const redrawCanvas = () => {
     if (!canvasRef.current || !map) return;
 
@@ -123,14 +185,15 @@ export const useRedrawCanvas = ({
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
+    const zoom = map.getZoom();
     if (startMarker) {
       const startPoint = latLngToCanvasPoint(startMarker);
-      drawMarker(ctx, startPoint, startImageRef.current);
+      drawMarker(ctx, startPoint, startImageRef.current, zoom, 0);
     }
 
     if (endMarker) {
       const endPoint = latLngToCanvasPoint(endMarker);
-      drawMarker(ctx, endPoint, endImageRef.current);
+      drawMarker(ctx, endPoint, endImageRef.current, zoom, 0);
     }
 
     if (pathPoints) {
@@ -139,24 +202,38 @@ export const useRedrawCanvas = ({
 
     if (lat && lng) {
       const currentLocation = latLngToCanvasPoint({ lat, lng });
-      drawMarker(ctx, currentLocation, mylocationRef.current);
+      if (alpha) {
+        drawMarker(ctx, currentLocation, character1Ref.current, zoom, (alpha * Math.PI) / 180);
+      } else {
+        drawMarker(ctx, currentLocation, character1Ref.current, zoom, 0);
+      }
     }
 
     if (otherLocations) {
-      otherLocations.forEach(({ location }) => {
-        // const markerColor = getMarkerColor(token);
-        const locationPoint = latLngToCanvasPoint(location);
-        drawMarker(ctx, locationPoint, guestlocationmarkerRef.current);
+      otherLocations.forEach(({ location, color }) => {
+        const locationPoint = latLngToCanvasPoint({
+          lat: location.lat ? location.lat : 0,
+          lng: location.lng ? location.lng : 0,
+        });
+
+        drawNeonCircleAndDirection(ctx, locationPoint, zoom, color);
+        drawMarker(
+          ctx,
+          locationPoint,
+          character2Ref.current,
+          zoom,
+          (location.alpha * Math.PI) / 180,
+        );
       });
     }
 
     if (guests) {
       guests.forEach(({ startPoint, endPoint, paths }) => {
         const startLocation = latLngToCanvasPoint(startPoint);
-        drawMarker(ctx, startLocation, startImageRef.current);
+        drawMarker(ctx, startLocation, startImageRef.current, zoom, 0);
 
         const endLocation = latLngToCanvasPoint(endPoint);
-        drawMarker(ctx, endLocation, endImageRef.current);
+        drawMarker(ctx, endLocation, endImageRef.current, zoom, 0);
 
         drawPath(ctx, paths);
       });
