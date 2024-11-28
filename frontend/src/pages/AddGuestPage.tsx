@@ -10,6 +10,7 @@ import { addChannelReqEntity, guestEntity } from '@/api/dto/channel.dto';
 import { addGuestChannel } from '@/api/channel.api';
 import { Page } from '@/component/routebutton/enum';
 import { ChannelContext } from '@/context/ChannelContext';
+import { HeaderButtonContext } from '@/context/HeaderButtonContext';
 import { InputBox } from '../component/common/InputBox';
 
 /**
@@ -30,11 +31,20 @@ export const AddGuestPage = () => {
     resetFooterContext,
     footerOption,
   } = useContext(FooterContext);
+  const { setLeftButtonOnclick, resetButtonContext } = useContext(HeaderButtonContext);
   const navigate = useNavigate();
+  const goToPrevPage = () => {
+    navigate(-1);
+    resetFooterContext();
+    resetUsers();
+    resetButtonContext();
+  };
+
   const goToMainPage = () => {
     navigate('/', { replace: true });
     resetFooterContext();
     resetUsers();
+    resetButtonContext();
   };
 
   // marker 색상과 인덱스를 매핑하는 객체
@@ -164,6 +174,7 @@ export const AddGuestPage = () => {
       const initialGuests = convertGuestsToUsers(channelInfo.guests);
       setGuests(initialGuests);
     }
+    setLeftButtonOnclick(goToPrevPage);
   }, []);
 
   // 모든 사용자가 데이터를 완료했는지 확인하여 Footer 활성화 여부 결정

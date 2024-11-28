@@ -14,8 +14,8 @@ export const LayoutHeader = () => {
     <HeaderLayout
       leftButton={headerOption.leftButton}
       rightButton={headerOption.rightButton}
-      className="z-[5000] bg-white"
-      userName={`${params.user}`}
+      className="z-[5000]"
+      userName={`${params.user || ''}`}
       title={`${headerOption.title}`}
       subtitle={`${headerOption.subtitle}`}
       leftButtonOnclick={leftButtonOnclick}

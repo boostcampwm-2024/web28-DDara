@@ -9,12 +9,15 @@ export const HEADER_SUBTITLE: Record<string, string> = {
 };
 
 export const HEADER_LEFTBUTTON: Record<string, HeaderIcon> = {
+  // '/': HeaderIcon.LOGOUT,
   '/add-channel': HeaderIcon.BACK,
   '/add-channel/:user': HeaderIcon.BACK,
   '/add-channel/:user/draw': HeaderIcon.BACK,
   '/channel/:channelId/host': HeaderIcon.BACK,
   '/update-channel': HeaderIcon.BACK,
   '/register': HeaderIcon.BACK,
+  '/channelInfo/:channelId': HeaderIcon.BACK,
+  '/guest-add-channel/:channelId': HeaderIcon.BACK,
 };
 
 export const HEADER_RIGHTBUTTON: Record<string, HeaderIcon> = {

@@ -9,7 +9,7 @@ import { buttonActiveType } from '@/component/layout/enumTypes';
 import { createChannelReqEntity } from '@/api/dto/channel.dto';
 import { createChannel } from '@/api/channel.api';
 import { Page } from '@/component/routebutton/enum';
-// import { HeaderButtonContext } from '@/context/HeaderButtonContext';
+import { HeaderButtonContext } from '@/context/HeaderButtonContext';
 import { InputBox } from '../component/common/InputBox';
 
 /**
@@ -47,8 +47,14 @@ export const AddChannel = () => {
     setFooterOnClick,
     resetFooterContext,
   } = useContext(FooterContext);
-  // const { setLeftButtonOnclick, resetButtonContext } = useContext(HeaderButtonContext);
+  const { setLeftButtonOnclick, resetButtonContext } = useContext(HeaderButtonContext);
   const navigate = useNavigate();
+  const goToMainPage = () => {
+    navigate('/');
+    resetFooterContext();
+    resetUsers();
+    resetButtonContext();
+  };
 
   /**
    * 사용자 추가 함수
@@ -128,7 +134,7 @@ export const AddChannel = () => {
     setFooterTitle('제작 완료');
     setFooterTransparency(false);
     setFooterActive(buttonActiveType.PASSIVE);
-    // setLeftButtonOnclick(goToMainPage);
+    setLeftButtonOnclick(goToMainPage);
   }, []);
 
   useEffect(() => {
@@ -175,11 +181,7 @@ export const AddChannel = () => {
       console.error('채널 생성 실패:', error);
     }
   };
-  const goToMainPage = () => {
-    navigate('/');
-    resetFooterContext();
-    resetUsers();
-  };
+
   useEffect(() => {
     setFooterOnClick(() => {
       createChannelAPI();

@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { IGuest } from '@/types/channel.types.ts';
 import { getGuestInfo } from '@/api/channel.api.ts';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { IPoint } from '@/lib/types/canvasInterface.ts';
 import { guestEntity } from '@/api/dto/channel.dto.ts';
 import { GusetMarker } from '@/component/IconGuide/GuestMarker.tsx';
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
+import { HeaderButtonContext } from '@/context/HeaderButtonContext';
 
 export const GuestView = () => {
   const { lat, lng, error } = getUserLocation();
@@ -19,7 +20,12 @@ export const GuestView = () => {
     endPoint: { lat: 0, lng: 0 },
     paths: [],
   });
-
+  const { setLeftButtonOnclick, resetButtonContext } = useContext(HeaderButtonContext);
+  const navigate = useNavigate();
+  const goToMainPage = () => {
+    navigate('/');
+    resetButtonContext();
+  };
   const location = useLocation();
 
   const transformTypeGuestEntityToIGuest = (props: guestEntity): IGuest => {
@@ -55,6 +61,7 @@ export const GuestView = () => {
   };
 
   useEffect(() => {
+    setLeftButtonOnclick(goToMainPage);
     fetchGuestInfo(location.pathname.split('/')[2], location.pathname.split('/')[4]);
   }, []);
 

@@ -7,16 +7,21 @@ import { buttonActiveType } from '@/component/layout/enumTypes';
 import { MapProviderForDraw } from '@/component/canvasWithMap/canvasWithMapforDraw/MapProviderForDraw.tsx';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { getAddressFromCoordinates } from '@/utils/map/getAddress';
+import { HeaderButtonContext } from '@/context/HeaderButtonContext';
 
 export const DrawRoute = () => {
   const { users, setUsers } = useContext(UserContext);
-  const { setFooterTitle, setFooterActive, setFooterOnClick } = useContext(FooterContext);
+  const { setFooterTitle, setFooterActive, setFooterOnClick, resetFooterContext } =
+    useContext(FooterContext);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
-  const params = useParams<Record<string, string | undefined>>(); // userName을 URL 파라미터로 가져옴
+  const params = useParams<Record<string, string | undefined>>();
+  const { setLeftButtonOnclick, resetButtonContext } = useContext(HeaderButtonContext);
   const navigate = useNavigate();
 
   const goToRoutePage = () => {
     navigate(-1);
+    resetButtonContext();
+    resetFooterContext();
   };
 
   const getUser = () => {
@@ -50,6 +55,7 @@ export const DrawRoute = () => {
   useEffect(() => {
     setFooterTitle('사용자 경로 추가 완료');
     setFooterActive(buttonActiveType.PASSIVE);
+    setLeftButtonOnclick(goToRoutePage);
     const user = getUser();
     if (user) {
       // userId에 따른 Tailwind 색상 클래스를 설정

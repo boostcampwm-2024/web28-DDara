@@ -2,13 +2,14 @@ import { HeaderDropdownContext } from '@/component/header/HeaderDropdownProvider
 import { useContext, useEffect, useState } from 'react';
 import { IGuest, IChannelInfo, IGuestData } from '@/types/channel.types.ts';
 import { getChannelInfo } from '@/api/channel.api.ts';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { IGuestDataInMapProps, IPoint } from '@/lib/types/canvasInterface.ts';
 import { getChannelResEntity, guestEntity } from '@/api/dto/channel.dto.ts';
 import { HostMarker } from '@/component/IconGuide/HostMarker.tsx';
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
+import { HeaderButtonContext } from '@/context/HeaderButtonContext';
 
 export const HostView = () => {
   const { lat, lng, error } = getUserLocation();
@@ -16,6 +17,12 @@ export const HostView = () => {
   const [guestsData, setGuestsData] = useState<IGuestData[]>([]);
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
   const [clickedId, setClickedId] = useState<string>('');
+  const { setLeftButtonOnclick, resetButtonContext } = useContext(HeaderButtonContext);
+  const navigate = useNavigate();
+  const goToMainPage = () => {
+    navigate('/');
+    resetButtonContext();
+  };
 
   const headerDropdownContext = useContext(HeaderDropdownContext);
 
@@ -69,7 +76,7 @@ export const HostView = () => {
 
   useEffect(() => {
     headerDropdownContext.setItems([{ name: '사용자 1', id: '1', markerStyle: { color: '#000' } }]);
-
+    setLeftButtonOnclick(goToMainPage);
     fetchChannelInfo(location.pathname.split('/')[2]);
   }, []);
 
