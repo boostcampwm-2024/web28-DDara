@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IGuest } from '@/types/channel.types.ts';
 import { getGuestInfo } from '@/api/channel.api.ts';
 import { useLocation } from 'react-router-dom';
@@ -6,8 +6,11 @@ import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView
 import { IPoint } from '@/lib/types/canvasInterface.ts';
 import { guestEntity } from '@/api/dto/channel.dto.ts';
 import { GusetMarker } from '@/component/IconGuide/GuestMarker.tsx';
+import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
+import { getUserLocation } from '@/hooks/getUserLocation.ts';
 
 export const GuestView = () => {
+  const { lat, lng, error } = getUserLocation();
   const [guestInfo, setGuestInfo] = useState<IGuest>({
     id: '',
     name: '',
@@ -16,7 +19,6 @@ export const GuestView = () => {
     endPoint: { lat: 0, lng: 0 },
     paths: [],
   });
-  const [component, setComponent] = useState<ReactNode>();
 
   const location = useLocation();
 
@@ -47,8 +49,8 @@ export const GuestView = () => {
         const transfromedData = transformTypeGuestEntityToIGuest(res.data);
         setGuestInfo(transfromedData);
       })
-      .catch((error: any) => {
-        console.error(error);
+      .catch((err: any) => {
+        console.error(err);
       });
   };
 
@@ -56,25 +58,22 @@ export const GuestView = () => {
     fetchGuestInfo(location.pathname.split('/')[2], location.pathname.split('/')[4]);
   }, []);
 
-  useEffect(() => {
-    console.log(guestInfo);
-    if (guestInfo) {
-      setComponent(
-        <MapCanvasForView
-          lat={37.3595704}
-          lng={127.105399}
-          width="100%"
-          height="100%"
-          guests={[guestInfo]}
-        />,
-      );
-    }
-  }, [guestInfo]);
-
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
-      <GusetMarker />
-      {component}
+      <GusetMarker markerColor={guestInfo.markerStyle.color} />
+      {/* eslint-disable-next-line no-nested-ternary */}
+      {lat && lng ? (
+        guestInfo ? (
+          <MapCanvasForView lat={lat} lng={lng} width="100%" height="100%" guests={[guestInfo]} />
+        ) : (
+          <LoadingSpinner />
+        )
+      ) : (
+        <section className="flex h-full flex-col items-center justify-center gap-2 text-xl text-gray-700">
+          <LoadingSpinner />
+          {error ? `Error: ${error}` : 'Loading map data...'}
+        </section>
+      )}
     </article>
   );
 };
