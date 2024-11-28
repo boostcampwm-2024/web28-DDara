@@ -13,6 +13,8 @@ export const HEADER_LEFTBUTTON: Record<string, string> = {
   '/channel/:channelId/host': 'back',
   '/update-channel': 'back',
   '/register': 'back',
+  '/channelInfo/:channelId': 'back',
+  '/guest-add-channel/:channelId': 'back',
 };
 
 export const HEADER_RIGHTBUTTON: Record<string, string> = {
