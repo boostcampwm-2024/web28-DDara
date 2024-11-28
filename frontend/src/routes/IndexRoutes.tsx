@@ -10,59 +10,62 @@ import { CurrentUserProvider } from '@/context/CurrentUserContext';
 import { ChannelInfoPage } from '@/pages/ChannelInfoPage'; // ChannelInfoPage 컴포넌트 임포트
 import { ChannelProvider } from '@/context/ChannelContext';
 import { RequireAuth } from '@/routes/RequireAuth.tsx';
+import { HeaderButtonProvider } from '@/context/HeaderButtonContext';
 
 export const IndexRoutes = () => (
-  <UserProvider>
-    <CurrentUserProvider>
-      <ChannelProvider>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Main />} />
-            <Route path="add-channel">
-              <Route
-                index
-                element={
-                  <RequireAuth>
-                    <AddChannel />
-                  </RequireAuth>
-                }
-              />
-              <Route path=":user">
+  <HeaderButtonProvider>
+    <UserProvider>
+      <CurrentUserProvider>
+        <ChannelProvider>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Main />} />
+              <Route path="add-channel">
                 <Route
-                  path="draw"
+                  index
                   element={
                     <RequireAuth>
-                      <DrawRoute />
+                      <AddChannel />
                     </RequireAuth>
                   }
                 />
+                <Route path=":user">
+                  <Route
+                    path="draw"
+                    element={
+                      <RequireAuth>
+                        <DrawRoute />
+                      </RequireAuth>
+                    }
+                  />
+                </Route>
               </Route>
-            </Route>
 
-            {/* channelInfo 페이지 경로 설정 */}
-            <Route
-              path="channelInfo/:channelId"
-              element={
-                <RequireAuth>
-                  <ChannelInfoPage />
-                </RequireAuth>
-              }
-            />
-
-            <Route path="channel/:channelId">
+              {/* channelInfo 페이지 경로 설정 */}
               <Route
-                path="host"
+                path="channelInfo/:channelId"
                 element={
                   <RequireAuth>
-                    <HostView />
+                    <ChannelInfoPage />
                   </RequireAuth>
                 }
               />
-              <Route path="guest/:guestId" element={<GuestView />} />
+
+              <Route path="channel/:channelId">
+                <Route
+                  path="host"
+                  element={
+                    <RequireAuth>
+                      <HostView />
+                    </RequireAuth>
+                  }
+                />
+                <Route path="guest/:guestId" element={<GuestView />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
-      </ChannelProvider>
-    </CurrentUserProvider>
-  </UserProvider>
+          </Routes>
+        </ChannelProvider>
+      </CurrentUserProvider>
+    </UserProvider>
+  </HeaderButtonProvider>
 );
