@@ -106,12 +106,13 @@ export const Content = (props: IContentProps) => {
   }, [channelInfo, navigate]);
 
   return (
-    <div className="relative flex w-full flex-row items-center justify-between px-4 py-5">
-      <div
-        onClick={() => {
-          navigate(props.link);
-        }}
-      >
+    <div
+      className="relative flex w-full flex-row items-center justify-between px-4 py-5"
+      onClick={() => {
+        navigate(props.link);
+      }}
+    >
+      <div>
         <header className="border-gray-200 pb-1 text-lg">{props.title}</header>
         <section className="flex items-center text-sm leading-5 text-gray-500">
           <time className="mr-4">
@@ -125,7 +126,12 @@ export const Content = (props: IContentProps) => {
           )}
         </section>
       </div>
-      <div className="relative">
+      <div
+        className="relative"
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      >
         <Dropdown>
           <Dropdown.Trigger>
             <MdMoreVert className="h-6 w-6" />

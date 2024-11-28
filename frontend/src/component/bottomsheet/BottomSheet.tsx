@@ -14,9 +14,9 @@ export const BottomSheet = ({
   backgroundColor,
   children,
 }: IBottomSheetProps) => {
-  const [sheetHeight, setSheetHeight] = useState(minHeight);
+  const [sheetHeight, setSheetHeight] = useState(minHeight + 0.2);
   const startY = useRef(0);
-  const startHeight = useRef(minHeight);
+  const startHeight = useRef(minHeight + 0.2);
 
   const handleStart = (y: number) => {
     startY.current = y;
@@ -58,11 +58,10 @@ export const BottomSheet = ({
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl bg-white shadow-lg transition-transform duration-700 ease-out"
+      className="transition-height fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl bg-white shadow-lg duration-700 ease-out"
       style={{
         backgroundColor: `${backgroundColor}`,
         height: `${sheetHeight * 100}vh`,
-        transform: `translateY(${(1 - sheetHeight) * 100}%)`,
       }}
     >
       <div
@@ -73,6 +72,7 @@ export const BottomSheet = ({
       >
         <div className="h-1.5 w-12 rounded-full bg-gray-300" />
       </div>
+
       <div className="absolute right-2 top-2">
         <button
           onClick={handleClose}
