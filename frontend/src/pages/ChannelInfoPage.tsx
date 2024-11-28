@@ -1,37 +1,52 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { RouteResultButton } from '@/component/routebutton/RouteResultButton';
 import { Page } from '@/component/routebutton/enum';
 import { ChannelContext } from '@/context/ChannelContext';
-import { IUser } from '@/context/UserContext';
+import { IUser, UserContext } from '@/context/UserContext';
 import { guestEntity } from '@/api/dto/channel.dto';
 import { InputBox } from '../component/common/InputBox';
 
 const Divider = () => <hr className="my-6 w-full border-gray-300" />;
 
 export const ChannelInfoPage = () => {
-  const [channelName, setChannelName] = useState<string>('');
   const { channelInfo } = useContext(ChannelContext);
   const { setFooterTransparency, resetFooterContext } = useContext(FooterContext);
+  const { resetUsers } = useContext(UserContext);
   const navigate = useNavigate();
-
-  const handleChangeChannelName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChannelName(event.target.value);
-  };
 
   useEffect(() => {
     setFooterTransparency(true);
   }, []);
 
   const goToAddChannelPage = () => {
-    navigate('/add-channel');
+    navigate(`/guest-add-channel/${channelInfo.id}`);
     resetFooterContext();
+    resetUsers();
+  };
+
+  const markerColors: { [key: number]: string } = {
+    1: '#B4D033',
+    2: '#22A751',
+    3: '#2722A7',
+    4: '#8F22A7',
+    5: '#A73D22',
   };
 
   const convertGuestsToUsers = (guests: guestEntity[]): IUser[] => {
-    return guests.map((guest, index) => ({
+    // markerColors의 순서에 따라 guests를 정렬
+    const sortedGuests = [...guests].sort((a, b) => {
+      const colorA = a.marker_style?.color || '';
+      const colorB = b.marker_style?.color || '';
+      const indexA = Object.values(markerColors).indexOf(colorA);
+      const indexB = Object.values(markerColors).indexOf(colorB);
+
+      return indexA - indexB;
+    });
+
+    return sortedGuests.map((guest, index) => ({
       id: guest.id || `guest-${index}`,
       index: index + 1,
       name: guest.name || '',
@@ -63,8 +78,8 @@ export const ChannelInfoPage = () => {
       <Outlet />
       <InputBox
         placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길"
-        onChange={handleChangeChannelName}
-        value={channelName}
+        value={channelInfo.name}
+        readOnly
       />
       <Divider />
       <section className="w-full space-y-4">
@@ -75,7 +90,7 @@ export const ChannelInfoPage = () => {
         ))}
       </section>
 
-      <section className="text-grayscale-400 my-4 mr-8 flex justify-start gap-[2px] text-xs">
+      <section className="text-grayscale-400 my-4 mr-8 flex items-center justify-start gap-[2px] text-xs">
         <HiMiniInformationCircle className="h-4 w-4 text-black" />
         사용자 별로 url을 복사하여 공유할 수 있습니다.
       </section>

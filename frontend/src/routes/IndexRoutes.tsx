@@ -11,6 +11,7 @@ import { ChannelInfoPage } from '@/pages/ChannelInfoPage'; // ChannelInfoPage �
 import { ChannelProvider } from '@/context/ChannelContext';
 import { RequireAuth } from '@/routes/RequireAuth.tsx';
 import { HeaderButtonProvider } from '@/context/HeaderButtonContext';
+import { AddGuestPage } from '@/pages/AddGuestPage';
 
 export const IndexRoutes = () => (
   <HeaderButtonProvider>
@@ -20,28 +21,22 @@ export const IndexRoutes = () => (
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Main />} />
-              <Route path="add-channel">
-                <Route
-                  index
-                  element={
-                    <RequireAuth>
-                      <AddChannel />
-                    </RequireAuth>
-                  }
-                />
-                <Route path=":user">
-                  <Route
-                    path="draw"
-                    element={
-                      <RequireAuth>
-                        <DrawRoute />
-                      </RequireAuth>
-                    }
-                  />
-                </Route>
-              </Route>
-
-              {/* channelInfo 페이지 경로 설정 */}
+              <Route
+                path="add-channel"
+                element={
+                  <RequireAuth>
+                    <AddChannel />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="add-channel/:user/draw"
+                element={
+                  <RequireAuth>
+                    <DrawRoute />
+                  </RequireAuth>
+                }
+              />
               <Route
                 path="channelInfo/:channelId"
                 element={
@@ -50,7 +45,14 @@ export const IndexRoutes = () => (
                   </RequireAuth>
                 }
               />
-
+              <Route
+                path="guest-add-channel/:channelId"
+                element={
+                  <RequireAuth>
+                    <AddGuestPage />
+                  </RequireAuth>
+                }
+              />
               <Route path="channel/:channelId">
                 <Route
                   path="host"

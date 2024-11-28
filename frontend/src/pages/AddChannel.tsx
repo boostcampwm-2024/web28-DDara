@@ -9,7 +9,7 @@ import { buttonActiveType } from '@/component/layout/enumTypes';
 import { createChannelReqEntity } from '@/api/dto/channel.dto';
 import { createChannel } from '@/api/channel.api';
 import { Page } from '@/component/routebutton/enum';
-import { HeaderButtonContext } from '@/context/HeaderButtonContext';
+// import { HeaderButtonContext } from '@/context/HeaderButtonContext';
 import { InputBox } from '../component/common/InputBox';
 
 /**
@@ -38,7 +38,7 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
 
 export const AddChannel = () => {
   const [channelName, setChannelName] = useState<string>('');
-  const { users, setUsers } = useContext(UserContext);
+  const { users, setUsers, resetUsers } = useContext(UserContext);
   const {
     setFooterTitle,
     setFooterTransparency,
@@ -47,13 +47,8 @@ export const AddChannel = () => {
     setFooterOnClick,
     resetFooterContext,
   } = useContext(FooterContext);
-  const { setLeftButtonOnclick, resetButtonContext } = useContext(HeaderButtonContext);
+  // const { setLeftButtonOnclick, resetButtonContext } = useContext(HeaderButtonContext);
   const navigate = useNavigate();
-  const goToMainPage = () => {
-    navigate('/');
-    resetFooterContext();
-    resetButtonContext();
-  };
 
   /**
    * 사용자 추가 함수
@@ -133,10 +128,13 @@ export const AddChannel = () => {
     setFooterTitle('제작 완료');
     setFooterTransparency(false);
     setFooterActive(buttonActiveType.PASSIVE);
-    setLeftButtonOnclick(goToMainPage);
+    // setLeftButtonOnclick(goToMainPage);
   }, []);
 
   useEffect(() => {
+    if (users.length === 0) {
+      addUser(); // users가 비어있다면 기본 사용자 추가
+    }
     const allUsersComplete = users.every(isUserDataComplete);
 
     // 모든 사용자가 완전한 데이터라면 Footer를 활성화
@@ -177,7 +175,11 @@ export const AddChannel = () => {
       console.error('채널 생성 실패:', error);
     }
   };
-
+  const goToMainPage = () => {
+    navigate('/');
+    resetFooterContext();
+    resetUsers();
+  };
   useEffect(() => {
     setFooterOnClick(() => {
       createChannelAPI();
