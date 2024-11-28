@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
-import { MdFormatListBulleted, MdLogout } from 'react-icons/md';
+import { MdLogout } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
 import { buttonActiveType } from '@/component/layout/enumTypes';
@@ -117,12 +117,14 @@ export const Main = () => {
   return (
     <div className="flex flex-col overflow-hidden">
       <header className="absolute left-0 right-0 top-0 z-10 flex p-4">
-        <button type="button" className="text-gray-700">
-          <MdFormatListBulleted size={24} />
-        </button>
         {isUserLoggedIn && (
-          <button type="button" className="ml-auto text-gray-700" onClick={handleLogout}>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex flex-col items-center gap-2 text-gray-700"
+          >
             <MdLogout size={24} />
+            <span className="text-xs">로그아웃</span>
           </button>
         )}
       </header>
