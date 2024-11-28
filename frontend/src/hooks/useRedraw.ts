@@ -72,10 +72,9 @@ export const useRedrawCanvas = ({
     ctx: CanvasRenderingContext2D,
     point: { x: number; y: number } | null,
     image: HTMLImageElement | null,
-    zoom: number,
   ) => {
     if (point && image) {
-      const markerSize = zoom * 2;
+      const markerSize = 32;
       ctx.drawImage(image, point.x - markerSize / 2, point.y - markerSize, markerSize, markerSize);
     }
   };
@@ -97,6 +96,20 @@ export const useRedrawCanvas = ({
     }
   };
 
+  // const getMarkerColor = (token: string): string => {
+  //   // 문자열 해싱을 통해 고유 숫자 생성
+  //   let hash = 0;
+  //   for (let i = 0; i < token.length; i++) {
+  //     hash = token.charCodeAt(i) + ((hash << 5) - hash);
+  //   }
+  //   // 해시 값을 기반으로 RGB 값 생성
+  //   const r = (hash >> 16) & 0xff;
+  //   const g = (hash >> 8) & 0xff;
+  //   const b = hash & 0xff;
+  //   // RGB를 HEX 코드로 변환
+  //   return `rgb(${r}, ${g}, ${b})`;
+  // };
+
   const redrawCanvas = () => {
     if (!canvasRef.current || !map) return;
 
@@ -110,15 +123,14 @@ export const useRedrawCanvas = ({
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    const zoom = map.getZoom();
     if (startMarker) {
       const startPoint = latLngToCanvasPoint(startMarker);
-      drawMarker(ctx, startPoint, startImageRef.current, zoom);
+      drawMarker(ctx, startPoint, startImageRef.current);
     }
 
     if (endMarker) {
       const endPoint = latLngToCanvasPoint(endMarker);
-      drawMarker(ctx, endPoint, endImageRef.current, zoom);
+      drawMarker(ctx, endPoint, endImageRef.current);
     }
 
     if (pathPoints) {
@@ -127,23 +139,24 @@ export const useRedrawCanvas = ({
 
     if (lat && lng) {
       const currentLocation = latLngToCanvasPoint({ lat, lng });
-      drawMarker(ctx, currentLocation, mylocationRef.current, zoom);
+      drawMarker(ctx, currentLocation, mylocationRef.current);
     }
 
     if (otherLocations) {
       otherLocations.forEach(({ location }) => {
+        // const markerColor = getMarkerColor(token);
         const locationPoint = latLngToCanvasPoint(location);
-        drawMarker(ctx, locationPoint, guestlocationmarkerRef.current, zoom);
+        drawMarker(ctx, locationPoint, guestlocationmarkerRef.current);
       });
     }
 
     if (guests) {
       guests.forEach(({ startPoint, endPoint, paths }) => {
         const startLocation = latLngToCanvasPoint(startPoint);
-        drawMarker(ctx, startLocation, startImageRef.current, zoom);
+        drawMarker(ctx, startLocation, startImageRef.current);
 
         const endLocation = latLngToCanvasPoint(endPoint);
-        drawMarker(ctx, endLocation, endImageRef.current, zoom);
+        drawMarker(ctx, endLocation, endImageRef.current);
 
         drawPath(ctx, paths);
       });

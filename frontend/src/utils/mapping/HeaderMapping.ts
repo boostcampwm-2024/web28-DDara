@@ -10,6 +10,8 @@ const normalizePath = (path: string): string => {
     .replace(/\/add-channel\/[^/]+\/draw$/, '/add-channel/:user/draw') // `/add-channel/사용자1/draw` → `/add-channel/:user/draw`
     .replace(/\/add-channel\/[^/]+$/, '/add-channel/:user') // `/add-channel/사용자1` → `/add-channel/:user`
     .replace(/\/channel\/[^/]+\/host$/, '/channel/:channelId/host') // `/channel/123/host` → `/channel/:channelId/host`
+    .replace(/\/channelInfo\/[^/]+$/, '/channelInfo/:channelId') // `/channelInfo/123` → `/channel/:channelId`
+    .replace(/\/guest-add-channel\/[^/]+$/, '/guest-add-channel/:channelId') // `/guest-add-channel/123` → `/guest-add-channel/:channelId`
     .replace(/\/channel\/[^/]+\/guest\/[^/]+$/, '/channel/:channelId/guest/:guestId') // `/channel/123/guest/456` → `/channel/:channelId/guest/:guestId`
     .replace(/\/$/, '/'); // 루트 경로 유지
 };
