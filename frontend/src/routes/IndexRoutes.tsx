@@ -10,13 +10,15 @@ import { CurrentUserProvider } from '@/context/CurrentUserContext';
 import { ChannelInfoPage } from '@/pages/ChannelInfoPage'; // ChannelInfoPage 컴포넌트 임포트
 import { ChannelProvider } from '@/context/ChannelContext';
 import { RequireAuth } from '@/routes/RequireAuth.tsx';
+import { AlertUndefinedURL } from '@/routes/AlertUndefinedURL.tsx';
+import { AddGuestPage } from '@/pages/AddGuestPage';
 
 export const IndexRoutes = () => (
   <UserProvider>
     <CurrentUserProvider>
       <ChannelProvider>
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route path="*" element={<Layout />}>
             <Route index element={<Main />} />
             <Route path="add-channel">
               <Route
@@ -49,6 +51,15 @@ export const IndexRoutes = () => (
               }
             />
 
+            <Route
+              path="guest-add-channel/:channelId"
+              element={
+                <RequireAuth>
+                  <AddGuestPage />
+                </RequireAuth>
+              }
+            />
+
             <Route path="channel/:channelId">
               <Route
                 path="host"
@@ -60,6 +71,9 @@ export const IndexRoutes = () => (
               />
               <Route path="guest/:guestId" element={<GuestView />} />
             </Route>
+
+            {/* 정의되지 않은 경로 라우팅 */}
+            <Route path="*" element={<AlertUndefinedURL />} />
           </Route>
         </Routes>
       </ChannelProvider>

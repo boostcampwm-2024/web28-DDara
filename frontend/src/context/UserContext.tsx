@@ -26,36 +26,24 @@ interface IUserContextProps {
 
 interface IUserOptionContext {
   users: IUser[];
-  setUsers: React.Dispatch<React.SetStateAction<IUser[]>>;
+  setUsers: React.Dispatch<React.SetStateAction<IUser[]>>; // setUsers 함수 타입 수정
   resetUsers: () => void;
 }
-
 const defaultUserContext: IUserOptionContext = {
   users: [],
   setUsers: () => {},
   resetUsers: () => {},
 };
 
-export const UserContext = createContext<IUserOptionContext>(defaultUserContext);
+export const UserContext = createContext<IUserOptionContext>(defaultUserContext); // 기본값을 null로 설정
 
 export const UserProvider = (props: IUserContextProps) => {
-  const defaultUsers: IUser[] = [
-    {
-      id: '',
-      index: 1,
-      name: '사용자1',
-      start_location: { title: '', lat: 0, lng: 0 },
-      end_location: { title: '', lat: 0, lng: 0 },
-      path: [],
-      marker_style: { color: '' },
-    },
-  ];
-
-  const [users, setUsers] = useState<IUser[]>(defaultUsers);
+  const [users, setUsers] = useState<IUser[]>([]);
 
   const resetUsers = () => {
-    setUsers(defaultUsers);
+    setUsers([]);
   };
+
   const contextValue = useMemo(() => ({ users, setUsers, resetUsers }), [users, setUsers]);
 
   return <UserContext.Provider value={contextValue}>{props.children}</UserContext.Provider>;

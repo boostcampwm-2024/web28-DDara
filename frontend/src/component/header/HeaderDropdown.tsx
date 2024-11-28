@@ -2,12 +2,16 @@ import { Dropdown } from '@/component/common/dropdown/Dropdown.tsx';
 import { MdMenu, MdLocationOn } from 'react-icons/md';
 import { DropdownItem } from '@/component/common/dropdown/DropdownItem.tsx';
 import { HeaderDropdownContext } from '@/component/header/HeaderDropdownProvider.tsx';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 export const HeaderDropdown = () => {
   const [clickedId, setClickedId] = useState<string>('');
   const { headerDropdownOption } = useContext(HeaderDropdownContext);
+
+  useEffect(() => {
+    if (headerDropdownOption.items.length === 1) setClickedId(headerDropdownOption.items[0].id);
+  }, [headerDropdownOption]);
 
   const DropdownItems = () => {
     const Items = headerDropdownOption.items.map(guestData => {
