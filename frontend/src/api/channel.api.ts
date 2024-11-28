@@ -1,5 +1,7 @@
 import { ResponseDto } from '@/api/dto/response.dto.ts';
 import {
+  addChannelReqEntity,
+  addChannelResEntity,
   createChannelReqEntity,
   createChannelResEntity,
   getChannelResEntity,
@@ -24,6 +26,32 @@ export const createChannel = (
           fnReject(`msg.${res}`);
         } else {
           fnResolve(new ResponseDto<createChannelResEntity>(res.data));
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        fnReject('msg.RESULT_FAILED');
+      });
+  };
+  return new Promise(promiseFn);
+};
+
+export const addGuestChannel = (
+  data: addChannelReqEntity,
+): Promise<ResponseDto<addChannelResEntity>> => {
+  const promiseFn = (
+    fnResolve: (value: ResponseDto<addChannelResEntity>) => void,
+    fnReject: (reason?: any) => void,
+  ) => {
+    const apiClient = getApiClient();
+    apiClient
+      .post(`/channel/${data.channel_id}/guests`, data)
+      .then(res => {
+        if (res.status !== 200) {
+          console.error(res);
+          fnReject(`msg.${res}`);
+        } else {
+          fnResolve(new ResponseDto<addChannelResEntity>(res.data));
         }
       })
       .catch(err => {

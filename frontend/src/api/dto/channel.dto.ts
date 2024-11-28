@@ -50,6 +50,12 @@ export class createChannelReqEntity {
   guests: guestReqEntity[] | undefined;
 }
 
+export class addChannelReqEntity {
+  channel_id: string | undefined;
+
+  guests: guestReqEntity[] | undefined;
+}
+
 export class guestSimpleEntity {
   id: string | undefined;
 
@@ -66,6 +72,12 @@ export class createChannelResEntity {
   guests: guestSimpleEntity[] | undefined;
 
   created_at: string | undefined;
+}
+
+export class addChannelResEntity {
+  success: boolean | undefined;
+
+  message: string | undefined;
 }
 
 export class channelListEntity {

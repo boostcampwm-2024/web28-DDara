@@ -37,7 +37,7 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
 
 export const AddChannel = () => {
   const [channelName, setChannelName] = useState<string>('');
-  const { users, setUsers } = useContext(UserContext);
+  const { users, setUsers, resetUsers } = useContext(UserContext);
   const {
     setFooterTitle,
     setFooterTransparency,
@@ -129,6 +129,9 @@ export const AddChannel = () => {
   }, []);
 
   useEffect(() => {
+    if (users.length === 0) {
+      addUser(); // users가 비어있다면 기본 사용자 추가
+    }
     const allUsersComplete = users.every(isUserDataComplete);
 
     // 모든 사용자가 완전한 데이터라면 Footer를 활성화
@@ -172,6 +175,7 @@ export const AddChannel = () => {
   const goToMainPage = () => {
     navigate('/');
     resetFooterContext();
+    resetUsers();
   };
   useEffect(() => {
     setFooterOnClick(() => {
