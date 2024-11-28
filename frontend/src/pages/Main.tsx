@@ -25,7 +25,7 @@ export const Main = () => {
   } = useContext(FooterContext);
   const { lat, lng, error } = getUserLocation();
   const [otherLocations, setOtherLocations] = useState<any[]>([]);
-  const MIN_HEIGHT = 0.36;
+  const MIN_HEIGHT = 0.15;
   const MAX_HEIGHT = 0.9;
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);

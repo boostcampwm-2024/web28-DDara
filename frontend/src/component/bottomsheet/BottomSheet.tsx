@@ -14,9 +14,9 @@ export const BottomSheet = ({
   backgroundColor,
   children,
 }: IBottomSheetProps) => {
-  const [sheetHeight, setSheetHeight] = useState(minHeight);
+  const [sheetHeight, setSheetHeight] = useState(minHeight + 0.2);
   const startY = useRef(0);
-  const startHeight = useRef(minHeight);
+  const startHeight = useRef(minHeight + 0.2);
 
   const handleStart = (y: number) => {
     startY.current = y;
