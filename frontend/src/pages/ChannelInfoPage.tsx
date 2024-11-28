@@ -75,7 +75,7 @@ export const ChannelInfoPage = () => {
         ))}
       </section>
 
-      <section className="text-grayscale-400 my-4 mr-8 flex justify-start gap-[2px] text-xs">
+      <section className="text-grayscale-400 my-4 mr-8 flex items-center justify-start gap-[2px] text-xs">
         <HiMiniInformationCircle className="h-4 w-4 text-black" />
         사용자 별로 url을 복사하여 공유할 수 있습니다.
       </section>

@@ -16,7 +16,7 @@ export const DrawRoute = () => {
   const navigate = useNavigate();
 
   const goToAddChannelRoute = () => {
-    navigate(`/add-channel/`);
+    navigate(`/add-channel`);
   };
 
   const getUser = () => {

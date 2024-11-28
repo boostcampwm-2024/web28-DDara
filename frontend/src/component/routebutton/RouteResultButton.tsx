@@ -37,7 +37,7 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
   };
 
   return (
-    <div className="flex w-full flex-row items-center justify-start" key={props.user.id}>
+    <div className="flex flex-row items-center justify-center" key={props.user.id}>
       <div className="shadow-userName border-grayscale-400 flex h-11 w-16 items-center justify-center rounded-lg border text-xs">
         <p className="font-nomal leading-none">{props.user.name}</p>
       </div>
@@ -85,6 +85,7 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
           링크 복사
         </button>
       )}
+      {props.user.index === 1 && props.page === Page.ADD && <div className="h-6 w-6" />}
       {props.user.index > 1 && props.page === Page.ADD && (
         <button type="button" onClick={() => props.deleteUser?.(props.user.index)}>
           <IoClose className="text-grayscale-400 h-6 w-6" />
