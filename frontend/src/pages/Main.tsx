@@ -165,6 +165,7 @@ export const Main = () => {
               <hr className="my-2" />
             </Fragment>
           ))}
+          <div className="h-20" />
         </BottomSheet>
       ) : (
         <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#F1F1F1F2">
