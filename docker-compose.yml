@@ -1,0 +1,46 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/backend/node_modules
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    networks:
+      - app-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/frontend/node_modules
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html
+      - /etc/letsencrypt:/etc/letsencrypt
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -30,7 +30,7 @@ jobs:
 
       - name: Run Build
         run: pnpm build  # pnpm을 사용하여 빌드 실행
-        continue-on-error: false # 빌드 실패 시 워크플로우 실패로 처리
+#        continue-on-error: false # 빌드 실패 시 워크플로우 실패로 처리
 
       - name: Run Tests
         run: pnpm test  # pnpm을 사용하여 테스트 실행

@@ -56,7 +56,19 @@ export default [
       'prettier/prettier': 'error',
       'no-underscore-dangle': 'warn',
       'no-undef': 'off',
-      'import/extensions': 'off',
+      'max-classes-per-file': 'off',
+      'no-bitwise': 'off',
+      'no-plusplus': 'off',
+      'import/extensions': [
+        'error',
+        'always',
+        {
+          js: 'always',
+          jsx: 'always',
+          ts: 'never',
+          tsx: 'never',
+        },
+      ],
     },
     settings: {
       'import/resolver': {
@@ -102,10 +114,10 @@ export default [
       'import/prefer-default-export': 'off',
       'import/no-unresolved': 'warn',
       'no-console': 'off',
+      'consistent-return': 'off',
       'import/extensions': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/consistent-type-definitions': 'off',
-      '@typescript-eslint/naming-convention': 'off',
+      camelcase: 'off',
+      'no-shadow': 'off',
     },
   },
 
@@ -181,6 +193,9 @@ export default [
       'no-underscore-dangle': 'warn',
       'no-undef': 'off',
       'arrow-body-style': 'off',
+      'jsx-a11y/click-events-have-key-events': 'warn',
+      'jsx-a11y/no-static-element-interactions': 'warn',
+      'consistent-return': 'off',
     },
   },
 

@@ -9,16 +9,15 @@
    License: none (public domain)
 */
 
-*,
+* {
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+}
 *::before,
 *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box; /* padding과 border를 box 크기에 포함 */
-}
-
-body {
-  font-family: 'Pretendard', sans-serif;
 }
 
 html, body, div, span, applet, object, iframe,
@@ -37,6 +36,7 @@ time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
+  border-style: solid;
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
@@ -49,6 +49,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
   line-height: 1;
+  font-family: Pretendard, 'Pretendard Variable', sans-serif;
 }
 ol, ul {
   list-style: none;
@@ -64,4 +65,10 @@ q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+span, a, img {
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none
 }
