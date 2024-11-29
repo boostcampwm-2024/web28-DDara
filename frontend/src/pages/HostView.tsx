@@ -46,6 +46,7 @@ export const HostView = () => {
     if (ws) {
       ws.onmessage = event => {
         const data = JSON.parse(event.data);
+        console.log(data);
         if (data.type === 'init') {
           // 기존 클라이언트들의 위치 초기화
           const updatedLocations = data.clients.map((client: any, index: number) => {

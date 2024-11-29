@@ -28,6 +28,7 @@ export interface ICanvasScreenProps {
 
 export interface IOtherLiveLocations {
   location: IPointWithAlpha;
+  token: string;
   color: string;
 }
 

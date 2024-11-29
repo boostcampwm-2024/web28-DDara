@@ -52,13 +52,13 @@ export const SearchBox = (props: ISearchBoxProps) => {
     setError(null);
 
     try {
-      const apiUrl = `https://cors-anywhere.herokuapp.com/https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
-        inputValue,
-      )}&display=5&start=1&sort=random`;
-
-      // const apiUrl = `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
+      // const apiUrl = `https://cors-anywhere.herokuapp.com/https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
       //   inputValue,
-      // )}&display=10&start=1&sort=random`;
+      // )}&display=5&start=1&sort=random`;
+
+      const apiUrl = `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
+        inputValue,
+      )}&display=10&start=1&sort=random`;
 
       const response = await fetch(apiUrl, {
         headers: {
@@ -130,7 +130,7 @@ export const SearchBox = (props: ISearchBoxProps) => {
       }, 300);
 
       // Todo : 요부분 반환값 lint 오류 때문에 해결이 안돼요...
-      // eslint-disable-next-line consistent-return
+
       return () => {
         clearTimeout(delayDebounceFn);
       };
