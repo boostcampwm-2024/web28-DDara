@@ -22,22 +22,22 @@ export const GuestView = () => {
 
   const location = useLocation();
 
-  const transformTypeGuestEntityToIGuest = (props: guestEntity): IGuest => {
+  const transformTypeGuestEntityToIGuest = (props: guestEntity | undefined): IGuest => {
     return {
-      id: props.id ?? '',
-      name: props.name ?? '',
+      id: props?.id ?? '',
+      name: props?.name ?? '',
       // name: '현재 내 위치',
       startPoint: {
-        lat: props.start_location?.lat ?? 0,
-        lng: props.start_location?.lng ?? 0,
+        lat: props?.start_location?.lat ?? 0,
+        lng: props?.start_location?.lng ?? 0,
       },
       endPoint: {
-        lat: props.end_location?.lat ?? 0,
-        lng: props.end_location?.lng ?? 0,
+        lat: props?.end_location?.lat ?? 0,
+        lng: props?.end_location?.lng ?? 0,
       },
-      paths: (props.path as IPoint[]) ?? [],
+      paths: (props?.path as IPoint[]) ?? [],
       markerStyle: {
-        color: props.marker_style?.color ?? '',
+        color: props?.marker_style?.color ?? '',
       },
     };
   };
@@ -46,7 +46,7 @@ export const GuestView = () => {
     getGuestInfo(channelId, userId)
       .then(res => {
         if (!res.data) throw new Error('🚀 Fetch Error: responsed undefined');
-        const transfromedData = transformTypeGuestEntityToIGuest(res.data);
+        const transfromedData = transformTypeGuestEntityToIGuest(res.data.guest);
         setGuestInfo(transfromedData);
       })
       .catch((err: any) => {
