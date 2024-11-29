@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 interface IGetUserLocation {
   lat: number | null;
   lng: number | null;
+  alpha: number | null;
   error: string | null;
 }
 
@@ -32,36 +33,58 @@ export const getUserLocation = (): IGetUserLocation => {
   const [location, setLocation] = useState<IGetUserLocation>({
     lat: null,
     lng: null,
+    alpha: null,
     error: null,
   });
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
-        position => {
-          setLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            error: null,
-          });
-        },
-        error => {
-          setLocation({
-            lat: 37.3595704,
-            lng: 127.105399,
-            error: error.message,
-          });
-        },
-        { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 },
-      );
+    let watchId: number;
 
-      return () => navigator.geolocation.clearWatch(watchId);
+    const handlePosition = (position: GeolocationPosition) => {
+      setLocation(prev => ({
+        ...prev,
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        error: null,
+      }));
+    };
+
+    const handleError = (error: GeolocationPositionError) => {
+      setLocation({
+        lat: 37.3595704,
+        lng: 127.105399,
+        alpha: 0,
+        error: error.message,
+      });
+    };
+
+    if (navigator.geolocation) {
+      watchId = navigator.geolocation.watchPosition(handlePosition, handleError, {
+        enableHighAccuracy: true,
+        maximumAge: 5000,
+        timeout: 10000,
+      });
+    } else {
+      setLocation({
+        lat: 37.3595704,
+        lng: 127.105399,
+        alpha: 0,
+        error: '현재 위치를 불러오지 못했습니다',
+      });
     }
-    setLocation({
-      lat: 37.3595704,
-      lng: 127.105399,
-      error: '현재 위치를 불러오지 못했습니다',
-    });
+
+    const handleOrientation = (event: DeviceOrientationEvent) => {
+      if (event.alpha !== null) {
+        setLocation(prev => ({ ...prev, alpha: event.alpha }));
+      }
+    };
+
+    window.addEventListener('deviceorientation', handleOrientation);
+
+    return () => {
+      if (watchId) navigator.geolocation.clearWatch(watchId);
+      window.removeEventListener('deviceorientation', handleOrientation);
+    };
   }, []);
 
   return location;

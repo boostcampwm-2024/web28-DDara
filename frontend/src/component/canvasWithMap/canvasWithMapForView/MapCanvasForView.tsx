@@ -7,6 +7,7 @@ import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 export const MapCanvasForView = ({
   lat,
   lng,
+  alpha,
   otherLocations,
   guests,
   width,
@@ -70,6 +71,7 @@ export const MapCanvasForView = ({
     guests,
     lat,
     lng,
+    alpha,
   });
 
   const {
@@ -101,7 +103,7 @@ export const MapCanvasForView = ({
 
   useEffect(() => {
     redrawCanvas();
-  }, [guests, otherLocations, lat, lng, map]);
+  }, [guests, otherLocations, lat, lng, alpha, map]);
 
   return (
     <div

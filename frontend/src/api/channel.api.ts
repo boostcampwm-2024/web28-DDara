@@ -6,7 +6,7 @@ import {
   createChannelResEntity,
   getChannelResEntity,
   getUserChannelsResEntity,
-  guestEntity,
+  getGuestResEntity,
 } from '@/api/dto/channel.dto.ts';
 import { getApiClient } from '@/api/client.api.ts';
 
@@ -113,9 +113,9 @@ export const getChannelInfo = (channelId: string): Promise<ResponseDto<getChanne
 export const getGuestInfo = (
   channelId: string,
   userId: string,
-): Promise<ResponseDto<guestEntity>> => {
+): Promise<ResponseDto<getGuestResEntity>> => {
   const promiseFn = (
-    fnResolve: (value: ResponseDto<guestEntity>) => void,
+    fnResolve: (value: ResponseDto<getGuestResEntity>) => void,
     fnReject: (reason?: any) => void,
   ) => {
     const apiClient = getApiClient();
@@ -126,7 +126,7 @@ export const getGuestInfo = (
           console.error(res);
           fnReject(`msg.${res}`);
         } else {
-          fnResolve(new ResponseDto<guestEntity>(res.data));
+          fnResolve(new ResponseDto<getGuestResEntity>(res.data));
         }
       })
       .catch(err => {

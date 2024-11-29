@@ -10,6 +10,12 @@ export interface IPoint {
   lng: number;
 }
 
+export interface IPointWithAlpha {
+  lat: number;
+  lng: number;
+  alpha: number;
+}
+
 export interface ICanvasPoint {
   x: number;
   y: number;
@@ -21,8 +27,8 @@ export interface ICanvasScreenProps {
 }
 
 export interface IOtherLiveLocations {
-  location: IPoint;
-  token: string;
+  location: IPointWithAlpha;
+  color: string;
 }
 
 export interface IMarkerStyle {
@@ -41,6 +47,7 @@ export interface IGuestDataInMapProps {
 export interface IMapCanvasViewProps {
   lat: number;
   lng: number;
+  alpha?: number | null;
   otherLocations?: IOtherLiveLocations[] | null;
   guests?: IGuestDataInMapProps[] | null;
   width: string;
