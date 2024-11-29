@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { IGuest } from '@/types/channel.types.ts';
 import { getGuestInfo } from '@/api/channel.api.ts';
 import { useLocation } from 'react-router-dom';
@@ -8,9 +8,14 @@ import { guestEntity } from '@/api/dto/channel.dto.ts';
 import { GusetMarker } from '@/component/IconGuide/GuestMarker.tsx';
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
+import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
+import { AppConfig } from '@/lib/constants/commonConstants.ts';
+import { v4 as uuidv4 } from 'uuid';
 
 export const GuestView = () => {
-  const { lat, lng, error } = getUserLocation();
+  const { lat, lng, alpha, error } = getUserLocation();
+  const location = useLocation();
+
   const [guestInfo, setGuestInfo] = useState<IGuest>({
     id: '',
     name: '',
@@ -20,7 +25,35 @@ export const GuestView = () => {
     paths: [],
   });
 
-  const location = useLocation();
+  const wsRef = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    // 소켓 연결 초기화
+    const token = loadLocalData(AppConfig.KEYS.BROWSER_TOKEN) || uuidv4();
+    saveLocalData(AppConfig.KEYS.BROWSER_TOKEN, token);
+
+    const ws = new WebSocket(
+      `${AppConfig.SOCKET_SERVER}/?token=${token}&channelId=${location.pathname.split('/')[2]}&role=guest&guestId=${location.pathname.split('/')[4]}`,
+    );
+
+    ws.onopen = () => {
+      console.log('WebSocket connection established');
+    };
+
+    wsRef.current = ws;
+  }, [location]);
+
+  useEffect(() => {
+    // 위치 정보가 변경될 때마다 전송
+    if (lat && lng && wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(
+        JSON.stringify({
+          type: 'location',
+          location: { lat, lng, alpha },
+        }),
+      );
+    }
+  }, [lat, lng, alpha]);
 
   const transformTypeGuestEntityToIGuest = (props: guestEntity | undefined): IGuest => {
     return {
@@ -64,7 +97,14 @@ export const GuestView = () => {
       {/* eslint-disable-next-line no-nested-ternary */}
       {lat && lng ? (
         guestInfo ? (
-          <MapCanvasForView lat={lat} lng={lng} width="100%" height="100%" guests={[guestInfo]} />
+          <MapCanvasForView
+            lat={lat}
+            lng={lng}
+            alpha={alpha}
+            width="100%"
+            height="100%"
+            guests={[guestInfo]}
+          />
         ) : (
           <LoadingSpinner />
         )

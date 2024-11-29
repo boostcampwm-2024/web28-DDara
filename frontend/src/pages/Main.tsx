@@ -23,7 +23,7 @@ export const Main = () => {
     setFooterActive,
     resetFooterContext,
   } = useContext(FooterContext);
-  const { lat, lng, error } = getUserLocation();
+  const { lat, lng, alpha, error } = getUserLocation();
   const [otherLocations, setOtherLocations] = useState<any[]>([]);
   const MIN_HEIGHT = 0.15;
   const MAX_HEIGHT = 0.9;
@@ -65,7 +65,7 @@ export const Main = () => {
       const ws = new WebSocket(`${AppConfig.SOCKET_SERVER}/?token=${token}`);
       // 초기 위치 전송
       ws.onopen = () => {
-        ws.send(JSON.stringify({ type: 'location', location: { lat, lng } }));
+        ws.send(JSON.stringify({ type: 'location', location: { lat, lng, alpha } }));
       };
       ws.onmessage = event => {
         const data = JSON.parse(event.data);
@@ -84,7 +84,8 @@ export const Main = () => {
       return () => ws.close();
     }
     return undefined;
-  }, [lat, lng]);
+  }, [lat, lng, alpha]);
+
   const goToAddChannel = () => {
     resetFooterContext();
     resetUsers();
@@ -138,6 +139,7 @@ export const Main = () => {
               height="100%"
               lat={lat}
               lng={lng}
+              alpha={alpha}
               otherLocations={otherLocations}
             />
           ) : (

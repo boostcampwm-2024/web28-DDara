@@ -4,22 +4,83 @@ import { IGuest, IChannelInfo, IGuestData } from '@/types/channel.types.ts';
 import { getChannelInfo } from '@/api/channel.api.ts';
 import { useLocation } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
-import { IGuestDataInMapProps, IPoint } from '@/lib/types/canvasInterface.ts';
+import { IGuestDataInMapProps, IPoint, IPointWithAlpha } from '@/lib/types/canvasInterface.ts';
 import { getChannelResEntity, guestEntity } from '@/api/dto/channel.dto.ts';
 import { HostMarker } from '@/component/IconGuide/HostMarker.tsx';
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
+import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
+import { AppConfig } from '@/lib/constants/commonConstants.ts';
+import { v4 as uuidv4 } from 'uuid';
+import { useSocket } from '@/hooks/useSocket.ts';
 
+interface IOtherLocationsInHostView {
+  guestId: string;
+  location: IPointWithAlpha;
+  token: string;
+  color: string;
+}
 export const HostView = () => {
-  const { lat, lng, error } = getUserLocation();
+  const { lat, lng, alpha, error } = getUserLocation();
+  const location = useLocation();
+
   const [channelInfo, setChannelInfo] = useState<IChannelInfo>();
   const [guestsData, setGuestsData] = useState<IGuestData[]>([]);
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
   const [clickedId, setClickedId] = useState<string>('');
+  const [otherLocations, setOtherLocations] = useState<IOtherLocationsInHostView[]>([]);
 
   const headerDropdownContext = useContext(HeaderDropdownContext);
+  const markerDefaultColor = ['#B4D033', '#22A751', '#2722A7', '#8F22A7', '#A73D22'];
 
-  const location = useLocation();
+  if (!loadLocalData(AppConfig.KEYS.BROWSER_TOKEN)) {
+    const token = uuidv4();
+    saveLocalData(AppConfig.KEYS.BROWSER_TOKEN, token);
+  }
+  const token = loadLocalData(AppConfig.KEYS.BROWSER_TOKEN);
+  const url = `${AppConfig.SOCKET_SERVER}/?token=${token}&channelId=${location.pathname.split('/')[2]}&role=host`;
+
+  const ws = useSocket(url);
+
+  useEffect(() => {
+    if (ws) {
+      ws.onmessage = event => {
+        const data = JSON.parse(event.data);
+        console.log(data);
+        if (data.type === 'init') {
+          // 기존 클라이언트들의 위치 초기화
+          const updatedLocations = data.clients.map((client: any, index: number) => {
+            const matchingGuest = channelInfo?.guests?.find(guest => guest.id === client.guestId);
+            return {
+              ...client,
+              color: matchingGuest?.markerStyle.color ?? markerDefaultColor[index],
+            };
+          });
+          setOtherLocations(updatedLocations);
+        } else if (data.type === 'location') {
+          // 새로 들어온 위치 업데이트
+          const matchingGuest = guestsData?.find(guest => guest.id === data.guestId);
+          const updatedLocation = {
+            guestId: data.guestId,
+            location: data.location,
+            token: data.token,
+            color: matchingGuest?.markerStyle.color ?? '#ffffff',
+          };
+
+          setOtherLocations(prev => {
+            const index = prev.findIndex(el => el.guestId === data.guestId);
+
+            if (index !== -1) {
+              const updatedLocations = [...prev];
+              updatedLocations[index] = updatedLocation;
+              return updatedLocations;
+            }
+            return [...prev, updatedLocation];
+          });
+        }
+      };
+    }
+  }, [ws, guestsData]);
 
   const transformTypeGuestEntityToIGuest = (props: guestEntity): IGuest => {
     return {
@@ -74,8 +135,6 @@ export const HostView = () => {
   }, []);
 
   useEffect(() => {
-    const markerDefaultColor = ['#B4D033', '#22A751', '#2722A7', '#8F22A7', '#A73D22'];
-
     if (channelInfo?.guests) {
       const data: IGuestData[] = channelInfo.guests.map((guest, index) => ({
         name: guest.name,
@@ -107,8 +166,21 @@ export const HostView = () => {
       <HostMarker guestsData={mapProps} />
       {/* eslint-disable-next-line no-nested-ternary */}
       {lat && lng ? (
+        // eslint-disable-next-line no-nested-ternary
         mapProps ? (
-          <MapCanvasForView lat={lat} lng={lng} width="100%" height="100%" guests={mapProps} />
+          otherLocations ? (
+            <MapCanvasForView
+              lat={lat}
+              lng={lng}
+              alpha={alpha}
+              width="100%"
+              height="100%"
+              guests={mapProps}
+              otherLocations={otherLocations}
+            />
+          ) : (
+            <LoadingSpinner />
+          )
         ) : (
           <LoadingSpinner />
         )
