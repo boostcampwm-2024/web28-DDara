@@ -3,8 +3,8 @@ import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
 
 import startmarker from '@/assets/startmarker.svg';
 import endmarker from '@/assets/endmarker.svg';
-import mylocation from '@/assets/mylocation.svg';
-import guestlocationmarker from '@/assets/guestlocationmarker.svg';
+import character1 from '@/assets/character1.png';
+import character2 from '@/assets/character2.png';
 
 interface ILatLng {
   lat: number;
@@ -51,8 +51,8 @@ export const useRedrawCanvas = ({
 }: IUseRedrawCanvasProps) => {
   const startImageRef = useRef<HTMLImageElement | null>(null);
   const endImageRef = useRef<HTMLImageElement | null>(null);
-  const mylocationRef = useRef<HTMLImageElement | null>(null);
-  const guestlocationmarkerRef = useRef<HTMLImageElement | null>(null);
+  const character1Ref = useRef<HTMLImageElement | null>(null);
+  const character2Ref = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     startImageRef.current = new Image();
@@ -61,11 +61,11 @@ export const useRedrawCanvas = ({
     endImageRef.current = new Image();
     endImageRef.current.src = endmarker;
 
-    mylocationRef.current = new Image();
-    mylocationRef.current.src = mylocation;
+    character1Ref.current = new Image();
+    character1Ref.current.src = character1;
 
-    guestlocationmarkerRef.current = new Image();
-    guestlocationmarkerRef.current.src = guestlocationmarker;
+    character2Ref.current = new Image();
+    character2Ref.current.src = character2;
   }, []);
 
   const drawMarker = (
@@ -139,14 +139,14 @@ export const useRedrawCanvas = ({
 
     if (lat && lng) {
       const currentLocation = latLngToCanvasPoint({ lat, lng });
-      drawMarker(ctx, currentLocation, mylocationRef.current);
+      drawMarker(ctx, currentLocation, character1Ref.current);
     }
 
     if (otherLocations) {
       otherLocations.forEach(({ location }) => {
         // const markerColor = getMarkerColor(token);
         const locationPoint = latLngToCanvasPoint(location);
-        drawMarker(ctx, locationPoint, guestlocationmarkerRef.current);
+        drawMarker(ctx, locationPoint, character2Ref.current);
       });
     }
 
