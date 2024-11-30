@@ -13,6 +13,15 @@
 
 **모든 것을 "직접 구현"** 해보고, 그 과정에서 깊이 있는 기술적인 도전을 해 나갑니다.
 
+
+<br />
+
+<h1>🎗 배포 서비스 바로가기</h1>
+
+<h3><a href="https://ddara.kro.kr/">https://ddara.kro.kr/</a></h3>
+
+
+
 </div>
 
 <br /><br /><br /><br />
@@ -22,11 +31,7 @@
 
 
 
-<br />
 
-## 🎗 배포 서비스 바로가기
-
-<h3><a href="https://ddara.kro.kr/">https://ddara.kro.kr/</a></h3>
 
 <br /><br />
 
