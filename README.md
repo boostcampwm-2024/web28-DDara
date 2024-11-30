@@ -34,13 +34,19 @@
 
 ### 1. 지도 위 캔버스에 출발지/도착지 마커, 경로 그리기
 
-캔버스 위에 그려둔 그림은 지도(캔버스)를 이동하거나 확대/축소하더라도 그린 위치(지도 기준)에 그대로 존재해야 함
+- 캔버스 위에 그려둔 그림은 지도(캔버스)를 이동하거나 확대/축소하더라도 그린 위치(지도 기준)에 그대로 존재해야 함
 
 <img width="500" alt="image" src="https://github.com/user-attachments/assets/a1cc5824-f30f-4e11-9cfc-b9279fc13e0d" />
 <img width="500" alt="image" src="https://github.com/user-attachments/assets/63590a47-7b52-4413-8732-313a8dac58ff" />
 
+<br /><br />
 
-### 2.
+### 2. 실시간 위치 파악
+
+- 호스트(손자)는 게스트들(할머니, 할아버지)의 위치 실시간으로 확인 가능해야 함
+- 게스트(할머니)는 본인의 위치와 호스트(손자)가 설정해둔 출발지, 도착지, 경로만을 확인할 수 있어야 함
+
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/19a1efb6-1317-4d5d-aeb6-130f9e377f3e" />
 
 
 
