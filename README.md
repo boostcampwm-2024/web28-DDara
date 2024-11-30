@@ -3,7 +3,8 @@
    <h2 align="center">🧭 선따라 길따라 🧭</h2>
     <h4 align="center">중장년층을 위한 위치 기반 길 안내 서비스</h2>
     <br />
-    <h4 align="center"><a href="https://ddara.kro.kr/">🎗 배포 서비스 바로가기 🎗</a></h4>
+    <h4>👇 배포 서비스 바로가기</h4>
+    <h4 align="center"><a href="https://ddara.kro.kr/">https://ddara.kro.kr</a></h4>
 </div>
 
 
@@ -36,7 +37,7 @@
 
 <br /><br />
 
-## ⛏ 아키텍처
+## ⛏ 서비스 아키텍처
 
 <img width="1300" alt="image" src="https://github.com/user-attachments/assets/8c6ba9d4-92b5-4c46-8a18-59e41005dc1f">
 
