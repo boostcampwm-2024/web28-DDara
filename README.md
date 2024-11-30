@@ -48,8 +48,10 @@
 - 호스트(손자)는 게스트들(할머니, 할아버지)의 위치 실시간으로 확인 가능해야 함
 - 게스트(할머니)는 본인의 위치와 호스트(손자)가 설정해둔 출발지, 도착지, 경로만을 확인할 수 있어야 함
 
-<img width="1000" alt="image" src="https://github.com/user-attachments/assets/19a1efb6-1317-4d5d-aeb6-130f9e377f3e" />
 
+<div align="center">
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/19a1efb6-1317-4d5d-aeb6-130f9e377f3e" />
+</div>
 
 
 <br /><br />
