@@ -30,14 +30,17 @@
 
 <br /><br />
 
+## 💡 핵심 기능
 
-## 🌱 팀원 소개
+### 1. 지도 위 캔버스에 출발지/도착지 마커, 경로 그리기
 
-|J060_김주원|J174_이동율|J210_임재도|J234_정혜인|
-|:--:|:--:|:--:|:--:|
-|<a href="https://github.com/juwon5272"><img src="https://github.com/user-attachments/assets/f774ff48-8831-490f-b0fe-b18b024f7916" width="150px;" alt=""/></a>|<a href="https://github.com/leedongyull"><img src="https://github.com/user-attachments/assets/4d682b1f-0f91-4547-8a7d-1f6b00bee674" width="150px;" alt=""/></a>|<a href="https://github.com/effozen"><img src="https://github.com/user-attachments/assets/92bddae1-19ce-4b06-811e-52df15ac726c" width="150px;" alt=""/></a>|<a href="https://github.com/happyhyep"><img src="https://github.com/user-attachments/assets/40ac933c-3e19-4884-a5e9-da2f2298dd72" width="150px;" alt=""/></a>|
-|FE|FE|FE|Full Stack (FE + BE)|
-|<a href="https://github.com/juwon5272">@juwon5272</a>|<a href="https://github.com/leedongyull">@leedongyull</a>|<a href="https://github.com/effozen">@effozen</a>|<a href="https://github.com/happyhyep">@happyhyep</a>|
+캔버스 위에 그려둔 그림은 지도(캔버스)를 이동하거나 확대/축소하더라도 그린 위치(지도 기준)에 그대로 존재해야 함
+
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/a1cc5824-f30f-4e11-9cfc-b9279fc13e0d" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/63590a47-7b52-4413-8732-313a8dac58ff" />
+
+
+### 2.
 
 
 
@@ -49,7 +52,8 @@
 
 
 
-<br />
+<br /><br />
+
 
 ## 🗝 링크 안내
   
@@ -66,10 +70,19 @@
 
 </div>
 
-<br /><br /><br />
+<br /><br />
 
 
+## 🌱 팀원 소개
 
+|J060_김주원|J174_이동율|J210_임재도|J234_정혜인|
+|:--:|:--:|:--:|:--:|
+|<a href="https://github.com/juwon5272"><img src="https://github.com/user-attachments/assets/f774ff48-8831-490f-b0fe-b18b024f7916" width="150px;" alt=""/></a>|<a href="https://github.com/leedongyull"><img src="https://github.com/user-attachments/assets/4d682b1f-0f91-4547-8a7d-1f6b00bee674" width="150px;" alt=""/></a>|<a href="https://github.com/effozen"><img src="https://github.com/user-attachments/assets/92bddae1-19ce-4b06-811e-52df15ac726c" width="150px;" alt=""/></a>|<a href="https://github.com/happyhyep"><img src="https://github.com/user-attachments/assets/40ac933c-3e19-4884-a5e9-da2f2298dd72" width="150px;" alt=""/></a>|
+|FE|FE|FE|Full Stack (FE + BE)|
+|<a href="https://github.com/juwon5272">@juwon5272</a>|<a href="https://github.com/leedongyull">@leedongyull</a>|<a href="https://github.com/effozen">@effozen</a>|<a href="https://github.com/happyhyep">@happyhyep</a>|
+
+
+<br /><br />
 
 
 
