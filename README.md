@@ -3,15 +3,13 @@
    <h2 align="center">🧭 선따라 길따라 🧭</h2>
     <h4 align="center">중장년층을 위한 위치 기반 길 안내 서비스</h2>
     <br />
-    <h4>👇 배포 서비스 바로가기</h4>
-    <h4 align="center"><a href="https://ddara.kro.kr/">https://ddara.kro.kr</a></h4>
+    <h4 align="center"><a href="https://ddara.kro.kr/">🎗 배포 서비스 바로가기 🎗</a></h4>
 </div>
 
 
-<div align="center">
 <br />
   
-## 👩‍💻 팀 소개 👩‍💻 
+## 🕶️ 팀 소개 
 
 ### 안녕하세요, 팀 "따라따라" 입니다!
 
@@ -60,7 +58,6 @@
 
 </div>
 
-<div align="center">
 <br /><br /><br />
 
 
