@@ -1,26 +1,36 @@
 <div align="center">
-    <img width="600" alt="image" src="https://github.com/user-attachments/assets/f7973fe3-dd8a-4643-9536-53e63db1f6fe">
-   <h3 align="center">🧭 선따라 길따라 🧭</h2>
-    <h4 align="center">중장년층을 위한 접근성을 바탕으로 한 위치 기반 서비스</h2>
+    <img width="700" alt="image" src="https://github.com/user-attachments/assets/3e83808c-95c2-44e3-8645-dec3e941effc">
+   <h2 align="center">🧭 선따라 길따라 🧭</h2>
+    <h4 align="center">중장년층을 위한 위치 기반 길 안내 서비스</h2>
+    <br />
+    <h4 align="center"><a href="https://ddara.kro.kr/">🎗 배포 서비스 바로가기 🎗</a></h4>
 </div>
 
 
 <div align="center">
 <br />
   
-## 👩‍💻 팀 소개
-
-<img width="200" src="https://github.com/user-attachments/assets/ab367ecb-be89-4076-abdf-bf00bdc29a4f" />
-<div>(따라핑)</div>
+## 👩‍💻 팀 소개 👩‍💻 
 
 ### 안녕하세요, 팀 "따라따라" 입니다!
+
+<br />
+
+저희는 6주간 ⚒ **"기술적 도전"** ⚒을 목표로 삼았습니다.
+
+<br />
+
+저희는 단순히 api나 라이브러리를 **"가져다 써서" 구현 하는 것이 아닌**,
+
+**모든 것을 "직접 구현"** 해보고, 그 과정에서 깊이 있는 기술적인 도전을 해 나갑니다.
+
 
 <br />
 
 ## 🗝 링크 안내
   
 <p>  
-  <a href="https://ddara-docs.vercel.app/">팀 위키</a> |
+<!--   <a href="https://ddara-docs.vercel.app/">팀 위키</a> | -->
   <a href="https://www.notion.so/127b1b2b649180e88f70d6a4648924a0?pvs=4">팀 노션</a>   |   
   <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897">기획서</a>   |   
   <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929">디자인</a>
