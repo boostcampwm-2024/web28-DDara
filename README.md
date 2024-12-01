@@ -16,7 +16,7 @@
 **모든 것을 "직접 구현"** 해보고, 그 과정에서 깊이 있는 기술적인 도전을 해 나갑니다.
 
 
-<br />
+<br /><br /><br /><br />
 
 <div align="center" style="display: flex">
   <a href="https://ddara.kro.kr/"><img width="60%" alt="image" src="https://github.com/user-attachments/assets/0eaf0bac-01bc-44ae-ab02-56c2c9951ce1" /></a>
