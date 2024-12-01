@@ -16,23 +16,24 @@
 
 <br />
 
-<h1>🎗 배포 서비스 바로가기</h1>
-
-<h3><a href="https://ddara.kro.kr/">https://ddara.kro.kr/</a></h3>
-
-<br /><br />
+<h1>🗝 링크 안내 🗝</h1>
 <div align="center" style="display: flex">
-<a href="https://ddara.kro.kr/"><img width="20%" alt="image" src="https://github.com/user-attachments/assets/fba85098-2bbd-4972-bcde-c9557119019c" /></a>
-<a href=""><img width="20%" alt="image" src="https://github.com/user-attachments/assets/f3c616b9-f0e3-4391-a9b0-bcf12438e177" /></a>
-<a href=""><img width="20%" alt="image" src="https://github.com/user-attachments/assets/3316f3aa-7f2a-4bfe-bbec-7d23cec06b34" /></a>
+  <a href="https://ddara.kro.kr/"><img width="60%" alt="image" src="https://github.com/user-attachments/assets/a4b272f3-a2b3-41ec-89b6-5b8db9dc67f5" /></a>
+</div>
+
+<br />
+<div align="center" style="display: flex">
+<a href="https://ddara.kro.kr/"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/fba85098-2bbd-4972-bcde-c9557119019c" /></a>
+<a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/f3c616b9-f0e3-4391-a9b0-bcf12438e177" /></a>
+<a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/3316f3aa-7f2a-4bfe-bbec-7d23cec06b34" /></a>
 </div>
 
 <br />
 
 <div align="center" style="display: flex; gap: 10px">
-<a href="https://ddara.kro.kr/"><img width="20%" alt="image" src="https://github.com/user-attachments/assets/a6863a4e-ba5d-4cdc-a639-c5b0d5d5ad11" /></a>
-<a href=""><img width="20%" alt="image" src="https://github.com/user-attachments/assets/afbe44fd-f163-4ade-b9a4-971ea74e4212" /></a>
-<a href=""><img width="20%" alt="image" src="https://github.com/user-attachments/assets/2a8910cb-d82f-4c2a-a815-386e70e59d22" /></a>
+<a href="https://ddara.kro.kr/"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/a6863a4e-ba5d-4cdc-a639-c5b0d5d5ad11" /></a>
+<a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/afbe44fd-f163-4ade-b9a4-971ea74e4212" /></a>
+<a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/2a8910cb-d82f-4c2a-a815-386e70e59d22" /></a>
 </div>
 
 
