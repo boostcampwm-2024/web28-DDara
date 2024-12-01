@@ -26,6 +26,7 @@
 
 <img width="20%" alt="image" src="https://github.com/user-attachments/assets/32d30ab1-7d87-4e86-bcca-9f30d1150f3c" />
 
+(모바일에서 위 QR 코드로 접속하실 수 있습니다.)
 
 
 <br /><br />
