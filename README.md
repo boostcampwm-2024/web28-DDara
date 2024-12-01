@@ -23,16 +23,16 @@
 
 <br />
 <div align="center" style="display: flex">
-<a href="https://ddara.kro.kr/"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/fba85098-2bbd-4972-bcde-c9557119019c" /></a>
-<a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/f3c616b9-f0e3-4391-a9b0-bcf12438e177" /></a>
-<a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/3316f3aa-7f2a-4bfe-bbec-7d23cec06b34" /></a>
+<a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/fba85098-2bbd-4972-bcde-c9557119019c" /></a>
+<a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/f3c616b9-f0e3-4391-a9b0-bcf12438e177" /></a>
+<a href="https://www.notion.so/127b1b2b649180e88f70d6a4648924a0?pvs=4"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/3316f3aa-7f2a-4bfe-bbec-7d23cec06b34" /></a>
 </div>
 
 <br />
 
 <div align="center" style="display: flex; gap: 10px">
-<a href="https://ddara.kro.kr/"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/a6863a4e-ba5d-4cdc-a639-c5b0d5d5ad11" /></a>
-<a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/afbe44fd-f163-4ade-b9a4-971ea74e4212" /></a>
+<a href="https://github.com/orgs/boostcampwm-2024/projects/196"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/a6863a4e-ba5d-4cdc-a639-c5b0d5d5ad11" /></a>
+<a href="https://ddara.kro.kr/api-docs"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/afbe44fd-f163-4ade-b9a4-971ea74e4212" /></a>
 <a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/2a8910cb-d82f-4c2a-a815-386e70e59d22" /></a>
 </div>
 
@@ -90,21 +90,6 @@
 - 추가될 예정입니다.
 
 
-<br /><br />
-
-
-## 🗝 팀 링크 안내
-  
-<p>  
-<!--   <a href="https://ddara-docs.vercel.app/">팀 위키</a> | -->
-  <a href="https://www.notion.so/127b1b2b649180e88f70d6a4648924a0?pvs=4">팀 노션</a>   |   
-  <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897">기획서</a>   |   
-  <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929">디자인</a>
-<!--   <br />
-  <a href="https://www.notion.so/127b1b2b6491805b9055d480ab56e432?v=ee8c766f016148d7bfd6c6f49d782b10&pvs=4">회의록</a>   |  
-  <a href="https://www.notion.so/129b1b2b649180ef8ad6f356251f2dec?pvs=4">그라운드 룰</a>   |   
-  <a href="https://www.notion.so/812667c55af84dba8d18f4902b56a85e?pvs=4">기능 명세</a> -->
-</p>
 
 </div>
 
