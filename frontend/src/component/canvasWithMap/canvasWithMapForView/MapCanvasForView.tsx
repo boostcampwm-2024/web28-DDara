@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { ICanvasPoint, IMapCanvasViewProps, IPoint } from '@/lib/types/canvasInterface.ts';
 import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
 import { useRedrawCanvas } from '@/hooks/useRedraw';
+import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 
 export const MapCanvasForView = ({
   lat,
   lng,
+  alpha,
   otherLocations,
   guests,
   width,
@@ -69,6 +71,7 @@ export const MapCanvasForView = ({
     guests,
     lat,
     lng,
+    alpha,
   });
 
   const {
@@ -100,7 +103,7 @@ export const MapCanvasForView = ({
 
   useEffect(() => {
     redrawCanvas();
-  }, [guests, otherLocations, lat, lng, map]);
+  }, [guests, otherLocations, lat, lng, alpha, map]);
 
   return (
     <div
@@ -123,6 +126,9 @@ export const MapCanvasForView = ({
           pointerEvents: 'auto',
         }}
       />
+      <div className="absolute right-2 top-4 z-10 flex gap-2">
+        <ZoomSlider map={map} redrawCanvas={redrawCanvas} />
+      </div>
     </div>
   );
 };

@@ -103,3 +103,13 @@ export class getChannelResEntity {
 
   guests: guestEntity[] | undefined;
 }
+
+export class getGuestResEntity {
+  id: string | undefined;
+
+  name: string | undefined;
+
+  host_id: string | undefined;
+
+  guest: guestEntity | undefined;
+}

@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
-import { MdFormatListBulleted, MdLogout } from 'react-icons/md';
+import { MdLogout } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
 import { buttonActiveType } from '@/component/layout/enumTypes';
@@ -23,9 +23,9 @@ export const Main = () => {
     setFooterActive,
     resetFooterContext,
   } = useContext(FooterContext);
-  const { lat, lng, error } = getUserLocation();
+  const { lat, lng, alpha, error } = getUserLocation();
   const [otherLocations, setOtherLocations] = useState<any[]>([]);
-  const MIN_HEIGHT = 0.36;
+  const MIN_HEIGHT = 0.15;
   const MAX_HEIGHT = 0.9;
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
@@ -65,7 +65,7 @@ export const Main = () => {
       const ws = new WebSocket(`${AppConfig.SOCKET_SERVER}/?token=${token}`);
       // 초기 위치 전송
       ws.onopen = () => {
-        ws.send(JSON.stringify({ type: 'location', location: { lat, lng } }));
+        ws.send(JSON.stringify({ type: 'location', location: { lat, lng, alpha } }));
       };
       ws.onmessage = event => {
         const data = JSON.parse(event.data);
@@ -84,7 +84,8 @@ export const Main = () => {
       return () => ws.close();
     }
     return undefined;
-  }, [lat, lng]);
+  }, [lat, lng, alpha]);
+
   const goToAddChannel = () => {
     resetFooterContext();
     resetUsers();
@@ -117,12 +118,14 @@ export const Main = () => {
   return (
     <div className="flex flex-col overflow-hidden">
       <header className="absolute left-0 right-0 top-0 z-10 flex p-4">
-        <button type="button" className="text-gray-700">
-          <MdFormatListBulleted size={24} />
-        </button>
         {isUserLoggedIn && (
-          <button type="button" className="ml-auto text-gray-700" onClick={handleLogout}>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex flex-col items-center gap-2 text-gray-700"
+          >
             <MdLogout size={24} />
+            <span className="text-xs">로그아웃</span>
           </button>
         )}
       </header>
@@ -136,6 +139,7 @@ export const Main = () => {
               height="100%"
               lat={lat}
               lng={lng}
+              alpha={alpha}
               otherLocations={otherLocations}
             />
           ) : (
@@ -163,11 +167,12 @@ export const Main = () => {
               <hr className="my-2" />
             </Fragment>
           ))}
+          <div className="h-20" />
         </BottomSheet>
       ) : (
         <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#F1F1F1F2">
           <div className="h-full w-full cursor-pointer" onClick={handleLoginRequest}>
-            <div className="absolute left-1/2 top-[35%] flex -translate-x-1/2 transform cursor-pointer flex-col p-6 text-center">
+            <div className="absolute left-1/2 top-[20%] flex -translate-x-1/2 transform cursor-pointer flex-col p-6 text-center">
               <p className="text-grayscale-175 mb-5 text-lg font-normal">로그인을 진행하여</p>
               <p className="text-grayscale-175 mb-5 text-lg font-normal">더 많은 기능을</p>
               <p className="text-grayscale-175 text-lg font-normal">사용해보세요</p>

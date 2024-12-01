@@ -10,17 +10,17 @@ import { CurrentUserProvider } from '@/context/CurrentUserContext';
 import { ChannelInfoPage } from '@/pages/ChannelInfoPage'; // ChannelInfoPage 컴포넌트 임포트
 import { ChannelProvider } from '@/context/ChannelContext';
 import { RequireAuth } from '@/routes/RequireAuth.tsx';
-import { HeaderButtonProvider } from '@/context/HeaderButtonContext';
+import { AlertUndefinedURL } from '@/routes/AlertUndefinedURL.tsx';
 import { AddGuestPage } from '@/pages/AddGuestPage';
 
 export const IndexRoutes = () => (
-  <HeaderButtonProvider>
-    <UserProvider>
-      <CurrentUserProvider>
-        <ChannelProvider>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Main />} />
+  <UserProvider>
+    <CurrentUserProvider>
+      <ChannelProvider>
+        <Routes>
+          <Route path="*" element={<Layout />}>
+            <Route index element={<Main />} />
+            <Route path="add-channel">
               <Route
                 path="add-channel"
                 element={
@@ -65,9 +65,12 @@ export const IndexRoutes = () => (
                 <Route path="guest/:guestId" element={<GuestView />} />
               </Route>
             </Route>
-          </Routes>
-        </ChannelProvider>
-      </CurrentUserProvider>
-    </UserProvider>
-  </HeaderButtonProvider>
+
+            {/* 정의되지 않은 경로 라우팅 */}
+            <Route path="*" element={<AlertUndefinedURL />} />
+          </Route>
+        </Routes>
+      </ChannelProvider>
+    </CurrentUserProvider>
+  </UserProvider>
 );

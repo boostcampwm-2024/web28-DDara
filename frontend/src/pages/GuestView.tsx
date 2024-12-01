@@ -1,17 +1,21 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { IGuest } from '@/types/channel.types.ts';
 import { getGuestInfo } from '@/api/channel.api.ts';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { IPoint } from '@/lib/types/canvasInterface.ts';
 import { guestEntity } from '@/api/dto/channel.dto.ts';
 import { GusetMarker } from '@/component/IconGuide/GuestMarker.tsx';
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
-import { HeaderButtonContext } from '@/context/HeaderButtonContext';
+import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
+import { AppConfig } from '@/lib/constants/commonConstants.ts';
+import { v4 as uuidv4 } from 'uuid';
 
 export const GuestView = () => {
-  const { lat, lng, error } = getUserLocation();
+  const { lat, lng, alpha, error } = getUserLocation();
+  const location = useLocation();
+
   const [guestInfo, setGuestInfo] = useState<IGuest>({
     id: '',
     name: '',
@@ -20,30 +24,53 @@ export const GuestView = () => {
     endPoint: { lat: 0, lng: 0 },
     paths: [],
   });
-  const { setLeftButtonOnclick, resetButtonContext } = useContext(HeaderButtonContext);
-  const navigate = useNavigate();
-  const goToMainPage = () => {
-    navigate('/');
-    resetButtonContext();
-  };
-  const location = useLocation();
 
-  const transformTypeGuestEntityToIGuest = (props: guestEntity): IGuest => {
+  const wsRef = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    // 소켓 연결 초기화
+    const token = loadLocalData(AppConfig.KEYS.BROWSER_TOKEN) || uuidv4();
+    saveLocalData(AppConfig.KEYS.BROWSER_TOKEN, token);
+
+    const ws = new WebSocket(
+      `${AppConfig.SOCKET_SERVER}/?token=${token}&channelId=${location.pathname.split('/')[2]}&role=guest&guestId=${location.pathname.split('/')[4]}`,
+    );
+
+    ws.onopen = () => {
+      console.log('WebSocket connection established');
+    };
+
+    wsRef.current = ws;
+  }, [location]);
+
+  useEffect(() => {
+    // 위치 정보가 변경될 때마다 전송
+    if (lat && lng && wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(
+        JSON.stringify({
+          type: 'location',
+          location: { lat, lng, alpha },
+        }),
+      );
+    }
+  }, [lat, lng, alpha]);
+
+  const transformTypeGuestEntityToIGuest = (props: guestEntity | undefined): IGuest => {
     return {
-      id: props.id ?? '',
-      name: props.name ?? '',
+      id: props?.id ?? '',
+      name: props?.name ?? '',
       // name: '현재 내 위치',
       startPoint: {
-        lat: props.start_location?.lat ?? 0,
-        lng: props.start_location?.lng ?? 0,
+        lat: props?.start_location?.lat ?? 0,
+        lng: props?.start_location?.lng ?? 0,
       },
       endPoint: {
-        lat: props.end_location?.lat ?? 0,
-        lng: props.end_location?.lng ?? 0,
+        lat: props?.end_location?.lat ?? 0,
+        lng: props?.end_location?.lng ?? 0,
       },
-      paths: (props.path as IPoint[]) ?? [],
+      paths: (props?.path as IPoint[]) ?? [],
       markerStyle: {
-        color: props.marker_style?.color ?? '',
+        color: props?.marker_style?.color ?? '',
       },
     };
   };
@@ -52,7 +79,7 @@ export const GuestView = () => {
     getGuestInfo(channelId, userId)
       .then(res => {
         if (!res.data) throw new Error('🚀 Fetch Error: responsed undefined');
-        const transfromedData = transformTypeGuestEntityToIGuest(res.data);
+        const transfromedData = transformTypeGuestEntityToIGuest(res.data.guest);
         setGuestInfo(transfromedData);
       })
       .catch((err: any) => {
@@ -61,7 +88,6 @@ export const GuestView = () => {
   };
 
   useEffect(() => {
-    setLeftButtonOnclick(goToMainPage);
     fetchGuestInfo(location.pathname.split('/')[2], location.pathname.split('/')[4]);
   }, []);
 
@@ -71,7 +97,14 @@ export const GuestView = () => {
       {/* eslint-disable-next-line no-nested-ternary */}
       {lat && lng ? (
         guestInfo ? (
-          <MapCanvasForView lat={lat} lng={lng} width="100%" height="100%" guests={[guestInfo]} />
+          <MapCanvasForView
+            lat={lat}
+            lng={lng}
+            alpha={alpha}
+            width="100%"
+            height="100%"
+            guests={[guestInfo]}
+          />
         ) : (
           <LoadingSpinner />
         )

@@ -22,14 +22,14 @@ const ZoomButton = ({ label, onClick }: IZoomButtonProps) => (
   <button
     type="button"
     onClick={onClick}
-    className="text-grayscale-500 flex w-full items-center justify-center rounded border-b py-2 focus:outline-none"
+    className="text-grayscale-500 flex w-full items-center justify-center rounded border-b border-t py-2 focus:outline-none"
   >
     {label}
   </button>
 );
 
 const ZoomSliderInput = ({ zoomLevel, onSliderChange }: IZoomSliderInputProps) => (
-  <div className="relative flex w-[200px] flex-grow items-center justify-center px-2">
+  <div className="relative flex w-[130px] flex-grow items-center justify-center px-1">
     <input
       type="range"
       min="6"
@@ -43,9 +43,9 @@ const ZoomSliderInput = ({ zoomLevel, onSliderChange }: IZoomSliderInputProps) =
       }}
     />
     <div
-      className="absolute h-full w-1 bg-blue-500"
+      className="absolute flex items-center justify-center"
       style={{
-        height: `${((zoomLevel - 6) / 17) * 100}%`,
+        height: '100%',
         bottom: 0,
       }}
     />
@@ -83,7 +83,7 @@ export const ZoomSlider = ({ map, redrawCanvas }: IZoomSliderProps) => {
   };
 
   return (
-    <div className="flex h-64 w-9 flex-col items-center rounded bg-white shadow">
+    <div className="flex h-48 w-9 flex-col items-center rounded bg-white shadow">
       <ZoomButton label={<MdOutlineAdd />} onClick={() => handleZoomChange(1)} />
       <ZoomSliderInput zoomLevel={zoomLevel} onSliderChange={handleSliderChange} />
       <ZoomButton label={<MdRemove />} onClick={() => handleZoomChange(-1)} />
