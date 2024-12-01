@@ -84,17 +84,9 @@
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/19a1efb6-1317-4d5d-aeb6-130f9e377f3e" />
 </div>
 
-
 <br /><br />
 
-## ⛏ 서비스 아키텍처
-
-<img width="1300" alt="image" src="https://github.com/user-attachments/assets/ab20d1eb-dab9-4373-b32b-7e455debb5c5">
-
-
-<br /><br />
-
-## 📃 기술적 도전
+## 📃 우리의 기술적 도전
 
 ###  by. J060_김주원
 
@@ -116,6 +108,14 @@
 - [[BE] 🔌 실시간 소켓 통신의 도전기: 다양한 조건이 존재하는 통신 feat. 클라이언트와 서버 각각에서의 고민과 설계 과정](https://velog.io/@happyhyep/%EC%8B%A4%EC%8B%9C%EA%B0%84-%EC%86%8C%EC%BC%93-%ED%86%B5%EC%8B%A0%EC%9D%98-%EB%8F%84%EC%A0%84%EA%B8%B0-%EB%8B%A4%EC%96%91%ED%95%9C-%EC%A1%B0%EA%B1%B4%EC%9D%B4-%EC%A1%B4%EC%9E%AC%ED%95%98%EB%8A%94-%ED%86%B5%EC%8B%A0)
 
 
+
+<br /><br />
+
+## ⛏ 서비스 아키텍처
+
+<img width="1300" alt="image" src="https://github.com/user-attachments/assets/ab20d1eb-dab9-4373-b32b-7e455debb5c5">
+
+
 </div>
 
 <br /><br />
@@ -125,7 +125,7 @@
 
 |J060_김주원|J174_이동율|J210_임재도|J234_정혜인|
 |:--:|:--:|:--:|:--:|
-|<a href="https://github.com/juwon5272"><img src="https://github.com/user-attachments/assets/f774ff48-8831-490f-b0fe-b18b024f7916" width="150px;" alt=""/></a>|<a href="https://github.com/leedongyull"><img src="https://github.com/user-attachments/assets/4d682b1f-0f91-4547-8a7d-1f6b00bee674" width="150px;" alt=""/></a>|<a href="https://github.com/effozen"><img src="https://github.com/user-attachments/assets/92bddae1-19ce-4b06-811e-52df15ac726c" width="150px;" alt=""/></a>|<a href="https://github.com/happyhyep"><img src="https://github.com/user-attachments/assets/40ac933c-3e19-4884-a5e9-da2f2298dd72" width="150px;" alt=""/></a>|
+|<a href="https://github.com/juwon5272"><img src="https://github.com/user-attachments/assets/f774ff48-8831-490f-b0fe-b18b024f7916" width="150px;" alt=""/></a>|<a href="https://github.com/leedongyull"><img src="https://github.com/user-attachments/assets/178c1cd6-b296-498e-adb1-60534eec2713" width="150px;" alt=""/></a>|<a href="https://github.com/effozen"><img src="https://github.com/user-attachments/assets/92bddae1-19ce-4b06-811e-52df15ac726c" width="150px;" alt=""/></a>|<a href="https://github.com/happyhyep"><img src="https://github.com/user-attachments/assets/40ac933c-3e19-4884-a5e9-da2f2298dd72" width="150px;" alt=""/></a>|
 |FE|FE|FE|Full Stack (FE + BE)|
 |<a href="https://github.com/juwon5272">@juwon5272</a>|<a href="https://github.com/leedongyull">@leedongyull</a>|<a href="https://github.com/effozen">@effozen</a>|<a href="https://github.com/happyhyep">@happyhyep</a>|
 
