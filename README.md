@@ -17,8 +17,9 @@
 <br />
 
 <div align="center" style="display: flex">
-  <a href="https://ddara.kro.kr/"><img width="90%" alt="image" src="https://github.com/user-attachments/assets/a4b272f3-a2b3-41ec-89b6-5b8db9dc67f5" /></a>
+  <a href="https://ddara.kro.kr/"><img width="60%" alt="image" src="https://github.com/user-attachments/assets/244ac0a2-2be4-46f6-aba8-0bade57d6d6d" /></a>
 </div>
+
 
 
 
