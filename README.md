@@ -22,11 +22,13 @@
   <a href="https://ddara.kro.kr/"><img width="60%" alt="image" src="https://github.com/user-attachments/assets/0eaf0bac-01bc-44ae-ab02-56c2c9951ce1" /></a>
 </div>
 
-
-
-
-
 <br />
+
+<img width="20%" alt="image" src="https://github.com/user-attachments/assets/32d30ab1-7d87-4e86-bcca-9f30d1150f3c" />
+
+
+
+<br /><br />
 <div align="center" style="display: flex">
 <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/eff4141f-bd7f-4791-8789-ae1c8c2c9602" /></a>
 <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/74606b44-04a2-4b06-9f52-b12e453bc882" /></a>
@@ -40,6 +42,7 @@
 <a href="https://ddara.kro.kr/api-docs"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/457b1e76-71a8-4a2d-8cd7-f60378b0bbe2" /></a>
 <a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/6500d674-d951-4cc0-ae71-5502c1dedea9" /></a>
 </div>
+
 
 
 
