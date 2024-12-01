@@ -20,19 +20,21 @@
   <a href="https://ddara.kro.kr/"><img width="90%" alt="image" src="https://github.com/user-attachments/assets/a4b272f3-a2b3-41ec-89b6-5b8db9dc67f5" /></a>
 </div>
 
+
+
 <br />
 <div align="center" style="display: flex">
-<a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/fba85098-2bbd-4972-bcde-c9557119019c" /></a>
-<a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/f3c616b9-f0e3-4391-a9b0-bcf12438e177" /></a>
-<a href="https://www.notion.so/127b1b2b649180e88f70d6a4648924a0?pvs=4"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/3316f3aa-7f2a-4bfe-bbec-7d23cec06b34" /></a>
+<a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/eff4141f-bd7f-4791-8789-ae1c8c2c9602" /></a>
+<a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/74606b44-04a2-4b06-9f52-b12e453bc882" /></a>
+<a href="https://www.notion.so/127b1b2b649180e88f70d6a4648924a0?pvs=4"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/a8108a13-e48b-4c9e-b840-a446b3f54f6c" /></a>
 </div>
 
 <br />
 
 <div align="center" style="display: flex; gap: 10px">
-<a href="https://github.com/orgs/boostcampwm-2024/projects/196"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/a6863a4e-ba5d-4cdc-a639-c5b0d5d5ad11" /></a>
-<a href="https://ddara.kro.kr/api-docs"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/afbe44fd-f163-4ade-b9a4-971ea74e4212" /></a>
-<a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/2a8910cb-d82f-4c2a-a815-386e70e59d22" /></a>
+<a href="https://github.com/orgs/boostcampwm-2024/projects/196"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/5507e684-7628-46a5-b317-761aa9483bec" /></a>
+<a href="https://ddara.kro.kr/api-docs"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/457b1e76-71a8-4a2d-8cd7-f60378b0bbe2" /></a>
+<a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/6500d674-d951-4cc0-ae71-5502c1dedea9" /></a>
 </div>
 
 
