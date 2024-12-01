@@ -16,16 +16,15 @@
 
 <br />
 
-<h1>🗝 링크 안내 🗝</h1>
 <div align="center" style="display: flex">
-  <a href="https://ddara.kro.kr/"><img width="60%" alt="image" src="https://github.com/user-attachments/assets/a4b272f3-a2b3-41ec-89b6-5b8db9dc67f5" /></a>
+  <a href="https://ddara.kro.kr/"><img width="90%" alt="image" src="https://github.com/user-attachments/assets/a4b272f3-a2b3-41ec-89b6-5b8db9dc67f5" /></a>
 </div>
 
 <br />
 <div align="center" style="display: flex">
-<a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/fba85098-2bbd-4972-bcde-c9557119019c" /></a>
-<a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/f3c616b9-f0e3-4391-a9b0-bcf12438e177" /></a>
-<a href="https://www.notion.so/127b1b2b649180e88f70d6a4648924a0?pvs=4"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/3316f3aa-7f2a-4bfe-bbec-7d23cec06b34" /></a>
+<a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897"><img width="30%" alt="image" src="https://github.com/user-attachments/assets/fba85098-2bbd-4972-bcde-c9557119019c" /></a>
+<a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929"><img width="30%" alt="image" src="https://github.com/user-attachments/assets/f3c616b9-f0e3-4391-a9b0-bcf12438e177" /></a>
+<a href="https://www.notion.so/127b1b2b649180e88f70d6a4648924a0?pvs=4"><img width="30%" alt="image" src="https://github.com/user-attachments/assets/3316f3aa-7f2a-4bfe-bbec-7d23cec06b34" /></a>
 </div>
 
 <br />
