@@ -1,6 +1,8 @@
 <div align="center">
 <h1>🕶️ 팀 소개 🕶️</h1>
 
+![lllll](https://github.com/user-attachments/assets/0be465e9-e3df-465d-ac25-4ea9bf24a682)
+
 ### 안녕하세요, 팀 "따라따라" 입니다!
 
 <br />
@@ -82,8 +84,7 @@
 
 ## ⛏ 서비스 아키텍처
 
-<img width="1300" alt="image" src="https://github.com/user-attachments/assets/8c6ba9d4-92b5-4c46-8a18-59e41005dc1f">
-
+<img width="1300" alt="image" src="https://github.com/user-attachments/assets/ab20d1eb-dab9-4373-b32b-7e455debb5c5">
 
 
 <br /><br />
