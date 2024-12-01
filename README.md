@@ -90,8 +90,24 @@
 
 ## 📃 기술적 도전
 
-- 추가될 예정입니다.
+###  by. J060_김주원
 
+- [[FE] 🎨 지도의 기능들 canvas에서 구현하기](https://velog.io/@jackson5272/%EC%A7%80%EB%8F%84%EC%9D%98-%EA%B8%B0%EB%8A%A5%EB%93%A4-canvas%EC%97%90%EC%84%9C-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0)
+
+###  by. J174_이동율
+
+- [[FE] 💾 초보 개발자의 데이터 관리 시행착오](https://misty-thread-f6e.notion.site/FE-14f87662ce1380b39c90d38e24a2dad8?pvs=4)
+
+###  by. J210_임재도
+ 
+- [[FE] 🧬 캔버스와 네이버 지도 API를 연동하기 위한 과정](https://fantasmith.com/dev-lab/challenge/boostcamp/ddara/canvas-and-map-linking)
+
+
+###  by. J234_정혜인
+
+- [[FE] 🗺️ 지도와 함께 움직이는 캔버스 설계/구현 시행착오 스토리](https://velog.io/@happyhyep/%EC%A7%80%EB%8F%84%EC%99%80-%ED%95%A8%EA%BB%98-%EC%9B%80%EC%A7%81%EC%9D%B4%EB%8A%94-%EC%BA%94%EB%B2%84%EC%8A%A4-%EA%B5%AC%ED%98%84-%EC%8A%A4%ED%86%A0%EB%A6%AC)
+
+- [[BE] 🔌 실시간 소켓 통신의 도전기: 다양한 조건이 존재하는 통신 feat. 클라이언트와 서버 각각에서의 고민과 설계 과정](https://velog.io/@happyhyep/%EC%8B%A4%EC%8B%9C%EA%B0%84-%EC%86%8C%EC%BC%93-%ED%86%B5%EC%8B%A0%EC%9D%98-%EB%8F%84%EC%A0%84%EA%B8%B0-%EB%8B%A4%EC%96%91%ED%95%9C-%EC%A1%B0%EA%B1%B4%EC%9D%B4-%EC%A1%B4%EC%9E%AC%ED%95%98%EB%8A%94-%ED%86%B5%EC%8B%A0)
 
 
 </div>
