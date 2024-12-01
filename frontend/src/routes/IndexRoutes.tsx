@@ -20,55 +20,54 @@ export const IndexRoutes = () => (
         <Routes>
           <Route path="*" element={<Layout />}>
             <Route index element={<Main />} />
-            <Route path="add-channel">
+            <Route
+              path="add-channel"
+              element={
+                <RequireAuth>
+                  <AddChannel />
+                </RequireAuth>
+              }
+            >
               <Route
-                path="add-channel"
-                element={
-                  <RequireAuth>
-                    <AddChannel />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="add-channel/:user/draw"
+                path=":user/draw"
                 element={
                   <RequireAuth>
                     <DrawRoute />
                   </RequireAuth>
                 }
               />
-              <Route
-                path="channelInfo/:channelId"
-                element={
-                  <RequireAuth>
-                    <ChannelInfoPage />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="guest-add-channel/:channelId"
-                element={
-                  <RequireAuth>
-                    <AddGuestPage />
-                  </RequireAuth>
-                }
-              />
-              <Route path="channel/:channelId">
-                <Route
-                  path="host"
-                  element={
-                    <RequireAuth>
-                      <HostView />
-                    </RequireAuth>
-                  }
-                />
-                <Route path="guest/:guestId" element={<GuestView />} />
-              </Route>
             </Route>
-
-            {/* 정의되지 않은 경로 라우팅 */}
-            <Route path="*" element={<AlertUndefinedURL />} />
+            <Route
+              path="guest-add-channel/:channelId"
+              element={
+                <RequireAuth>
+                  <AddGuestPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="channelInfo/:channelId"
+              element={
+                <RequireAuth>
+                  <ChannelInfoPage />
+                </RequireAuth>
+              }
+            />
+            <Route path="channel/:channelId">
+              <Route
+                path="host"
+                element={
+                  <RequireAuth>
+                    <HostView />
+                  </RequireAuth>
+                }
+              />
+              <Route path="guest/:guestId" element={<GuestView />} />
+            </Route>
           </Route>
+
+          {/* 정의되지 않은 경로 라우팅 */}
+          <Route path="*" element={<AlertUndefinedURL />} />
         </Routes>
       </ChannelProvider>
     </CurrentUserProvider>

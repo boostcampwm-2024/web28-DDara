@@ -7,7 +7,6 @@ import { Page } from '@/component/routebutton/enum';
 import { ChannelContext } from '@/context/ChannelContext';
 import { IUser, UserContext } from '@/context/UserContext';
 import { guestEntity } from '@/api/dto/channel.dto';
-import { HeaderButtonContext } from '@/context/HeaderButtonContext';
 import { InputBox } from '../component/common/InputBox';
 
 const Divider = () => <hr className="my-6 w-full border-gray-300" />;
@@ -16,19 +15,10 @@ export const ChannelInfoPage = () => {
   const { channelInfo } = useContext(ChannelContext);
   const { setFooterTransparency, resetFooterContext } = useContext(FooterContext);
   const { resetUsers } = useContext(UserContext);
-  const { setLeftButtonOnclick, resetButtonContext } = useContext(HeaderButtonContext);
   const navigate = useNavigate();
-
-  const goToMainPage = () => {
-    navigate('/');
-    resetFooterContext();
-    resetUsers();
-    resetButtonContext();
-  };
 
   useEffect(() => {
     setFooterTransparency(true);
-    setLeftButtonOnclick(goToMainPage);
   }, []);
 
   const goToAddChannelPage = () => {

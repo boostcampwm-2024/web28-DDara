@@ -1,4 +1,6 @@
-import { HeaderIcon } from '@/component/header/constatnt/HeaderEnums';
+import { HeaderBackButton } from '@/component/header/HeaderBackButton';
+import { HeaderDropdown } from '@/component/header/HeaderDropdown';
+import React, { ReactNode } from 'react';
 
 export const HEADER_TITLE: Record<string, string> = {
   '/add-channel/:user/draw': '에 따른 경로 설정',
@@ -8,18 +10,17 @@ export const HEADER_SUBTITLE: Record<string, string> = {
   '/add-channel/:user/draw': '사용자 별로 출발지/도착지(마커), 경로(그림)을 설정할 수 있습니다',
 };
 
-export const HEADER_LEFTBUTTON: Record<string, HeaderIcon> = {
-  // '/': HeaderIcon.LOGOUT,
-  '/add-channel': HeaderIcon.BACK,
-  '/add-channel/:user': HeaderIcon.BACK,
-  '/add-channel/:user/draw': HeaderIcon.BACK,
-  '/channel/:channelId/host': HeaderIcon.BACK,
-  '/update-channel': HeaderIcon.BACK,
-  '/register': HeaderIcon.BACK,
-  '/channelInfo/:channelId': HeaderIcon.BACK,
-  '/guest-add-channel/:channelId': HeaderIcon.BACK,
+export const HEADER_LEFTITEMS: Record<string, ReactNode[]> = {
+  '/add-channel': [React.createElement(HeaderBackButton)],
+  '/add-channel/:user': [React.createElement(HeaderBackButton)],
+  '/add-channel/:user/draw': [React.createElement(HeaderBackButton)],
+  '/channel/:channelId/host': [React.createElement(HeaderBackButton)],
+  '/update-channel': [React.createElement(HeaderBackButton)],
+  '/register': [React.createElement(HeaderBackButton)],
+  '/channelInfo/:channelId': [React.createElement(HeaderBackButton)],
+  '/guest-add-channel/:channelId': [React.createElement(HeaderBackButton)],
 };
 
-export const HEADER_RIGHTBUTTON: Record<string, HeaderIcon> = {
-  '/channel/:channelId/host': HeaderIcon.MENU,
+export const HEADER_RIGHTITEMS: Record<string, ReactNode[]> = {
+  '/channel/:channelId/host': [React.createElement(HeaderDropdown)],
 };
