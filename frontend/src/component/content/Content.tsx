@@ -70,13 +70,13 @@ export const Content = (props: IContentProps) => {
   };
 
   return (
-    <div className="relative flex w-full flex-row justify-between px-4 py-5">
-      <button
-        type="button"
-        onClick={() => {
-          navigate(props.link);
-        }}
-      >
+    <div
+      className="relative flex w-full flex-row items-center justify-between px-4 py-5"
+      onClick={() => {
+        navigate(props.link);
+      }}
+    >
+      <div>
         <header className="border-gray-200 pb-1 text-start text-lg">{props.title}</header>
         <section className="flex items-center text-sm leading-5 text-gray-500">
           <time className="mr-4">
@@ -89,7 +89,7 @@ export const Content = (props: IContentProps) => {
             </>
           )}
         </section>
-      </button>
+      </div>
       <div className="relative">
         <Dropdown>
           <Dropdown.Trigger>
@@ -102,7 +102,6 @@ export const Content = (props: IContentProps) => {
             <Dropdown.Item className="flex items-start text-base">삭제하기</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        {/* {isMenuOpen && (드롭다운 메뉴)} */}
       </div>
     </div>
   );
