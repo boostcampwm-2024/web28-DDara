@@ -359,7 +359,12 @@ export const MapCanvasForDraw = ({
       <div className="relative flex">
         <ToolDescription />
       </div>
-      <div className="absolute bottom-3 left-3 z-10 flex gap-2">
+      <div
+        className="absolute right-5 top-1/2 z-10 flex gap-2"
+        style={{
+          transform: 'translateY(-50%)',
+        }}
+      >
         <ZoomSlider map={map} redrawCanvas={redrawCanvas} />
       </div>
     </div>

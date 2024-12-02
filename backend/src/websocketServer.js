@@ -17,10 +17,6 @@ export const initializeWebSocketServer = server => {
     },
   });
 
-  wss.on('error', err => {
-    console.error('WebSocket Server Error:', err);
-  });
-
   wss.on('connection', (ws, req) => {
     // URL에서 token 추출
     // TODO: 프론트 라우터 및 token 설정 완료 후 테스트
@@ -36,9 +32,9 @@ export const initializeWebSocketServer = server => {
     }
 
     // 동일한 token으로 이미 연결된 클라이언트가 있으면 이전 연결을 강제로 종료
-    if (activeConnections[token]) {
-      activeConnections[token].close(4000, 'Duplicate connection');
-    }
+    // if (activeConnections[token]) {
+    //   activeConnections[token].close();
+    // }
 
     // 새로운 연결을 활성화된 연결 목록에 저장
     activeConnections[token] = ws;
@@ -50,10 +46,10 @@ export const initializeWebSocketServer = server => {
     if (role === 'host') {
       channelData[channelId].hosts[token] = { ws };
     } else if (role === 'guest') {
-      channelData[channelId].guests[token] = { ws, guestId };
+      if (!channelData[channelId].guests[guestId]) {
+        channelData[channelId].guests[guestId] = { ws, guestId, location: {} };
+      }
     }
-
-    console.log(`Client connected with token: ${token}`);
 
     // 새 클라이언트에게 기존 클라이언트의 위치 전송
     if (role === 'host') {
@@ -71,15 +67,24 @@ export const initializeWebSocketServer = server => {
     ws.on('message', message => {
       try {
         const data = JSON.parse(message);
-        if (data.type === 'location') {
-          const locationData = { ...data.location, token, guestId };
 
-          // Guest 위치 업데이트 및 Host들에게 전달
-          if (role === 'guest') {
-            channelData[channelId].guests[token].location = data.location;
-            Object.values(channelData[channelId].hosts).forEach(host =>
-              host.ws.send(JSON.stringify({ type: 'location', ...locationData })),
-            );
+        if (role === 'guest' && data.type === 'location') {
+          // 위치 데이터 업데이트
+          const guestData = channelData[channelId]?.guests[guestId];
+
+          if (guestData) {
+            guestData.location = data.location;
+            // 모든 호스트에게 위치 전송
+            Object.values(channelData[channelId]?.hosts || {}).forEach(host => {
+              host.ws.send(
+                JSON.stringify({
+                  type: 'location',
+                  guestId,
+                  location: data.location,
+                  token,
+                }),
+              );
+            });
           }
         }
       } catch (err) {
@@ -93,7 +98,7 @@ export const initializeWebSocketServer = server => {
       delete activeConnections[token];
       if (channelData[channelId]) {
         delete channelData[channelId].hosts[token];
-        delete channelData[channelId].guests[token];
+        delete channelData[channelId].guests[guestId];
         if (
           Object.keys(channelData[channelId].hosts).length === 0 &&
           Object.keys(channelData[channelId].guests).length === 0
