@@ -202,9 +202,6 @@ importers:
 
   frontend:
     dependencies:
-      '@fontsource/pretendard':
-        specifier: ^5.1.0
-        version: 5.1.0
       axios:
         specifier: ^1.7.7
         version: 1.7.7
@@ -1580,9 +1577,6 @@ packages:
   '@eslint/plugin-kit@0.2.2':
     resolution: {integrity: sha512-CXtq5nR4Su+2I47WPOlWud98Y5Lv8Kyxp2ukhgFx/eW6Blm18VXJO5WuQylPugRo8nbluoi6GvvxBLqHcvqUUw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@fontsource/pretendard@5.1.0':
-    resolution: {integrity: sha512-aUkTiTYKDX/919OJqKKyly4cuoets76Cwjqw1qNTCFpIdVMpOm5uGEpreIPabDdp1ReYdeVfB94Wxyn5Q9jrBQ==}
 
   '@hapi/hoek@9.3.0':
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
@@ -9968,8 +9962,6 @@ snapshots:
   '@eslint/plugin-kit@0.2.2':
     dependencies:
       levn: 0.4.1
-
-  '@fontsource/pretendard@5.1.0': {}
 
   '@hapi/hoek@9.3.0': {}
 

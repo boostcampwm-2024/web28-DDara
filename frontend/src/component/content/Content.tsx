@@ -4,6 +4,7 @@ import { getChannelInfo } from '@/api/channel.api';
 import { useContext } from 'react';
 import { ChannelContext } from '@/context/ChannelContext';
 import { Dropdown } from '../common/dropdown/Dropdown';
+import { FooterContext } from '../layout/footer/LayoutFooterProvider';
 
 interface IContentProps {
   title: string;
@@ -35,6 +36,7 @@ interface IContentProps {
  */
 
 export const Content = (props: IContentProps) => {
+  const { resetFooterContext } = useContext(FooterContext);
   const formattedDate = new Date(props.time).toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
@@ -61,7 +63,13 @@ export const Content = (props: IContentProps) => {
   const goToChannelInfoPage = () => {
     if (channelInfo?.id) {
       navigate(`/channelInfo/${channelInfo.id}`);
+      resetFooterContext();
     }
+  };
+
+  const goToHostViewPage = () => {
+    navigate(props.link);
+    resetFooterContext();
   };
 
   const handleUpdate = () => {
@@ -85,7 +93,7 @@ export const Content = (props: IContentProps) => {
           {props.person > 0 && (
             <>
               <MdGroup className="mr-2 h-5 w-5" aria-label="인원수 아이콘" />
-              <span>{props.person}명</span>
+              <span className="text-xs font-normal">{props.person}명</span>
             </>
           )}
         </section>
@@ -101,10 +109,15 @@ export const Content = (props: IContentProps) => {
             <MdMoreVert className="h-6 w-6" />
           </Dropdown.Trigger>
           <Dropdown.Menu>
-            <Dropdown.Item className="flex items-start text-base" onClick={handleUpdate}>
+            <Dropdown.Item
+              className="flex items-start text-base font-normal"
+              onClick={handleUpdate}
+            >
               공유하기
             </Dropdown.Item>
-            <Dropdown.Item className="flex items-start text-base">삭제하기</Dropdown.Item>
+            <Dropdown.Item className="flex items-start text-base font-normal">
+              삭제하기
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>
