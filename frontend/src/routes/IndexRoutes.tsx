@@ -27,16 +27,15 @@ export const IndexRoutes = () => (
                   <AddChannel />
                 </RequireAuth>
               }
-            >
-              <Route
-                path=":user/draw"
-                element={
-                  <RequireAuth>
-                    <DrawRoute />
-                  </RequireAuth>
-                }
-              />
-            </Route>
+            />
+            <Route
+              path="add-channel/:user/draw"
+              element={
+                <RequireAuth>
+                  <DrawRoute />
+                </RequireAuth>
+              }
+            />
             <Route
               path="guest-add-channel/:channelId"
               element={

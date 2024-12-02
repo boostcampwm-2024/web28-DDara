@@ -169,7 +169,6 @@ export const AddGuestPage = () => {
 
   // 모든 사용자가 데이터를 완료했는지 확인하여 Footer 활성화 여부 결정
   useEffect(() => {
-    console.log(users);
     const allUsersComplete = users?.every(isUserDataComplete);
     if (allUsersComplete) {
       setFooterActive(buttonActiveType.ACTIVE);
