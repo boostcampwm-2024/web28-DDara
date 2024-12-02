@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { RouteSettingButton } from '@/component/routebutton/RouteSettingButton';
@@ -36,8 +36,7 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
  */
 
 export const AddChannel = () => {
-  const [channelName, setChannelName] = useState<string>('');
-  const { users, setUsers, resetUsers } = useContext(UserContext);
+  const { users, setUsers, resetUsers, channelName, setChannelName } = useContext(UserContext);
   const {
     setFooterTitle,
     setFooterTransparency,
