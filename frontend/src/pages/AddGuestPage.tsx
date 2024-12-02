@@ -30,9 +30,10 @@ export const AddGuestPage = () => {
     resetFooterContext,
     footerOption,
   } = useContext(FooterContext);
+
   const navigate = useNavigate();
   const goToMainPage = () => {
-    navigate('/', { replace: true });
+    navigate('/');
     resetFooterContext();
     resetUsers();
   };

@@ -1,9 +1,13 @@
 import { IndexRoutes } from '@/routes/IndexRoutes.tsx';
 import 'App.css';
 import { useEffect, useState } from 'react';
+import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
+import { AppConfig } from '@/lib/constants/commonConstants.ts';
+import { Onboarding } from '@/component/onBoarding/Onboarding.tsx';
 
 export const App = () => {
   const [isMobile, setIsMobile] = useState(true);
+  const [isFirstVisit, setIsFirstVisit] = useState(false);
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -24,6 +28,23 @@ export const App = () => {
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
+  useEffect(() => {
+    const firstVisit = loadLocalData(AppConfig.KEYS.FIRST_VISIT);
+    if (firstVisit === null) {
+      saveLocalData(AppConfig.KEYS.FIRST_VISIT, 'true');
+      setIsFirstVisit(true);
+    } else if (firstVisit === 'true') {
+      setIsFirstVisit(true);
+    } else {
+      setIsFirstVisit(false);
+    }
+  }, []);
+
+  const handleOnboardingComplete = () => {
+    saveLocalData(AppConfig.KEYS.FIRST_VISIT, 'false');
+    setIsFirstVisit(false);
+  };
+
   if (!isMobile) {
     return (
       <>
@@ -37,5 +58,10 @@ export const App = () => {
       </>
     );
   }
+
+  if (isFirstVisit) {
+    return <Onboarding onComplete={handleOnboardingComplete} />;
+  }
+
   return <IndexRoutes />;
 };

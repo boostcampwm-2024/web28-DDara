@@ -20,37 +20,22 @@ export const IndexRoutes = () => (
         <Routes>
           <Route path="*" element={<Layout />}>
             <Route index element={<Main />} />
-            <Route path="add-channel">
-              <Route
-                index
-                element={
-                  <RequireAuth>
-                    <AddChannel />
-                  </RequireAuth>
-                }
-              />
-              <Route path=":user">
-                <Route
-                  path="draw"
-                  element={
-                    <RequireAuth>
-                      <DrawRoute />
-                    </RequireAuth>
-                  }
-                />
-              </Route>
-            </Route>
-
-            {/* channelInfo 페이지 경로 설정 */}
             <Route
-              path="channelInfo/:channelId"
+              path="add-channel"
               element={
                 <RequireAuth>
-                  <ChannelInfoPage />
+                  <AddChannel />
                 </RequireAuth>
               }
             />
-
+            <Route
+              path="add-channel/:user/draw"
+              element={
+                <RequireAuth>
+                  <DrawRoute />
+                </RequireAuth>
+              }
+            />
             <Route
               path="guest-add-channel/:channelId"
               element={
@@ -59,7 +44,14 @@ export const IndexRoutes = () => (
                 </RequireAuth>
               }
             />
-
+            <Route
+              path="channelInfo/:channelId"
+              element={
+                <RequireAuth>
+                  <ChannelInfoPage />
+                </RequireAuth>
+              }
+            />
             <Route path="channel/:channelId">
               <Route
                 path="host"
@@ -71,10 +63,10 @@ export const IndexRoutes = () => (
               />
               <Route path="guest/:guestId" element={<GuestView />} />
             </Route>
-
-            {/* 정의되지 않은 경로 라우팅 */}
-            <Route path="*" element={<AlertUndefinedURL />} />
           </Route>
+
+          {/* 정의되지 않은 경로 라우팅 */}
+          <Route path="*" element={<AlertUndefinedURL />} />
         </Routes>
       </ChannelProvider>
     </CurrentUserProvider>

@@ -131,7 +131,6 @@ export const HostView = () => {
 
   useEffect(() => {
     headerDropdownContext.setItems([{ name: '사용자 1', id: '1', markerStyle: { color: '#000' } }]);
-
     fetchChannelInfo(location.pathname.split('/')[2]);
   }, []);
 

@@ -4,6 +4,7 @@ import { getChannelInfo } from '@/api/channel.api';
 import { useContext } from 'react';
 import { ChannelContext } from '@/context/ChannelContext';
 import { Dropdown } from '../common/dropdown/Dropdown';
+import { FooterContext } from '../layout/footer/LayoutFooterProvider';
 
 interface IContentProps {
   title: string;
@@ -35,6 +36,7 @@ interface IContentProps {
  */
 
 export const Content = (props: IContentProps) => {
+  const { resetFooterContext } = useContext(FooterContext);
   const formattedDate = new Date(props.time).toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
@@ -61,7 +63,13 @@ export const Content = (props: IContentProps) => {
   const goToChannelInfoPage = () => {
     if (channelInfo?.id) {
       navigate(`/channelInfo/${channelInfo.id}`);
+      resetFooterContext();
     }
+  };
+
+  const goToHostViewPage = () => {
+    navigate(props.link);
+    resetFooterContext();
   };
 
   const handleUpdate = () => {
@@ -70,39 +78,49 @@ export const Content = (props: IContentProps) => {
   };
 
   return (
-    <div className="relative flex w-full flex-row justify-between px-4 py-5">
-      <button
-        type="button"
-        onClick={() => {
-          navigate(props.link);
-        }}
-      >
-        <header className="border-gray-200 pb-1 text-start text-lg">{props.title}</header>
-        <section className="flex items-center text-sm leading-5 text-gray-500">
+    <div
+      className="relative flex w-full flex-row items-center justify-between px-4 py-5"
+      onClick={goToHostViewPage}
+    >
+      {/* <div className="relative flex w-full flex-row justify-between px-4 py-5"> */}
+      <div>
+        <header className="border-gray-200 pb-1 text-start text-base font-normal">
+          {props.title}
+        </header>
+        <section className="text-grayscale-200 flex items-center text-xs font-normal leading-5">
           <time className="mr-4">
             {formattedDate} {formattedTime}
           </time>
           {props.person > 0 && (
             <>
               <MdGroup className="mr-2 h-5 w-5" aria-label="인원수 아이콘" />
-              <span>{props.person}명</span>
+              <span className="text-xs font-normal">{props.person}명</span>
             </>
           )}
         </section>
-      </button>
-      <div className="relative">
+      </div>
+      <div
+        className="relative"
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      >
         <Dropdown>
           <Dropdown.Trigger>
             <MdMoreVert className="h-6 w-6" />
           </Dropdown.Trigger>
           <Dropdown.Menu>
-            <Dropdown.Item className="flex items-start text-base" onClick={handleUpdate}>
+            <Dropdown.Item
+              className="flex items-start text-base font-normal"
+              onClick={handleUpdate}
+            >
               공유하기
             </Dropdown.Item>
-            <Dropdown.Item className="flex items-start text-base">삭제하기</Dropdown.Item>
+            <Dropdown.Item className="flex items-start text-base font-normal">
+              삭제하기
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        {/* {isMenuOpen && (드롭다운 메뉴)} */}
       </div>
     </div>
   );
