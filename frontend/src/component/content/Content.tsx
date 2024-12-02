@@ -90,7 +90,12 @@ export const Content = (props: IContentProps) => {
           )}
         </section>
       </div>
-      <div className="relative">
+      <div
+        className="relative"
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      >
         <Dropdown>
           <Dropdown.Trigger>
             <MdMoreVert className="h-6 w-6" />
