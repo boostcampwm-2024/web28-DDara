@@ -24,9 +24,12 @@
 </div>
 
 <br />
-
+저희는 모바일 웹서비스이기 때문에, 모바일로 접속하시는 것을 추천드립니다.
+<br />
 <img width="20%" alt="image" src="https://github.com/user-attachments/assets/32d30ab1-7d87-4e86-bcca-9f30d1150f3c" />
 
+
+<br />
 (모바일에서 위 QR 코드로 접속하실 수 있습니다.)
 
 
@@ -107,7 +110,11 @@
 
 - [[BE] 🔌 실시간 소켓 통신의 도전기: 다양한 조건이 존재하는 통신 feat. 클라이언트와 서버 각각에서의 고민과 설계 과정](https://velog.io/@happyhyep/%EC%8B%A4%EC%8B%9C%EA%B0%84-%EC%86%8C%EC%BC%93-%ED%86%B5%EC%8B%A0%EC%9D%98-%EB%8F%84%EC%A0%84%EA%B8%B0-%EB%8B%A4%EC%96%91%ED%95%9C-%EC%A1%B0%EA%B1%B4%EC%9D%B4-%EC%A1%B4%EC%9E%AC%ED%95%98%EB%8A%94-%ED%86%B5%EC%8B%A0)
 
+<br />
 
+### ... 그 외 다양한 기술적 도전 보러가기
+
+- [기술적 도전 모음zip](https://harsh-flier-3c0.notion.site/133b1b2b649180648a0fe8dcecbc12ea?pvs=4)
 
 <br /><br />
 
