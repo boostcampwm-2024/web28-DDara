@@ -2,6 +2,7 @@ export const KEYS = {
   LOGIN_USER: 'LUT',
   LOGIN_TOKEN: 'LUT_TK',
   BROWSER_TOKEN: 'BRW_TK',
+  FIRST_VISIT: 'FIRST_VISIT',
 };
 
 export const AppConfig = {
