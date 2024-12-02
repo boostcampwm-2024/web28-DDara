@@ -124,7 +124,7 @@ export const Main = () => {
             onClick={handleLogout}
             className="flex flex-col items-center gap-2 text-gray-700"
           >
-            <MdLogout size={24} />
+            <MdLogout size={24} className="text-blueGray-800" />
             <span className="text-xs">로그아웃</span>
           </button>
         )}

@@ -13,9 +13,12 @@ interface IGuestMarkerProps {
 
 export const GusetMarker = (props: IGuestMarkerProps) => {
   const markerData: IMarkerData[] = [
-    { name: '내 위치', icon: <MdAssistantNavigation color={props.markerColor && 'black'} /> },
-    { name: '도착지', icon: <MdFlag color={props.markerColor && 'black'} /> },
-    { name: '출발지', icon: <MdLocationOn color={props.markerColor && 'black'} /> },
+    {
+      name: '내 위치',
+      icon: <MdAssistantNavigation color={props.markerColor && '#333C4A'} />,
+    },
+    { name: '도착지', icon: <MdFlag color={props.markerColor && '#333C4A'} /> },
+    { name: '출발지', icon: <MdLocationOn color={props.markerColor && '#333C4A'} /> },
   ];
 
   const iconContextValue = useMemo(() => ({ color: 'purple', className: 'size-5' }), []);
