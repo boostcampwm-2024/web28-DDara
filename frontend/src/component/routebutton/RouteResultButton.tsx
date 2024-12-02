@@ -21,7 +21,8 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
   const navigate = useNavigate();
 
   const goToUserDrawRoute = (user: string) => {
-    navigate(`/add-channel/${user}/draw`);
+    const userExists = channelInfo.guests?.some(guest => guest.name === user);
+    if (!userExists) navigate(`/add-channel/${user}/draw`);
   };
 
   const copyLinkToClipboard = () => {
