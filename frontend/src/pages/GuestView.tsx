@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { IPoint } from '@/lib/types/canvasInterface.ts';
 import { guestEntity } from '@/api/dto/channel.dto.ts';
-import { GusetMarker } from '@/component/IconGuide/GuestMarker.tsx';
+import { GuestMarker } from '@/component/IconGuide/GuestMarker.tsx';
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
 import { getUserLocation } from '@/hooks/getUserLocation.ts';
 import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
@@ -93,7 +93,7 @@ export const GuestView = () => {
 
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
-      <GusetMarker markerColor={guestInfo.markerStyle.color} />
+      <GuestMarker markerColor={guestInfo.markerStyle.color} />
       {/* eslint-disable-next-line no-nested-ternary */}
       {lat && lng ? (
         guestInfo ? (
