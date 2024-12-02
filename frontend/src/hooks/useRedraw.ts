@@ -13,6 +13,7 @@ import mylocation from '@/assets/mylocation.svg';
 import character1 from '@/assets/character1.png';
 import character2 from '@/assets/character2.png';
 import { IMarkerStyle } from '@/lib/types/canvasInterface.ts';
+import footprint from '@/assets/footprint.svg';
 
 interface ILatLng {
   lat: number;
@@ -71,6 +72,7 @@ export const useRedrawCanvas = ({
   const mylocationRef = useRef<HTMLImageElement | null>(null);
   const character1Ref = useRef<HTMLImageElement | null>(null);
   const character2Ref = useRef<HTMLImageElement | null>(null);
+  const footprintRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     startImageRef.current = new Image();
@@ -87,6 +89,9 @@ export const useRedrawCanvas = ({
 
     character2Ref.current = new Image();
     character2Ref.current.src = character2;
+
+    footprintRef.current = new Image();
+    footprintRef.current.src = footprint;
   }, []);
 
   // 캔버스에서 이미지 그리고, 캔버스 전체 색상 변경 후에 반환하는 함수
@@ -200,20 +205,75 @@ export const useRedrawCanvas = ({
     ctx.restore();
   };
 
-  const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[], color: string) => {
-    if (points.length === 0) return;
-    ctx.fillStyle = color || '#000';
-    ctx.strokeStyle = color || '#000';
+  // const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[]) => {
+  //   if (points.length === 0 || !footprintRef.current) return;
 
-    ctx.beginPath();
-    const firstPoint = latLngToCanvasPoint(points[0]);
-    if (firstPoint) {
-      ctx.moveTo(firstPoint.x, firstPoint.y);
-      for (let i = 1; i < points.length; i++) {
-        const point = latLngToCanvasPoint(points[i]);
-        if (point) {
-          ctx.lineTo(point.x, point.y);
-        }
+  //   const footprintImage = footprintRef.current;
+
+  //   for (let i = 0; i < points.length - 1; i++) {
+  //     const start = latLngToCanvasPoint(points[i]);
+  //     const end = latLngToCanvasPoint(points[i + 1]);
+
+  //     /* eslint-disable no-continue */
+  //     if (!start || !end) {
+  //       continue;
+  //     }
+
+  //     const angle = Math.atan2(end.y - start.y, end.x - start.x);
+
+  //     const distance = 30;
+  //     const totalDistance = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2);
+  //     const steps = Math.floor(totalDistance / distance);
+
+  //     for (let j = 0; j < steps; j++) {
+  //       const progress = j / steps;
+  //       const x = start.x + progress * (end.x - start.x);
+  //       const y = start.y + progress * (end.y - start.y);
+
+  //       if (footprintImage && map) {
+  //         ctx.save();
+  //         ctx.translate(x, y);
+  //         ctx.rotate(angle + Math.PI / 2);
+  //         const markerSize = Math.min(map.getZoom() * 2, 20);
+  //         ctx.drawImage(footprintImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
+  //         ctx.restore();
+  //       }
+  //     }
+  //   }
+  // };
+  const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[], color: string) => {
+    if (points.length === 0 || !footprintRef.current || !map) return;
+
+    const footprintImage = footprintRef.current;
+    const markerSize = Math.min(map.getZoom() * 2, 20);
+
+    const offscreenCanvas = colorizeImage(footprintImage, color, markerSize, markerSize);
+
+    for (let i = 0; i < points.length - 1; i++) {
+      const start = latLngToCanvasPoint(points[i]);
+      const end = latLngToCanvasPoint(points[i + 1]);
+
+      /* eslint-disable no-continue */
+      if (!start || !end) {
+        continue;
+      }
+
+      const angle = Math.atan2(end.y - start.y, end.x - start.x);
+
+      const distance = 30;
+      const totalDistance = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2);
+      const steps = Math.floor(totalDistance / distance);
+
+      for (let j = 0; j < steps; j++) {
+        const progress = j / steps;
+        const x = start.x + progress * (end.x - start.x);
+        const y = start.y + progress * (end.y - start.y);
+
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle + Math.PI / 2);
+        ctx.drawImage(offscreenCanvas, -markerSize / 2, -markerSize / 2);
+        ctx.restore();
       }
       ctx.stroke();
     }
