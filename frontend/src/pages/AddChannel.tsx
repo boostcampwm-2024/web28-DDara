@@ -47,6 +47,11 @@ export const AddChannel = () => {
     resetFooterContext,
   } = useContext(FooterContext);
   const navigate = useNavigate();
+  const goToMainPage = () => {
+    navigate('/');
+    resetFooterContext();
+    resetUsers();
+  };
 
   /**
    * 사용자 추가 함수
@@ -172,11 +177,7 @@ export const AddChannel = () => {
       console.error('채널 생성 실패:', error);
     }
   };
-  const goToMainPage = () => {
-    navigate('/');
-    resetFooterContext();
-    resetUsers();
-  };
+
   useEffect(() => {
     setFooterOnClick(() => {
       createChannelAPI();

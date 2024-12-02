@@ -1,6 +1,6 @@
 #root {
   touch-action: pan-y;
-  font-family: Pretendard, 'Pretendard Variable', sans-serif;
+  font-family: Pretendard, 'Pretendard Variable', sans-serif !important;
 }
 
 .logo {
@@ -40,10 +40,10 @@
 }
 
 .disable-drag {
-  -webkit-user-select:none;
-  -moz-user-select:none;
-  -ms-user-select:none;
-  user-select:none
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .overlay {
