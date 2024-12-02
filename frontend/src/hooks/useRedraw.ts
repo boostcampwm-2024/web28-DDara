@@ -89,6 +89,38 @@ export const useRedrawCanvas = ({
     character2Ref.current.src = character2;
   }, []);
 
+  // 캔버스에서 이미지 그리고, 캔버스 전체 색상 변경 후에 반환하는 함수
+  const colorizeImage = (
+    image: HTMLImageElement,
+    color: string,
+    width: number,
+    height: number,
+  ): HTMLCanvasElement => {
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = width;
+    tempCanvas.height = height;
+
+    const tempCtx = tempCanvas.getContext('2d');
+    if (!tempCtx) return tempCanvas;
+
+    // 원본 이미지 그리기
+    tempCtx.drawImage(image, 0, 0, width, height);
+
+    // 색상 적용
+    tempCtx.globalCompositeOperation = 'source-in';
+    tempCtx.fillStyle = color;
+    tempCtx.fillRect(0, 0, width, height);
+
+    return tempCanvas;
+  };
+
+  const checkMarker = (path: string) => {
+    if (path.includes('startmarker') || path.includes('endmarker') || path.includes('mylocation')) {
+      return true;
+    }
+    return false;
+  };
+
   const drawMarker = (
     ctx: CanvasRenderingContext2D,
     point: { x: number; y: number } | null,
@@ -104,7 +136,11 @@ export const useRedrawCanvas = ({
       ctx.save();
       ctx.translate(point.x, point.y);
       ctx.rotate(rotate);
-      ctx.drawImage(image, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
+      let filteredImage;
+      if (checkMarker(image.src))
+        filteredImage = colorizeImage(image, color, markerSize, markerSize);
+      else filteredImage = image;
+      ctx.drawImage(filteredImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
       ctx.restore();
     }
   };
