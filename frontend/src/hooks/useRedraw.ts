@@ -160,10 +160,56 @@ export const useRedrawCanvas = ({
     ctx.restore();
   };
 
+  // const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[]) => {
+  //   if (points.length === 0 || !footprintRef.current) return;
+
+  //   const footprintImage = footprintRef.current;
+
+  //   for (let i = 0; i < points.length - 1; i++) {
+  //     const start = latLngToCanvasPoint(points[i]);
+  //     const end = latLngToCanvasPoint(points[i + 1]);
+
+  //     /* eslint-disable no-continue */
+  //     if (!start || !end) {
+  //       continue;
+  //     }
+
+  //     const angle = Math.atan2(end.y - start.y, end.x - start.x);
+
+  //     const distance = 30;
+  //     const totalDistance = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2);
+  //     const steps = Math.floor(totalDistance / distance);
+
+  //     for (let j = 0; j < steps; j++) {
+  //       const progress = j / steps;
+  //       const x = start.x + progress * (end.x - start.x);
+  //       const y = start.y + progress * (end.y - start.y);
+
+  //       if (footprintImage && map) {
+  //         ctx.save();
+  //         ctx.translate(x, y);
+  //         ctx.rotate(angle + Math.PI / 2);
+  //         const markerSize = Math.min(map.getZoom() * 2, 20);
+  //         ctx.drawImage(footprintImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
+  //         ctx.restore();
+  //       }
+  //     }
+  //   }
+  // };
   const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[]) => {
-    if (points.length === 0 || !character1Ref.current) return;
+    if (points.length === 0 || !footprintRef.current) return;
 
     const footprintImage = footprintRef.current;
+    const markerSize = Math.min(map.getZoom() * 2, 20);
+    const offscreenCanvas = document.createElement('canvas');
+    const offscreenCtx = offscreenCanvas.getContext('2d');
+
+    if (!offscreenCtx) return;
+
+    offscreenCanvas.width = markerSize;
+    offscreenCanvas.height = markerSize;
+
+    offscreenCtx.drawImage(footprintImage, 0, 0, markerSize, markerSize);
 
     for (let i = 0; i < points.length - 1; i++) {
       const start = latLngToCanvasPoint(points[i]);
@@ -185,14 +231,11 @@ export const useRedrawCanvas = ({
         const x = start.x + progress * (end.x - start.x);
         const y = start.y + progress * (end.y - start.y);
 
-        if (footprintImage && map) {
-          ctx.save();
-          ctx.translate(x, y);
-          ctx.rotate(angle + Math.PI / 2);
-          const markerSize = Math.min(map.getZoom() * 2, 20);
-          ctx.drawImage(footprintImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
-          ctx.restore();
-        }
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle + Math.PI / 2);
+        ctx.drawImage(offscreenCanvas, -markerSize / 2, -markerSize / 2);
+        ctx.restore();
       }
     }
   };
