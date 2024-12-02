@@ -80,13 +80,14 @@ export const Content = (props: IContentProps) => {
   return (
     <div
       className="relative flex w-full flex-row items-center justify-between px-4 py-5"
-      onClick={() => {
-        navigate(props.link);
-      }}
+      onClick={goToHostViewPage}
     >
+      {/* <div className="relative flex w-full flex-row justify-between px-4 py-5"> */}
       <div>
-        <header className="border-gray-200 pb-1 text-start text-lg">{props.title}</header>
-        <section className="flex items-center text-sm leading-5 text-gray-500">
+        <header className="border-gray-200 pb-1 text-start text-base font-normal">
+          {props.title}
+        </header>
+        <section className="text-grayscale-200 flex items-center text-xs font-normal leading-5">
           <time className="mr-4">
             {formattedDate} {formattedTime}
           </time>
