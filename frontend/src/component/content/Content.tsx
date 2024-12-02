@@ -78,8 +78,12 @@ export const Content = (props: IContentProps) => {
   };
 
   return (
-    <div className="relative flex w-full flex-row justify-between px-4 py-5">
-      <button type="button" onClick={goToHostViewPage}>
+    <div
+      className="relative flex w-full flex-row items-center justify-between px-4 py-5"
+      onClick={goToHostViewPage}
+    >
+      {/* <div className="relative flex w-full flex-row justify-between px-4 py-5"> */}
+      <div>
         <header className="border-gray-200 pb-1 text-start text-base font-normal">
           {props.title}
         </header>
@@ -94,8 +98,13 @@ export const Content = (props: IContentProps) => {
             </>
           )}
         </section>
-      </button>
-      <div className="relative">
+      </div>
+      <div
+        className="relative"
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      >
         <Dropdown>
           <Dropdown.Trigger>
             <MdMoreVert className="h-6 w-6" />
@@ -112,7 +121,6 @@ export const Content = (props: IContentProps) => {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        {/* {isMenuOpen && (드롭다운 메뉴)} */}
       </div>
     </div>
   );
