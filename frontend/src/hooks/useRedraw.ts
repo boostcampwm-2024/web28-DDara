@@ -197,7 +197,7 @@ export const useRedrawCanvas = ({
   //   }
   // };
   const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[]) => {
-    if (points.length === 0 || !footprintRef.current) return;
+    if (points.length === 0 || !footprintRef.current || !map) return;
 
     const footprintImage = footprintRef.current;
     const markerSize = Math.min(map.getZoom() * 2, 20);
