@@ -10,13 +10,15 @@ import { getAddressFromCoordinates } from '@/utils/map/getAddress';
 
 export const DrawRoute = () => {
   const { users, setUsers } = useContext(UserContext);
-  const { setFooterTitle, setFooterActive, setFooterOnClick } = useContext(FooterContext);
+  const { setFooterTitle, setFooterActive, setFooterOnClick, resetFooterContext } =
+    useContext(FooterContext);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
-  const params = useParams<Record<string, string | undefined>>(); // userName을 URL 파라미터로 가져옴
+  const params = useParams<Record<string, string | undefined>>();
   const navigate = useNavigate();
 
   const goToRoutePage = () => {
     navigate(-1);
+    resetFooterContext();
   };
 
   const getUser = () => {

@@ -19,7 +19,6 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@fontsource/pretendard": "^5.1.0",
     "axios": "^1.7.7",
     "lz-string": "^1.5.0",
     "react": "^18.3.1",

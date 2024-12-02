@@ -62,7 +62,7 @@ export const HeaderDropdown = () => {
     <div>
       <Dropdown>
         <Dropdown.Trigger>
-          <MdMenu className="h-6 w-6" />
+          <MdMenu className="text-blueGray-800 h-6 w-6" />
         </Dropdown.Trigger>
         <Dropdown.Menu>{DropdownItems()}</Dropdown.Menu>
       </Dropdown>
