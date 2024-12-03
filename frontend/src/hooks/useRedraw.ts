@@ -135,7 +135,13 @@ export const useRedrawCanvas = ({
     markerType: MARKER_TYPE,
   ) => {
     if (point && image) {
-      const markerSize = zoom < 18 ? Math.min(zoom * 5, 50) : (zoom - 15) * (zoom - 16) * 10;
+      let markerSize;
+      if (markerType === MARKER_TYPE.CHARACTER) {
+        markerSize = zoom < 18 ? Math.min(zoom * 6, 60) : (zoom - 15) * (zoom - 16) * 15;
+      } else {
+        markerSize = zoom < 18 ? Math.min(zoom * 4, 40) : (zoom - 15) * (zoom - 14) * 5;
+      }
+
       ctx.save();
       ctx.translate(point.x, point.y);
       ctx.rotate(rotate);
