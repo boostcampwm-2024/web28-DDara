@@ -1,6 +1,7 @@
 import { ReactNode, useContext } from 'react';
 import classNames from 'classnames';
-import { ToggleContext } from '@/component/common/dropdown/DropdownContext';
+import { ToggleContext } from '@/context/DropdownContext.tsx';
+import { DropdownInstanceContext } from '@/context/DropdownInstanceContext';
 
 interface IDropdownTriggerProps {
   /** 버튼 내부에 들어갈 컨텐츠 */
@@ -28,10 +29,16 @@ interface IDropdownTriggerProps {
  */
 
 export const DropdownTrigger = (props: IDropdownTriggerProps) => {
-  const { toggle } = useContext(ToggleContext);
+  const { openDropdownId, setOpenDropdownId } = useContext(ToggleContext);
+  const dropdownId = useContext(DropdownInstanceContext);
+  const isOpen = openDropdownId === dropdownId;
 
   const handleOnClick = () => {
-    toggle();
+    if (isOpen) {
+      setOpenDropdownId(null); // 이미 열려 있으면 닫기
+    } else {
+      setOpenDropdownId(dropdownId); // 이 드롭다운 열기
+    }
   };
 
   return (
