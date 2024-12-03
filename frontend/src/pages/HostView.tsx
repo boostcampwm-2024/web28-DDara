@@ -34,6 +34,9 @@ export const HostView = () => {
   const [clickedId, setClickedId] = useState<string>('');
   const [otherLocations, setOtherLocations] = useState<IOtherLocationsInHostView[]>([]);
   const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false); // 오류 알림 상태 추가
+  const [filteredOtherLocations, setFilteredOtherLocations] = useState<IOtherLocationsInHostView[]>(
+    [],
+  );
 
   const headerDropdownContext = useContext(HeaderDropdownContext);
   const markerDefaultColor = ['#B4D033', '#22A751', '#2722A7', '#8F22A7', '#A73D22'];
@@ -193,6 +196,21 @@ export const HostView = () => {
       return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
     }
   }, [showErrorAlert, navigate]);
+
+  useEffect(() => {
+    if (clickedId === '') return;
+
+    setFilteredOtherLocations(prev => {
+      const index = prev.findIndex(el => el.guestId === clickedId);
+      if (index !== -1) {
+        return prev.filter(el => el.guestId === clickedId);
+      }
+      return prev;
+    });
+
+    console.log('filteredOtherLocations', filteredOtherLocations);
+    console.log('otherLocations', otherLocations);
+  }, [clickedId]);
 
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
