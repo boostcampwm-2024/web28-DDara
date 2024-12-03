@@ -120,6 +120,20 @@ export const HostView = () => {
       .then(res => {
         if (!res.data) throw new Error('🚀 Fetch Error: responsed undefined');
         const transfromedData = transformTypeFromResToInfo(res.data);
+
+        const orderedGuest: IGuest[] = [];
+
+        markerDefaultColor.forEach(color => {
+          const guest = transfromedData.guests.find(
+            guestData => guestData.markerStyle.color === color,
+          );
+          if (guest) {
+            orderedGuest.push(guest);
+          }
+        });
+
+        transfromedData.guests = orderedGuest;
+
         setChannelInfo(transfromedData);
       })
       .catch((err: any) => {

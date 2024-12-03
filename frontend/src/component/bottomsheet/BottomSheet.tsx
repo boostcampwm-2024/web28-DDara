@@ -58,7 +58,7 @@ export const BottomSheet = ({
 
   return (
     <div
-      className="transition-height fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl bg-white shadow-lg duration-700 ease-out"
+      className="transition-height absolute bottom-0 left-0 right-0 rounded-t-2xl bg-white shadow-lg duration-700 ease-out"
       style={{
         backgroundColor: `${backgroundColor}`,
         height: `${sheetHeight * 100}vh`,
@@ -82,7 +82,7 @@ export const BottomSheet = ({
         </button>
       </div>
 
-      <div className="h-full overflow-auto pb-5">{children}</div>
+      <div className="h-[calc(100%-60px)] overflow-auto pb-5">{children}</div>
     </div>
   );
 };

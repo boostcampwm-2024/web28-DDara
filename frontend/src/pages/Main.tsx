@@ -1,3 +1,4 @@
+// Main.tsx
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { MdLogout } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
@@ -14,6 +15,7 @@ import { getUserLocation } from '@/hooks/getUserLocation.ts';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
 import { UserContext } from '@/context/UserContext';
+import { ToggleProvider } from '@/context/DropdownContext.tsx';
 
 export const Main = () => {
   const {
@@ -116,32 +118,36 @@ export const Main = () => {
   const isUserLoggedIn = loadLocalData(AppConfig.KEYS.LOGIN_TOKEN) !== null;
 
   return (
-    <div className="flex flex-col overflow-hidden">
-      <header className="absolute left-0 right-0 top-0 z-10 flex p-4">
-        {isUserLoggedIn && (
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="flex flex-col items-center gap-2 text-gray-700"
-          >
-            <MdLogout size={24} className="text-blueGray-800" />
-            <span className="text-xs">로그아웃</span>
-          </button>
-        )}
-      </header>
+    <ToggleProvider>
+      <div className="flex flex-col overflow-hidden">
+        <header className="absolute left-0 right-0 top-0 z-10 flex p-4">
+          {isUserLoggedIn && (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="flex flex-col items-center gap-2 text-gray-700"
+            >
+              <MdLogout size={24} className="text-blueGray-800" />
+              <span className="text-xs">로그아웃</span>
+            </button>
+          )}
+        </header>
 
-      <main className="absolute h-full w-screen flex-grow overflow-hidden">
-        {/* eslint-disable-next-line no-nested-ternary */}
-        {lat && lng ? (
-          otherLocations ? (
-            <MapCanvasForView
-              width="100%"
-              height="100%"
-              lat={lat}
-              lng={lng}
-              alpha={alpha}
-              otherLocations={otherLocations}
-            />
+        <main className="absolute h-full w-screen flex-grow overflow-hidden">
+          {/* eslint-disable-next-line no-nested-ternary */}
+          {lat && lng ? (
+            otherLocations ? (
+              <MapCanvasForView
+                width="100%"
+                height="100%"
+                lat={lat}
+                lng={lng}
+                alpha={alpha}
+                otherLocations={otherLocations}
+              />
+            ) : (
+              <LoadingSpinner />
+            )
           ) : (
             <LoadingSpinner />
           )
@@ -153,36 +159,37 @@ export const Main = () => {
         )}
       </main>
 
-      {isUserLoggedIn ? (
-        <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#FFFFFF">
-          {channels.map(item => (
-            <Fragment key={item.id}>
-              <Content
-                channelId={item.id}
-                title={item.name}
-                link={`/channel/${item.id}/host`}
-                person={item.guest_count}
-                time={item.generated_at}
-              />
-              <hr className="my-2" />
-            </Fragment>
-          ))}
-          <div className="h-20" />
-        </BottomSheet>
-      ) : (
-        <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#F1F1F1F2">
-          <div className="h-full w-full cursor-pointer" onClick={handleLoginRequest}>
-            <div className="absolute left-1/2 top-[20%] flex -translate-x-1/2 transform cursor-pointer flex-col p-6 text-center">
-              <p className="text-grayscale-175 mb-5 text-lg font-normal">로그인을 진행하여</p>
-              <p className="text-grayscale-175 mb-5 text-lg font-normal">더 많은 기능을</p>
-              <p className="text-grayscale-175 text-lg font-normal">사용해보세요</p>
+        {isUserLoggedIn ? (
+          <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#FFFFFF">
+            {channels.map(item => (
+              <Fragment key={item.id}>
+                <Content
+                  channelId={item.id}
+                  title={item.name}
+                  link={`/channel/${item.id}/host`}
+                  person={item.guest_count}
+                  time={item.generated_at}
+                />
+                <hr className="my-2" />
+              </Fragment>
+            ))}
+            <div className="h-20" />
+          </BottomSheet>
+        ) : (
+          <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#F1F1F1F2">
+            <div className="h-full w-full cursor-pointer" onClick={handleLoginRequest}>
+              <div className="absolute left-1/2 top-[20%] flex -translate-x-1/2 transform cursor-pointer flex-col p-6 text-center">
+                <p className="text-grayscale-175 mb-5 text-lg font-normal">로그인을 진행하여</p>
+                <p className="text-grayscale-175 mb-5 text-lg font-normal">더 많은 기능을</p>
+                <p className="text-grayscale-175 text-lg font-normal">사용해보세요</p>
+              </div>
             </div>
-          </div>
-        </BottomSheet>
-      )}
+          </BottomSheet>
+        )}
 
-      {/* 로그인 모달 */}
-      <AuthModal isOpen={showLoginModal} onClose={handleCloseLoginModal} type="login" />
-    </div>
+        {/* 로그인 모달 */}
+        <AuthModal isOpen={showLoginModal} onClose={handleCloseLoginModal} type="login" />
+      </div>
+    </ToggleProvider>
   );
 };

@@ -1,6 +1,7 @@
 import { ReactNode, useContext, useRef, useEffect } from 'react';
 import classNames from 'classnames';
-import { ToggleContext } from '@/component/common/dropdown/DropdownContext';
+import { ToggleContext } from '@/context/DropdownContext.tsx';
+import { DropdownInstanceContext } from '@/context/DropdownInstanceContext';
 
 interface IDropdownMenuProps {
   /** 드롭다운 메뉴가 열려있는지 여부 */
@@ -27,7 +28,9 @@ interface IDropdownMenuProps {
  */
 
 export const DropdownMenu = (props: IDropdownMenuProps) => {
-  const { isOpen, toggle } = useContext(ToggleContext);
+  const { openDropdownId, setOpenDropdownId } = useContext(ToggleContext);
+  const dropdownId = useContext(DropdownInstanceContext);
+  const isOpen = openDropdownId === dropdownId;
   const ref = useRef<HTMLUListElement | null>(null);
 
   const handleOutSideClick = (event: MouseEvent) => {
@@ -43,29 +46,32 @@ export const DropdownMenu = (props: IDropdownMenuProps) => {
       !ref.current.contains(target) &&
       target.dataset.component !== 'DropdownTrigger'
     ) {
-      toggle();
+      setOpenDropdownId(null); // 외부 클릭 시 드롭다운 닫기
     }
   };
 
   useEffect(() => {
-    document.addEventListener('click', handleOutSideClick);
+    if (isOpen) {
+      document.addEventListener('click', handleOutSideClick);
+    } else {
+      document.removeEventListener('click', handleOutSideClick);
+    }
     return () => {
       document.removeEventListener('click', handleOutSideClick);
     };
-  }, []);
+  }, [isOpen]);
 
   return (
     isOpen && (
       <ul
         ref={ref}
         className={classNames(
-          // 추후 애니메이션 조건부 적용을 위해서 classNames 사용
           'align-center',
           'animate-smoothAppear',
           'absolute',
           'right-0',
           'top-8',
-          'z-10',
+          'z-[6000]',
           'flex',
           'flex-col',
           'justify-center',
