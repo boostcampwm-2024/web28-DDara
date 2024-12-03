@@ -1,8 +1,9 @@
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { DropdownTrigger } from '@/component/common/dropdown/DropdownTrigger.tsx';
 import { DropdownItem } from '@/component/common/dropdown/DropdownItem.tsx';
 import { DropdownMenu } from '@/component/common/dropdown/DropdownMenu.tsx';
-import { ToggleProvider } from '@/component/common/dropdown/DropdownContext.tsx';
+import { DropdownInstanceContext } from '@/context/DropdownInstanceContext';
 
 interface IDropdownProps {
   /** 드롭다운 컴포넌트 내부에 들어갈 컨텐츠 */
@@ -34,10 +35,12 @@ interface IDropdownProps {
  */
 
 export const Dropdown = (props: IDropdownProps) => {
+  const id = useMemo(() => uuidv4(), []); // 각 Dropdown 인스턴스에 고유 ID 생성
+
   return (
-    <aside className="relative flex w-fit flex-col">
-      <ToggleProvider>{props.children}</ToggleProvider>
-    </aside>
+    <DropdownInstanceContext.Provider value={id}>
+      <aside className="relative flex w-fit flex-col">{props.children}</aside>
+    </DropdownInstanceContext.Provider>
   );
 };
 

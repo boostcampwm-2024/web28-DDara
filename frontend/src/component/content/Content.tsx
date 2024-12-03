@@ -82,7 +82,6 @@ export const Content = (props: IContentProps) => {
       className="relative flex w-full flex-row items-center justify-between px-4 py-5"
       onClick={goToHostViewPage}
     >
-      {/* <div className="relative flex w-full flex-row justify-between px-4 py-5"> */}
       <div>
         <header className="border-gray-200 pb-1 text-start text-base font-normal">
           {props.title}
@@ -102,7 +101,7 @@ export const Content = (props: IContentProps) => {
       <div
         className="relative"
         onClick={e => {
-          e.stopPropagation();
+          e.stopPropagation(); // 부모의 onClick 이벤트 방지
         }}
       >
         <Dropdown>

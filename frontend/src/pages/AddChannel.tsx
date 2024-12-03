@@ -9,6 +9,8 @@ import { buttonActiveType } from '@/component/layout/enumTypes';
 import { createChannelReqEntity } from '@/api/dto/channel.dto';
 import { createChannel } from '@/api/channel.api';
 import { Page } from '@/component/routebutton/enum';
+import { loadLocalData } from '@/utils/common/manageLocalData';
+import { AppConfig } from '@/lib/constants/commonConstants';
 import { InputBox } from '../component/common/InputBox';
 
 /**
@@ -148,9 +150,10 @@ export const AddChannel = () => {
 
   const createChannelAPI = async () => {
     try {
+      const userId = loadLocalData(AppConfig.KEYS.LOGIN_USER);
       const channelData: createChannelReqEntity = {
         name: channelName,
-        host_id: 'jhi2359',
+        host_id: userId ?? undefined, // 추후 검증 로직 추가 예정
         guests: users.map(user => ({
           name: user.name,
           start_location: {
