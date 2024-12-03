@@ -32,7 +32,11 @@ export const HostView = () => {
   const [guestsData, setGuestsData] = useState<IGuestData[]>([]);
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
   const [clickedId, setClickedId] = useState<string>('');
+
   const [otherLocations, setOtherLocations] = useState<IOtherLocationsInHostView[]>([]);
+  const [filteredOtherLocations, setFilteredOtherLocations] = useState<IOtherLocationsInHostView[]>(
+    [],
+  );
   const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false); // 오류 알림 상태 추가
 
   const headerDropdownContext = useContext(HeaderDropdownContext);
@@ -194,6 +198,14 @@ export const HostView = () => {
     }
   }, [showErrorAlert, navigate]);
 
+  useEffect(() => {
+    if (clickedId === '') {
+      setFilteredOtherLocations(otherLocations);
+    } else {
+      setFilteredOtherLocations(otherLocations.filter(el => el.guestId === clickedId));
+    }
+  }, [clickedId]);
+
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
       {showErrorAlert && (
@@ -217,7 +229,7 @@ export const HostView = () => {
               width="100%"
               height="100%"
               guests={mapProps}
-              otherLocations={otherLocations}
+              otherLocations={filteredOtherLocations}
               ref={mapRef}
             />
           ) : (
