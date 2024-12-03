@@ -147,9 +147,14 @@ export const HostView = () => {
 
       if (clickedId === '') {
         setMapProps([]);
-        channelInfo.guests?.map(guest =>
-          setMapProps(prev => [...prev, guest as IGuestDataInMapProps]),
-        );
+        const tmpMapProps: IGuestDataInMapProps[] = [];
+        // TODO : 차후 로직 개선하기
+        channelInfo.guests?.map(guest => tmpMapProps.push(guest as IGuestDataInMapProps));
+        const orderedMapProps: IGuestDataInMapProps[] = [];
+        markerDefaultColor.forEach(color => {
+          orderedMapProps.push(...tmpMapProps.filter(guest => guest.markerStyle.color === color));
+        });
+        setMapProps([...orderedMapProps]);
       } else {
         setMapProps(channelInfo.guests?.filter(guest => guest.id === clickedId));
       }
