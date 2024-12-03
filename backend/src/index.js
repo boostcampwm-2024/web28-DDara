@@ -7,6 +7,7 @@ import { PORT } from './constants/constants.js';
 import { initializeWebSocketServer } from './websocketServer.js';
 import { authRouter } from './routes/authRouter.js';
 import { channelRouter } from './routes/channelRouter.js';
+import { searchRouter } from './routes/searchRouter.js';
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/api/auth', authRouter);
 app.use('/api/channel', channelRouter);
+app.use('/api/search', searchRouter);
 
 // HTTP 서버 생성
 const server = http.createServer(app);
