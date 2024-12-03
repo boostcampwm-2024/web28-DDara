@@ -32,11 +32,12 @@ export const HostView = () => {
   const [guestsData, setGuestsData] = useState<IGuestData[]>([]);
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
   const [clickedId, setClickedId] = useState<string>('');
+
   const [otherLocations, setOtherLocations] = useState<IOtherLocationsInHostView[]>([]);
-  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false); // 오류 알림 상태 추가
   const [filteredOtherLocations, setFilteredOtherLocations] = useState<IOtherLocationsInHostView[]>(
     [],
   );
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false); // 오류 알림 상태 추가
 
   const headerDropdownContext = useContext(HeaderDropdownContext);
   const markerDefaultColor = ['#B4D033', '#22A751', '#2722A7', '#8F22A7', '#A73D22'];
@@ -198,18 +199,11 @@ export const HostView = () => {
   }, [showErrorAlert, navigate]);
 
   useEffect(() => {
-    if (clickedId === '') return;
-
-    setFilteredOtherLocations(prev => {
-      const index = prev.findIndex(el => el.guestId === clickedId);
-      if (index !== -1) {
-        return prev.filter(el => el.guestId === clickedId);
-      }
-      return prev;
-    });
-
-    console.log('filteredOtherLocations', filteredOtherLocations);
-    console.log('otherLocations', otherLocations);
+    if (clickedId === '') {
+      setFilteredOtherLocations(otherLocations);
+    } else {
+      setFilteredOtherLocations(otherLocations.filter(el => el.guestId === clickedId));
+    }
   }, [clickedId]);
 
   return (
@@ -235,7 +229,7 @@ export const HostView = () => {
               width="100%"
               height="100%"
               guests={mapProps}
-              otherLocations={otherLocations}
+              otherLocations={filteredOtherLocations}
               ref={mapRef}
             />
           ) : (
