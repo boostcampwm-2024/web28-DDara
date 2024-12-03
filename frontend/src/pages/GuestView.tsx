@@ -12,6 +12,7 @@ import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts'
 import { AppConfig } from '@/lib/constants/commonConstants.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { AlertUI } from '@/component/common/alert/Alert.tsx';
+import { PATH_COLOR } from '@/lib/constants/canvasConstants.ts';
 
 export const GuestView = () => {
   const { lat, lng, alpha, error } = getUserLocation();
@@ -73,7 +74,7 @@ export const GuestView = () => {
       },
       paths: (props?.path as IPoint[]) ?? [],
       markerStyle: {
-        color: props?.marker_style?.color ?? '',
+        color: PATH_COLOR,
       },
     };
   };
