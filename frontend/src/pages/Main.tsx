@@ -1,4 +1,3 @@
-// Main.tsx
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { MdLogout } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';

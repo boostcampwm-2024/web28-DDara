@@ -111,7 +111,7 @@ export const GuestView = () => {
       ) : (
         <section className="flex h-full flex-col items-center justify-center gap-2 text-xl text-gray-700">
           <LoadingSpinner />
-          {error ? `Error: ${error}` : 'Loading map data...'}
+          {error ? `Error: ${error}` : null}
         </section>
       )}
     </article>
