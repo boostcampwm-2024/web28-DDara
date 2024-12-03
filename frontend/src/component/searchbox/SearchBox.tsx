@@ -106,6 +106,9 @@ export const SearchBox = (props: ISearchBoxProps) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value); // 상태 업데이트
   };
+  useEffect(() => {
+    setInputValue('');
+  }, [toolType]);
 
   useEffect(() => {
     // 마커가 이미 존재하는 경우 더 이상 검색하지 않도록 방지
@@ -142,10 +145,6 @@ export const SearchBox = (props: ISearchBoxProps) => {
     setSearchResults([]);
     props.deleteMarker();
   };
-
-  useEffect(() => {
-    console.log(searchResults);
-  }, [searchResults]);
 
   return (
     <div className="absolute top-2 z-[6000] w-full px-2">
