@@ -151,7 +151,6 @@ export const AddGuestPage = () => {
       if (response.resultCode === 0) {
         goToMainPage();
       }
-      console.log('게스트 추가 성공:', response);
     } catch (error) {
       console.error('게스트 추가 실패:', error);
     }
