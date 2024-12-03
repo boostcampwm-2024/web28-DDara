@@ -47,6 +47,7 @@ export const AddChannel = () => {
     setFooterOnClick,
     resetFooterContext,
   } = useContext(FooterContext);
+
   const navigate = useNavigate();
   const goToMainPage = () => {
     navigate('/');
@@ -94,6 +95,9 @@ export const AddChannel = () => {
       user.marker_style.color !== ''
     );
   };
+  const isChannelNameComplete = (): boolean => {
+    return channelName.trim() !== '';
+  };
 
   /**
    * 사용자 추가 함수
@@ -139,14 +143,13 @@ export const AddChannel = () => {
       addUser(); // users가 비어있다면 기본 사용자 추가
     }
     const allUsersComplete = users.every(isUserDataComplete);
-
     // 모든 사용자가 완전한 데이터라면 Footer를 활성화
-    if (allUsersComplete) {
+    if (allUsersComplete && isChannelNameComplete()) {
       setFooterActive(buttonActiveType.ACTIVE);
     } else {
       setFooterActive(buttonActiveType.PASSIVE);
     }
-  }, [users, setFooterActive]); // users가 변경될 때마다 실행
+  }, [users, setFooterActive, channelName]); // users가 변경될 때마다 실행
 
   const createChannelAPI = async () => {
     try {
