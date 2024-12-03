@@ -37,7 +37,7 @@
 
 <br /><br />
 
-<a href="https://harsh-flier-3c0.notion.site/133b1b2b649180648a0fe8dcecbc12ea?pvs=4"><img width="40%" alt="image" src="https://github.com/user-attachments/assets/5aa43481-ba7e-473a-bce1-7d1379a17ed0" /></a>
+<a href="https://harsh-flier-3c0.notion.site/133b1b2b649180648a0fe8dcecbc12ea?pvs=4"><img width="60%" alt="image" src="https://github.com/user-attachments/assets/5aa43481-ba7e-473a-bce1-7d1379a17ed0" /></a>
 
 
 <div align="center" style="display: flex">
