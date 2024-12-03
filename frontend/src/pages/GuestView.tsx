@@ -43,6 +43,13 @@ export const GuestView = () => {
       console.log('WebSocket connection established');
     };
 
+    ws.send(
+      JSON.stringify({
+        type: 'location',
+        location: { lat, lng, alpha },
+      }),
+    );
+
     wsRef.current = ws;
   }, [location]);
 
