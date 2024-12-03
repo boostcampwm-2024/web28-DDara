@@ -19,6 +19,8 @@
 
 <br /><br /><br /><br />
 
+<h1>🎢 바로가기 링크 🎢</h1>
+<br /><br />
 <div align="center" style="display: flex">
   <a href="https://ddara.kro.kr/"><img width="60%" alt="image" src="https://github.com/user-attachments/assets/0eaf0bac-01bc-44ae-ab02-56c2c9951ce1" /></a>
 </div>
@@ -34,6 +36,11 @@
 
 
 <br /><br />
+
+<a href="https://harsh-flier-3c0.notion.site/133b1b2b649180648a0fe8dcecbc12ea?pvs=4"><img width="50%" alt="image" src="https://github.com/user-attachments/assets/5aa43481-ba7e-473a-bce1-7d1379a17ed0" /></a>
+
+<br />
+
 <div align="center" style="display: flex">
 <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/eff4141f-bd7f-4791-8789-ae1c8c2c9602" /></a>
 <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/74606b44-04a2-4b06-9f52-b12e453bc882" /></a>
@@ -45,7 +52,7 @@
 <div align="center" style="display: flex; gap: 10px">
 <a href="https://github.com/orgs/boostcampwm-2024/projects/196"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/5507e684-7628-46a5-b317-761aa9483bec" /></a>
 <a href="https://ddara.kro.kr/api-docs"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/457b1e76-71a8-4a2d-8cd7-f60378b0bbe2" /></a>
-<a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/6500d674-d951-4cc0-ae71-5502c1dedea9" /></a>
+<!-- <a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/6500d674-d951-4cc0-ae71-5502c1dedea9" /></a> -->
 </div>
 
 
@@ -55,9 +62,8 @@
 
 <br /><br /><br /><br />
 
-![image](https://github.com/user-attachments/assets/7251fa39-1c7c-4005-9187-a2b560c2405f)
 
-
+![image](https://github.com/user-attachments/assets/da9357c4-095f-4f1c-9d04-7e377a0f23f1)
 
 
 
@@ -86,6 +92,18 @@
 <div align="center">
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/19a1efb6-1317-4d5d-aeb6-130f9e377f3e" />
 </div>
+
+<br /><br />
+
+## ✨ 핵심 기능 구현을 위한 고민과 과정
+
+### 1. 지도와 캔버스 연동을 위한 고민
+
+[🗺️ 지도와 캔버스 연동을 위한 고민](https://velog.io/@happyhyep/%EC%A7%80%EB%8F%84%EC%99%80-%ED%95%A8%EA%BB%98-%EC%9B%80%EC%A7%81%EC%9D%B4%EB%8A%94-%EC%BA%94%EB%B2%84%EC%8A%A4-%EA%B5%AC%ED%98%84-%EC%8A%A4%ED%86%A0%EB%A6%AC)
+
+### 2. 실시간 위치 파악 구현을 위한 고민
+
+[🔌 실시간 위치 파악 구현을 위한 고민](https://velog.io/@happyhyep/%EC%8B%A4%EC%8B%9C%EA%B0%84-%EC%86%8C%EC%BC%93-%ED%86%B5%EC%8B%A0%EC%9D%98-%EB%8F%84%EC%A0%84%EA%B8%B0-%EB%8B%A4%EC%96%91%ED%95%9C-%EC%A1%B0%EA%B1%B4%EC%9D%B4-%EC%A1%B4%EC%9E%AC%ED%95%98%EB%8A%94-%ED%86%B5%EC%8B%A0)
 
 <br /><br />
 
