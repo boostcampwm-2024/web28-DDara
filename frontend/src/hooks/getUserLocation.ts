@@ -7,6 +7,10 @@ interface IGetUserLocation {
   error: string | null;
 }
 
+interface IDeviceOrientationEventWithPermission extends DeviceOrientationEvent {
+  requestPermission?: () => Promise<'granted' | 'denied'>;
+}
+
 /**
  * 사용자 위치를 가져오는 커스텀 Hook입니다.
  *
@@ -74,12 +78,39 @@ export const getUserLocation = (): IGetUserLocation => {
     }
 
     const handleOrientation = (event: DeviceOrientationEvent) => {
+      console.log(event.alpha);
       if (event.alpha !== null) {
         setLocation(prev => ({ ...prev, alpha: event.alpha }));
       }
     };
 
-    window.addEventListener('deviceorientation', handleOrientation);
+    const requestOrientationPermission = async () => {
+      const DeviceOrientationEventTyped =
+        DeviceOrientationEvent as unknown as IDeviceOrientationEventWithPermission;
+
+      if (
+        typeof DeviceOrientationEventTyped !== 'undefined' &&
+        typeof DeviceOrientationEventTyped.requestPermission === 'function'
+      ) {
+        try {
+          const permission = await DeviceOrientationEventTyped.requestPermission();
+          if (permission === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation);
+          } else {
+            console.error('Device Orientation permission denied.');
+          }
+        } catch (error) {
+          console.error('Failed to request Device Orientation permission:', error);
+        }
+      } else {
+        console.warn('DeviceOrientationEvent.requestPermission is not supported on this browser.');
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
+    };
+
+    requestOrientationPermission().then(() => {
+      window.addEventListener('deviceorientation', handleOrientation);
+    });
 
     return () => {
       if (watchId) navigator.geolocation.clearWatch(watchId);
