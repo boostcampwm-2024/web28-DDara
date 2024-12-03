@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { IGuest } from '@/types/channel.types.ts';
 import { getGuestInfo } from '@/api/channel.api.ts';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { IPoint } from '@/lib/types/canvasInterface.ts';
 import { guestEntity } from '@/api/dto/channel.dto.ts';
@@ -11,10 +11,12 @@ import { getUserLocation } from '@/hooks/getUserLocation.ts';
 import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
 import { AppConfig } from '@/lib/constants/commonConstants.ts';
 import { v4 as uuidv4 } from 'uuid';
+import { AlertUI } from '@/component/common/alert/Alert.tsx';
 
 export const GuestView = () => {
   const { lat, lng, alpha, error } = getUserLocation();
   const location = useLocation();
+  const navigate = useNavigate(); // 네비게이션 훅 추가
 
   const [guestInfo, setGuestInfo] = useState<IGuest>({
     id: '',
@@ -24,6 +26,7 @@ export const GuestView = () => {
     endPoint: { lat: 0, lng: 0 },
     paths: [],
   });
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false); // 오류 알림 상태 추가
 
   const wsRef = useRef<WebSocket | null>(null);
 
@@ -84,6 +87,7 @@ export const GuestView = () => {
       })
       .catch((err: any) => {
         console.error(err);
+        setShowErrorAlert(true); // 오류 발생 시 알림 표시
       });
   };
 
@@ -91,8 +95,26 @@ export const GuestView = () => {
     fetchGuestInfo(location.pathname.split('/')[2], location.pathname.split('/')[4]);
   }, []);
 
+  useEffect(() => {
+    if (showErrorAlert) {
+      const timer = setTimeout(() => {
+        navigate('/', { replace: true }); // 메인 페이지로 리다이렉트
+      }, 3000); // 3초 후 리다이렉트
+
+      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
+    }
+  }, [showErrorAlert, navigate]);
+
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
+      {showErrorAlert && (
+        <AlertUI
+          message="잘못된 요청입니다. 메인 페이지로 이동합니다."
+          duration={3000}
+          autoClose
+          onClose={() => setShowErrorAlert(false)}
+        />
+      )}
       <GuestMarker markerColor={guestInfo.markerStyle.color} />
       {/* eslint-disable-next-line no-nested-ternary */}
       {lat && lng ? (
