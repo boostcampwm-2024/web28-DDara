@@ -13,8 +13,8 @@ const calculateZoomLevel = (latDiff: number, lngDiff: number) => {
   if (maxDiff < 0.5) return 10;
   if (maxDiff < 1) return 9;
   if (maxDiff < 2) return 8;
-  if (maxDiff < 5) return 7;
-  if (maxDiff < 10) return 6;
+  if (maxDiff < 5) return 8;
+  if (maxDiff < 10) return 7;
   return 5;
 };
 
