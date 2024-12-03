@@ -18,7 +18,7 @@ export const IndexRoutes = () => (
     <CurrentUserProvider>
       <ChannelProvider>
         <Routes>
-          <Route path="*" element={<Layout />}>
+          <Route path="/" element={<Layout />}>
             <Route index element={<Main />} />
             <Route
               path="add-channel"
@@ -53,6 +53,7 @@ export const IndexRoutes = () => (
               }
             />
             <Route path="channel/:channelId">
+              <Route index element={<AlertUndefinedURL />} />
               <Route
                 path="host"
                 element={
