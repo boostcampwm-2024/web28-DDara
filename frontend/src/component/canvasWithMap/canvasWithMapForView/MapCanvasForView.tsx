@@ -101,6 +101,7 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
 
     return (
       <div
+        className="absolute right-2 top-1/2 flex gap-2"
         style={{ position: 'relative', width, height }}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}

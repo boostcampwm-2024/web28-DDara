@@ -135,7 +135,7 @@ export const useRedrawCanvas = ({
     color: string,
   ) => {
     if (point && image) {
-      const markerSize = zoom * 5;
+      const markerSize = zoom < 18 ? Math.min(zoom * 5, 50) : (zoom - 15) * (zoom - 16) * 10;
       ctx.fillStyle = color || '#000';
       ctx.strokeStyle = color || '#000';
       ctx.save();
