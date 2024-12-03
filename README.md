@@ -19,6 +19,8 @@
 
 <br /><br /><br /><br />
 
+<h1>🎢 바로가기 링크 🎢</h1>
+<br /><br />
 <div align="center" style="display: flex">
   <a href="https://ddara.kro.kr/"><img width="60%" alt="image" src="https://github.com/user-attachments/assets/0eaf0bac-01bc-44ae-ab02-56c2c9951ce1" /></a>
 </div>
@@ -34,6 +36,10 @@
 
 
 <br /><br />
+
+<a href="https://harsh-flier-3c0.notion.site/133b1b2b649180648a0fe8dcecbc12ea?pvs=4"><img width="40%" alt="image" src="https://github.com/user-attachments/assets/5aa43481-ba7e-473a-bce1-7d1379a17ed0" /></a>
+
+
 <div align="center" style="display: flex">
 <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=90-1897"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/eff4141f-bd7f-4791-8789-ae1c8c2c9602" /></a>
 <a href="https://www.figma.com/design/r9nl4Jcz9VXIMbrpf50wY6/PickMeUp?node-id=87-929"><img width="18%" alt="image" src="https://github.com/user-attachments/assets/74606b44-04a2-4b06-9f52-b12e453bc882" /></a>
@@ -89,7 +95,7 @@
 
 <br /><br />
 
-## 📃 우리의 주요 기술적 도전
+## 📃 우리의 기술적 도전
 
 ###  by. J060_김주원
 
@@ -112,7 +118,7 @@
 
 <br />
 
-## 🔎 ... 다양한 기술적 도전 보러가기
+### ... 그 외 다양한 기술적 도전 보러가기
 
 - [기술적 도전 모음zip](https://harsh-flier-3c0.notion.site/133b1b2b649180648a0fe8dcecbc12ea?pvs=4)
 
