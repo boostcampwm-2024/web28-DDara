@@ -54,6 +54,12 @@ interface IUseRedrawCanvasProps {
   alpha?: number | null;
 }
 
+enum MARKER_TYPE {
+  START_MARKER = 'START_MARKER',
+  END_MARKER = 'END_MARKER',
+  CHARACTER = 'CHARACTER',
+}
+
 export const useRedrawCanvas = ({
   canvasRef,
   map,
@@ -119,13 +125,6 @@ export const useRedrawCanvas = ({
     return tempCanvas;
   };
 
-  const checkMarker = (path: string) => {
-    if (path.includes('startmarker') || path.includes('endmarker') || path.includes('mylocation')) {
-      return true;
-    }
-    return false;
-  };
-
   const drawMarker = (
     ctx: CanvasRenderingContext2D,
     point: { x: number; y: number } | null,
@@ -133,18 +132,19 @@ export const useRedrawCanvas = ({
     zoom: number,
     rotate: number,
     color: string,
+    markerType: MARKER_TYPE,
   ) => {
     if (point && image) {
       const markerSize = zoom < 18 ? Math.min(zoom * 5, 50) : (zoom - 15) * (zoom - 16) * 10;
-      ctx.fillStyle = color || '#000';
-      ctx.strokeStyle = color || '#000';
       ctx.save();
       ctx.translate(point.x, point.y);
       ctx.rotate(rotate);
       let filteredImage;
-      if (checkMarker(image.src))
+      if (markerType === MARKER_TYPE.CHARACTER) {
+        filteredImage = image;
+      } else {
         filteredImage = colorizeImage(image, color, markerSize, markerSize);
-      else filteredImage = image;
+      }
       ctx.drawImage(filteredImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
       ctx.restore();
     }
@@ -296,12 +296,28 @@ export const useRedrawCanvas = ({
     const zoom = map.getZoom();
     if (startMarker) {
       const startPoint = latLngToCanvasPoint(startMarker);
-      drawMarker(ctx, startPoint, startImageRef.current, zoom, 0, START_MARKER_COLOR);
+      drawMarker(
+        ctx,
+        startPoint,
+        startImageRef.current,
+        zoom,
+        0,
+        START_MARKER_COLOR,
+        MARKER_TYPE.START_MARKER,
+      );
     }
 
     if (endMarker) {
       const endPoint = latLngToCanvasPoint(endMarker);
-      drawMarker(ctx, endPoint, endImageRef.current, zoom, 0, END_MARKER_COLOR);
+      drawMarker(
+        ctx,
+        endPoint,
+        endImageRef.current,
+        zoom,
+        0,
+        END_MARKER_COLOR,
+        MARKER_TYPE.END_MARKER,
+      );
     }
 
     if (pathPoints) {
@@ -318,6 +334,7 @@ export const useRedrawCanvas = ({
           zoom,
           (alpha * Math.PI) / 180,
           guests![0]?.markerStyle.color,
+          MARKER_TYPE.CHARACTER,
         );
       } else {
         drawMarker(
@@ -327,6 +344,7 @@ export const useRedrawCanvas = ({
           zoom,
           0,
           guests![0]?.markerStyle.color,
+          MARKER_TYPE.CHARACTER,
         );
       }
     }
@@ -346,6 +364,7 @@ export const useRedrawCanvas = ({
           zoom,
           (location.alpha * Math.PI) / 180,
           color,
+          MARKER_TYPE.CHARACTER,
         );
       });
     }
@@ -353,10 +372,26 @@ export const useRedrawCanvas = ({
     if (guests) {
       guests.forEach(({ startPoint, endPoint, paths, markerStyle }) => {
         const startLocation = latLngToCanvasPoint(startPoint);
-        drawMarker(ctx, startLocation, startImageRef.current, zoom, 0, markerStyle.color);
+        drawMarker(
+          ctx,
+          startLocation,
+          startImageRef.current,
+          zoom,
+          0,
+          markerStyle.color,
+          MARKER_TYPE.START_MARKER,
+        );
 
         const endLocation = latLngToCanvasPoint(endPoint);
-        drawMarker(ctx, endLocation, endImageRef.current, zoom, 0, markerStyle.color);
+        drawMarker(
+          ctx,
+          endLocation,
+          endImageRef.current,
+          zoom,
+          0,
+          markerStyle.color,
+          MARKER_TYPE.END_MARKER,
+        );
 
         drawPath(ctx, paths, markerStyle.color);
       });
