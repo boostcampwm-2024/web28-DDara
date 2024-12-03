@@ -20,6 +20,7 @@ interface IOtherLocationsInHostView {
   token: string;
   color: string;
 }
+
 export const HostView = () => {
   const { lat, lng, alpha, error } = getUserLocation();
   const location = useLocation();
