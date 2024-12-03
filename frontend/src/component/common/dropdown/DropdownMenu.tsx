@@ -71,7 +71,7 @@ export const DropdownMenu = (props: IDropdownMenuProps) => {
           'absolute',
           'right-0',
           'top-8',
-          'z-10',
+          'z-[6000]',
           'flex',
           'flex-col',
           'justify-center',
