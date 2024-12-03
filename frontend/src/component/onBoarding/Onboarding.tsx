@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { onboardingData } from '@/lib/data/onboardingData.ts';
 import { MdClear } from 'react-icons/md';
 
@@ -8,6 +8,19 @@ interface IOnboardingProps {
 
 export const Onboarding = ({ onComplete }: IOnboardingProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const setVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+    setVh();
+
+    window.addEventListener('resize', setVh);
+    return () => {
+      window.removeEventListener('resize', setVh);
+    };
+  }, []);
 
   const handleNext = () => {
     if (currentSlide < onboardingData.length - 1) {
@@ -24,7 +37,10 @@ export const Onboarding = ({ onComplete }: IOnboardingProps) => {
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-gray-100">
+    <div
+      className="relative flex w-full flex-col items-center justify-center overflow-hidden bg-gray-100"
+      style={{ height: window.innerHeight }}
+    >
       <div className="absolute right-3 top-3 z-[6000] flex items-center gap-2">
         <div className="text-sm text-gray-200">튜토리얼 끝내기</div>
         <button
