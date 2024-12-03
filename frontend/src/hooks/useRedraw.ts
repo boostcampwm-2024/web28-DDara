@@ -198,6 +198,7 @@ export const useRedrawCanvas = ({
     ctx.beginPath();
     ctx.arc(point.x, point.y + zoom + 1, radius, 0, 2 * Math.PI);
     ctx.fillStyle = gradient;
+    ctx.strokeStyle = 'transparent';
     ctx.fill();
 
     ctx.save();
