@@ -360,7 +360,7 @@ export const MapCanvasForDraw = ({
         <ToolDescription />
       </div>
       <div
-        className="absolute left-2 top-1/2 z-10 flex gap-2"
+        className="absolute left-2 top-1/2 flex gap-2"
         style={{
           transform: 'translateY(-50%)',
         }}
