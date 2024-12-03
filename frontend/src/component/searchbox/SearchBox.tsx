@@ -4,6 +4,8 @@ import { IoMdClose } from 'react-icons/io';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { IPoint } from '@/lib/types/canvasInterface';
 import { getAddressFromCoordinates } from '@/utils/map/getAddress';
+import { getSearchData } from '@/api/search.api';
+import { itemEntity } from '@/api/dto/search.dto';
 import { ButtonState } from '../common/enums';
 
 interface ISearchResultItem {
@@ -46,47 +48,38 @@ export const SearchBox = (props: ISearchBoxProps) => {
   };
 
   const handleSearch = async () => {
-    if (!inputValue.trim()) return;
+    const trimmedInput = inputValue.trim();
+
+    if (!trimmedInput) return;
+
     setSearchResults([]);
     setLoading(true);
     setError(null);
 
     try {
-      // const apiUrl = `https://cors-anywhere.herokuapp.com/https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
-      //   inputValue,
-      // )}&display=5&start=1&sort=random`;
-
-      const apiUrl = `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
-        inputValue,
-      )}&display=10&start=1&sort=random`;
-
-      const response = await fetch(apiUrl, {
-        headers: {
-          'X-Naver-Client-Id': 'RwiDUxdYdlPHF1pcM0id',
-          'X-Naver-Client-Secret': 'zmxxnHsoM0',
-        },
+      await getSearchData(inputValue).then(res => {
+        const formattedResults =
+          res.data?.items?.map((item: itemEntity) => ({
+            title: item.title ? item.title.replace(/<\/?[^>]+(>|$)/g, '') : '', // HTML 태그 제거
+            address: item.address || '',
+            roadAddress: item.roadAddress || '',
+            link: item.link || '#',
+            lat: item.mapy ? parseFloat(item.mapy) / 1e7 : 0,
+            lng: item.mapx ? parseFloat(item.mapx) / 1e7 : 0,
+          })) || [];
+        if (res !== undefined) {
+          setSearchResults(formattedResults);
+        }
       });
-
-      if (!response.ok) {
-        throw new Error(`API 요청 실패: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const formattedResults = data.items.map((item: any) => ({
-        title: item.title.replace(/<\/?[^>]+(>|$)/g, ''), // HTML 태그 제거
-        address: item.address || item.roadAddress || '주소 정보 없음',
-        link: item.link || '#',
-        lat: parseFloat(item.mapy) / 1e7,
-        lng: parseFloat(item.mapx) / 1e7,
-      }));
-      setSearchResults(formattedResults); // 검색 결과 상태 업데이트
     } catch (err) {
-      setError(err instanceof Error ? err.message : '알 수 없는 오류');
+      const errorMessage =
+        err instanceof Error ? err.message : '검색 중 알 수 없는 오류가 발생했습니다.';
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
-
   /* TODO: 자동검색 로직 수정 필요 */
 
   useEffect(() => {
@@ -113,6 +106,9 @@ export const SearchBox = (props: ISearchBoxProps) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value); // 상태 업데이트
   };
+  useEffect(() => {
+    setInputValue('');
+  }, [toolType]);
 
   useEffect(() => {
     // 마커가 이미 존재하는 경우 더 이상 검색하지 않도록 방지

@@ -1,5 +1,11 @@
 import { useRef, useEffect, RefObject } from 'react';
-import { LINE_WIDTH, STROKE_STYLE } from '@/lib/constants/canvasConstants.ts';
+import {
+  END_MARKER_COLOR,
+  LINE_WIDTH,
+  PATH_COLOR,
+  START_MARKER_COLOR,
+  STROKE_STYLE,
+} from '@/lib/constants/canvasConstants.ts';
 
 import startmarker from '@/assets/startmarker.svg';
 import endmarker from '@/assets/endmarker.svg';
@@ -88,19 +94,58 @@ export const useRedrawCanvas = ({
     footprintRef.current.src = footprint;
   }, []);
 
+  // 캔버스에서 이미지 그리고, 캔버스 전체 색상 변경 후에 반환하는 함수
+  const colorizeImage = (
+    image: HTMLImageElement,
+    color: string,
+    width: number,
+    height: number,
+  ): HTMLCanvasElement => {
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = width;
+    tempCanvas.height = height;
+
+    const tempCtx = tempCanvas.getContext('2d');
+    if (!tempCtx) return tempCanvas;
+
+    // 원본 이미지 그리기
+    tempCtx.drawImage(image, 0, 0, width, height);
+
+    // 색상 적용
+    tempCtx.globalCompositeOperation = 'source-in';
+    tempCtx.fillStyle = color;
+    tempCtx.fillRect(0, 0, width, height);
+
+    return tempCanvas;
+  };
+
+  const checkMarker = (path: string) => {
+    if (path.includes('startmarker') || path.includes('endmarker') || path.includes('mylocation')) {
+      return true;
+    }
+    return false;
+  };
+
   const drawMarker = (
     ctx: CanvasRenderingContext2D,
     point: { x: number; y: number } | null,
     image: HTMLImageElement | null,
     zoom: number,
     rotate: number,
+    color: string,
   ) => {
     if (point && image) {
-      const markerSize = zoom * 5;
+      const markerSize = zoom < 18 ? Math.min(zoom * 5, 50) : (zoom - 15) * (zoom - 16) * 10;
+      ctx.fillStyle = color || '#000';
+      ctx.strokeStyle = color || '#000';
       ctx.save();
       ctx.translate(point.x, point.y);
       ctx.rotate(rotate);
-      ctx.drawImage(image, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
+      let filteredImage;
+      if (checkMarker(image.src))
+        filteredImage = colorizeImage(image, color, markerSize, markerSize);
+      else filteredImage = image;
+      ctx.drawImage(filteredImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
       ctx.restore();
     }
   };
@@ -196,20 +241,13 @@ export const useRedrawCanvas = ({
   //     }
   //   }
   // };
-  const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[]) => {
+  const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[], color: string) => {
     if (points.length === 0 || !footprintRef.current || !map) return;
 
     const footprintImage = footprintRef.current;
     const markerSize = Math.min(map.getZoom() * 2, 20);
-    const offscreenCanvas = document.createElement('canvas');
-    const offscreenCtx = offscreenCanvas.getContext('2d');
 
-    if (!offscreenCtx) return;
-
-    offscreenCanvas.width = markerSize;
-    offscreenCanvas.height = markerSize;
-
-    offscreenCtx.drawImage(footprintImage, 0, 0, markerSize, markerSize);
+    const offscreenCanvas = colorizeImage(footprintImage, color, markerSize, markerSize);
 
     for (let i = 0; i < points.length - 1; i++) {
       const start = latLngToCanvasPoint(points[i]);
@@ -237,6 +275,7 @@ export const useRedrawCanvas = ({
         ctx.drawImage(offscreenCanvas, -markerSize / 2, -markerSize / 2);
         ctx.restore();
       }
+      ctx.stroke();
     }
   };
 
@@ -253,27 +292,42 @@ export const useRedrawCanvas = ({
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
+    // 호스트가 게스트 경로 그릴때 쓰이는 디자인
     const zoom = map.getZoom();
     if (startMarker) {
       const startPoint = latLngToCanvasPoint(startMarker);
-      drawMarker(ctx, startPoint, startImageRef.current, zoom, 0);
+      drawMarker(ctx, startPoint, startImageRef.current, zoom, 0, START_MARKER_COLOR);
     }
 
     if (endMarker) {
       const endPoint = latLngToCanvasPoint(endMarker);
-      drawMarker(ctx, endPoint, endImageRef.current, zoom, 0);
+      drawMarker(ctx, endPoint, endImageRef.current, zoom, 0, END_MARKER_COLOR);
     }
 
     if (pathPoints) {
-      drawPath(ctx, pathPoints);
+      drawPath(ctx, pathPoints, PATH_COLOR);
     }
 
     if (lat && lng) {
       const currentLocation = latLngToCanvasPoint({ lat, lng });
       if (alpha) {
-        drawMarker(ctx, currentLocation, character1Ref.current, zoom, (alpha * Math.PI) / 180);
+        drawMarker(
+          ctx,
+          currentLocation,
+          character1Ref.current,
+          zoom,
+          (alpha * Math.PI) / 180,
+          guests![0]?.markerStyle.color,
+        );
       } else {
-        drawMarker(ctx, currentLocation, character1Ref.current, zoom, 0);
+        drawMarker(
+          ctx,
+          currentLocation,
+          character1Ref.current,
+          zoom,
+          0,
+          guests![0]?.markerStyle.color,
+        );
       }
     }
 
@@ -291,19 +345,20 @@ export const useRedrawCanvas = ({
           character2Ref.current,
           zoom,
           (location.alpha * Math.PI) / 180,
+          color,
         );
       });
     }
 
     if (guests) {
-      guests.forEach(({ startPoint, endPoint, paths }) => {
+      guests.forEach(({ startPoint, endPoint, paths, markerStyle }) => {
         const startLocation = latLngToCanvasPoint(startPoint);
-        drawMarker(ctx, startLocation, startImageRef.current, zoom, 0);
+        drawMarker(ctx, startLocation, startImageRef.current, zoom, 0, markerStyle.color);
 
         const endLocation = latLngToCanvasPoint(endPoint);
-        drawMarker(ctx, endLocation, endImageRef.current, zoom, 0);
+        drawMarker(ctx, endLocation, endImageRef.current, zoom, 0, markerStyle.color);
 
-        drawPath(ctx, paths);
+        drawPath(ctx, paths, markerStyle.color);
       });
     }
   };
