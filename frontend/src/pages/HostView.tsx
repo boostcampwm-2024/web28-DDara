@@ -204,7 +204,7 @@ export const HostView = () => {
     } else {
       setFilteredOtherLocations(otherLocations.filter(el => el.guestId === clickedId));
     }
-  }, [clickedId]);
+  }, [clickedId, ws, otherLocations]);
 
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
@@ -221,7 +221,7 @@ export const HostView = () => {
       {lat && lng ? (
         // eslint-disable-next-line no-nested-ternary
         mapProps ? (
-          otherLocations ? (
+          otherLocations && filteredOtherLocations ? (
             <MapCanvasForView
               lat={lat}
               lng={lng}
