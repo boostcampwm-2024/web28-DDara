@@ -118,6 +118,20 @@ export const HostView = () => {
       .then(res => {
         if (!res.data) throw new Error('🚀 Fetch Error: responsed undefined');
         const transfromedData = transformTypeFromResToInfo(res.data);
+
+        const orderedGuest: IGuest[] = [];
+
+        markerDefaultColor.forEach(color => {
+          const guest = transfromedData.guests.find(
+            guestData => guestData.markerStyle.color === color,
+          );
+          if (guest) {
+            orderedGuest.push(guest);
+          }
+        });
+
+        transfromedData.guests = orderedGuest;
+
         setChannelInfo(transfromedData);
       })
       .catch((err: any) => {
@@ -147,14 +161,9 @@ export const HostView = () => {
 
       if (clickedId === '') {
         setMapProps([]);
-        const tmpMapProps: IGuestDataInMapProps[] = [];
-        // TODO : 차후 로직 개선하기
-        channelInfo.guests?.map(guest => tmpMapProps.push(guest as IGuestDataInMapProps));
-        const orderedMapProps: IGuestDataInMapProps[] = [];
-        markerDefaultColor.forEach(color => {
-          orderedMapProps.push(...tmpMapProps.filter(guest => guest.markerStyle.color === color));
-        });
-        setMapProps([...orderedMapProps]);
+        channelInfo.guests?.map(guest =>
+          setMapProps(prev => [...prev, guest as IGuestDataInMapProps]),
+        );
       } else {
         setMapProps(channelInfo.guests?.filter(guest => guest.id === clickedId));
       }
