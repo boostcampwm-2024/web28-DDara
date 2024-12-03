@@ -1,4 +1,3 @@
-// Main.tsx
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { MdLogout } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
@@ -149,15 +148,12 @@ export const Main = () => {
               <LoadingSpinner />
             )
           ) : (
-            <LoadingSpinner />
-          )
-        ) : (
-          <section className="flex h-full flex-col items-center justify-center gap-2 text-xl text-gray-700">
-            <LoadingSpinner />
-            {error ? `Error: ${error}` : null}
-          </section>
-        )}
-      </main>
+            <section className="flex h-full flex-col items-center justify-center gap-2 text-xl text-gray-700">
+              <LoadingSpinner />
+              {error ? `Error: ${error}` : 'Loading map data...'}
+            </section>
+          )}
+        </main>
 
         {isUserLoggedIn ? (
           <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#FFFFFF">
