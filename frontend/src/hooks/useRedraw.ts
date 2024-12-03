@@ -331,6 +331,34 @@ export const useRedrawCanvas = ({
       drawPath(ctx, pathPoints, PATH_COLOR);
     }
 
+    if (guests) {
+      guests.forEach(({ startPoint, endPoint, paths, markerStyle }) => {
+        const startLocation = latLngToCanvasPoint(startPoint);
+        drawMarker(
+          ctx,
+          startLocation,
+          startImageRef.current,
+          zoom,
+          0,
+          markerStyle.color,
+          MARKER_TYPE.START_MARKER,
+        );
+
+        const endLocation = latLngToCanvasPoint(endPoint);
+        drawMarker(
+          ctx,
+          endLocation,
+          endImageRef.current,
+          zoom,
+          0,
+          markerStyle.color,
+          MARKER_TYPE.END_MARKER,
+        );
+
+        drawPath(ctx, paths, markerStyle.color);
+      });
+    }
+
     if (lat && lng) {
       const currentLocation = latLngToCanvasPoint({ lat, lng });
       if (alpha) {
@@ -373,34 +401,6 @@ export const useRedrawCanvas = ({
           color,
           MARKER_TYPE.CHARACTER,
         );
-      });
-    }
-
-    if (guests) {
-      guests.forEach(({ startPoint, endPoint, paths, markerStyle }) => {
-        const startLocation = latLngToCanvasPoint(startPoint);
-        drawMarker(
-          ctx,
-          startLocation,
-          startImageRef.current,
-          zoom,
-          0,
-          markerStyle.color,
-          MARKER_TYPE.START_MARKER,
-        );
-
-        const endLocation = latLngToCanvasPoint(endPoint);
-        drawMarker(
-          ctx,
-          endLocation,
-          endImageRef.current,
-          zoom,
-          0,
-          markerStyle.color,
-          MARKER_TYPE.END_MARKER,
-        );
-
-        drawPath(ctx, paths, markerStyle.color);
       });
     }
   };
