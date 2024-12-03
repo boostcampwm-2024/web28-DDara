@@ -201,53 +201,18 @@ export const useRedrawCanvas = ({
     gradient.addColorStop(0, hexToRgba(color || '#3498db', alphaStart));
     gradient.addColorStop(1, hexToRgba(color || '#3498db', alphaEnd));
 
+    ctx.save();
+
     ctx.beginPath();
     ctx.arc(point.x, point.y + zoom + 1, radius, 0, 2 * Math.PI);
     ctx.fillStyle = gradient;
     ctx.strokeStyle = 'transparent';
+    ctx.lineWidth = 0;
     ctx.fill();
-
-    ctx.save();
 
     ctx.restore();
   };
 
-  // const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[]) => {
-  //   if (points.length === 0 || !footprintRef.current) return;
-
-  //   const footprintImage = footprintRef.current;
-
-  //   for (let i = 0; i < points.length - 1; i++) {
-  //     const start = latLngToCanvasPoint(points[i]);
-  //     const end = latLngToCanvasPoint(points[i + 1]);
-
-  //     /* eslint-disable no-continue */
-  //     if (!start || !end) {
-  //       continue;
-  //     }
-
-  //     const angle = Math.atan2(end.y - start.y, end.x - start.x);
-
-  //     const distance = 30;
-  //     const totalDistance = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2);
-  //     const steps = Math.floor(totalDistance / distance);
-
-  //     for (let j = 0; j < steps; j++) {
-  //       const progress = j / steps;
-  //       const x = start.x + progress * (end.x - start.x);
-  //       const y = start.y + progress * (end.y - start.y);
-
-  //       if (footprintImage && map) {
-  //         ctx.save();
-  //         ctx.translate(x, y);
-  //         ctx.rotate(angle + Math.PI / 2);
-  //         const markerSize = Math.min(map.getZoom() * 2, 20);
-  //         ctx.drawImage(footprintImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
-  //         ctx.restore();
-  //       }
-  //     }
-  //   }
-  // };
   const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[], color: string) => {
     if (points.length === 0 || !footprintRef.current || !map) return;
 

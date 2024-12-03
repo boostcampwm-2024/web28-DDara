@@ -78,7 +78,6 @@ export const getUserLocation = (): IGetUserLocation => {
     }
 
     const handleOrientation = (event: DeviceOrientationEvent) => {
-      console.log(event.alpha);
       if (event.alpha !== null) {
         setLocation(prev => ({ ...prev, alpha: event.alpha }));
       }
