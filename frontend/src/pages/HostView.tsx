@@ -2,7 +2,7 @@ import { HeaderDropdownContext } from '@/component/header/HeaderDropdownProvider
 import { useContext, useEffect, useRef, useState } from 'react';
 import { IGuest, IChannelInfo, IGuestData } from '@/types/channel.types.ts';
 import { getChannelInfo } from '@/api/channel.api.ts';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView/MapCanvasForView.tsx';
 import { IGuestDataInMapProps, IPoint, IPointWithAlpha } from '@/lib/types/canvasInterface.ts';
 import { getChannelResEntity, guestEntity } from '@/api/dto/channel.dto.ts';
@@ -13,6 +13,7 @@ import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts'
 import { AppConfig } from '@/lib/constants/commonConstants.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { useSocket } from '@/hooks/useSocket.ts';
+import { AlertUI } from '@/component/common/alert/Alert.tsx';
 import { zoomMapView } from '@/utils/map/mapUtils';
 
 interface IOtherLocationsInHostView {
@@ -32,9 +33,12 @@ export const HostView = () => {
   const [mapProps, setMapProps] = useState<IGuestDataInMapProps[]>([]);
   const [clickedId, setClickedId] = useState<string>('');
   const [otherLocations, setOtherLocations] = useState<IOtherLocationsInHostView[]>([]);
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false); // 오류 알림 상태 추가
 
   const headerDropdownContext = useContext(HeaderDropdownContext);
   const markerDefaultColor = ['#B4D033', '#22A751', '#2722A7', '#8F22A7', '#A73D22'];
+
+  const navigate = useNavigate(); // 네비게이션 훅 추가
 
   if (!loadLocalData(AppConfig.KEYS.BROWSER_TOKEN)) {
     const token = uuidv4();
@@ -138,6 +142,7 @@ export const HostView = () => {
       })
       .catch((err: any) => {
         console.error(err);
+        setShowErrorAlert(true); // 오류 발생 시 알림 표시
       });
   };
 
@@ -179,8 +184,26 @@ export const HostView = () => {
     zoomMapView(mapRef.current, allLocations);
   }, [guestsData]);
 
+  useEffect(() => {
+    if (showErrorAlert) {
+      const timer = setTimeout(() => {
+        navigate('/', { replace: true }); // 메인 페이지로 리다이렉트
+      }, 2000); // 2초 후 리다이렉트
+
+      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
+    }
+  }, [showErrorAlert, navigate]);
+
   return (
     <article className="absolute h-full w-screen flex-grow overflow-hidden">
+      {showErrorAlert && (
+        <AlertUI
+          message="잘못된 요청입니다. 메인 페이지로 이동합니다."
+          duration={3000}
+          autoClose
+          onClose={() => setShowErrorAlert(false)}
+        />
+      )}
       <HostMarker guestsData={mapProps} />
       {/* eslint-disable-next-line no-nested-ternary */}
       {lat && lng ? (
