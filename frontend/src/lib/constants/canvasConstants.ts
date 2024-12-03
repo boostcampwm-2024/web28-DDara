@@ -1,5 +1,5 @@
 export const LINE_WIDTH = 30;
-export const STROKE_STYLE = 'black';
+export const STROKE_STYLE = 'transparent';
 export const START_MARKER_COLOR = '#333C4A';
 export const END_MARKER_COLOR = '#333C4A';
 export const PATH_COLOR = '#333C4A';

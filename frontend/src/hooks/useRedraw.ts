@@ -201,13 +201,14 @@ export const useRedrawCanvas = ({
     gradient.addColorStop(0, hexToRgba(color || '#3498db', alphaStart));
     gradient.addColorStop(1, hexToRgba(color || '#3498db', alphaEnd));
 
+    ctx.save();
+
     ctx.beginPath();
     ctx.arc(point.x, point.y + zoom + 1, radius, 0, 2 * Math.PI);
     ctx.fillStyle = gradient;
     ctx.strokeStyle = 'transparent';
+    ctx.lineWidth = 0;
     ctx.fill();
-
-    ctx.save();
 
     ctx.restore();
   };
