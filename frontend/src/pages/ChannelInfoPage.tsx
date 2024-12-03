@@ -112,7 +112,6 @@ export const ChannelInfoPage = () => {
       </section>
       {showAlert && (
         <ToastAlert
-          duration={3000}
           message={alertMessage}
           onClose={() => {
             setShowAlert(false);
