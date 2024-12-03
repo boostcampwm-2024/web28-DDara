@@ -135,7 +135,13 @@ export const useRedrawCanvas = ({
     markerType: MARKER_TYPE,
   ) => {
     if (point && image) {
-      const markerSize = zoom < 18 ? Math.min(zoom * 5, 50) : (zoom - 15) * (zoom - 16) * 10;
+      let markerSize;
+      if (markerType === MARKER_TYPE.CHARACTER) {
+        markerSize = zoom < 18 ? Math.min(zoom * 6, 60) : (zoom - 15) * (zoom - 16) * 15;
+      } else {
+        markerSize = zoom < 18 ? Math.min(zoom * 4, 40) : (zoom - 15) * (zoom - 14) * 5;
+      }
+
       ctx.save();
       ctx.translate(point.x, point.y - zoom);
       ctx.rotate(rotate);
@@ -325,6 +331,34 @@ export const useRedrawCanvas = ({
       drawPath(ctx, pathPoints, PATH_COLOR);
     }
 
+    if (guests) {
+      guests.forEach(({ startPoint, endPoint, paths, markerStyle }) => {
+        const startLocation = latLngToCanvasPoint(startPoint);
+        drawMarker(
+          ctx,
+          startLocation,
+          startImageRef.current,
+          zoom,
+          0,
+          markerStyle.color,
+          MARKER_TYPE.START_MARKER,
+        );
+
+        const endLocation = latLngToCanvasPoint(endPoint);
+        drawMarker(
+          ctx,
+          endLocation,
+          endImageRef.current,
+          zoom,
+          0,
+          markerStyle.color,
+          MARKER_TYPE.END_MARKER,
+        );
+
+        drawPath(ctx, paths, markerStyle.color);
+      });
+    }
+
     if (lat && lng) {
       const currentLocation = latLngToCanvasPoint({ lat, lng });
       if (alpha) {
@@ -367,34 +401,6 @@ export const useRedrawCanvas = ({
           color,
           MARKER_TYPE.CHARACTER,
         );
-      });
-    }
-
-    if (guests) {
-      guests.forEach(({ startPoint, endPoint, paths, markerStyle }) => {
-        const startLocation = latLngToCanvasPoint(startPoint);
-        drawMarker(
-          ctx,
-          startLocation,
-          startImageRef.current,
-          zoom,
-          0,
-          markerStyle.color,
-          MARKER_TYPE.START_MARKER,
-        );
-
-        const endLocation = latLngToCanvasPoint(endPoint);
-        drawMarker(
-          ctx,
-          endLocation,
-          endImageRef.current,
-          zoom,
-          0,
-          markerStyle.color,
-          MARKER_TYPE.END_MARKER,
-        );
-
-        drawPath(ctx, paths, markerStyle.color);
       });
     }
   };
