@@ -16,7 +16,7 @@ export const getSearchData = (query: string): Promise<ResponseDto<searchResultEn
         if (res.status !== 200) {
           fnReject(`msg.${res.status}`);
         } else {
-          fnResolve(new ResponseDto<searchResultEntity>(res));
+          fnResolve(new ResponseDto<searchResultEntity>(res.data));
         }
       })
       .catch(err => {
