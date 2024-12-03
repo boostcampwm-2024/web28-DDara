@@ -99,7 +99,7 @@ export const GuestView = () => {
     if (showErrorAlert) {
       const timer = setTimeout(() => {
         navigate('/', { replace: true }); // 메인 페이지로 리다이렉트
-      }, 3000); // 3초 후 리다이렉트
+      }, 2000); // 3초 후 리다이렉트
 
       return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
     }
