@@ -1,5 +1,5 @@
 import { HeaderDropdownContext } from '@/component/header/HeaderDropdownProvider.tsx';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { IGuest, IChannelInfo, IGuestData } from '@/types/channel.types.ts';
 import { getChannelInfo } from '@/api/channel.api.ts';
 import { useLocation } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts'
 import { AppConfig } from '@/lib/constants/commonConstants.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { useSocket } from '@/hooks/useSocket.ts';
+import { zoomMapView } from '@/utils/map/mapUtils';
 
 interface IOtherLocationsInHostView {
   guestId: string;
@@ -20,7 +21,9 @@ interface IOtherLocationsInHostView {
   token: string;
   color: string;
 }
+
 export const HostView = () => {
+  const mapRef = useRef<naver.maps.Map>(null);
   const { lat, lng, alpha, error } = getUserLocation();
   const location = useLocation();
 
@@ -158,6 +161,8 @@ export const HostView = () => {
   useEffect(() => {
     headerDropdownContext.setItems(guestsData);
     headerDropdownContext.setOnClickHandler(handleClickDropdown);
+    const allLocations = mapProps.flatMap(guest => [guest.startPoint, guest.endPoint]);
+    zoomMapView(mapRef.current, allLocations);
   }, [guestsData]);
 
   return (
@@ -176,6 +181,7 @@ export const HostView = () => {
               height="100%"
               guests={mapProps}
               otherLocations={otherLocations}
+              ref={mapRef}
             />
           ) : (
             <LoadingSpinner />

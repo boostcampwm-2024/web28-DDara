@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 
 interface IHeaderProps {
@@ -6,6 +6,7 @@ interface IHeaderProps {
   rightItems?: ReactNode[];
   title?: ReactNode;
   subtitle?: string;
+  subtitleIcons?: React.ComponentType<{}>;
   className?: string;
   userName?: string;
 }
@@ -36,7 +37,10 @@ export const HeaderLayout = (props: IHeaderProps) => {
             ))}
         </div>
       </div>
-      <div className="text-grayscale-400 ml-8 text-xs">{props.subtitle}</div>
+      <div className="text-grayscale-400 ml-4 flex flex-row gap-1 text-xs">
+        {props.subtitleIcons && <props.subtitleIcons />}
+        {props.subtitle}
+      </div>
     </header>
   );
 };
