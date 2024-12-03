@@ -58,7 +58,6 @@ export const SearchBox = (props: ISearchBoxProps) => {
 
     try {
       await getSearchData(inputValue).then(res => {
-        console.log(res);
         const formattedResults =
           res.data?.items?.map((item: itemEntity) => ({
             title: item.title ? item.title.replace(/<\/?[^>]+(>|$)/g, '') : '', // HTML 태그 제거
