@@ -12,6 +12,7 @@ export const LayoutHeader = () => {
       userName={`${params.user || ''}`}
       title={`${headerOption.title}`}
       subtitle={`${headerOption.subtitle}`}
+      subtitleIcons={headerOption.subtitleIcons}
       leftItems={headerOption.leftItems}
       rightItems={headerOption.rightItems}
     />

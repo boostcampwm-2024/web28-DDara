@@ -28,23 +28,32 @@ interface IUserOptionContext {
   users: IUser[];
   setUsers: React.Dispatch<React.SetStateAction<IUser[]>>; // setUsers 함수 타입 수정
   resetUsers: () => void;
+  channelName: string;
+  setChannelName: React.Dispatch<React.SetStateAction<string>>;
 }
 const defaultUserContext: IUserOptionContext = {
   users: [],
   setUsers: () => {},
   resetUsers: () => {},
+  channelName: '',
+  setChannelName: () => {},
 };
 
 export const UserContext = createContext<IUserOptionContext>(defaultUserContext); // 기본값을 null로 설정
 
 export const UserProvider = (props: IUserContextProps) => {
+  const [channelName, setChannelName] = useState<string>('');
   const [users, setUsers] = useState<IUser[]>([]);
 
   const resetUsers = () => {
     setUsers([]);
+    setChannelName('');
   };
 
-  const contextValue = useMemo(() => ({ users, setUsers, resetUsers }), [users, setUsers]);
+  const contextValue = useMemo(
+    () => ({ users, setUsers, resetUsers, channelName, setChannelName }),
+    [users, setUsers, channelName, setChannelName],
+  );
 
   return <UserContext.Provider value={contextValue}>{props.children}</UserContext.Provider>;
 };

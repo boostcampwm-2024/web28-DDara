@@ -1,6 +1,7 @@
 import { HeaderBackButton } from '@/component/header/HeaderBackButton';
 import { HeaderDropdown } from '@/component/header/HeaderDropdown';
 import React, { ReactNode } from 'react';
+import { MdInfo } from 'react-icons/md';
 
 export const HEADER_TITLE: Record<string, string> = {
   '/add-channel/:user/draw': '에 따른 경로 설정',
@@ -8,6 +9,10 @@ export const HEADER_TITLE: Record<string, string> = {
 
 export const HEADER_SUBTITLE: Record<string, string> = {
   '/add-channel/:user/draw': '사용자 별로 출발지/도착지(마커), 경로(그림)을 설정할 수 있습니다',
+};
+
+export const HEADER_SUBTITLEICONS: Record<string, React.ComponentType> = {
+  '/add-channel/:user/draw': MdInfo,
 };
 
 export const HEADER_LEFTITEMS: Record<string, ReactNode[]> = {

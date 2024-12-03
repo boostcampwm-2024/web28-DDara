@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { Page } from '@/component/routebutton/enum';
 import { ChannelContext } from '@/context/ChannelContext';
 import { IUser, UserContext } from '@/context/UserContext';
 import { guestEntity } from '@/api/dto/channel.dto';
+import { ToastAlert } from '@/component/common/alert/ToastAlert';
 import { InputBox } from '../component/common/InputBox';
 
 const Divider = () => <hr className="my-6 w-full border-gray-300" />;
@@ -15,8 +16,14 @@ export const ChannelInfoPage = () => {
   const { channelInfo } = useContext(ChannelContext);
   const { setFooterTransparency, resetFooterContext } = useContext(FooterContext);
   const { resetUsers } = useContext(UserContext);
+  const [alertMessage, setAlertMessage] = useState<string>('');
+  const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
 
+  const handleAlert = (message: string) => {
+    setAlertMessage(message);
+    setShowAlert(true);
+  };
   useEffect(() => {
     setFooterTransparency(true);
   }, []);
@@ -85,7 +92,7 @@ export const ChannelInfoPage = () => {
       <section className="w-full space-y-4">
         {users.map(user => (
           <div key={user.id}>
-            <RouteResultButton user={user} page={Page.UPDATE} />
+            <RouteResultButton user={user} page={Page.UPDATE} showAlert={handleAlert} />
           </div>
         ))}
       </section>
@@ -103,6 +110,14 @@ export const ChannelInfoPage = () => {
           수정하기
         </button>
       </section>
+      {showAlert && (
+        <ToastAlert
+          message={alertMessage}
+          onClose={() => {
+            setShowAlert(false);
+          }}
+        />
+      )}
     </main>
   );
 };
