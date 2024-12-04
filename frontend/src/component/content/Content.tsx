@@ -41,11 +41,13 @@ export const Content = (props: IContentProps) => {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
+    timeZone: 'UTC',
   });
 
   const formattedTime = new Date(props.time).toLocaleTimeString('ko-KR', {
     hour: '2-digit',
     minute: '2-digit',
+    timeZone: 'UTC',
   });
   const navigate = useNavigate();
   const { channelInfo, setChannelInfo } = useContext(ChannelContext);

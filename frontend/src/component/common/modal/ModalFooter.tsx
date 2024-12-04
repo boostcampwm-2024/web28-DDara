@@ -13,7 +13,7 @@ export const ModalFooter = (props: IModalFooterProps) => (
   <div className="flex w-full flex-row-reverse items-center justify-start gap-5 rounded-lg bg-white py-4 shadow-sm">
     <button
       type="button"
-      className="bg-blueGray-800 hover:bg-blueGray-600 h-[40px] rounded-lg px-4 py-2 text-sm font-semibold text-white"
+      className="bg-blueGray-800 h-[40px] rounded-lg px-4 py-2 text-sm font-semibold text-white"
       onClick={props.onClick}
     >
       {props.text}

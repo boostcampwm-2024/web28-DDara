@@ -80,8 +80,16 @@ export const Main = () => {
               ? prev.map(loc => (loc.token === data.token ? data : loc))
               : [...prev, data],
           );
+        } else if (data.type === 'channel') {
+          setChannels(prevChannels => {
+            if (prevChannels.some(channel => channel.id === data.channel.id)) {
+              return prevChannels;
+            }
+            return [...prevChannels, data.channel];
+          });
         }
       };
+
       return () => ws.close();
     }
     return undefined;

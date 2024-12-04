@@ -56,6 +56,12 @@ interface IUseRedrawCanvasProps {
   clusters?: ICluster[] | null;
 }
 
+enum MARKER_TYPE {
+  START_MARKER = 'START_MARKER',
+  END_MARKER = 'END_MARKER',
+  CHARACTER = 'CHARACTER',
+}
+
 export const useRedrawCanvas = ({
   canvasRef,
   map,
@@ -163,18 +169,25 @@ export const useRedrawCanvas = ({
     zoom: number,
     rotate: number,
     color: string,
+    markerType: MARKER_TYPE,
   ) => {
     if (point && image) {
-      const markerSize = zoom < 18 ? Math.min(zoom * 5, 50) : (zoom - 15) * (zoom - 16) * 10;
-      ctx.fillStyle = color || '#000';
-      ctx.strokeStyle = color || '#000';
+      let markerSize;
+      if (markerType === MARKER_TYPE.CHARACTER) {
+        markerSize = zoom < 18 ? Math.min(zoom * 6, 60) : (zoom - 15) * (zoom - 16) * 15;
+      } else {
+        markerSize = zoom < 18 ? Math.min(zoom * 4, 40) : (zoom - 15) * (zoom - 14) * 5;
+      }
+
       ctx.save();
-      ctx.translate(point.x, point.y);
+      ctx.translate(point.x, point.y - zoom);
       ctx.rotate(rotate);
       let filteredImage;
-      if (checkMarker(image.src))
+      if (markerType === MARKER_TYPE.CHARACTER) {
+        filteredImage = image;
+      } else {
         filteredImage = colorizeImage(image, color, markerSize, markerSize);
-      else filteredImage = image;
+      }
       ctx.drawImage(filteredImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
       ctx.restore();
     }
@@ -225,52 +238,18 @@ export const useRedrawCanvas = ({
     gradient.addColorStop(0, hexToRgba(color || '#3498db', alphaStart));
     gradient.addColorStop(1, hexToRgba(color || '#3498db', alphaEnd));
 
+    ctx.save();
+
     ctx.beginPath();
     ctx.arc(point.x, point.y + zoom + 1, radius, 0, 2 * Math.PI);
     ctx.fillStyle = gradient;
+    ctx.strokeStyle = 'transparent';
+    ctx.lineWidth = 0;
     ctx.fill();
-
-    ctx.save();
 
     ctx.restore();
   };
 
-  // const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[]) => {
-  //   if (points.length === 0 || !footprintRef.current) return;
-
-  //   const footprintImage = footprintRef.current;
-
-  //   for (let i = 0; i < points.length - 1; i++) {
-  //     const start = latLngToCanvasPoint(points[i]);
-  //     const end = latLngToCanvasPoint(points[i + 1]);
-
-  //     /* eslint-disable no-continue */
-  //     if (!start || !end) {
-  //       continue;
-  //     }
-
-  //     const angle = Math.atan2(end.y - start.y, end.x - start.x);
-
-  //     const distance = 30;
-  //     const totalDistance = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2);
-  //     const steps = Math.floor(totalDistance / distance);
-
-  //     for (let j = 0; j < steps; j++) {
-  //       const progress = j / steps;
-  //       const x = start.x + progress * (end.x - start.x);
-  //       const y = start.y + progress * (end.y - start.y);
-
-  //       if (footprintImage && map) {
-  //         ctx.save();
-  //         ctx.translate(x, y);
-  //         ctx.rotate(angle + Math.PI / 2);
-  //         const markerSize = Math.min(map.getZoom() * 2, 20);
-  //         ctx.drawImage(footprintImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
-  //         ctx.restore();
-  //       }
-  //     }
-  //   }
-  // };
   const drawPath = (ctx: CanvasRenderingContext2D, points: ILatLng[], color: string) => {
     if (points.length === 0 || !footprintRef.current || !map) return;
 
@@ -335,7 +314,15 @@ export const useRedrawCanvas = ({
       const startPoint = latLngToCanvasPoint(startMarker);
       const markerKey = `${startMarker.lat.toFixed(6)}_${startMarker.lng.toFixed(6)}`;
       if (!clusteredMarkerSet.has(markerKey)) {
-        drawMarker(ctx, startPoint, startImageRef.current, zoom, 0, START_MARKER_COLOR);
+        drawMarker(
+          ctx,
+          startPoint,
+          startImageRef.current,
+          zoom,
+          0,
+          START_MARKER_COLOR,
+          MARKER_TYPE.START_MARKER,
+        );
       }
     }
 
@@ -343,7 +330,15 @@ export const useRedrawCanvas = ({
       const endPoint = latLngToCanvasPoint(endMarker);
       const markerKey = `${endMarker.lat.toFixed(6)}_${endMarker.lng.toFixed(6)}`;
       if (!clusteredMarkerSet.has(markerKey)) {
-        drawMarker(ctx, endPoint, endImageRef.current, zoom, 0, END_MARKER_COLOR);
+        drawMarker(
+          ctx,
+          endPoint,
+          endImageRef.current,
+          zoom,
+          0,
+          END_MARKER_COLOR,
+          MARKER_TYPE.END_MARKER,
+        );
       }
     }
 
@@ -361,6 +356,7 @@ export const useRedrawCanvas = ({
           zoom,
           (alpha * Math.PI) / 180,
           guests![0]?.markerStyle.color,
+          MARKER_TYPE.CHARACTER,
         );
       } else {
         drawMarker(
@@ -370,6 +366,7 @@ export const useRedrawCanvas = ({
           zoom,
           0,
           guests![0]?.markerStyle.color,
+          MARKER_TYPE.CHARACTER,
         );
       }
     }
@@ -389,6 +386,7 @@ export const useRedrawCanvas = ({
           zoom,
           (location.alpha * Math.PI) / 180,
           color,
+          MARKER_TYPE.CHARACTER,
         );
       });
     }
@@ -399,12 +397,28 @@ export const useRedrawCanvas = ({
         const endLocationKey = `${endPoint.lat.toFixed(6)}_${endPoint.lng.toFixed(6)}`;
         if (!clusteredMarkerSet.has(startLocationKey)) {
           const startLocation = latLngToCanvasPoint(startPoint);
-          drawMarker(ctx, startLocation, startImageRef.current, zoom, 0, markerStyle.color);
+          drawMarker(
+            ctx,
+            startLocation,
+            startImageRef.current,
+            zoom,
+            0,
+            markerStyle.color,
+            MARKER_TYPE.START_MARKER,
+          );
         }
 
         if (!clusteredMarkerSet.has(endLocationKey)) {
           const endLocation = latLngToCanvasPoint(endPoint);
-          drawMarker(ctx, endLocation, endImageRef.current, zoom, 0, markerStyle.color);
+          drawMarker(
+            ctx,
+            endLocation,
+            endImageRef.current,
+            zoom,
+            0,
+            markerStyle.color,
+            MARKER_TYPE.END_MARKER,
+          );
         }
 
         // 경로는 두 포인트 중 하나라도 클러스터에 포함되지 않으면 그리기
