@@ -123,8 +123,15 @@ export const AddChannel = () => {
       .map((user, i) => ({
         ...user,
         index: i + 1,
-        name: `사용자${i + 1}`,
+        name: user.name || `사용자${i + 1}`,
       }));
+    setUsers(updatedUsers);
+  };
+
+  const setUserName = (index: number, newName: string) => {
+    const updatedUsers = users.map(user =>
+      user.index === index ? { ...user, name: newName } : user,
+    );
     setUsers(updatedUsers);
   };
 
@@ -208,9 +215,14 @@ export const AddChannel = () => {
         {users.map(user => (
           <div key={user.index}>
             {isUserDataComplete(user) ? (
-              <RouteResultButton user={user} deleteUser={deleteUser} page={Page.ADD} />
+              <RouteResultButton
+                user={user}
+                setUserName={setUserName}
+                deleteUser={deleteUser}
+                page={Page.ADD}
+              />
             ) : (
-              <RouteSettingButton user={user} deleteUser={deleteUser} />
+              <RouteSettingButton user={user} setUserName={setUserName} deleteUser={deleteUser} />
             )}
           </div>
         ))}
