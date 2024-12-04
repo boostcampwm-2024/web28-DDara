@@ -44,6 +44,7 @@ export const HostView = () => {
     const token = uuidv4();
     saveLocalData(AppConfig.KEYS.BROWSER_TOKEN, token);
   }
+
   const token = loadLocalData(AppConfig.KEYS.BROWSER_TOKEN);
   const url = `${AppConfig.SOCKET_SERVER}/?token=${token}&channelId=${location.pathname.split('/')[2]}&role=host`;
 
@@ -53,7 +54,6 @@ export const HostView = () => {
     if (ws) {
       ws.onmessage = event => {
         const data = JSON.parse(event.data);
-        console.log(data);
         if (data.type === 'init') {
           // 기존 클라이언트들의 위치 초기화
           const updatedLocations = data.clients.map((client: any, index: number) => {

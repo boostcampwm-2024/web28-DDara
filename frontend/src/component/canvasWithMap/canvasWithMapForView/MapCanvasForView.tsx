@@ -3,6 +3,7 @@ import { ICanvasPoint, IMapCanvasViewProps, IPoint } from '@/lib/types/canvasInt
 import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
 import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
+import { ICluster, useCluster } from '@/hooks/useCluster';
 
 export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasViewProps>(
   ({ lat, lng, alpha, otherLocations, guests, width, height }: IMapCanvasViewProps, ref) => {
@@ -10,6 +11,8 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [projection, setProjection] = useState<naver.maps.MapSystemProjection | null>(null);
     const [map, setMap] = useState<naver.maps.Map | null>(null);
+    const { createClusters } = useCluster();
+    const [clusters, setClusters] = useState<ICluster[] | null>(null);
 
     useImperativeHandle(ref, () => map as naver.maps.Map);
 
@@ -66,6 +69,7 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
       lat,
       lng,
       alpha,
+      clusters,
     });
 
     const {
@@ -95,9 +99,31 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
       updateCanvasSize();
     }, [map]);
 
+    // guests나 map이 변경될 때마다 클러스터를 다시 생성하고 상태를 업데이트
+    useEffect(() => {
+      let animationFrameId: number;
+
+      const updateClusters = () => {
+        if (map && guests && guests.length > 0) {
+          const createdClusters = guests
+            .map(guest =>
+              createClusters([guest.startPoint, guest.endPoint], guest.markerStyle, map),
+            )
+            .flat();
+
+          setClusters(createdClusters);
+        }
+        animationFrameId = requestAnimationFrame(updateClusters);
+      };
+
+      updateClusters();
+
+      return () => cancelAnimationFrame(animationFrameId);
+    }, [guests]);
+
     useEffect(() => {
       redrawCanvas();
-    }, [guests, otherLocations, lat, lng, alpha, mapRef, handleWheel]);
+    }, [guests, otherLocations, lat, lng, alpha, clusters, handleWheel]);
 
     return (
       <div

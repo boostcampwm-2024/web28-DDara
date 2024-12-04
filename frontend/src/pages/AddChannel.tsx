@@ -154,9 +154,14 @@ export const AddChannel = () => {
   const createChannelAPI = async () => {
     try {
       const userId = loadLocalData(AppConfig.KEYS.LOGIN_USER);
+
+      if (!userId) {
+        console.error('유효하지 않은 사용자 ID입니다.');
+        return;
+      }
       const channelData: createChannelReqEntity = {
         name: channelName,
-        host_id: userId ?? undefined, // 추후 검증 로직 추가 예정
+        host_id: userId, // 추후 검증 로직 추가 예정
         guests: users.map(user => ({
           name: user.name,
           start_location: {
