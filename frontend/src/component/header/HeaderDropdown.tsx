@@ -1,7 +1,7 @@
 import { Dropdown } from '@/component/common/dropdown/Dropdown.tsx';
 import { MdMenu, MdLocationOn } from 'react-icons/md';
 import { DropdownItem } from '@/component/common/dropdown/DropdownItem.tsx';
-import { HeaderDropdownContext } from '@/component/header/HeaderDropdownProvider.tsx';
+import { HeaderDropdownContext } from '@/context/HeaderDropdownContext.tsx';
 import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 

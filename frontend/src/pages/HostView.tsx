@@ -1,4 +1,4 @@
-import { HeaderDropdownContext } from '@/component/header/HeaderDropdownProvider.tsx';
+import { HeaderDropdownContext } from '@/context/HeaderDropdownContext.tsx';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { IGuest, IChannelInfo, IGuestData } from '@/types/channel.types.ts';
 import { getChannelInfo } from '@/api/channel.api.ts';

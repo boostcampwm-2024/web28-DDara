@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { LayoutHeader } from '@/layout/header/LayoutHeader.tsx';
-import { HeaderDropdownProvider } from '@/component/header/HeaderDropdownProvider.tsx';
+import { HeaderDropdownProvider } from '@/context/HeaderDropdownContext.tsx';
 import { LayoutFooterProvider } from '@/layout/footer/LayoutFooterProvider.tsx';
 import { ToggleProvider } from '@/context/DropdownContext.tsx';
 import { LayoutFooter } from './footer/LayoutFooter.tsx';
