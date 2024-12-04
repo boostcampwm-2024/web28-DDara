@@ -1,8 +1,8 @@
 import { Fragment, useContext, useEffect, useRef, useState, ReactNode } from 'react';
 import { MdLogout } from 'react-icons/md';
-import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
+import { FooterContext } from '@/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
-import { buttonActiveType } from '@/component/layout/enumTypes';
+import { buttonActiveType } from '@/layout/enumTypes';
 import { loadLocalData, saveLocalData, removeLocalData } from '@/utils/common/manageLocalData.ts';
 import { AuthModal } from '@/component/authmodal/AuthModal';
 import { deleteChannel, getUserChannels } from '@/api/channel.api.ts';

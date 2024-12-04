@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useReducer, useMemo, useCallback } from 'react';
-import { IFooterProps } from '@/component/layout/footer/Footer';
-import { buttonActiveType } from '../enumTypes';
+import { IFooterProps } from '@/layout/footer/Footer.tsx';
+import { buttonActiveType } from '../enumTypes.ts';
 
 interface ILayoutFooterProviderProps {
   children: ReactNode;

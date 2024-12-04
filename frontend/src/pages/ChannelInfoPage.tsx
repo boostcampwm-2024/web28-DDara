@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
-import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
+import { FooterContext } from '@/layout/footer/LayoutFooterProvider';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { RouteResultButton } from '@/component/routebutton/RouteResultButton';
 import { Page } from '@/component/routebutton/enum';

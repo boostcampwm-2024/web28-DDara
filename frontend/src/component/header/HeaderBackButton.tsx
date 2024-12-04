@@ -2,7 +2,7 @@ import { MdArrowBackIos } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/component/common/button/Button.tsx';
 import { useContext } from 'react';
-import { FooterContext } from '../layout/footer/LayoutFooterProvider';
+import { FooterContext } from '@/layout/footer/LayoutFooterProvider';
 
 export const HeaderBackButton = () => {
   const { resetFooterContext } = useContext(FooterContext);

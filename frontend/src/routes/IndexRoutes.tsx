@@ -4,7 +4,7 @@ import { AddChannel } from '@/pages/AddChannel';
 import { DrawRoute } from '@/pages/DrawRoute';
 import { HostView } from '@/pages/HostView';
 import { GuestView } from '@/pages/GuestView';
-import { Layout } from '@/component/layout/Layout';
+import { Layout } from '@/layout/Layout';
 import { UserProvider } from '@/context/UserContext';
 import { CurrentUserProvider } from '@/context/CurrentUserContext';
 import { ChannelInfoPage } from '@/pages/ChannelInfoPage'; // ChannelInfoPage 컴포넌트 임포트

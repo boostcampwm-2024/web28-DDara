@@ -1,6 +1,6 @@
-import { HeaderBackButton } from '@/component/header/HeaderBackButton';
-import { HeaderDropdown } from '@/component/header/HeaderDropdown';
-import { IItem } from '@/component/header/HeaderLayout';
+import { HeaderBackButton } from '@/component/header/HeaderBackButton.tsx';
+import { HeaderDropdown } from '@/component/header/HeaderDropdown.tsx';
+import { IItem } from '@/component/header/HeaderLayout.tsx';
 import React from 'react';
 import { MdInfo } from 'react-icons/md';
 

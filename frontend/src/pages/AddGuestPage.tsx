@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
-import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
+import { FooterContext } from '@/layout/footer/LayoutFooterProvider';
 import { RouteSettingButton } from '@/component/routebutton/RouteSettingButton';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { RouteResultButton } from '@/component/routebutton/RouteResultButton';
 import { IUser, UserContext } from '@/context/UserContext';
-import { buttonActiveType } from '@/component/layout/enumTypes';
+import { buttonActiveType } from '@/layout/enumTypes';
 import { addChannelReqEntity, guestEntity } from '@/api/dto/channel.dto';
 import { addGuestChannel } from '@/api/channel.api';
 import { Page } from '@/component/routebutton/enum';

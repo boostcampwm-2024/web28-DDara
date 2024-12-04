@@ -1,6 +1,6 @@
 import { useLocation, useParams } from 'react-router-dom';
-import { getHeaderInfo } from '@/utils/mapping/HeaderMapping';
-import { HeaderLayout } from '@/component/header/HeaderLayout';
+import { getHeaderInfo } from '@/utils/mapping/HeaderMapping.ts';
+import { HeaderLayout } from '@/component/header/HeaderLayout.tsx';
 
 export const LayoutHeader = () => {
   const params = useParams<Record<string, string | undefined>>();

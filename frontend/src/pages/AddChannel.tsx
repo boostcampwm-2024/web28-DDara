@@ -1,11 +1,11 @@
 import { useContext, useEffect } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
-import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
+import { FooterContext } from '@/layout/footer/LayoutFooterProvider';
 import { RouteSettingButton } from '@/component/routebutton/RouteSettingButton';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { RouteResultButton } from '@/component/routebutton/RouteResultButton';
 import { IUser, UserContext } from '@/context/UserContext';
-import { buttonActiveType } from '@/component/layout/enumTypes';
+import { buttonActiveType } from '@/layout/enumTypes';
 import { createChannelReqEntity } from '@/api/dto/channel.dto';
 import { createChannel } from '@/api/channel.api';
 import { Page } from '@/component/routebutton/enum';
@@ -188,8 +188,8 @@ export const AddChannel = () => {
           marker_style: user.marker_style,
         })),
       };
-      const response = await createChannel(channelData);
-      console.log('채널 생성 성공:', response);
+
+      await createChannel(channelData);
     } catch (error) {
       console.error('채널 생성 실패:', error);
     }

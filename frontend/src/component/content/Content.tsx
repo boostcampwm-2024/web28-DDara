@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getChannelInfo } from '@/api/channel.api';
 import { useContext } from 'react';
 import { ChannelContext } from '@/context/ChannelContext';
+import { FooterContext } from '@/layout/footer/LayoutFooterProvider';
 import { Dropdown } from '../common/dropdown/Dropdown';
-import { FooterContext } from '../layout/footer/LayoutFooterProvider';
 
 interface IContentProps {
   title: string;

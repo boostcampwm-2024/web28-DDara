@@ -1,9 +1,9 @@
 import { useContext, useEffect } from 'react';
-import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
+import { FooterContext } from '@/layout/footer/LayoutFooterProvider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IUser, UserContext } from '@/context/UserContext';
 import { ToolTypeProvider } from '@/context/ToolTypeContext';
-import { buttonActiveType } from '@/component/layout/enumTypes';
+import { buttonActiveType } from '@/layout/enumTypes';
 import { MapProviderForDraw } from '@/component/canvasWithMap/canvasWithMapforDraw/MapProviderForDraw.tsx';
 import { CurrentUserContext } from '@/context/CurrentUserContext';
 import { getAddressFromCoordinates } from '@/utils/map/getAddress';

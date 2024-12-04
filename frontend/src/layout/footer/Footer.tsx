@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { buttonActiveStyle, buttonActiveType } from '../enumTypes';
+import { buttonActiveStyle, buttonActiveType } from '../enumTypes.ts';
 
 export interface IFooterProps {
   title?: string;

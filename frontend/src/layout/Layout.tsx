@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
-import { LayoutHeader } from '@/component/layout/header/LayoutHeader.tsx';
+import { LayoutHeader } from '@/layout/header/LayoutHeader.tsx';
 import { HeaderDropdownProvider } from '@/component/header/HeaderDropdownProvider.tsx';
-import { LayoutFooterProvider } from '@/component/layout/footer/LayoutFooterProvider';
+import { LayoutFooterProvider } from '@/layout/footer/LayoutFooterProvider.tsx';
 import { ToggleProvider } from '@/context/DropdownContext.tsx';
-import { LayoutFooter } from './footer/LayoutFooter';
+import { LayoutFooter } from './footer/LayoutFooter.tsx';
 
 export const Layout = () => {
   return (

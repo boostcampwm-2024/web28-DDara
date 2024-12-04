@@ -4,7 +4,7 @@ import {
   HEADER_SUBTITLE,
   HEADER_SUBTITLEICONS,
   HEADER_TITLE,
-} from '@/component/layout/constant/HeaderConst';
+} from '@/layout/constant/HeaderConst';
 
 const normalizePath = (path: string): string => {
   return path
