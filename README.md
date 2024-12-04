@@ -170,7 +170,7 @@
 
 <br /><br />
 
-<a href="https://harsh-flier-3c0.notion.site/133b1b2b649180648a0fe8dcecbc12ea?pvs=4"><img width="50%" alt="image" src="https://github.com/user-attachments/assets/5aa43481-ba7e-473a-bce1-7d1379a17ed0" /></a>
+<a href="https://harsh-flier-3c0.notion.site/133b1b2b649180648a0fe8dcecbc12ea?pvs=4"><img width="50%" alt="image" src="https://github.com/user-attachments/assets/a55a5551-e329-4566-8fbb-23185c1b4fce" /></a>
 
 <br />
 
