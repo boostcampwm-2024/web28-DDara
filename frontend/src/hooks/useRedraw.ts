@@ -218,8 +218,24 @@ export const useRedrawCanvas = ({
 
     const footprintImage = footprintRef.current;
     const markerSize = Math.min(map.getZoom() * 2, 20);
-
+    const offsetDistance = markerSize * 0.3;
     const offscreenCanvas = colorizeImage(footprintImage, color, markerSize, markerSize);
+
+    const path = new Path2D();
+
+    ctx.beginPath();
+    ctx.setLineDash([10, 5]);
+
+    if (points.length === 1) {
+      const point = latLngToCanvasPoint(points[0]);
+      if (point) {
+        ctx.save();
+        ctx.translate(point.x, point.y);
+        ctx.drawImage(offscreenCanvas, -markerSize / 2, -markerSize / 2); // 발자국 이미지 그리기
+        ctx.restore();
+      }
+      return;
+    }
 
     for (let i = 0; i < points.length - 1; i++) {
       const start = latLngToCanvasPoint(points[i]);
@@ -230,9 +246,11 @@ export const useRedrawCanvas = ({
         continue;
       }
 
-      const angle = Math.atan2(end.y - start.y, end.x - start.x);
+      path.moveTo(start.x, start.y);
+      path.lineTo(end.x, end.y);
 
-      const distance = 30;
+      const angle = Math.atan2(end.y - start.y, end.x - start.x);
+      const distance = 25;
       const totalDistance = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2);
       const steps = Math.floor(totalDistance / distance);
 
@@ -241,14 +259,24 @@ export const useRedrawCanvas = ({
         const x = start.x + progress * (end.x - start.x);
         const y = start.y + progress * (end.y - start.y);
 
+        const isLeftFoot = j % 2 === 0;
+        const offsetX =
+          Math.cos(angle + (isLeftFoot ? Math.PI / 2 : -Math.PI / 2)) * offsetDistance;
+        const offsetY =
+          Math.sin(angle + (isLeftFoot ? Math.PI / 2 : -Math.PI / 2)) * offsetDistance;
+
         ctx.save();
-        ctx.translate(x, y);
+        ctx.translate(x + offsetX, y + offsetY);
         ctx.rotate(angle + Math.PI / 2);
-        ctx.drawImage(offscreenCanvas, -markerSize / 2, -markerSize / 2);
+        ctx.drawImage(offscreenCanvas, -markerSize / 2, -markerSize / 2); // 발자국 이미지 그리기
         ctx.restore();
       }
-      ctx.stroke();
     }
+
+    ctx.strokeStyle = hexToRgba(color, 0.1);
+    ctx.lineWidth = 10;
+    ctx.stroke(path);
+    ctx.setLineDash([]);
   };
 
   const redrawCanvas = () => {
@@ -264,7 +292,6 @@ export const useRedrawCanvas = ({
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    // 호스트가 게스트 경로 그릴때 쓰이는 디자인
     const zoom = map.getZoom();
     if (startMarker) {
       const startPoint = latLngToCanvasPoint(startMarker);
