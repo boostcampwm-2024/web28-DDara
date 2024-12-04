@@ -14,6 +14,7 @@ import character1 from '@/assets/character1.png';
 import character2 from '@/assets/character2.png';
 import { IMarkerStyle } from '@/lib/types/canvasInterface.ts';
 import footprint from '@/assets/footprint.svg';
+import { ICluster } from './useCluster';
 
 interface ILatLng {
   lat: number;
@@ -52,6 +53,7 @@ interface IUseRedrawCanvasProps {
   lat?: number;
   lng?: number;
   alpha?: number | null;
+  clusters?: ICluster[] | null;
 }
 
 enum MARKER_TYPE {
@@ -72,6 +74,7 @@ export const useRedrawCanvas = ({
   lat,
   lng,
   alpha = 0,
+  clusters = [],
 }: IUseRedrawCanvasProps) => {
   const startImageRef = useRef<HTMLImageElement | null>(null);
   const endImageRef = useRef<HTMLImageElement | null>(null);
@@ -123,6 +126,40 @@ export const useRedrawCanvas = ({
     tempCtx.fillRect(0, 0, width, height);
 
     return tempCanvas;
+  };
+
+  const checkMarker = (path: string) => {
+    if (path.includes('startmarker') || path.includes('endmarker') || path.includes('mylocation')) {
+      return true;
+    }
+    return false;
+  };
+
+  const drawCluster = (
+    ctx: CanvasRenderingContext2D,
+    cluster: ICluster,
+    image: HTMLImageElement | null,
+    zoom: number,
+    color: string,
+  ) => {
+    if (!cluster || !cluster.center || !cluster.markers.length) return;
+
+    // 클러스터 중심을 캔버스 좌표로 변환
+    const clusterCenter = latLngToCanvasPoint(cluster.center);
+
+    if (clusterCenter && image) {
+      const markerSize = zoom < 18 ? Math.min(zoom * 5, 50) : (zoom - 15) * (zoom - 16) * 10;
+      ctx.fillStyle = color || '#000';
+      ctx.strokeStyle = color || '#000';
+      ctx.save();
+      ctx.translate(clusterCenter.x, clusterCenter.y);
+      let filteredImage;
+      if (checkMarker(image.src))
+        filteredImage = colorizeImage(image, color, markerSize, markerSize);
+      else filteredImage = image;
+      ctx.drawImage(filteredImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
+      ctx.restore();
+    }
   };
 
   const drawMarker = (
@@ -218,8 +255,24 @@ export const useRedrawCanvas = ({
 
     const footprintImage = footprintRef.current;
     const markerSize = Math.min(map.getZoom() * 2, 20);
-
+    const offsetDistance = markerSize * 0.3;
     const offscreenCanvas = colorizeImage(footprintImage, color, markerSize, markerSize);
+
+    const path = new Path2D();
+
+    ctx.beginPath();
+    ctx.setLineDash([10, 5]);
+
+    if (points.length === 1) {
+      const point = latLngToCanvasPoint(points[0]);
+      if (point) {
+        ctx.save();
+        ctx.translate(point.x, point.y);
+        ctx.drawImage(offscreenCanvas, -markerSize / 2, -markerSize / 2); // 발자국 이미지 그리기
+        ctx.restore();
+      }
+      return;
+    }
 
     for (let i = 0; i < points.length - 1; i++) {
       const start = latLngToCanvasPoint(points[i]);
@@ -230,9 +283,11 @@ export const useRedrawCanvas = ({
         continue;
       }
 
-      const angle = Math.atan2(end.y - start.y, end.x - start.x);
+      path.moveTo(start.x, start.y);
+      path.lineTo(end.x, end.y);
 
-      const distance = 30;
+      const angle = Math.atan2(end.y - start.y, end.x - start.x);
+      const distance = 25;
       const totalDistance = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2);
       const steps = Math.floor(totalDistance / distance);
 
@@ -241,14 +296,24 @@ export const useRedrawCanvas = ({
         const x = start.x + progress * (end.x - start.x);
         const y = start.y + progress * (end.y - start.y);
 
+        const isLeftFoot = j % 2 === 0;
+        const offsetX =
+          Math.cos(angle + (isLeftFoot ? Math.PI / 2 : -Math.PI / 2)) * offsetDistance;
+        const offsetY =
+          Math.sin(angle + (isLeftFoot ? Math.PI / 2 : -Math.PI / 2)) * offsetDistance;
+
         ctx.save();
-        ctx.translate(x, y);
+        ctx.translate(x + offsetX, y + offsetY);
         ctx.rotate(angle + Math.PI / 2);
-        ctx.drawImage(offscreenCanvas, -markerSize / 2, -markerSize / 2);
+        ctx.drawImage(offscreenCanvas, -markerSize / 2, -markerSize / 2); // 발자국 이미지 그리기
         ctx.restore();
       }
-      ctx.stroke();
     }
+
+    ctx.strokeStyle = hexToRgba(color, 0.1);
+    ctx.lineWidth = 10;
+    ctx.stroke(path);
+    ctx.setLineDash([]);
   };
 
   const redrawCanvas = () => {
@@ -264,64 +329,48 @@ export const useRedrawCanvas = ({
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    // 호스트가 게스트 경로 그릴때 쓰이는 디자인
+    const clusteredMarkerSet = new Set<string>();
+    clusters?.forEach(cluster => {
+      cluster.markers.forEach((marker: any) =>
+        clusteredMarkerSet.add(`${marker.lat.toFixed(6)}_${marker.lng.toFixed(6)}`),
+      );
+    });
+
     const zoom = map.getZoom();
     if (startMarker) {
       const startPoint = latLngToCanvasPoint(startMarker);
-      drawMarker(
-        ctx,
-        startPoint,
-        startImageRef.current,
-        zoom,
-        0,
-        START_MARKER_COLOR,
-        MARKER_TYPE.START_MARKER,
-      );
+      const markerKey = `${startMarker.lat.toFixed(6)}_${startMarker.lng.toFixed(6)}`;
+      if (!clusteredMarkerSet.has(markerKey)) {
+        drawMarker(
+          ctx,
+          startPoint,
+          startImageRef.current,
+          zoom,
+          0,
+          START_MARKER_COLOR,
+          MARKER_TYPE.START_MARKER,
+        );
+      }
     }
 
     if (endMarker) {
       const endPoint = latLngToCanvasPoint(endMarker);
-      drawMarker(
-        ctx,
-        endPoint,
-        endImageRef.current,
-        zoom,
-        0,
-        END_MARKER_COLOR,
-        MARKER_TYPE.END_MARKER,
-      );
+      const markerKey = `${endMarker.lat.toFixed(6)}_${endMarker.lng.toFixed(6)}`;
+      if (!clusteredMarkerSet.has(markerKey)) {
+        drawMarker(
+          ctx,
+          endPoint,
+          endImageRef.current,
+          zoom,
+          0,
+          END_MARKER_COLOR,
+          MARKER_TYPE.END_MARKER,
+        );
+      }
     }
 
     if (pathPoints) {
       drawPath(ctx, pathPoints, PATH_COLOR);
-    }
-
-    if (guests) {
-      guests.forEach(({ startPoint, endPoint, paths, markerStyle }) => {
-        const startLocation = latLngToCanvasPoint(startPoint);
-        drawMarker(
-          ctx,
-          startLocation,
-          startImageRef.current,
-          zoom,
-          0,
-          markerStyle.color,
-          MARKER_TYPE.START_MARKER,
-        );
-
-        const endLocation = latLngToCanvasPoint(endPoint);
-        drawMarker(
-          ctx,
-          endLocation,
-          endImageRef.current,
-          zoom,
-          0,
-          markerStyle.color,
-          MARKER_TYPE.END_MARKER,
-        );
-
-        drawPath(ctx, paths, markerStyle.color);
-      });
     }
 
     if (lat && lng) {
@@ -366,6 +415,48 @@ export const useRedrawCanvas = ({
           color,
           MARKER_TYPE.CHARACTER,
         );
+      });
+    }
+
+    if (guests) {
+      guests.forEach(({ startPoint, endPoint, paths, markerStyle }) => {
+        const startLocationKey = `${startPoint.lat.toFixed(6)}_${startPoint.lng.toFixed(6)}`;
+        const endLocationKey = `${endPoint.lat.toFixed(6)}_${endPoint.lng.toFixed(6)}`;
+        if (!clusteredMarkerSet.has(startLocationKey)) {
+          const startLocation = latLngToCanvasPoint(startPoint);
+          drawMarker(
+            ctx,
+            startLocation,
+            startImageRef.current,
+            zoom,
+            0,
+            markerStyle.color,
+            MARKER_TYPE.START_MARKER,
+          );
+        }
+
+        if (!clusteredMarkerSet.has(endLocationKey)) {
+          const endLocation = latLngToCanvasPoint(endPoint);
+          drawMarker(
+            ctx,
+            endLocation,
+            endImageRef.current,
+            zoom,
+            0,
+            markerStyle.color,
+            MARKER_TYPE.END_MARKER,
+          );
+        }
+
+        // 경로는 두 포인트 중 하나라도 클러스터에 포함되지 않으면 그리기
+        if (!clusteredMarkerSet.has(startLocationKey) || !clusteredMarkerSet.has(endLocationKey)) {
+          drawPath(ctx, paths, markerStyle.color);
+        }
+      });
+    }
+    if (clusters) {
+      clusters.forEach(cluster => {
+        drawCluster(ctx, cluster, startImageRef.current, zoom, cluster.color.color);
       });
     }
   };

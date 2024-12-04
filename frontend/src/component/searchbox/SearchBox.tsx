@@ -166,7 +166,7 @@ export const SearchBox = (props: ISearchBoxProps) => {
 
       {/* 검색 결과 리스트 */}
       {searchResults.length > 0 && (
-        <div className="border-grayscale-75 absolute z-[5000] mt-2 max-h-60 w-full overflow-y-auto border-2 bg-white">
+        <div className="border-grayscale-75 relative z-[5000] mt-2 max-h-60 w-full overflow-y-auto border-2 bg-white px-2">
           {loading && <p>로딩 중...</p>}
           {error && <p className="text-red-500">{error}</p>}
           {searchResults.map(result => (
@@ -176,8 +176,8 @@ export const SearchBox = (props: ISearchBoxProps) => {
               onClick={() => handleSelectResult(result)}
               className="flex flex-col items-start gap-2 p-2"
             >
-              <div>{result.title}</div>
-              <div className="text-grayscale-400">{result.address}</div>
+              <div className="text-left">{result.title}</div>
+              <div className="text-grayscale-400 text-left">{result.address}</div>
             </button>
           ))}
         </div>

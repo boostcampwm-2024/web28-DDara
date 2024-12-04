@@ -12,6 +12,7 @@ interface IContentProps {
   link: string;
   time: string;
   channelId: string;
+  onDelete?: (channelId: string) => void;
 }
 
 /**
@@ -41,11 +42,13 @@ export const Content = (props: IContentProps) => {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
+    timeZone: 'UTC',
   });
 
   const formattedTime = new Date(props.time).toLocaleTimeString('ko-KR', {
     hour: '2-digit',
     minute: '2-digit',
+    timeZone: 'UTC',
   });
   const navigate = useNavigate();
   const { channelInfo, setChannelInfo } = useContext(ChannelContext);
@@ -60,6 +63,11 @@ export const Content = (props: IContentProps) => {
       console.error('Failed to get channel info:', error);
     }
   };
+
+  const deleteChannelItem = async () => {
+    props.onDelete?.(props.channelId);
+  };
+
   const goToChannelInfoPage = () => {
     if (channelInfo?.id) {
       navigate(`/channelInfo/${channelInfo.id}`);
@@ -75,6 +83,10 @@ export const Content = (props: IContentProps) => {
   const handleUpdate = () => {
     getUpdateChannelInfo();
     goToChannelInfoPage();
+  };
+
+  const handleDelete = () => {
+    deleteChannelItem();
   };
 
   return (
@@ -115,7 +127,10 @@ export const Content = (props: IContentProps) => {
             >
               공유하기
             </Dropdown.Item>
-            <Dropdown.Item className="flex items-start text-base font-normal">
+            <Dropdown.Item
+              className="flex items-start text-base font-normal"
+              onClick={handleDelete}
+            >
               삭제하기
             </Dropdown.Item>
           </Dropdown.Menu>

@@ -1,9 +1,14 @@
 import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 
+export interface IItem {
+  id: string; // 고유 식별자
+  content: ReactNode;
+}
+
 interface IHeaderProps {
-  leftItems?: ReactNode[];
-  rightItems?: ReactNode[];
+  leftItems?: IItem[];
+  rightItems?: IItem[];
   title?: ReactNode;
   subtitle?: string;
   subtitleIcons?: React.ComponentType<{}>;
@@ -23,7 +28,9 @@ export const HeaderLayout = (props: IHeaderProps) => {
         <div className="flex items-center gap-1">
           {props.leftItems &&
             props.leftItems.map(item => (
-              <div className="flex items-center justify-center">{item}</div>
+              <div key={item.id} className="flex items-center justify-center">
+                {item.content}
+              </div>
             ))}
           <div className="flex items-center justify-center text-base">
             <div className="font-bold">{props.userName}</div>
@@ -33,7 +40,9 @@ export const HeaderLayout = (props: IHeaderProps) => {
         <div className="flex items-center gap-1">
           {props.rightItems &&
             props.rightItems.map(item => (
-              <div className="flex items-center justify-center">{item}</div>
+              <div key={item.id} className="flex items-center justify-center">
+                {item.content}
+              </div>
             ))}
         </div>
       </div>

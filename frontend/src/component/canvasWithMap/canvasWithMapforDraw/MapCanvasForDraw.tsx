@@ -13,6 +13,7 @@ import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
 import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { zoomMapView } from '@/utils/map/mapUtils';
+import { ICluster, useCluster } from '@/hooks/useCluster';
 
 export const MapCanvasForDraw = ({
   width,
@@ -33,6 +34,9 @@ export const MapCanvasForDraw = ({
   const { pathPoints, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
 
   const { setCurrentUser } = useContext(CurrentUserContext);
+
+  const { createClusters } = useCluster();
+  const [clusters, setClusters] = useState<ICluster[]>([]);
 
   useEffect(() => {
     const updateUser = () => {
@@ -138,6 +142,7 @@ export const MapCanvasForDraw = ({
     startMarker,
     endMarker,
     pathPoints,
+    clusters,
   });
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -238,11 +243,11 @@ export const MapCanvasForDraw = ({
   }, [map]);
 
   useEffect(() => {
-    if (startMarker && endMarker) {
-      const markers = [];
-
-      if (startMarker) markers.push(startMarker);
-      if (endMarker) markers.push(endMarker);
+    if (startMarker && endMarker && map) {
+      const markers = [
+        { lat: startMarker.lat, lng: startMarker.lng },
+        { lat: endMarker.lat, lng: endMarker.lng },
+      ];
 
       zoomMapView(map, markers);
     } else {
@@ -258,8 +263,23 @@ export const MapCanvasForDraw = ({
   }, [startMarker, endMarker]);
 
   useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (startMarker && endMarker && map) {
+        const markers = [
+          { lat: startMarker.lat, lng: startMarker.lng },
+          { lat: endMarker.lat, lng: endMarker.lng },
+        ];
+
+        const createdClusters = createClusters(markers, { color: '#333C4A' }, map);
+        setClusters(createdClusters);
+      }
+    }, 100);
+
+    return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 클리어
+  }, [startMarker, endMarker, map]);
+  useEffect(() => {
     redrawCanvas();
-  }, [startMarker, endMarker, pathPoints, map, undoStack, redoStack]);
+  }, [startMarker, endMarker, clusters, pathPoints, map, undoStack, redoStack]);
 
   return (
     <div
