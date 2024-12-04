@@ -10,7 +10,7 @@ import { addChannelReqEntity, guestEntity } from '@/api/dto/channel.dto';
 import { addGuestChannel } from '@/api/channel.api';
 import { Page } from '@/component/routebutton/enum';
 import { ChannelContext } from '@/context/ChannelContext';
-import { InputBox } from '../component/common/InputBox';
+import { InputBox } from '../component/common/inputBox/InputBox.tsx';
 
 /**
  * Divider 컴포넌트: 구분선 역할을 하는 컴포넌트입니다.

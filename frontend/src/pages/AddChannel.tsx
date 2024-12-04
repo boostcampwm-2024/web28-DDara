@@ -11,7 +11,7 @@ import { createChannel } from '@/api/channel.api';
 import { Page } from '@/component/routebutton/enum';
 import { loadLocalData } from '@/utils/common/manageLocalData';
 import { AppConfig } from '@/lib/constants/commonConstants';
-import { InputBox } from '../component/common/InputBox';
+import { InputBox } from '../component/common/inputBox/InputBox.tsx';
 
 /**
  * Divider 컴포넌트: 구분선 역할을 하는 컴포넌트입니다.

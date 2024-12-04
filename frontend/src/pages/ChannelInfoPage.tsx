@@ -8,7 +8,7 @@ import { ChannelContext } from '@/context/ChannelContext';
 import { IUser, UserContext } from '@/context/UserContext';
 import { guestEntity } from '@/api/dto/channel.dto';
 import { ToastAlert } from '@/component/common/alert/ToastAlert';
-import { InputBox } from '../component/common/InputBox';
+import { InputBox } from '../component/common/inputBox/InputBox.tsx';
 
 const Divider = () => <hr className="my-6 w-full border-gray-300" />;
 
