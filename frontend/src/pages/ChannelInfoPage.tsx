@@ -92,7 +92,7 @@ export const ChannelInfoPage = () => {
       <section className="w-full space-y-4">
         {users.map(user => (
           <div key={user.id}>
-            <RouteResultButton user={user} page={Page.UPDATE} showAlert={handleAlert} />
+            <RouteResultButton user={user} page={Page.UPDATE} showAlert={handleAlert} isGuest />
           </div>
         ))}
       </section>

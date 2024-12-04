@@ -118,7 +118,7 @@ export const AddGuestPage = () => {
       .map((user, i) => ({
         ...user,
         index: guests.length + i + 1,
-        name: `사용자${guests.length + i + 1}`,
+        name: user.name || `사용자${guests.length + i + 1}`,
       }));
     setUsers(updatedUsers);
   };
@@ -157,7 +157,7 @@ export const AddGuestPage = () => {
   };
 
   useEffect(() => {
-    setFooterTitle('제작 완료');
+    setFooterTitle('수정 완료');
     setFooterTransparency(false);
     setFooterActive(buttonActiveType.PASSIVE);
     if (channelInfo?.guests) {
@@ -182,6 +182,13 @@ export const AddGuestPage = () => {
     }
   }, [footerOption.active]);
 
+  const setUserName = (index: number, newName: string) => {
+    const updatedUsers = users.map(user =>
+      user.index === index ? { ...user, name: newName } : user,
+    );
+    setUsers(updatedUsers);
+  };
+
   return (
     <main className="flex h-full w-full flex-col items-center px-8 py-16">
       <Outlet />
@@ -194,16 +201,21 @@ export const AddGuestPage = () => {
       <section className="w-full space-y-4">
         {guests.map(guest => (
           <div key={guest.index}>
-            <RouteResultButton user={guest} page={Page.ADD} isGuest />
+            <RouteResultButton setUserName={setUserName} user={guest} page={Page.ADD} isGuest />
           </div>
         ))}
         {users &&
           users.map(user => (
             <div key={user.index}>
               {isUserDataComplete(user) ? (
-                <RouteResultButton user={user} deleteUser={deleteUser} page={Page.ADD} />
+                <RouteResultButton
+                  setUserName={setUserName}
+                  user={user}
+                  deleteUser={deleteUser}
+                  page={Page.ADD}
+                />
               ) : (
-                <RouteSettingButton user={user} deleteUser={deleteUser} />
+                <RouteSettingButton setUserName={setUserName} user={user} deleteUser={deleteUser} />
               )}
             </div>
           ))}

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface IRouteSettingButtonProps {
   user: IUser;
+  setUserName: (index: number, newName: string) => void;
   deleteUser?: (index: number) => void;
 }
 
@@ -15,10 +16,21 @@ export const RouteSettingButton = (props: IRouteSettingButtonProps) => {
     navigate(`/add-channel/${user}/draw`);
   };
 
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    props.setUserName(props.user.index, event.target.value);
+  };
+
   return (
     <div className="flex flex-row items-center justify-center space-x-2" key={props.user.id}>
       <div className="shadow-userName border-grayscale-400 flex h-11 w-16 items-center justify-center rounded-lg border py-4 text-xs">
-        <p className="font-nomal leading-none">{props.user.name}</p>
+        <input
+          type="text"
+          className="w-full overflow-hidden text-ellipsis whitespace-nowrap px-1 text-center font-normal leading-none"
+          value={props.user.name}
+          onChange={e => {
+            handleChangeName(e);
+          }}
+        />
       </div>
       <button type="button" onClick={() => goToUserDrawRoute(props.user.name)}>
         <div
