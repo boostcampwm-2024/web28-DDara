@@ -33,7 +33,7 @@ export const RouteResultButton = (props: IRouteResultButtonProps) => {
       .writeText(url)
       .then(() => {
         props.showAlert?.(
-          `${channelInfo.name} 경로의 링크가 복사되었습니다\n사용자에게 링크를 보내주세요!\n\n${url}`,
+          `${channelInfo.name} 경로의 링크가 복사되었습니다\n${props.user.name}에게 링크를 보내주세요!\n\n${url}`,
         );
       })
       .catch(() => {
