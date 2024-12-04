@@ -1,6 +1,7 @@
 import { HeaderBackButton } from '@/component/header/HeaderBackButton';
 import { HeaderDropdown } from '@/component/header/HeaderDropdown';
-import React, { ReactNode } from 'react';
+import { IItem } from '@/component/header/HeaderLayout';
+import React from 'react';
 import { MdInfo } from 'react-icons/md';
 
 export const HEADER_TITLE: Record<string, string> = {
@@ -15,17 +16,19 @@ export const HEADER_SUBTITLEICONS: Record<string, React.ComponentType> = {
   '/add-channel/:user/draw': MdInfo,
 };
 
-export const HEADER_LEFTITEMS: Record<string, ReactNode[]> = {
-  '/add-channel': [React.createElement(HeaderBackButton)],
-  '/add-channel/:user': [React.createElement(HeaderBackButton)],
-  '/add-channel/:user/draw': [React.createElement(HeaderBackButton)],
-  '/channel/:channelId/host': [React.createElement(HeaderBackButton)],
-  '/update-channel': [React.createElement(HeaderBackButton)],
-  '/register': [React.createElement(HeaderBackButton)],
-  '/channelInfo/:channelId': [React.createElement(HeaderBackButton)],
-  '/guest-add-channel/:channelId': [React.createElement(HeaderBackButton)],
+export const HEADER_LEFTITEMS: Record<string, IItem[]> = {
+  '/add-channel': [{ id: 'item1', content: React.createElement(HeaderBackButton) }],
+  '/add-channel/:user': [{ id: 'item1', content: React.createElement(HeaderBackButton) }],
+  '/add-channel/:user/draw': [{ id: 'item1', content: React.createElement(HeaderBackButton) }],
+  '/channel/:channelId/host': [{ id: 'item1', content: React.createElement(HeaderBackButton) }],
+  '/update-channel': [{ id: 'item1', content: React.createElement(HeaderBackButton) }],
+  '/register': [{ id: 'item1', content: React.createElement(HeaderBackButton) }],
+  '/channelInfo/:channelId': [{ id: 'item1', content: React.createElement(HeaderBackButton) }],
+  '/guest-add-channel/:channelId': [
+    { id: 'item1', content: React.createElement(HeaderBackButton) },
+  ],
 };
 
-export const HEADER_RIGHTITEMS: Record<string, ReactNode[]> = {
-  '/channel/:channelId/host': [React.createElement(HeaderDropdown)],
+export const HEADER_RIGHTITEMS: Record<string, IItem[]> = {
+  '/channel/:channelId/host': [{ id: 'item1', content: React.createElement(HeaderDropdown) }],
 };
