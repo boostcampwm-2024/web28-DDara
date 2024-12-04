@@ -101,8 +101,6 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
 
     // guests나 map이 변경될 때마다 클러스터를 다시 생성하고 상태를 업데이트
     useEffect(() => {
-      let animationFrameId: number;
-
       const updateClusters = () => {
         if (map && guests && guests.length > 0) {
           const createdClusters = guests
@@ -113,13 +111,17 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
 
           setClusters(createdClusters);
         }
-        animationFrameId = requestAnimationFrame(updateClusters);
       };
 
+      // 컴포넌트가 처음 마운트될 때 즉시 실행
       updateClusters();
 
-      return () => cancelAnimationFrame(animationFrameId);
-    }, [guests]);
+      const intervalId = setInterval(() => {
+        updateClusters();
+      }, 100);
+
+      return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 클리어
+    }, [guests, map]);
 
     useEffect(() => {
       redrawCanvas();

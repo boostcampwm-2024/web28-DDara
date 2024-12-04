@@ -263,9 +263,7 @@ export const MapCanvasForDraw = ({
   }, [startMarker, endMarker]);
 
   useEffect(() => {
-    let animationFrameId: number;
-
-    const updateClusters = () => {
+    const intervalId = setInterval(() => {
       if (startMarker && endMarker && map) {
         const markers = [
           { lat: startMarker.lat, lng: startMarker.lng },
@@ -275,14 +273,10 @@ export const MapCanvasForDraw = ({
         const createdClusters = createClusters(markers, { color: '#333C4A' }, map);
         setClusters(createdClusters);
       }
-      animationFrameId = requestAnimationFrame(updateClusters);
-    };
+    }, 100);
 
-    updateClusters();
-
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [startMarker, endMarker]);
-
+    return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 클리어
+  }, [startMarker, endMarker, map]);
   useEffect(() => {
     redrawCanvas();
   }, [startMarker, endMarker, clusters, pathPoints, map, undoStack, redoStack]);
