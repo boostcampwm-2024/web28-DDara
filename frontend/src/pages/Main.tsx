@@ -31,7 +31,7 @@ export const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
   const [channels, setChannels] = useState<any[]>([]);
-  const [, setIsDeleted] = useState<boolean>(false);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
   const { resetUsers } = useContext(UserContext);
 
@@ -53,7 +53,7 @@ export const Main = () => {
           });
       }
     }
-  }, []);
+  }, [isDeleted]);
 
   const navigate = useNavigate();
 
