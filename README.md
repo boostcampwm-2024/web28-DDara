@@ -28,7 +28,7 @@
 
 <br /><br />
 
-# 💡 핵심 기술적 도전
+# 💡 라이브러리나 API에 의존하지 않기 위한 노력
 
 ## 🎨 1. 지도 위 캔버스에 출발지/도착지 마커, 경로 그리기
 
@@ -96,7 +96,7 @@
 
 
 
-# 📃 우리의 기술적 도전
+# 📃 우리가 집중해서 해결한 문제
 
 ###  by. J060_김주원
 
@@ -137,17 +137,22 @@
 
 # 🌱 팀원 소개
 
+<div align="center">
+  
 |J060_김주원|J174_이동율|J210_임재도|J234_정혜인|
 |:--:|:--:|:--:|:--:|
 |<a href="https://github.com/juwon5272"><img src="https://github.com/user-attachments/assets/f774ff48-8831-490f-b0fe-b18b024f7916" width="150px;" alt=""/></a>|<a href="https://github.com/leedongyull"><img src="https://github.com/user-attachments/assets/178c1cd6-b296-498e-adb1-60534eec2713" width="150px;" alt=""/></a>|<a href="https://github.com/effozen"><img src="https://github.com/user-attachments/assets/92bddae1-19ce-4b06-811e-52df15ac726c" width="150px;" alt=""/></a>|<a href="https://github.com/happyhyep"><img src="https://github.com/user-attachments/assets/40ac933c-3e19-4884-a5e9-da2f2298dd72" width="150px;" alt=""/></a>|
 |FE|FE|FE|Full Stack (FE + BE)|
 |<a href="https://github.com/juwon5272">@juwon5272</a>|<a href="https://github.com/leedongyull">@leedongyull</a>|<a href="https://github.com/effozen">@effozen</a>|<a href="https://github.com/happyhyep">@happyhyep</a>|
 
+</div>
 
 <br /><br />
 
 
-<h1>🎢 바로가기 링크 🎢</h1>
+<h1>🎢 바로가기 링크</h1>
+
+<div align="center">
 <br /><br />
 <div align="center" style="display: flex">
   <a href="https://ddara.kro.kr/"><img width="60%" alt="image" src="https://github.com/user-attachments/assets/0eaf0bac-01bc-44ae-ab02-56c2c9951ce1" /></a>
@@ -183,5 +188,5 @@
 <!-- <a href=""><img width="18%" alt="image" src="https://github.com/user-attachments/assets/6500d674-d951-4cc0-ae71-5502c1dedea9" /></a> -->
 </div>
 
-
+</div>
 
