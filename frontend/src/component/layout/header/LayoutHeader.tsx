@@ -1,25 +1,20 @@
-import { Header } from '@/component/header/Header';
-import { NoticeText } from '@/component/text/NoticeText';
 import { useLocation, useParams } from 'react-router-dom';
 import { getHeaderInfo } from '@/utils/mapping/HeaderMapping';
+import { HeaderLayout } from '@/component/header/HeaderLayout';
 
 export const LayoutHeader = () => {
   const params = useParams<Record<string, string | undefined>>();
   const urlPath = useLocation();
   const headerOption = getHeaderInfo(urlPath.pathname);
-
   return (
-    <Header className="z-4000">
-      <Header.MainLayout
-        leftButton={headerOption.leftButton}
-        rightButton={headerOption.rightButton}
-        title={`${params.user || ''}${headerOption.title}`}
-      />
-      {headerOption.subtitle && (
-        <Header.Subtitle>
-          <NoticeText>{headerOption.subtitle}</NoticeText>
-        </Header.Subtitle>
-      )}
-    </Header>
+    <HeaderLayout
+      className="z-[5000]"
+      userName={`${params.user || ''}`}
+      title={`${headerOption.title}`}
+      subtitle={`${headerOption.subtitle}`}
+      subtitleIcons={headerOption.subtitleIcons}
+      leftItems={headerOption.leftItems}
+      rightItems={headerOption.rightItems}
+    />
   );
 };

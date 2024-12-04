@@ -12,6 +12,7 @@ import { SearchBox } from '@/component/searchbox/SearchBox';
 import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
 import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 import { useRedrawCanvas } from '@/hooks/useRedraw';
+import { zoomMapView } from '@/utils/map/mapUtils';
 
 export const MapCanvasForDraw = ({
   width,
@@ -236,44 +237,14 @@ export const MapCanvasForDraw = ({
     updateCanvasSize();
   }, [map]);
 
-  const calculateZoomLevel = (latDiff: number, lngDiff: number) => {
-    const maxDiff = Math.max(latDiff, lngDiff);
-    if (maxDiff < 0.0005) return 19;
-    if (maxDiff < 0.001) return 18;
-    if (maxDiff < 0.004) return 17;
-    if (maxDiff < 0.01) return 15;
-    if (maxDiff < 0.03) return 14;
-    if (maxDiff < 0.05) return 13;
-    if (maxDiff < 0.1) return 12;
-    if (maxDiff < 0.2) return 11;
-    if (maxDiff < 0.5) return 10;
-    if (maxDiff < 1) return 9;
-    if (maxDiff < 2) return 8;
-    if (maxDiff < 5) return 7;
-    if (maxDiff < 10) return 6;
-    return 5;
-  };
-
   useEffect(() => {
     if (startMarker && endMarker) {
-      const latitudes = [startMarker.lat, endMarker.lat];
-      const longitudes = [startMarker.lng, endMarker.lng];
+      const markers = [];
 
-      const maxLat = Math.max(...latitudes);
-      const minLat = Math.min(...latitudes);
-      const maxLng = Math.max(...longitudes);
-      const minLng = Math.min(...longitudes);
+      if (startMarker) markers.push(startMarker);
+      if (endMarker) markers.push(endMarker);
 
-      const centerLat = (maxLat + minLat) / 2;
-      const centerLng = (maxLng + minLng) / 2;
-
-      map?.setCenter(new window.naver.maps.LatLng(centerLat, centerLng));
-
-      const latDiff = maxLat - minLat;
-      const lngDiff = maxLng - minLng;
-      const zoomLevel = calculateZoomLevel(latDiff, lngDiff);
-
-      map?.setZoom(zoomLevel);
+      zoomMapView(map, markers);
     } else {
       if (startMarker) {
         map?.setCenter({ lat: startMarker.lat, lng: startMarker.lng });
@@ -359,7 +330,12 @@ export const MapCanvasForDraw = ({
       <div className="relative flex">
         <ToolDescription />
       </div>
-      <div className="absolute bottom-3 left-3 z-10 flex gap-2">
+      <div
+        className="absolute left-2 top-1/2 flex gap-2"
+        style={{
+          transform: 'translateY(-50%)',
+        }}
+      >
         <ZoomSlider map={map} redrawCanvas={redrawCanvas} />
       </div>
     </div>

@@ -1,7 +1,8 @@
 import {
-  HEADER_LEFTBUTTON,
-  HEADER_RIGHTBUTTON,
+  HEADER_LEFTITEMS,
+  HEADER_RIGHTITEMS,
   HEADER_SUBTITLE,
+  HEADER_SUBTITLEICONS,
   HEADER_TITLE,
 } from '@/component/layout/constant/HeaderConst';
 
@@ -20,13 +21,15 @@ export const getHeaderInfo = (path: string) => {
   const normalizedPath = normalizePath(path);
   const title = HEADER_TITLE[normalizedPath] || '';
   const subtitle = HEADER_SUBTITLE[normalizedPath] || '';
-  const leftButton = HEADER_LEFTBUTTON[normalizedPath] || '';
-  const rightButton = HEADER_RIGHTBUTTON[normalizedPath] || '';
+  const subtitleIcons = HEADER_SUBTITLEICONS[normalizedPath];
+  const leftItems = HEADER_LEFTITEMS[normalizedPath] || '';
+  const rightItems = HEADER_RIGHTITEMS[normalizedPath] || '';
 
   return {
     title,
     subtitle,
-    leftButton,
-    rightButton,
+    subtitleIcons,
+    leftItems,
+    rightItems,
   };
 };
