@@ -21,8 +21,8 @@
 <h1>🌍 서비스 소개 🌍</h1>
 </div>
 
-![image](https://github.com/user-attachments/assets/da9357c4-095f-4f1c-9d04-7e377a0f23f1)
 
+![image](https://github.com/user-attachments/assets/55dacfcb-07b8-4c96-9c33-b35e13b42ecc)
 
 
 
