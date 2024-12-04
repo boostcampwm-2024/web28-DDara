@@ -1,6 +1,6 @@
 import { MdGroup, MdMoreVert } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { getChannelInfo } from '@/api/channel.api';
+import { getChannelInfo, deleteChannel } from '@/api/channel.api';
 import { useContext } from 'react';
 import { ChannelContext } from '@/context/ChannelContext';
 import { Dropdown } from '../common/dropdown/Dropdown';
@@ -12,6 +12,7 @@ interface IContentProps {
   link: string;
   time: string;
   channelId: string;
+  setIsDeleted?: () => void;
 }
 
 /**
@@ -62,6 +63,19 @@ export const Content = (props: IContentProps) => {
       console.error('Failed to get channel info:', error);
     }
   };
+
+  const deleteChannelItem = async () => {
+    try {
+      const result = window.confirm('정말로 삭제하시겠습니까?');
+      if (result) {
+        await deleteChannel(props.channelId);
+        props.setIsDeleted?.();
+      }
+    } catch (error) {
+      console.error('Failed to delete channel info:', error);
+    }
+  };
+
   const goToChannelInfoPage = () => {
     if (channelInfo?.id) {
       navigate(`/channelInfo/${channelInfo.id}`);
@@ -77,6 +91,10 @@ export const Content = (props: IContentProps) => {
   const handleUpdate = () => {
     getUpdateChannelInfo();
     goToChannelInfoPage();
+  };
+
+  const handleDelete = () => {
+    deleteChannelItem();
   };
 
   return (
@@ -117,7 +135,10 @@ export const Content = (props: IContentProps) => {
             >
               공유하기
             </Dropdown.Item>
-            <Dropdown.Item className="flex items-start text-base font-normal">
+            <Dropdown.Item
+              className="flex items-start text-base font-normal"
+              onClick={handleDelete}
+            >
               삭제하기
             </Dropdown.Item>
           </Dropdown.Menu>

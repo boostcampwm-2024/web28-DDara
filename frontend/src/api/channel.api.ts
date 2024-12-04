@@ -7,6 +7,7 @@ import {
   getChannelResEntity,
   getUserChannelsResEntity,
   getGuestResEntity,
+  deleteChannelResEntity,
 } from '@/api/dto/channel.dto.ts';
 import { getApiClient } from '@/api/client.api.ts';
 
@@ -130,6 +131,31 @@ export const getGuestInfo = (
         }
       })
       .catch(err => {
+        console.error(err);
+        fnReject('msg.RESULT_FAILED');
+      });
+  };
+  return new Promise(promiseFn);
+};
+
+export const deleteChannel = (channelId: string): Promise<ResponseDto<deleteChannelResEntity>> => {
+  const promiseFn = (
+    fnResolve: (value: ResponseDto<deleteChannelResEntity>) => void,
+    fnReject: (reason?: any) => void,
+  ) => {
+    const apiClient = getApiClient();
+    apiClient
+      .delete(`/channel/${channelId}`)
+      .then(res => {
+        if (res.status !== 200) {
+          console.error(res);
+          fnReject(`msg.${res}`);
+        } else {
+          fnResolve(new ResponseDto<deleteChannelResEntity>(res.data));
+        }
+      })
+      .catch(err => {
+        console.log(channelId);
         console.error(err);
         fnReject('msg.RESULT_FAILED');
       });

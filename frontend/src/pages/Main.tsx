@@ -31,6 +31,7 @@ export const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
   const [channels, setChannels] = useState<any[]>([]);
+  const [, setIsDeleted] = useState<boolean>(false);
 
   const { resetUsers } = useContext(UserContext);
 
@@ -173,6 +174,9 @@ export const Main = () => {
                   link={`/channel/${item.id}/host`}
                   person={item.guest_count}
                   time={item.generated_at}
+                  setIsDeleted={() => {
+                    setIsDeleted(prev => !prev);
+                  }}
                 />
                 <hr className="my-2" />
               </Fragment>
