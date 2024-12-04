@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal } from '@/component/common/modal/Modal';
 import { doLogin, doRegister } from '@/api/auth.api.ts';
 import { saveLocalData } from '@/utils/common/manageLocalData.ts';
@@ -90,6 +90,10 @@ export const AuthModal = (props: IAuthModalProps) => {
         );
       });
   };
+
+  useEffect(() => {
+    if (!props.isOpen) switchToLogin();
+  }, [props.isOpen]);
 
   return (
     <Modal isOpen={props.isOpen}>
