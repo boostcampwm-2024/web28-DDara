@@ -1,5 +1,6 @@
 import {
   createChannelInDB,
+  deleteChannelByIdFromDB,
   getChannelInfoByIdInDB,
   getChannelsByUserIdFromDB,
   getChannelWithGuestsByIdFromDB,
@@ -103,5 +104,18 @@ export const getUserChannels = async userId => {
     return await getChannelsByUserIdFromDB(userId);
   } catch (error) {
     throw new Error('Failed to fetch channels', error);
+  }
+};
+
+/**
+ * @description 채널 삭제 서비스
+ * @param {string} id - 삭제할 채널의 ID
+ * @returns {boolean} 삭제 성공 여부
+ */
+export const deleteChannelService = async id => {
+  try {
+    return await deleteChannelByIdFromDB(id);
+  } catch (error) {
+    throw new Error('Failed to delete channel', error);
   }
 };

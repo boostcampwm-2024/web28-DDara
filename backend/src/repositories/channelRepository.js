@@ -155,3 +155,17 @@ export const getChannelsByUserIdFromDB = async userId => {
     throw error;
   }
 };
+
+export const deleteChannelByIdFromDB = async id => {
+  try {
+    const query = 'DELETE FROM "main"."channel" WHERE id = $1 RETURNING id';
+    const values = [id];
+
+    const result = await pool.query(query, values);
+
+    return result.rowCount > 0;
+  } catch (error) {
+    console.error('Database error:', error);
+    throw error;
+  }
+};

@@ -3,6 +3,7 @@ import { body, param } from 'express-validator';
 import {
   addGuestController,
   createChannelController,
+  deleteChannelController,
   getChannelGuestInfoController,
   getChannelInfoController,
   getUserChannelsController,
@@ -189,4 +190,36 @@ channelRouter.get(
   authenticateJWT,
   validationMiddleware,
   getUserChannelsController,
+);
+
+// 채널 삭제 API 경로
+/**
+ * @swagger
+ * paths:
+ *   /channel/{id}:
+ *     delete:
+ *       summary: '채널 삭제 API'
+ *       description: '채널 ID를 사용하여 특정 채널을 삭제합니다.'
+ *       tags: [Channel]
+ *       parameters:
+ *         - name: 'id'
+ *           in: 'path'
+ *           required: true
+ *           schema:
+ *             type: 'string'
+ *           description: '삭제할 채널의 고유 ID'
+ *       responses:
+ *         200:
+ *           description: '채널 삭제 성공'
+ *         404:
+ *           description: '채널을 찾을 수 없음'
+ *         500:
+ *           description: '서버 오류'
+ */
+channelRouter.delete(
+  '/:id',
+  [param('id').notEmpty().withMessage('Channel ID is required')],
+  authenticateJWT,
+  validationMiddleware,
+  deleteChannelController,
 );

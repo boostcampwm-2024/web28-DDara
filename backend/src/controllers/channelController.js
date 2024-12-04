@@ -1,6 +1,7 @@
 import {
   addGuestService,
   createChannelService,
+  deleteChannelService,
   getChannelByIdService,
   getChannelGuestInfoService,
   getUserChannels,
@@ -106,6 +107,28 @@ export const getUserChannelsController = async (req, res) => {
       .json(new ResponseDto({ resultMsg: 'Get channels successfully', data: { channels } }));
   } catch (error) {
     console.error(error);
+    return res.status(500).json(new ErrorResponseDto({ message: 'Server error occurred' }));
+  }
+};
+
+/**
+ * @description 채널 삭제 컨트롤러
+ */
+export const deleteChannelController = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await deleteChannelService(id);
+
+    if (!result) {
+      return res.status(404).json(new ErrorResponseDto({ message: 'Channel not found' }));
+    }
+
+    return res
+      .status(200)
+      .json(new ResponseDto({ resultMsg: 'Channel deleted successfully', data: { id } }));
+  } catch (err) {
+    console.error(err);
     return res.status(500).json(new ErrorResponseDto({ message: 'Server error occurred' }));
   }
 };
