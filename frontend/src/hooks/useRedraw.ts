@@ -60,6 +60,7 @@ enum MARKER_TYPE {
   START_MARKER = 'START_MARKER',
   END_MARKER = 'END_MARKER',
   CHARACTER = 'CHARACTER',
+  CLUSTER = 'CLUSTER',
 }
 
 export const useRedrawCanvas = ({
@@ -127,14 +128,6 @@ export const useRedrawCanvas = ({
 
     return tempCanvas;
   };
-
-  const checkMarker = (path: string) => {
-    if (path.includes('startmarker') || path.includes('endmarker') || path.includes('mylocation')) {
-      return true;
-    }
-    return false;
-  };
-
   const drawCluster = (
     ctx: CanvasRenderingContext2D,
     cluster: ICluster,
@@ -149,14 +142,10 @@ export const useRedrawCanvas = ({
 
     if (clusterCenter && image) {
       const markerSize = zoom < 18 ? Math.min(zoom * 5, 50) : (zoom - 15) * (zoom - 16) * 10;
-      ctx.fillStyle = color || '#000';
-      ctx.strokeStyle = color || '#000';
       ctx.save();
-      ctx.translate(clusterCenter.x, clusterCenter.y);
-      let filteredImage;
-      if (checkMarker(image.src))
-        filteredImage = colorizeImage(image, color, markerSize, markerSize);
-      else filteredImage = image;
+      ctx.translate(clusterCenter.x, clusterCenter.y - zoom);
+      ctx.rotate(0);
+      const filteredImage = colorizeImage(image, color, markerSize, markerSize);
       ctx.drawImage(filteredImage, -markerSize / 2, -markerSize / 2, markerSize, markerSize);
       ctx.restore();
     }
