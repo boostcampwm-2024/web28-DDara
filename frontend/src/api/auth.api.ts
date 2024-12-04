@@ -15,7 +15,7 @@ export const doLogin = (id: string, password: string): Promise<ResponseDto<Login
           console.error(res);
           fnReject(`msg.${res}`);
         } else {
-          fnResolve(new ResponseDto<LoginResEntity>(res));
+          fnResolve(new ResponseDto<LoginResEntity>(res.data));
         }
       })
       .catch(err => {
@@ -44,7 +44,7 @@ export const doRegister = (
           console.error(res);
           fnReject(`msg.${res}`);
         } else {
-          fnResolve(new ResponseDto<RegisterResEntity>(res));
+          fnResolve(new ResponseDto<RegisterResEntity>(res.data));
         }
       })
       .catch(err => {

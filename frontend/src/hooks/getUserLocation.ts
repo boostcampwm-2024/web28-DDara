@@ -3,7 +3,12 @@ import { useEffect, useState } from 'react';
 interface IGetUserLocation {
   lat: number | null;
   lng: number | null;
+  alpha: number | null;
   error: string | null;
+}
+
+interface IDeviceOrientationEventWithPermission extends DeviceOrientationEvent {
+  requestPermission?: () => Promise<'granted' | 'denied'>;
 }
 
 /**
@@ -32,34 +37,84 @@ export const getUserLocation = (): IGetUserLocation => {
   const [location, setLocation] = useState<IGetUserLocation>({
     lat: null,
     lng: null,
+    alpha: null,
     error: null,
   });
 
   useEffect(() => {
+    let watchId: number;
+
+    const handlePosition = (position: GeolocationPosition) => {
+      setLocation(prev => ({
+        ...prev,
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        error: null,
+      }));
+    };
+
+    const handleError = (error: GeolocationPositionError) => {
+      setLocation({
+        lat: 37.3595704,
+        lng: 127.105399,
+        alpha: 0,
+        error: error.message,
+      });
+    };
+
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          setLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            error: null,
-          });
-        },
-        error => {
-          setLocation({
-            lat: 37.3595704,
-            lng: 127.105399,
-            error: error.message,
-          });
-        },
-      );
+      watchId = navigator.geolocation.watchPosition(handlePosition, handleError, {
+        enableHighAccuracy: true,
+        maximumAge: 5000,
+        timeout: 10000,
+      });
     } else {
       setLocation({
         lat: 37.3595704,
         lng: 127.105399,
+        alpha: 0,
         error: '현재 위치를 불러오지 못했습니다',
       });
     }
+
+    const handleOrientation = (event: DeviceOrientationEvent) => {
+      if (event.alpha !== null) {
+        setLocation(prev => ({ ...prev, alpha: event.alpha }));
+      }
+    };
+
+    const requestOrientationPermission = async () => {
+      const DeviceOrientationEventTyped =
+        DeviceOrientationEvent as unknown as IDeviceOrientationEventWithPermission;
+
+      if (
+        typeof DeviceOrientationEventTyped !== 'undefined' &&
+        typeof DeviceOrientationEventTyped.requestPermission === 'function'
+      ) {
+        try {
+          const permission = await DeviceOrientationEventTyped.requestPermission();
+          if (permission === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation);
+          } else {
+            console.error('Device Orientation permission denied.');
+          }
+        } catch (error) {
+          console.error('Failed to request Device Orientation permission:', error);
+        }
+      } else {
+        console.warn('DeviceOrientationEvent.requestPermission is not supported on this browser.');
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
+    };
+
+    requestOrientationPermission().then(() => {
+      window.addEventListener('deviceorientation', handleOrientation);
+    });
+
+    return () => {
+      if (watchId) navigator.geolocation.clearWatch(watchId);
+      window.removeEventListener('deviceorientation', handleOrientation);
+    };
   }, []);
 
   return location;

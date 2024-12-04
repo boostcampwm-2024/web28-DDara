@@ -19,7 +19,7 @@ export const HeaderBackButton = () => {
 
   return (
     <Button onClick={handleHeaderBackButtonClick}>
-      <MdArrowBackIos className="h-6 w-6" />
+      <MdArrowBackIos className="text-blueGray-800 h-6 w-6" />
     </Button>
   );
 };

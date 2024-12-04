@@ -1,42 +1,75 @@
 import { Route, Routes } from 'react-router-dom';
 import { Main } from '@/pages/Main';
-import { Register } from '@/pages/Register';
 import { AddChannel } from '@/pages/AddChannel';
-import { UserRoute } from '@/pages/UserRoute';
 import { DrawRoute } from '@/pages/DrawRoute';
 import { HostView } from '@/pages/HostView';
 import { GuestView } from '@/pages/GuestView';
 import { Layout } from '@/component/layout/Layout';
 import { UserProvider } from '@/context/UserContext';
+import { CurrentUserProvider } from '@/context/CurrentUserContext';
+import { ChannelInfoPage } from '@/pages/ChannelInfoPage'; // ChannelInfoPage 컴포넌트 임포트
+import { ChannelProvider } from '@/context/ChannelContext';
+import { RequireAuth } from '@/routes/RequireAuth.tsx';
+import { AlertUndefinedURL } from '@/routes/AlertUndefinedURL.tsx';
+import { AddGuestPage } from '@/pages/AddGuestPage';
 
 export const IndexRoutes = () => (
   <UserProvider>
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        {/* 메인 페이지를 위한 인덱스 라우트 */}
-        <Route index element={<Main />} />
-
-        {/* 공개 라우트 */}
-        <Route path="register" element={<Register />} />
-
-        {/* 채널 추가를 위한 중첩 라우트 */}
-        <Route path="add-channel">
-          <Route index element={<AddChannel />} />
-          <Route path=":user">
-            <Route index element={<UserRoute />} />
-            <Route path="draw" element={<DrawRoute />} />
+    <CurrentUserProvider>
+      <ChannelProvider>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Main />} />
+            <Route
+              path="add-channel"
+              element={
+                <RequireAuth>
+                  <AddChannel />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="add-channel/:user/draw"
+              element={
+                <RequireAuth>
+                  <DrawRoute />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="guest-add-channel/:channelId"
+              element={
+                <RequireAuth>
+                  <AddGuestPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="channelInfo/:channelId"
+              element={
+                <RequireAuth>
+                  <ChannelInfoPage />
+                </RequireAuth>
+              }
+            />
+            <Route path="channel/:channelId">
+              <Route index element={<AlertUndefinedURL />} />
+              <Route
+                path="host"
+                element={
+                  <RequireAuth>
+                    <HostView />
+                  </RequireAuth>
+                }
+              />
+              <Route path="guest/:guestId" element={<GuestView />} />
+            </Route>
           </Route>
-        </Route>
 
-        {/* 채널별 뷰를 위한 중첩 라우트 */}
-        <Route path="channel/:channelId">
-          <Route path="host" element={<HostView />} />
-          <Route path="guest/:guestId" element={<GuestView />} />
-        </Route>
-
-        {/* TODO : 정의되지 않은 경로에 대한 폴백 라우트 (선택사항) */}
-        {/* <Route path="*" element={<NotFound />} /> */}
-      </Route>
-    </Routes>
+          {/* 정의되지 않은 경로 라우팅 */}
+          <Route path="*" element={<AlertUndefinedURL />} />
+        </Routes>
+      </ChannelProvider>
+    </CurrentUserProvider>
   </UserProvider>
 );

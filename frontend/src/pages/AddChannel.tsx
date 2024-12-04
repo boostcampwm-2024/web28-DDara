@@ -2,10 +2,15 @@ import { useContext, useEffect } from 'react';
 import { HiMiniInformationCircle } from 'react-icons/hi2';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { RouteSettingButton } from '@/component/routebutton/RouteSettingButton';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { RouteResultButton } from '@/component/routebutton/RouteResultButton';
 import { IUser, UserContext } from '@/context/UserContext';
 import { buttonActiveType } from '@/component/layout/enumTypes';
+import { createChannelReqEntity } from '@/api/dto/channel.dto';
+import { createChannel } from '@/api/channel.api';
+import { Page } from '@/component/routebutton/enum';
+import { loadLocalData } from '@/utils/common/manageLocalData';
+import { AppConfig } from '@/lib/constants/commonConstants';
 import { InputBox } from '../component/common/InputBox';
 
 /**
@@ -33,9 +38,21 @@ const Divider = () => <hr className="my-6 w-full border-gray-300" />;
  */
 
 export const AddChannel = () => {
-  const { users, setUsers } = useContext(UserContext);
-
-  const { setFooterTitle, setFooterTransparency, setFooterActive } = useContext(FooterContext);
+  const { users, setUsers, resetUsers, channelName, setChannelName } = useContext(UserContext);
+  const {
+    setFooterTitle,
+    setFooterTransparency,
+    setFooterActive,
+    footerOption,
+    setFooterOnClick,
+    resetFooterContext,
+  } = useContext(FooterContext);
+  const navigate = useNavigate();
+  const goToMainPage = () => {
+    navigate('/');
+    resetFooterContext();
+    resetUsers();
+  };
 
   /**
    * 사용자 추가 함수
@@ -56,10 +73,11 @@ export const AddChannel = () => {
    */
   const addUser = () => {
     const newUser: IUser = {
-      id: users.length + 1,
+      id: '',
+      index: users.length + 1,
       name: `사용자${users.length + 1}`,
-      start_location: { lat: 0, lng: 0 }, // 초기값으로 빈 좌표
-      end_location: { lat: 0, lng: 0 }, // 초기값으로 빈 좌표
+      start_location: { title: '', lat: 0, lng: 0 }, // 초기값으로 빈 좌표
+      end_location: { title: '', lat: 0, lng: 0 }, // 초기값으로 빈 좌표
       path: [], // 초기값으로 빈 배열
       marker_style: { color: '' }, // 초기값으로 빈 문자열
     };
@@ -95,16 +113,19 @@ export const AddChannel = () => {
    * ```
    */
 
-  const deleteUser = (id: number) => {
+  const deleteUser = (index: number) => {
     const updatedUsers = users
-      .filter(user => user.id !== id)
-      .map((user, index) => ({
+      .filter(user => user.index !== index)
+      .map((user, i) => ({
         ...user,
-        id: index + 1,
-        name: `사용자${index + 1}`,
+        index: i + 1,
+        name: `사용자${i + 1}`,
       }));
     setUsers(updatedUsers);
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
+  };
+
+  const handleChangeChannelName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChannelName(event.target.value);
   };
 
   useEffect(() => {
@@ -114,6 +135,9 @@ export const AddChannel = () => {
   }, []);
 
   useEffect(() => {
+    if (users.length === 0) {
+      addUser(); // users가 비어있다면 기본 사용자 추가
+    }
     const allUsersComplete = users.every(isUserDataComplete);
 
     // 모든 사용자가 완전한 데이터라면 Footer를 활성화
@@ -124,16 +148,59 @@ export const AddChannel = () => {
     }
   }, [users, setFooterActive]); // users가 변경될 때마다 실행
 
+  const createChannelAPI = async () => {
+    try {
+      const userId = loadLocalData(AppConfig.KEYS.LOGIN_USER);
+      const channelData: createChannelReqEntity = {
+        name: channelName,
+        host_id: userId ?? undefined, // 추후 검증 로직 추가 예정
+        guests: users.map(user => ({
+          name: user.name,
+          start_location: {
+            title: user.start_location.title,
+            lat: user.start_location.lat,
+            lng: user.start_location.lng,
+          },
+          end_location: {
+            title: user.end_location.title,
+            lat: user.end_location.lat,
+            lng: user.end_location.lng,
+          },
+          path: user.path.map(p => ({
+            lat: p.lat,
+            lng: p.lng,
+          })),
+          marker_style: user.marker_style,
+        })),
+      };
+      const response = await createChannel(channelData);
+      console.log('채널 생성 성공:', response);
+    } catch (error) {
+      console.error('채널 생성 실패:', error);
+    }
+  };
+
+  useEffect(() => {
+    setFooterOnClick(() => {
+      createChannelAPI();
+      goToMainPage();
+    });
+  }, [footerOption.active, channelName]); // channelName이 변경될 때마다 실행
+
   return (
     <main className="flex h-full w-full flex-col items-center px-8 py-16">
       <Outlet />
-      <InputBox placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길" />
+      <InputBox
+        placeholder="경로 이름을 입력해주세요. ex) 아들 집 가는 길"
+        onChange={handleChangeChannelName}
+        value={channelName}
+      />
       <Divider />
       <section className="w-full space-y-4">
         {users.map(user => (
-          <div key={user.id}>
+          <div key={user.index}>
             {isUserDataComplete(user) ? (
-              <RouteResultButton user={user} deleteUser={deleteUser} />
+              <RouteResultButton user={user} deleteUser={deleteUser} page={Page.ADD} />
             ) : (
               <RouteSettingButton user={user} deleteUser={deleteUser} />
             )}
@@ -142,13 +209,14 @@ export const AddChannel = () => {
       </section>
       <section className="text-grayscale-400 my-4 flex flex-row items-center justify-center gap-[2px] text-xs">
         <HiMiniInformationCircle className="h-4 w-4 text-black" />
-        사용자 별로 출발지/도착지(마커), 경로(그림)을 설정할 수 있습니다.
+        사용자 별로 출발지/도착지, 경로을 설정할 수 있습니다.
       </section>
       {users.length < 5 && (
         <section className="flex w-full justify-end">
           <button
+            type="button"
             onClick={addUser}
-            className="bg-grayscale-25 border-gray-75 h-8 w-64 rounded border p-2 text-xs"
+            className="bg-grayscale-25 border-gray-75 font-nomal mr-8 h-8 w-64 rounded border p-2 text-xs"
           >
             사용자 추가
           </button>

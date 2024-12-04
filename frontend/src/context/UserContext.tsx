@@ -1,13 +1,16 @@
 import React, { createContext, ReactNode, useMemo, useState } from 'react';
 
 export interface IUser {
-  id: number;
+  id: string;
   name: string;
+  index: number;
   start_location: {
+    title: string;
     lat: number;
     lng: number;
   };
   end_location: {
+    title: string;
     lat: number;
     lng: number;
   };
@@ -23,28 +26,34 @@ interface IUserContextProps {
 
 interface IUserOptionContext {
   users: IUser[];
-  setUsers: React.Dispatch<React.SetStateAction<IUser[]>>;
+  setUsers: React.Dispatch<React.SetStateAction<IUser[]>>; // setUsers 함수 타입 수정
+  resetUsers: () => void;
+  channelName: string;
+  setChannelName: React.Dispatch<React.SetStateAction<string>>;
 }
-
 const defaultUserContext: IUserOptionContext = {
   users: [],
   setUsers: () => {},
+  resetUsers: () => {},
+  channelName: '',
+  setChannelName: () => {},
 };
 
-export const UserContext = createContext<IUserOptionContext>(defaultUserContext);
+export const UserContext = createContext<IUserOptionContext>(defaultUserContext); // 기본값을 null로 설정
 
 export const UserProvider = (props: IUserContextProps) => {
-  const [users, setUsers] = useState<IUser[]>([
-    {
-      id: 1,
-      name: '사용자1',
-      start_location: { lat: 0, lng: 0 },
-      end_location: { lat: 0, lng: 0 },
-      path: [],
-      marker_style: { color: '' },
-    },
-  ]);
-  const contextValue = useMemo(() => ({ users, setUsers }), [users, setUsers]);
+  const [channelName, setChannelName] = useState<string>('');
+  const [users, setUsers] = useState<IUser[]>([]);
+
+  const resetUsers = () => {
+    setUsers([]);
+    setChannelName('');
+  };
+
+  const contextValue = useMemo(
+    () => ({ users, setUsers, resetUsers, channelName, setChannelName }),
+    [users, setUsers, channelName, setChannelName],
+  );
 
   return <UserContext.Provider value={contextValue}>{props.children}</UserContext.Provider>;
 };

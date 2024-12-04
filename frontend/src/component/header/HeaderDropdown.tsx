@@ -1,39 +1,70 @@
 import { Dropdown } from '@/component/common/dropdown/Dropdown.tsx';
 import { MdMenu, MdLocationOn } from 'react-icons/md';
 import { DropdownItem } from '@/component/common/dropdown/DropdownItem.tsx';
+import { HeaderDropdownContext } from '@/component/header/HeaderDropdownProvider.tsx';
+import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 
-interface IDropdownContainerProps {
-  items: string[];
-}
+export const HeaderDropdown = () => {
+  const [clickedId, setClickedId] = useState<string>('');
+  const { headerDropdownOption } = useContext(HeaderDropdownContext);
 
-export const HeaderDropdown = (props: IDropdownContainerProps) => {
-  // Tailwind의 동적 클래스 네이밍 할당을 위한 변수
-  const textMarkerUser = [
-    'text-marker-user1',
-    'text-marker-user2',
-    'text-marker-user3',
-    'text-marker-user4',
-    'text-marker-user5',
-  ];
+  useEffect(() => {
+    if (headerDropdownOption.items.length === 1) setClickedId(headerDropdownOption.items[0].id);
+  }, [headerDropdownOption]);
+
+  const DropdownItems = () => {
+    const Items = headerDropdownOption.items.map(guestData => {
+      return (
+        <DropdownItem
+          key={guestData.id}
+          onClick={() => {
+            headerDropdownOption.onClick(guestData.id);
+            setClickedId(guestData.id);
+          }}
+        >
+          <span
+            className={classNames({
+              'text-marker-user4 font-bold': clickedId === guestData.id,
+            })}
+          >
+            {guestData.name} 보기
+          </span>
+          <MdLocationOn className="h-5 w-5 fill-current" color={guestData.markerStyle.color} />
+        </DropdownItem>
+      );
+    });
+
+    if (Items.length > 1) {
+      Items.push(
+        <DropdownItem
+          key="showall"
+          onClick={() => {
+            headerDropdownOption.onClick('');
+            setClickedId('');
+          }}
+        >
+          <span
+            className={classNames({
+              'text-marker-user4 font-bold': clickedId === '',
+            })}
+          >
+            모두 보기
+          </span>
+        </DropdownItem>,
+      );
+    }
+
+    return Items;
+  };
 
   return (
     <div>
       <Dropdown>
         <Dropdown.Trigger>
-          <MdMenu className="h-6 w-6" />
+          <MdMenu className="text-blueGray-800 h-6 w-6" />
         </Dropdown.Trigger>
-        <Dropdown.Menu>
-          {props.items.map((e, i) => {
-            return (
-              <DropdownItem key={e}>
-                {e}
-                <MdLocationOn className={classNames(`h-5 w-5 fill-current ${textMarkerUser[i]}`)} />
-                {/* 아이콘 색 변경 로직 찾기, 현재는 아이콘색이 반영이 안됨 수정할 사 */}
-              </DropdownItem>
-            );
-          })}
-        </Dropdown.Menu>
+        <Dropdown.Menu>{DropdownItems()}</Dropdown.Menu>
       </Dropdown>
     </div>
   );
