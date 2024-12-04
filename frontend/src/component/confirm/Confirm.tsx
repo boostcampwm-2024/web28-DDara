@@ -1,11 +1,18 @@
+import classNames from 'classnames';
+
 interface IConfirmButtonProps {
   onClick: () => void;
   text: string;
+  type: 'confirm' | 'cancel';
 }
 
 const ConfirmButton = (props: IConfirmButtonProps) => (
   <button
-    className="bg-blueGray-800 w-full cursor-pointer rounded-md border-none px-2.5 py-2.5 text-sm font-medium text-white"
+    className={classNames(
+      'w-full cursor-pointer rounded-md border-none px-2.5 py-2.5 text-sm font-medium',
+      props.type === 'confirm' && 'bg-blueGray-800 text-white',
+      props.type === 'cancel' && 'bg-gray-400 text-white',
+    )}
     onClick={props.onClick}
     type="button"
   >
@@ -30,11 +37,23 @@ export const Confirm = (props: IConfirmProps) => {
           {props.message}
         </div>
         {props.type === 'alert' ? (
-          <ConfirmButton onClick={props.onConfirm} text={props.confirmText || '확인'} />
+          <ConfirmButton
+            onClick={props.onConfirm}
+            text={props.confirmText || '확인'}
+            type="confirm"
+          />
         ) : (
           <div className="flex w-full items-center justify-between gap-4">
-            <ConfirmButton onClick={props.onConfirm} text={props.confirmText || '확인'} />
-            <ConfirmButton onClick={props.onCancel} text={props.cancelText || '취소'} />
+            <ConfirmButton
+              onClick={props.onConfirm}
+              text={props.confirmText || '확인'}
+              type="confirm"
+            />
+            <ConfirmButton
+              onClick={props.onCancel}
+              text={props.cancelText || '취소'}
+              type="cancel"
+            />
           </div>
         )}
       </div>
