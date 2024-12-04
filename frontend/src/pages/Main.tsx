@@ -1,11 +1,11 @@
-import { Fragment, useContext, useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useRef, useState, ReactNode } from 'react';
 import { MdLogout } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
 import { buttonActiveType } from '@/component/layout/enumTypes';
 import { loadLocalData, saveLocalData, removeLocalData } from '@/utils/common/manageLocalData.ts';
 import { AuthModal } from '@/component/authmodal/AuthModal';
-import { getUserChannels } from '@/api/channel.api.ts';
+import { deleteChannel, getUserChannels } from '@/api/channel.api.ts';
 import { BottomSheet } from '@/component/bottomsheet/BottomSheet.tsx';
 import { Content } from '@/component/content/Content.tsx';
 import { AppConfig } from '@/lib/constants/commonConstants.ts';
@@ -15,6 +15,7 @@ import { MapCanvasForView } from '@/component/canvasWithMap/canvasWithMapForView
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
 import { UserContext } from '@/context/UserContext';
 import { ToggleProvider } from '@/context/DropdownContext.tsx';
+import { Confirm } from '@/component/confirm/Confirm.tsx';
 
 export const Main = () => {
   const {
@@ -31,10 +32,59 @@ export const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
   const [channels, setChannels] = useState<any[]>([]);
+  const [modalState, setModalState] = useState<'none' | 'confirm' | 'alert'>('none');
+  const [modal, setModal] = useState<ReactNode>(false);
+
+  const deleteTargetRef = useRef<string>('');
 
   const { resetUsers } = useContext(UserContext);
 
+  const handleDeleteChannel = (channelId: string) => {
+    setModalState('confirm');
+    deleteTargetRef.current = channelId;
+    // setIsDeleted(prev => !prev);
+  };
+
+  const handleDeleteModalCancel = () => {
+    setModalState('none');
+  };
+
+  const handleDeleteModalConfirm = async () => {
+    try {
+      await deleteChannel(deleteTargetRef.current);
+      setModalState('alert');
+      console.log(modalState);
+    } catch (err) {
+      console.error('Failed to delete channel info:', err);
+    }
+  };
+
   useEffect(() => {
+    if (modalState === 'confirm') {
+      setModal(
+        <Confirm
+          type="confirm"
+          message="채널을 삭제 하시겠습니까?"
+          onConfirm={handleDeleteModalConfirm}
+          onCancel={handleDeleteModalCancel}
+        />,
+      );
+      return;
+    }
+    if (modalState === 'alert') {
+      setModal(
+        <Confirm
+          message="삭제 되었습니다."
+          onConfirm={() => {
+            setModalState('none');
+          }}
+          onCancel={() => {}}
+          type="alert"
+        />,
+      );
+      return;
+    }
+
     const token = loadLocalData(AppConfig.KEYS.LOGIN_TOKEN);
     setIsLoggedIn(!!token);
 
@@ -52,7 +102,7 @@ export const Main = () => {
           });
       }
     }
-  }, []);
+  }, [modalState]);
 
   const navigate = useNavigate();
 
@@ -173,6 +223,7 @@ export const Main = () => {
                   link={`/channel/${item.id}/host`}
                   person={item.guest_count}
                   time={item.generated_at}
+                  onDelete={handleDeleteChannel}
                 />
                 <hr className="my-2" />
               </Fragment>
@@ -190,6 +241,8 @@ export const Main = () => {
             </div>
           </BottomSheet>
         )}
+
+        {modalState !== 'none' && modal}
 
         {/* 로그인 모달 */}
         <AuthModal isOpen={showLoginModal} onClose={handleCloseLoginModal} type="login" />
