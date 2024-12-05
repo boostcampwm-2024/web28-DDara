@@ -10,8 +10,13 @@ import { getAddressFromCoordinates } from '@/utils/map/getAddress';
 
 export const DrawRoute = () => {
   const { users, setUsers } = useContext(UserContext);
-  const { setFooterTitle, setFooterActive, setFooterOnClick, resetFooterContext } =
-    useContext(FooterContext);
+  const {
+    setFooterTitle,
+    setFooterActive,
+    setFooterOnClick,
+    setFooterTransparency,
+    resetFooterContext,
+  } = useContext(FooterContext);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const params = useParams<Record<string, string | undefined>>();
   const navigate = useNavigate();
@@ -51,6 +56,7 @@ export const DrawRoute = () => {
 
   useEffect(() => {
     setFooterTitle('사용자 경로 추가 완료');
+    setFooterTransparency(false);
     setFooterActive(buttonActiveType.PASSIVE);
     const user = getUser();
     if (user) {
