@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect, useRef, useState, ReactNode } from 'react';
-import { MdLogout } from 'react-icons/md';
+import { MdInfo, MdLogout } from 'react-icons/md';
 import { FooterContext } from '@/component/layout/footer/LayoutFooterProvider';
 import { useNavigate } from 'react-router-dom';
 import { buttonActiveType } from '@/component/layout/enumTypes';
@@ -53,7 +53,6 @@ export const Main = () => {
     try {
       await deleteChannel(deleteTargetRef.current);
       setModalState('alert');
-      console.log(modalState);
     } catch (err) {
       console.error('Failed to delete channel info:', err);
     }
@@ -172,12 +171,25 @@ export const Main = () => {
     setIsLoggedIn(!isLoggedIn);
   };
 
+  const handleOnBoardingButton = () => {
+    saveLocalData(AppConfig.KEYS.FIRST_VISIT, 'true');
+    window.location.reload();
+  };
+
   const isUserLoggedIn = loadLocalData(AppConfig.KEYS.LOGIN_TOKEN) !== null;
 
   return (
     <ToggleProvider>
       <div className="flex flex-col overflow-hidden">
-        <header className="absolute left-0 right-0 top-0 z-10 flex p-4">
+        <header className="absolute left-0 right-0 top-0 z-10 flex justify-between p-4">
+          <button
+            type="button"
+            onClick={handleOnBoardingButton}
+            className="flex flex-col items-center gap-2 text-gray-700"
+          >
+            <MdInfo size={24} className="text-blueGray-800" />
+            <span className="text-xs">가이드보기</span>
+          </button>
           {isUserLoggedIn && (
             <button
               type="button"
