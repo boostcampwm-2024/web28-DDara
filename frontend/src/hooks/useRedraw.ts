@@ -376,12 +376,14 @@ export const useRedrawCanvas = ({
     if (lat && lng) {
       const currentLocation = latLngToCanvasPoint({ lat, lng });
       if (alpha) {
+        const normalizedAlpha = (alpha + 360) % 360;
+        const correctedAlpha = ((normalizedAlpha - 90 + 180) % 360) * (Math.PI / 180);
         drawMarker(
           ctx,
           currentLocation,
           character1Ref.current,
           zoom,
-          (alpha * Math.PI) / 180,
+          correctedAlpha,
           guests![0]?.markerStyle.color,
           MARKER_TYPE.CHARACTER,
         );
@@ -404,6 +406,8 @@ export const useRedrawCanvas = ({
           lat: location.lat ? location.lat : 0,
           lng: location.lng ? location.lng : 0,
         });
+        const normalizedAlpha = (location.alpha + 360) % 360;
+        const correctedAlpha = ((normalizedAlpha - 90 + 180) % 360) * (Math.PI / 180);
 
         drawNeonCircleAndDirection(ctx, locationPoint, zoom, color);
         drawMarker(
@@ -411,7 +415,7 @@ export const useRedrawCanvas = ({
           locationPoint,
           character2Ref.current,
           zoom,
-          (location.alpha * Math.PI) / 180,
+          correctedAlpha,
           color,
           MARKER_TYPE.CHARACTER,
         );
