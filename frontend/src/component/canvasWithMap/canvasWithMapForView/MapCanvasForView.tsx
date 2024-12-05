@@ -36,7 +36,7 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
       return () => {
         mapInstance.destroy();
       };
-    }, [lat, lng]);
+    }, []);
 
     const latLngToCanvasPoint = (latLng: IPoint): ICanvasPoint | null => {
       if (!map || !projection || !canvasRef.current) return null;
