@@ -147,7 +147,13 @@ export const SearchBox = (props: ISearchBoxProps) => {
   };
 
   return (
-    <div className="absolute top-2 z-[6000] w-full px-2">
+    <div
+      className="absolute top-2 z-[6000] w-full px-2"
+      onTouchMove={e => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+    >
       {/* 검색 입력 */}
       <div className="border-grayscale-75 text-grayscale-400 flex h-11 w-full rounded border bg-white px-3">
         <input
