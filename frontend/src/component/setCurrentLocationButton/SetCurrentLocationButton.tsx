@@ -25,7 +25,7 @@ export const SetCurrentLocationButton = (props: ISetCurruntLocationButton) => {
         props.isMain ? 'relative bottom-0 left-2' : 'absolute bottom-5 left-5',
       )}
     >
-      <MdMyLocation />
+      <MdMyLocation className="h-6 w-6" />
     </button>
   );
 };
