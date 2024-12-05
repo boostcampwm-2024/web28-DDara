@@ -25,6 +25,7 @@ export const Main = () => {
     setFooterActive,
     resetFooterContext,
   } = useContext(FooterContext);
+  const mapRef = useRef<naver.maps.Map | null>(null);
   const { lat, lng, alpha, error } = getUserLocation();
   const [otherLocations, setOtherLocations] = useState<any[]>([]);
   const MIN_HEIGHT = 0.15;
@@ -53,7 +54,6 @@ export const Main = () => {
     try {
       await deleteChannel(deleteTargetRef.current);
       setModalState('alert');
-      console.log(modalState);
     } catch (err) {
       console.error('Failed to delete channel info:', err);
     }
@@ -200,6 +200,7 @@ export const Main = () => {
                 lat={lat}
                 lng={lng}
                 alpha={alpha}
+                ref={mapRef}
                 otherLocations={otherLocations}
               />
             ) : (
@@ -214,7 +215,14 @@ export const Main = () => {
         </main>
 
         {isUserLoggedIn ? (
-          <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#FFFFFF">
+          <BottomSheet
+            map={mapRef.current}
+            lat={lat}
+            lng={lng}
+            minHeight={MIN_HEIGHT}
+            maxHeight={MAX_HEIGHT}
+            backgroundColor="#FFFFFF"
+          >
             {channels.map(item => (
               <Fragment key={item.id}>
                 <Content
@@ -231,7 +239,14 @@ export const Main = () => {
             <div className="h-20" />
           </BottomSheet>
         ) : (
-          <BottomSheet minHeight={MIN_HEIGHT} maxHeight={MAX_HEIGHT} backgroundColor="#F1F1F1F2">
+          <BottomSheet
+            map={mapRef.current}
+            lat={lat}
+            lng={lng}
+            minHeight={MIN_HEIGHT}
+            maxHeight={MAX_HEIGHT}
+            backgroundColor="#F1F1F1F2"
+          >
             <div className="h-full w-full cursor-pointer" onClick={handleLoginRequest}>
               <div className="absolute left-1/2 top-[20%] flex -translate-x-1/2 transform cursor-pointer flex-col p-6 text-center">
                 <p className="text-grayscale-175 mb-5 text-lg font-normal">로그인을 진행하여</p>

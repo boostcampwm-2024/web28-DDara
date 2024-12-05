@@ -188,8 +188,7 @@ export const AddChannel = () => {
           marker_style: user.marker_style,
         })),
       };
-      const response = await createChannel(channelData);
-      console.log('채널 생성 성공:', response);
+      await createChannel(channelData);
     } catch (error) {
       console.error('채널 생성 실패:', error);
     }

@@ -1,7 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { MdClear } from 'react-icons/md';
+import { SetCurruntLocationButton } from '../setCurrentLocationButton/SetCurrentLocationButton';
 
 interface IBottomSheetProps {
+  map: naver.maps.Map | null;
+  lat: number | null;
+  lng: number | null;
   minHeight: number;
   maxHeight: number;
   backgroundColor: string;
@@ -9,6 +13,9 @@ interface IBottomSheetProps {
 }
 
 export const BottomSheet = ({
+  map,
+  lat,
+  lng,
   minHeight,
   maxHeight,
   backgroundColor,
@@ -64,6 +71,10 @@ export const BottomSheet = ({
         height: `${sheetHeight * 100}vh`,
       }}
     >
+      <div className="absolute top-0">
+        <SetCurruntLocationButton map={map} lat={lat} lng={lng} isMain />
+      </div>
+
       <div
         className="flex items-center justify-center pb-6 pt-2"
         onTouchStart={handleTouchStart}

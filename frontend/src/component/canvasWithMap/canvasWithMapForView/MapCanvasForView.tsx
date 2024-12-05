@@ -4,6 +4,7 @@ import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
 import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 import { ICluster, useCluster } from '@/hooks/useCluster';
+import { SetCurruntLocationButton } from '@/component/setCurrentLocationButton/SetCurrentLocationButton';
 
 export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasViewProps>(
   ({ lat, lng, alpha, otherLocations, guests, width, height }: IMapCanvasViewProps, ref) => {
@@ -13,8 +14,7 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
     const [map, setMap] = useState<naver.maps.Map | null>(null);
     const { createClusters } = useCluster();
     const [clusters, setClusters] = useState<ICluster[] | null>(null);
-
-    useImperativeHandle(ref, () => map as naver.maps.Map);
+    const [center, setCenter] = useState<IPoint>();
 
     useEffect(() => {
       if (!mapRef.current) return;
@@ -37,6 +37,8 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
         mapInstance.destroy();
       };
     }, [lat, lng]);
+
+    useImperativeHandle(ref, () => map as naver.maps.Map);
 
     const latLngToCanvasPoint = (latLng: IPoint): ICanvasPoint | null => {
       if (!map || !projection || !canvasRef.current) return null;
@@ -113,11 +115,20 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
         }
       };
 
+      const handleCenterChanged = () => {
+        if (map) {
+          const currentCenter = map.getCenter();
+          const point = { lat: currentCenter.x, lng: currentCenter.y };
+          setCenter(point);
+        }
+      };
+
       // 컴포넌트가 처음 마운트될 때 즉시 실행
       updateClusters();
 
       const intervalId = setInterval(() => {
         updateClusters();
+        handleCenterChanged();
       }, 100);
 
       return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 클리어
@@ -125,7 +136,7 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
 
     useEffect(() => {
       redrawCanvas();
-    }, [guests, otherLocations, lat, lng, alpha, clusters, handleWheel]);
+    }, [guests, otherLocations, lat, lng, alpha, clusters, handleWheel, center]);
 
     return (
       <div
@@ -156,6 +167,7 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
         >
           <ZoomSlider map={map} redrawCanvas={redrawCanvas} />
         </div>
+        <SetCurruntLocationButton map={map} lat={lat} lng={lng} />
       </div>
     );
   },

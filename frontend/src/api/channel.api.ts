@@ -155,7 +155,6 @@ export const deleteChannel = (channelId: string): Promise<ResponseDto<deleteChan
         }
       })
       .catch(err => {
-        console.log(channelId);
         console.error(err);
         fnReject('msg.RESULT_FAILED');
       });
