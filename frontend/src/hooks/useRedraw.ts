@@ -169,7 +169,7 @@ export const useRedrawCanvas = ({
       }
 
       ctx.save();
-      ctx.translate(point.x, point.y - zoom);
+      ctx.translate(point.x, point.y + zoom);
       ctx.rotate(rotate);
       let filteredImage;
       if (markerType === MARKER_TYPE.CHARACTER) {

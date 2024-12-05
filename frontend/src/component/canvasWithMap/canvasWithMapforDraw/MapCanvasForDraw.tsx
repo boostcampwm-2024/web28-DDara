@@ -15,6 +15,7 @@ import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { zoomMapView } from '@/utils/map/mapUtils';
 import { ICluster, useCluster } from '@/hooks/useCluster';
 import { MIN_ZOOM } from '@/lib/constants/mapConstants.ts';
+import { getUserLocation } from '@/hooks/getUserLocation.ts';
 
 export const MapCanvasForDraw = ({
   width,
@@ -22,6 +23,8 @@ export const MapCanvasForDraw = ({
   initialCenter,
   initialZoom,
 }: IMapCanvasProps) => {
+  const { lat, lng } = getUserLocation();
+
   const mapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [projection, setProjection] = useState<naver.maps.MapSystemProjection | null>(null);
@@ -68,7 +71,7 @@ export const MapCanvasForDraw = ({
     if (!mapRef.current) return;
 
     const mapInstance = new naver.maps.Map(mapRef.current, {
-      center: new naver.maps.LatLng(initialCenter.lat, initialCenter.lng),
+      center: new naver.maps.LatLng(lat || initialCenter.lat, lng || initialCenter.lng),
       zoom: initialZoom,
       minZoom: MIN_ZOOM,
       maxBounds: new naver.maps.LatLngBounds(
