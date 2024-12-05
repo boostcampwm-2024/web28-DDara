@@ -4,7 +4,6 @@ import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
 import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 import { ICluster, useCluster } from '@/hooks/useCluster';
-import { DEFAULT_ZOOM, MIN_ZOOM } from '@/lib/constants/mapConstants.ts';
 
 export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasViewProps>(
   ({ lat, lng, alpha, otherLocations, guests, width, height }: IMapCanvasViewProps, ref) => {
@@ -22,8 +21,8 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
 
       const mapInstance = new naver.maps.Map(mapRef.current, {
         center: new naver.maps.LatLng(lat, lng),
-        zoom: DEFAULT_ZOOM,
-        minZoom: MIN_ZOOM,
+        zoom: 10,
+        minZoom: 7,
         maxBounds: new naver.maps.LatLngBounds(
           new naver.maps.LatLng(33.0, 124.5),
           new naver.maps.LatLng(38.9, 131.9),
@@ -37,7 +36,7 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
       return () => {
         mapInstance.destroy();
       };
-    }, []);
+    }, [lat, lng]);
 
     const latLngToCanvasPoint = (latLng: IPoint): ICanvasPoint | null => {
       if (!map || !projection || !canvasRef.current) return null;
@@ -146,13 +145,14 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
             position: 'absolute',
             top: 0,
             left: 0,
-            pointerEvents: 'auto',
+            pointerEvents: isDragging ? 'none' : 'auto',
           }}
         />
         <div
           className="absolute right-2 top-1/2 flex gap-2"
           style={{
             transform: 'translateY(-50%)',
+            pointerEvents: 'auto',
           }}
         >
           <ZoomSlider map={map} redrawCanvas={redrawCanvas} />
