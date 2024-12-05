@@ -146,6 +146,7 @@ export const AddChannel = () => {
   }, []);
 
   useEffect(() => {
+    console.log(users);
     if (users.length === 0) {
       addUser(); // users가 비어있다면 기본 사용자 추가
     }
@@ -188,7 +189,8 @@ export const AddChannel = () => {
           marker_style: user.marker_style,
         })),
       };
-      await createChannel(channelData);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+      const res = await createChannel(channelData);
     } catch (error) {
       console.error('채널 생성 실패:', error);
     }
