@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MdOutlineAdd, MdRemove } from 'react-icons/md';
 import './ZoomSlider.css';
+import { DEFAULT_ZOOM } from '@/lib/constants/mapConstants.ts';
 
 interface IZoomSliderProps {
   /** Naver 지도 객체 */
@@ -66,7 +67,7 @@ const ZoomSliderInput = ({ zoomLevel, onSliderChange }: IZoomSliderInputProps) =
 };
 
 export const ZoomSlider = ({ map, redrawCanvas }: IZoomSliderProps) => {
-  const [zoomLevel, setZoomLevel] = useState(map?.getZoom() ?? 10);
+  const [zoomLevel, setZoomLevel] = useState(map?.getZoom() ?? DEFAULT_ZOOM);
 
   useEffect(() => {
     if (!map) return undefined;
@@ -87,7 +88,7 @@ export const ZoomSlider = ({ map, redrawCanvas }: IZoomSliderProps) => {
   };
 
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newZoom = parseInt(event.target.value, 10);
+    const newZoom = parseInt(event.target.value, DEFAULT_ZOOM);
     if (map) {
       map.setZoom(newZoom);
       setZoomLevel(newZoom);
