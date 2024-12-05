@@ -88,7 +88,7 @@ export const BottomSheet = ({
   return (
     <>
       <div
-        className={classNames('absolute bottom-14 z-[5000]')}
+        className={classNames('absolute bottom-14')}
         style={{
           height: `${sheetHeight * 100}vh`,
           transition: 'height 0.3s ease-out',

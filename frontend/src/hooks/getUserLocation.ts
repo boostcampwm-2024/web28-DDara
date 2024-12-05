@@ -7,7 +7,7 @@ interface IGetUserLocation {
   error: string | null;
 }
 
-interface IDeviceOrientationEventWithPermission extends DeviceOrientationEvent {
+export interface IDeviceOrientationEventWithPermission extends DeviceOrientationEvent {
   requestPermission?: () => Promise<'granted' | 'denied'>;
 }
 
