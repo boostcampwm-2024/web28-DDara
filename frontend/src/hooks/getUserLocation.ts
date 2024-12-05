@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface IGetUserLocation {
   lat: number | null;
@@ -7,7 +7,11 @@ interface IGetUserLocation {
   error: string | null;
 }
 
-interface IDeviceOrientationEventWithPermission extends DeviceOrientationEvent {
+interface IGetUserLocationRes extends IGetUserLocation {
+  updateLocation: () => void;
+}
+
+export interface IDeviceOrientationEventWithPermission extends DeviceOrientationEvent {
   requestPermission?: () => Promise<'granted' | 'denied'>;
 }
 
@@ -33,13 +37,36 @@ interface IDeviceOrientationEventWithPermission extends DeviceOrientationEvent {
  * ```
  */
 
-export const getUserLocation = (): IGetUserLocation => {
+export const getUserLocation = (): IGetUserLocationRes => {
   const [location, setLocation] = useState<IGetUserLocation>({
     lat: null,
     lng: null,
     alpha: null,
     error: null,
   });
+
+  const updateLocation = useCallback(() => {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        setLocation(prev => ({
+          ...prev,
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          error: null,
+        }));
+      },
+      error => {
+        setLocation(prev => ({ ...prev, error: error.message }));
+      },
+    );
+
+    window.addEventListener('deviceorientation', event => {
+      setLocation(prev => ({
+        ...prev,
+        alpha: event.alpha ?? null,
+      }));
+    });
+  }, []);
 
   useEffect(() => {
     let watchId: number;
@@ -107,9 +134,7 @@ export const getUserLocation = (): IGetUserLocation => {
       }
     };
 
-    requestOrientationPermission().then(() => {
-      window.addEventListener('deviceorientation', handleOrientation);
-    });
+    requestOrientationPermission();
 
     return () => {
       if (watchId) navigator.geolocation.clearWatch(watchId);
@@ -117,5 +142,9 @@ export const getUserLocation = (): IGetUserLocation => {
     };
   }, []);
 
-  return location;
+  useEffect(() => {
+    updateLocation();
+  }, [updateLocation]);
+
+  return { ...location, updateLocation };
 };

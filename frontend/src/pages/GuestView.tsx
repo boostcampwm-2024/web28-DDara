@@ -15,7 +15,8 @@ import { AlertUI } from '@/component/common/alert/Alert.tsx';
 import { PATH_COLOR } from '@/lib/constants/canvasConstants.ts';
 
 export const GuestView = () => {
-  const { lat, lng, alpha, error } = getUserLocation();
+  const { lat, lng, alpha, error, updateLocation } = getUserLocation();
+
   const location = useLocation();
   const navigate = useNavigate(); // 네비게이션 훅 추가
 
@@ -58,6 +59,14 @@ export const GuestView = () => {
       );
     }
   }, [lat, lng, alpha]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateLocation();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [updateLocation]);
 
   const transformTypeGuestEntityToIGuest = (props: guestEntity | undefined): IGuest => {
     return {
