@@ -146,13 +146,39 @@ export const SearchBox = (props: ISearchBoxProps) => {
     props.deleteMarker();
   };
 
+  const [, setScrollPosition] = useState(0);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    // 터치 시작 지점 저장
+    setTouchStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartY !== null) {
+      const deltaY = e.touches[0].clientY - touchStartY;
+
+      const scrollableElement = e.currentTarget; // 현재 스크롤이 가능한 요소
+      const newScrollPosition = scrollableElement.scrollTop - deltaY;
+
+      scrollableElement.scrollTop = newScrollPosition;
+
+      setTouchStartY(e.touches[0].clientY);
+
+      setScrollPosition(newScrollPosition);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTouchStartY(null);
+  };
+
   return (
     <div
       className="absolute top-2 z-[6000] w-full px-2"
-      onTouchMove={e => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
+      onTouchStart={e => e.stopPropagation()}
+      onTouchMove={e => e.stopPropagation()}
+      onTouchEnd={e => e.stopPropagation()}
     >
       {/* 검색 입력 */}
       <div className="border-grayscale-75 text-grayscale-400 flex h-11 w-full rounded border bg-white px-3">
@@ -172,7 +198,15 @@ export const SearchBox = (props: ISearchBoxProps) => {
 
       {/* 검색 결과 리스트 */}
       {searchResults.length > 0 && (
-        <div className="border-grayscale-75 relative z-[5000] mt-2 max-h-60 w-full overflow-y-auto border-2 bg-white px-2">
+        <div
+          className="border-grayscale-75 relative z-[5000] mt-2 max-h-60 w-full overflow-y-auto border-2 bg-white px-2"
+          style={{
+            WebkitOverflowScrolling: 'touch',
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {loading && <p>로딩 중...</p>}
           {error && <p className="text-red-500">{error}</p>}
           {searchResults.map(result => (
