@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { MdClear } from 'react-icons/md';
-import { SetCurruntLocationButton } from '../setCurrentLocationButton/SetCurrentLocationButton';
+import classNames from 'classnames';
+import { SetCurrentLocationButton } from '../setCurrentLocationButton/SetCurrentLocationButton';
 
 interface IBottomSheetProps {
   map: naver.maps.Map | null;
@@ -62,38 +63,46 @@ export const BottomSheet = ({
   const handleClose = () => {
     setSheetHeight(minHeight);
   };
-
+  console.log(sheetHeight);
   return (
-    <div
-      className="transition-height absolute bottom-0 left-0 right-0 overflow-hidden rounded-t-2xl bg-white shadow-lg duration-700 ease-out"
-      style={{
-        backgroundColor: `${backgroundColor}`,
-        height: `${sheetHeight * 100}vh`,
-      }}
-    >
-      <div className="absolute top-0">
-        <SetCurruntLocationButton map={map} lat={lat} lng={lng} isMain />
+    <>
+      <div
+        className={classNames('absolute bottom-14 z-[5000]')}
+        style={{
+          height: `${sheetHeight * 100}vh`,
+          transition: 'height 0.3s ease-out',
+        }}
+      >
+        <SetCurrentLocationButton map={map} lat={lat} lng={lng} isMain />
       </div>
 
       <div
-        className="flex items-center justify-center pb-6 pt-2"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onMouseDown={handleMouseDown}
+        className="transition-height absolute bottom-0 left-0 right-0 overflow-hidden rounded-t-2xl bg-white shadow-lg duration-700 ease-out"
+        style={{
+          backgroundColor: `${backgroundColor}`,
+          height: `${sheetHeight * 100}vh`,
+        }}
       >
-        <div className="h-1.5 w-12 rounded-full bg-gray-300" />
-      </div>
-
-      <div className="absolute right-2 top-2">
-        <button
-          onClick={handleClose}
-          className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-gray-200"
+        <div
+          className="flex items-center justify-center pb-6 pt-2"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onMouseDown={handleMouseDown}
         >
-          <MdClear size={18} color="grayscale-850" />
-        </button>
-      </div>
+          <div className="h-1.5 w-12 rounded-full bg-gray-300" />
+        </div>
 
-      <div className="h-[calc(100%-60px)] overflow-auto pb-5">{children}</div>
-    </div>
+        <div className="absolute right-2 top-2">
+          <button
+            onClick={handleClose}
+            className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-gray-200"
+          >
+            <MdClear size={18} color="grayscale-850" />
+          </button>
+        </div>
+
+        <div className="h-[calc(100%-60px)] overflow-auto pb-5">{children}</div>
+      </div>
+    </>
   );
 };

@@ -8,7 +8,7 @@ interface ISetCurruntLocationButton {
   isMain?: boolean;
 }
 
-export const SetCurruntLocationButton = (props: ISetCurruntLocationButton) => {
+export const SetCurrentLocationButton = (props: ISetCurruntLocationButton) => {
   const handleCurrentLocationButton = () => {
     if (props.lat && props.lng) {
       props.map?.setCenter(new window.naver.maps.LatLng(props.lat, props.lng));
@@ -21,8 +21,8 @@ export const SetCurruntLocationButton = (props: ISetCurruntLocationButton) => {
       type="button"
       onClick={() => handleCurrentLocationButton()}
       className={classNames(
-        'bg-blueGray-800 shadow-floatButton absolute z-[5000] flex h-12 w-12 items-center justify-center rounded-full text-white',
-        props.isMain ? 'bottom-2 left-2' : 'bottom-5 left-5',
+        'bg-blueGray-800 shadow-floatButton z-[5000] flex h-12 w-12 items-center justify-center rounded-full text-white',
+        props.isMain ? 'relative bottom-0 left-2' : 'absolute bottom-5 left-5',
       )}
     >
       <MdMyLocation />

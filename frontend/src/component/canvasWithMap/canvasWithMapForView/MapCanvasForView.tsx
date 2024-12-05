@@ -4,7 +4,7 @@ import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
 import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 import { ICluster, useCluster } from '@/hooks/useCluster';
-import { SetCurruntLocationButton } from '@/component/setCurrentLocationButton/SetCurrentLocationButton';
+import { SetCurrentLocationButton } from '@/component/setCurrentLocationButton/SetCurrentLocationButton';
 import { DEFAULT_ZOOM, MIN_ZOOM } from '@/lib/constants/mapConstants.ts';
 
 export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasViewProps>(
@@ -171,7 +171,7 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
         >
           <ZoomSlider map={map} redrawCanvas={redrawCanvas} />
         </div>
-        {!isMain && <SetCurruntLocationButton map={map} lat={lat} lng={lng} />}
+        {!isMain && <SetCurrentLocationButton map={map} lat={lat} lng={lng} />}
       </div>
     );
   },
