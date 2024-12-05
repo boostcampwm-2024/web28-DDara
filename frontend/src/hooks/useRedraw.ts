@@ -324,8 +324,45 @@ export const useRedrawCanvas = ({
         clusteredMarkerSet.add(`${marker.lat.toFixed(6)}_${marker.lng.toFixed(6)}`),
       );
     });
-
     const zoom = map.getZoom();
+
+    if (guests) {
+      guests.forEach(({ startPoint, endPoint, paths, markerStyle }) => {
+        const startLocationKey = `${startPoint.lat.toFixed(6)}_${startPoint.lng.toFixed(6)}`;
+        const endLocationKey = `${endPoint.lat.toFixed(6)}_${endPoint.lng.toFixed(6)}`;
+        if (!clusteredMarkerSet.has(startLocationKey)) {
+          const startLocation = latLngToCanvasPoint(startPoint);
+          drawMarker(
+            ctx,
+            startLocation,
+            startImageRef.current,
+            zoom,
+            0,
+            markerStyle.color,
+            MARKER_TYPE.START_MARKER,
+          );
+        }
+
+        if (!clusteredMarkerSet.has(endLocationKey)) {
+          const endLocation = latLngToCanvasPoint(endPoint);
+          drawMarker(
+            ctx,
+            endLocation,
+            endImageRef.current,
+            zoom,
+            0,
+            markerStyle.color,
+            MARKER_TYPE.END_MARKER,
+          );
+        }
+
+        // 경로는 두 포인트 중 하나라도 클러스터에 포함되지 않으면 그리기
+        if (!clusteredMarkerSet.has(startLocationKey) || !clusteredMarkerSet.has(endLocationKey)) {
+          drawPath(ctx, paths, markerStyle.color);
+        }
+      });
+    }
+
     if (startMarker) {
       const startPoint = latLngToCanvasPoint(startMarker);
       const markerKey = `${startMarker.lat.toFixed(6)}_${startMarker.lng.toFixed(6)}`;
@@ -366,7 +403,7 @@ export const useRedrawCanvas = ({
       const currentLocation = latLngToCanvasPoint({ lat, lng });
       if (alpha) {
         const normalizedAlpha = (alpha + 360) % 360;
-        const correctedAlpha = ((normalizedAlpha - 90 + 180) % 360) * (Math.PI / 180);
+        const correctedAlpha = ((90 - normalizedAlpha + 360) % 360) * (Math.PI / 180);
         drawMarker(
           ctx,
           currentLocation,
@@ -396,7 +433,7 @@ export const useRedrawCanvas = ({
           lng: location.lng ? location.lng : 0,
         });
         const normalizedAlpha = (location.alpha + 360) % 360;
-        const correctedAlpha = ((normalizedAlpha - 90 + 180) % 360) * (Math.PI / 180);
+        const correctedAlpha = ((90 - normalizedAlpha + 360) % 360) * (Math.PI / 180);
 
         drawNeonCircleAndDirection(ctx, locationPoint, zoom, color);
         drawMarker(
@@ -411,42 +448,6 @@ export const useRedrawCanvas = ({
       });
     }
 
-    if (guests) {
-      guests.forEach(({ startPoint, endPoint, paths, markerStyle }) => {
-        const startLocationKey = `${startPoint.lat.toFixed(6)}_${startPoint.lng.toFixed(6)}`;
-        const endLocationKey = `${endPoint.lat.toFixed(6)}_${endPoint.lng.toFixed(6)}`;
-        if (!clusteredMarkerSet.has(startLocationKey)) {
-          const startLocation = latLngToCanvasPoint(startPoint);
-          drawMarker(
-            ctx,
-            startLocation,
-            startImageRef.current,
-            zoom,
-            0,
-            markerStyle.color,
-            MARKER_TYPE.START_MARKER,
-          );
-        }
-
-        if (!clusteredMarkerSet.has(endLocationKey)) {
-          const endLocation = latLngToCanvasPoint(endPoint);
-          drawMarker(
-            ctx,
-            endLocation,
-            endImageRef.current,
-            zoom,
-            0,
-            markerStyle.color,
-            MARKER_TYPE.END_MARKER,
-          );
-        }
-
-        // 경로는 두 포인트 중 하나라도 클러스터에 포함되지 않으면 그리기
-        if (!clusteredMarkerSet.has(startLocationKey) || !clusteredMarkerSet.has(endLocationKey)) {
-          drawPath(ctx, paths, markerStyle.color);
-        }
-      });
-    }
     if (clusters) {
       clusters.forEach(cluster => {
         drawCluster(ctx, cluster, startImageRef.current, zoom, cluster.color.color);
