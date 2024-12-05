@@ -146,7 +146,6 @@ export const AddChannel = () => {
   }, []);
 
   useEffect(() => {
-    console.log(users);
     if (users.length === 0) {
       addUser(); // users가 비어있다면 기본 사용자 추가
     }
