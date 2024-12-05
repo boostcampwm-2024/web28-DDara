@@ -97,7 +97,13 @@ export const ZoomSlider = ({ map, redrawCanvas }: IZoomSliderProps) => {
   };
 
   return (
-    <div className="flex h-48 w-9 flex-col items-center rounded bg-white shadow">
+    <div
+      className="flex h-48 w-9 flex-col items-center rounded bg-white shadow"
+      onTouchMove={e => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+    >
       <ZoomButton label={<MdOutlineAdd />} onClick={() => handleZoomChange(1)} />
       <ZoomSliderInput zoomLevel={zoomLevel} onSliderChange={handleSliderChange} />
       <ZoomButton label={<MdRemove />} onClick={() => handleZoomChange(-1)} />

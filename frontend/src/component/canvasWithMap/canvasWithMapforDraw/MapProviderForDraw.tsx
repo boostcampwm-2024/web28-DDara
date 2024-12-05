@@ -29,20 +29,6 @@ export const MapProviderForDraw = ({ width, height }: ICanvasScreenProps) => {
     };
   }, []);
 
-  useEffect(() => {
-    const preventDefault = (e: TouchEvent) => {
-      e.preventDefault();
-    };
-
-    document.body.style.overflow = 'hidden';
-    document.addEventListener('touchmove', preventDefault, { passive: false });
-
-    return () => {
-      document.body.style.overflow = 'auto';
-      document.removeEventListener('touchmove', preventDefault);
-    };
-  }, []);
-
   return (
     <MapCanvasForDraw
       width={windowSize.width}
