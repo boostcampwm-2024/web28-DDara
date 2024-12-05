@@ -1,5 +1,3 @@
-/* src/index.css */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,6 +10,7 @@
 * {
   overscroll-behavior: none;
   overscroll-behavior-y: none;
+  touch-action: none;
 }
 *::before,
 *::after {
@@ -20,8 +19,13 @@
   box-sizing: border-box; /* padding과 border를 box 크기에 포함 */
 }
 
-html,
-body,
+html {
+  overflow: hidden;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  touch-action: manipulation;
+}
+body
 div,
 span,
 applet,
