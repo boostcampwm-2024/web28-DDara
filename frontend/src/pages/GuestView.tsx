@@ -127,6 +127,7 @@ export const GuestView = () => {
             width="100%"
             height="100%"
             guests={[guestInfo]}
+            isMain={false}
           />
         ) : (
           <LoadingSpinner />

@@ -3,6 +3,14 @@
   font-family: Pretendard, 'Pretendard Variable', sans-serif !important;
 }
 
+@supports (-webkit-touch-callout: none) {
+  #root {
+    touch-action: manipulation; /* Safari 호환 옵션 */
+    overscroll-behavior: none;
+  }
+}
+
+
 .logo {
   height: 6em;
   padding: 1.5em;
