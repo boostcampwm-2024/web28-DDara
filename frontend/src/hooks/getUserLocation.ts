@@ -1,14 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface IGetUserLocation {
   lat: number | null;
   lng: number | null;
   alpha: number | null;
   error: string | null;
-}
-
-interface IGetUserLocationRes extends IGetUserLocation {
-  updateLocation: () => void;
 }
 
 export interface IDeviceOrientationEventWithPermission extends DeviceOrientationEvent {
@@ -37,36 +33,13 @@ export interface IDeviceOrientationEventWithPermission extends DeviceOrientation
  * ```
  */
 
-export const getUserLocation = (): IGetUserLocationRes => {
+export const getUserLocation = (): IGetUserLocation => {
   const [location, setLocation] = useState<IGetUserLocation>({
     lat: null,
     lng: null,
     alpha: null,
     error: null,
   });
-
-  const updateLocation = useCallback(() => {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        setLocation(prev => ({
-          ...prev,
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          error: null,
-        }));
-      },
-      error => {
-        setLocation(prev => ({ ...prev, error: error.message }));
-      },
-    );
-
-    window.addEventListener('deviceorientation', event => {
-      setLocation(prev => ({
-        ...prev,
-        alpha: event.alpha ?? null,
-      }));
-    });
-  }, []);
 
   useEffect(() => {
     let watchId: number;
@@ -134,7 +107,9 @@ export const getUserLocation = (): IGetUserLocationRes => {
       }
     };
 
-    requestOrientationPermission();
+    requestOrientationPermission().then(() => {
+      window.addEventListener('deviceorientation', handleOrientation);
+    });
 
     return () => {
       if (watchId) navigator.geolocation.clearWatch(watchId);
@@ -142,9 +117,5 @@ export const getUserLocation = (): IGetUserLocationRes => {
     };
   }, []);
 
-  useEffect(() => {
-    updateLocation();
-  }, [updateLocation]);
-
-  return { ...location, updateLocation };
+  return location;
 };

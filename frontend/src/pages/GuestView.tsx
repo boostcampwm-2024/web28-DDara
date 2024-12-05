@@ -7,7 +7,7 @@ import { IPoint } from '@/lib/types/canvasInterface.ts';
 import { guestEntity } from '@/api/dto/channel.dto.ts';
 import { GuestMarker } from '@/component/IconGuide/GuestMarker.tsx';
 import { LoadingSpinner } from '@/component/common/loadingSpinner/LoadingSpinner.tsx';
-import { getUserLocation } from '@/hooks/getUserLocation.ts';
+import { getUserLocation, IDeviceOrientationEventWithPermission } from '@/hooks/getUserLocation.ts';
 import { loadLocalData, saveLocalData } from '@/utils/common/manageLocalData.ts';
 import { AppConfig } from '@/lib/constants/commonConstants.ts';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,8 +15,7 @@ import { AlertUI } from '@/component/common/alert/Alert.tsx';
 import { PATH_COLOR } from '@/lib/constants/canvasConstants.ts';
 
 export const GuestView = () => {
-  const { lat, lng, alpha, error, updateLocation } = getUserLocation();
-
+  const { lat, lng, alpha, error } = getUserLocation();
   const location = useLocation();
   const navigate = useNavigate(); // 네비게이션 훅 추가
 
@@ -31,6 +30,33 @@ export const GuestView = () => {
   const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false); // 오류 알림 상태 추가
 
   const wsRef = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    const requestOrientationPermission = async () => {
+      const DeviceOrientationEventTyped =
+        DeviceOrientationEvent as unknown as IDeviceOrientationEventWithPermission;
+
+      if (
+        typeof DeviceOrientationEventTyped !== 'undefined' &&
+        typeof DeviceOrientationEventTyped.requestPermission === 'function'
+      ) {
+        try {
+          const permission = await DeviceOrientationEventTyped.requestPermission();
+          if (permission === 'granted') {
+            console.log('Device Orientation permission granted.');
+          } else {
+            console.error('Device Orientation permission denied.');
+          }
+        } catch {
+          console.error('Failed to request Device Orientation permission:');
+        }
+      } else {
+        console.warn('DeviceOrientationEvent.requestPermission is not supported on this browser.');
+      }
+    };
+
+    requestOrientationPermission();
+  }, []);
 
   useEffect(() => {
     // 소켓 연결 초기화
@@ -59,14 +85,6 @@ export const GuestView = () => {
       );
     }
   }, [lat, lng, alpha]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateLocation();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [updateLocation]);
 
   const transformTypeGuestEntityToIGuest = (props: guestEntity | undefined): IGuest => {
     return {
