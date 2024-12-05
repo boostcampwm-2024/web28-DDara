@@ -14,6 +14,7 @@ import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { zoomMapView } from '@/utils/map/mapUtils';
 import { ICluster, useCluster } from '@/hooks/useCluster';
+import { MIN_ZOOM } from '@/lib/constants/mapConstants.ts';
 
 export const MapCanvasForDraw = ({
   width,
@@ -69,7 +70,7 @@ export const MapCanvasForDraw = ({
     const mapInstance = new naver.maps.Map(mapRef.current, {
       center: new naver.maps.LatLng(initialCenter.lat, initialCenter.lng),
       zoom: initialZoom,
-      minZoom: 7,
+      minZoom: MIN_ZOOM,
       maxBounds: new naver.maps.LatLngBounds(
         new naver.maps.LatLng(33.0, 124.5),
         new naver.maps.LatLng(38.9, 131.9),

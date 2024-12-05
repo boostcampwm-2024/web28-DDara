@@ -12,3 +12,5 @@ export const DEFAULT_CENTER = {
 
 export const MIN_ZOOM = 7; // 대한민국 전체가 보이는 최소 줌 레벨
 export const MAX_ZOOM = 19; // 네이버 지도 최대 줌 레벨
+
+export const DEFAULT_ZOOM = 18;

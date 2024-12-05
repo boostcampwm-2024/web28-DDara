@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { MapCanvasForDraw } from '@/component/canvasWithMap/canvasWithMapforDraw/MapCanvasForDraw.tsx';
-import { DEFAULT_CENTER } from '@/lib/constants/mapConstants.ts';
+import { DEFAULT_CENTER, DEFAULT_ZOOM } from '@/lib/constants/mapConstants.ts';
 import { ICanvasScreenProps } from '@/lib/types/canvasInterface.ts';
 
 export const MapProviderForDraw = ({ width, height }: ICanvasScreenProps) => {
@@ -48,7 +48,7 @@ export const MapProviderForDraw = ({ width, height }: ICanvasScreenProps) => {
       width={windowSize.width}
       height={windowSize.height}
       initialCenter={DEFAULT_CENTER}
-      initialZoom={7}
+      initialZoom={DEFAULT_ZOOM}
     />
   );
 };
