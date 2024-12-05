@@ -58,7 +58,7 @@ export const BottomSheet = ({
 
   return (
     <div
-      className="transition-height absolute bottom-0 left-0 right-0 rounded-t-2xl bg-white shadow-lg duration-700 ease-out"
+      className="transition-height absolute bottom-0 left-0 right-0 overflow-hidden rounded-t-2xl bg-white shadow-lg duration-700 ease-out"
       style={{
         backgroundColor: `${backgroundColor}`,
         height: `${sheetHeight * 100}vh`,
