@@ -81,18 +81,6 @@ export const MapCanvasForDraw = ({
     setMap(mapInstance);
     setProjection(mapInstance.getProjection());
 
-    // TODO: 필요 없을 것으로 예상, 혹시나해서 남겨둔 것이니 필요 없다 판단되면 제거 필요
-    // naver.maps.Event.addListener(mapInstance, 'zoom_changed', () => {
-    //   setProjection(mapInstance.getProjection());
-    //   updateCanvasSize();
-    //   redrawCanvas();
-    // });
-    //
-    // naver.maps.Event.addListener(mapInstance, 'center_changed', () => {
-    //   setProjection(mapInstance.getProjection());
-    //   redrawCanvas();
-    // });
-
     return () => {
       mapInstance.destroy();
     };
