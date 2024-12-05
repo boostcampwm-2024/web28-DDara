@@ -182,7 +182,7 @@ export const Main = () => {
   return (
     <ToggleProvider>
       <div className="flex flex-col overflow-hidden">
-        <header className="absolute left-0 right-0 top-0 z-10 flex justify-between p-4">
+        <header className="absolute left-0 right-0 top-0 z-[5100] flex justify-between p-4">
           <button
             type="button"
             onClick={handleOnBoardingButton}
