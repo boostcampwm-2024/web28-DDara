@@ -40,7 +40,7 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
       return () => {
         mapInstance.destroy();
       };
-    }, [lat, lng]);
+    }, []);
 
     useImperativeHandle(ref, () => map as naver.maps.Map);
 
