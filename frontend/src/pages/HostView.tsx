@@ -231,6 +231,7 @@ export const HostView = () => {
               guests={mapProps}
               otherLocations={filteredOtherLocations}
               ref={mapRef}
+              isMain={false}
             />
           ) : (
             <LoadingSpinner />

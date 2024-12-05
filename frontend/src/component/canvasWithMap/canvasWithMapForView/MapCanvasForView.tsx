@@ -5,9 +5,13 @@ import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 import { ICluster, useCluster } from '@/hooks/useCluster';
 import { SetCurruntLocationButton } from '@/component/setCurrentLocationButton/SetCurrentLocationButton';
+import { DEFAULT_ZOOM, MIN_ZOOM } from '@/lib/constants/mapConstants.ts';
 
 export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasViewProps>(
-  ({ lat, lng, alpha, otherLocations, guests, width, height }: IMapCanvasViewProps, ref) => {
+  (
+    { lat, lng, alpha, otherLocations, guests, width, height, isMain }: IMapCanvasViewProps,
+    ref,
+  ) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [projection, setProjection] = useState<naver.maps.MapSystemProjection | null>(null);
@@ -21,8 +25,8 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
 
       const mapInstance = new naver.maps.Map(mapRef.current, {
         center: new naver.maps.LatLng(lat, lng),
-        zoom: 10,
-        minZoom: 7,
+        zoom: DEFAULT_ZOOM,
+        minZoom: MIN_ZOOM,
         maxBounds: new naver.maps.LatLngBounds(
           new naver.maps.LatLng(33.0, 124.5),
           new naver.maps.LatLng(38.9, 131.9),
@@ -167,7 +171,7 @@ export const MapCanvasForView = forwardRef<naver.maps.Map | null, IMapCanvasView
         >
           <ZoomSlider map={map} redrawCanvas={redrawCanvas} />
         </div>
-        <SetCurruntLocationButton map={map} lat={lat} lng={lng} />
+        {!isMain && <SetCurruntLocationButton map={map} lat={lat} lng={lng} />}
       </div>
     );
   },

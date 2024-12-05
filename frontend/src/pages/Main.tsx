@@ -202,6 +202,7 @@ export const Main = () => {
                 alpha={alpha}
                 ref={mapRef}
                 otherLocations={otherLocations}
+                isMain
               />
             ) : (
               <LoadingSpinner />
@@ -236,7 +237,7 @@ export const Main = () => {
                 <hr className="my-2" />
               </Fragment>
             ))}
-            <div className="h-20" />
+            <div className="h-10" />
           </BottomSheet>
         ) : (
           <BottomSheet

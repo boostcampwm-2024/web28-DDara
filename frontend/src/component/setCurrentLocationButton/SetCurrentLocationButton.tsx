@@ -21,7 +21,7 @@ export const SetCurruntLocationButton = (props: ISetCurruntLocationButton) => {
       type="button"
       onClick={() => handleCurrentLocationButton()}
       className={classNames(
-        'bg-blueGray-800 shadow-floatButton absolute flex h-12 w-12 items-center justify-center rounded-full text-white transition-all duration-300',
+        'bg-blueGray-800 shadow-floatButton absolute z-[5000] flex h-12 w-12 items-center justify-center rounded-full text-white',
         props.isMain ? 'bottom-2 left-2' : 'bottom-5 left-5',
       )}
     >
