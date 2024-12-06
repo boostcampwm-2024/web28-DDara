@@ -113,3 +113,7 @@ export class getGuestResEntity {
 
   guest: guestEntity | undefined;
 }
+
+export class deleteChannelResEntity {
+  id: string | undefined;
+}

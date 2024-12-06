@@ -13,6 +13,9 @@ import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
 import { ZoomSlider } from '@/component/zoomslider/ZoomSlider';
 import { useRedrawCanvas } from '@/hooks/useRedraw';
 import { zoomMapView } from '@/utils/map/mapUtils';
+import { ICluster, useCluster } from '@/hooks/useCluster';
+import { MIN_ZOOM } from '@/lib/constants/mapConstants.ts';
+import { getUserLocation } from '@/hooks/getUserLocation.ts';
 
 export const MapCanvasForDraw = ({
   width,
@@ -20,6 +23,8 @@ export const MapCanvasForDraw = ({
   initialCenter,
   initialZoom,
 }: IMapCanvasProps) => {
+  const { lat, lng } = getUserLocation();
+
   const mapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [projection, setProjection] = useState<naver.maps.MapSystemProjection | null>(null);
@@ -33,6 +38,9 @@ export const MapCanvasForDraw = ({
   const { pathPoints, addPoint, undo, redo, undoStack, redoStack } = useUndoRedo([]);
 
   const { setCurrentUser } = useContext(CurrentUserContext);
+
+  const { createClusters } = useCluster();
+  const [clusters, setClusters] = useState<ICluster[]>([]);
 
   useEffect(() => {
     const updateUser = () => {
@@ -63,9 +71,9 @@ export const MapCanvasForDraw = ({
     if (!mapRef.current) return;
 
     const mapInstance = new naver.maps.Map(mapRef.current, {
-      center: new naver.maps.LatLng(initialCenter.lat, initialCenter.lng),
+      center: new naver.maps.LatLng(lat || initialCenter.lat, lng || initialCenter.lng),
       zoom: initialZoom,
-      minZoom: 7,
+      minZoom: MIN_ZOOM,
       maxBounds: new naver.maps.LatLngBounds(
         new naver.maps.LatLng(33.0, 124.5),
         new naver.maps.LatLng(38.9, 131.9),
@@ -75,18 +83,6 @@ export const MapCanvasForDraw = ({
 
     setMap(mapInstance);
     setProjection(mapInstance.getProjection());
-
-    // TODO: 필요 없을 것으로 예상, 혹시나해서 남겨둔 것이니 필요 없다 판단되면 제거 필요
-    // naver.maps.Event.addListener(mapInstance, 'zoom_changed', () => {
-    //   setProjection(mapInstance.getProjection());
-    //   updateCanvasSize();
-    //   redrawCanvas();
-    // });
-    //
-    // naver.maps.Event.addListener(mapInstance, 'center_changed', () => {
-    //   setProjection(mapInstance.getProjection());
-    //   redrawCanvas();
-    // });
 
     return () => {
       mapInstance.destroy();
@@ -138,6 +134,7 @@ export const MapCanvasForDraw = ({
     startMarker,
     endMarker,
     pathPoints,
+    clusters,
   });
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -238,11 +235,11 @@ export const MapCanvasForDraw = ({
   }, [map]);
 
   useEffect(() => {
-    if (startMarker && endMarker) {
-      const markers = [];
-
-      if (startMarker) markers.push(startMarker);
-      if (endMarker) markers.push(endMarker);
+    if (startMarker && endMarker && map) {
+      const markers = [
+        { lat: startMarker.lat, lng: startMarker.lng },
+        { lat: endMarker.lat, lng: endMarker.lng },
+      ];
 
       zoomMapView(map, markers);
     } else {
@@ -258,8 +255,23 @@ export const MapCanvasForDraw = ({
   }, [startMarker, endMarker]);
 
   useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (startMarker && endMarker && map) {
+        const markers = [
+          { lat: startMarker.lat, lng: startMarker.lng },
+          { lat: endMarker.lat, lng: endMarker.lng },
+        ];
+
+        const createdClusters = createClusters(markers, { color: '#333C4A' }, map);
+        setClusters(createdClusters);
+      }
+    }, 100);
+
+    return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 클리어
+  }, [startMarker, endMarker, map]);
+  useEffect(() => {
     redrawCanvas();
-  }, [startMarker, endMarker, pathPoints, map, undoStack, redoStack]);
+  }, [startMarker, endMarker, clusters, pathPoints, map, undoStack, redoStack]);
 
   return (
     <div

@@ -53,4 +53,5 @@ export interface IMapCanvasViewProps {
   guests?: IGuestDataInMapProps[] | null;
   width: string;
   height: string;
+  isMain: boolean;
 }

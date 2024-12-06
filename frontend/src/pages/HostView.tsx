@@ -48,6 +48,7 @@ export const HostView = () => {
     const token = uuidv4();
     saveLocalData(AppConfig.KEYS.BROWSER_TOKEN, token);
   }
+
   const token = loadLocalData(AppConfig.KEYS.BROWSER_TOKEN);
   const url = `${AppConfig.SOCKET_SERVER}/?token=${token}&channelId=${location.pathname.split('/')[2]}&role=host`;
 
@@ -230,6 +231,7 @@ export const HostView = () => {
               guests={mapProps}
               otherLocations={filteredOtherLocations}
               ref={mapRef}
+              isMain={false}
             />
           ) : (
             <LoadingSpinner />

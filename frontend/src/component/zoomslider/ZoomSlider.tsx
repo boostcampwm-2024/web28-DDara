@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MdOutlineAdd, MdRemove } from 'react-icons/md';
+import './ZoomSlider.css';
 
 interface IZoomSliderProps {
   /** Naver 지도 객체 */
@@ -28,29 +29,41 @@ const ZoomButton = ({ label, onClick }: IZoomButtonProps) => (
   </button>
 );
 
-const ZoomSliderInput = ({ zoomLevel, onSliderChange }: IZoomSliderInputProps) => (
-  <div className="relative flex w-[130px] flex-grow items-center justify-center px-1">
-    <input
-      type="range"
-      min="6"
-      max="22"
-      value={zoomLevel}
-      onChange={onSliderChange}
-      className="h-1 w-full rounded-full"
-      style={{
-        transform: 'rotate(-90deg)',
-        transformOrigin: 'center',
-      }}
-    />
-    <div
-      className="absolute flex items-center justify-center"
-      style={{
-        height: '100%',
-        bottom: 0,
-      }}
-    />
-  </div>
-);
+const ZoomSliderInput = ({ zoomLevel, onSliderChange }: IZoomSliderInputProps) => {
+  const minZoom = 6;
+  const maxZoom = 22;
+
+  const getBackgroundStyle = () => {
+    const gradientValue = ((zoomLevel - minZoom) / (maxZoom - minZoom)) * 100;
+    return `linear-gradient(to right, #333C4A 0%, #333C4A ${gradientValue}%, #ececec ${gradientValue}%, #ececec 100%)`;
+  };
+
+  return (
+    <div className="range-slider-container relative flex w-[130px] flex-grow items-center justify-center px-1">
+      <input
+        id="rangeInput"
+        type="range"
+        min={minZoom}
+        max={maxZoom}
+        value={zoomLevel}
+        onChange={onSliderChange}
+        className="rangeInput h-1 w-full appearance-none rounded-full focus:outline-none"
+        style={{
+          background: getBackgroundStyle(),
+          transform: 'rotate(-90deg)',
+          transformOrigin: 'center',
+        }}
+      />
+      <div
+        className="absolute flex items-center justify-center"
+        style={{
+          height: '100%',
+          bottom: 0,
+        }}
+      />
+    </div>
+  );
+};
 
 export const ZoomSlider = ({ map, redrawCanvas }: IZoomSliderProps) => {
   const [zoomLevel, setZoomLevel] = useState(map?.getZoom() ?? 10);
@@ -82,8 +95,25 @@ export const ZoomSlider = ({ map, redrawCanvas }: IZoomSliderProps) => {
     }
   };
 
+  const handleTouchStart = (event: React.TouchEvent) => {
+    event.stopPropagation();
+  };
+
+  const handleTouchMove = (event: React.TouchEvent) => {
+    event.stopPropagation();
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent) => {
+    event.stopPropagation();
+  };
+
   return (
-    <div className="flex h-48 w-9 flex-col items-center rounded bg-white shadow">
+    <div
+      className="flex h-48 w-9 flex-col items-center rounded bg-white shadow"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <ZoomButton label={<MdOutlineAdd />} onClick={() => handleZoomChange(1)} />
       <ZoomSliderInput zoomLevel={zoomLevel} onSliderChange={handleSliderChange} />
       <ZoomButton label={<MdRemove />} onClick={() => handleZoomChange(-1)} />

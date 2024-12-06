@@ -47,6 +47,7 @@ export const AddChannel = () => {
     setFooterOnClick,
     resetFooterContext,
   } = useContext(FooterContext);
+
   const navigate = useNavigate();
   const goToMainPage = () => {
     navigate('/');
@@ -94,6 +95,9 @@ export const AddChannel = () => {
       user.marker_style.color !== ''
     );
   };
+  const isChannelNameComplete = (): boolean => {
+    return channelName.trim() !== '';
+  };
 
   /**
    * 사용자 추가 함수
@@ -119,8 +123,15 @@ export const AddChannel = () => {
       .map((user, i) => ({
         ...user,
         index: i + 1,
-        name: `사용자${i + 1}`,
+        name: user.name || `사용자${i + 1}`,
       }));
+    setUsers(updatedUsers);
+  };
+
+  const setUserName = (index: number, newName: string) => {
+    const updatedUsers = users.map(user =>
+      user.index === index ? { ...user, name: newName } : user,
+    );
     setUsers(updatedUsers);
   };
 
@@ -139,21 +150,25 @@ export const AddChannel = () => {
       addUser(); // users가 비어있다면 기본 사용자 추가
     }
     const allUsersComplete = users.every(isUserDataComplete);
-
     // 모든 사용자가 완전한 데이터라면 Footer를 활성화
-    if (allUsersComplete) {
+    if (allUsersComplete && isChannelNameComplete()) {
       setFooterActive(buttonActiveType.ACTIVE);
     } else {
       setFooterActive(buttonActiveType.PASSIVE);
     }
-  }, [users, setFooterActive]); // users가 변경될 때마다 실행
+  }, [users, setFooterActive, channelName]); // users가 변경될 때마다 실행
 
   const createChannelAPI = async () => {
     try {
       const userId = loadLocalData(AppConfig.KEYS.LOGIN_USER);
+
+      if (!userId) {
+        console.error('유효하지 않은 사용자 ID입니다.');
+        return;
+      }
       const channelData: createChannelReqEntity = {
         name: channelName,
-        host_id: userId ?? undefined, // 추후 검증 로직 추가 예정
+        host_id: userId, // 추후 검증 로직 추가 예정
         guests: users.map(user => ({
           name: user.name,
           start_location: {
@@ -173,8 +188,9 @@ export const AddChannel = () => {
           marker_style: user.marker_style,
         })),
       };
-      const response = await createChannel(channelData);
-      console.log('채널 생성 성공:', response);
+
+      const res = await createChannel(channelData);
+      console.log(res.resultMsg);
     } catch (error) {
       console.error('채널 생성 실패:', error);
     }
@@ -200,9 +216,14 @@ export const AddChannel = () => {
         {users.map(user => (
           <div key={user.index}>
             {isUserDataComplete(user) ? (
-              <RouteResultButton user={user} deleteUser={deleteUser} page={Page.ADD} />
+              <RouteResultButton
+                user={user}
+                setUserName={setUserName}
+                deleteUser={deleteUser}
+                page={Page.ADD}
+              />
             ) : (
-              <RouteSettingButton user={user} deleteUser={deleteUser} />
+              <RouteSettingButton user={user} setUserName={setUserName} deleteUser={deleteUser} />
             )}
           </div>
         ))}
