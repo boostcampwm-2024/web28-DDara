@@ -55,7 +55,7 @@
 
 <br />
 
-[🗺️ 지도와 캔버스 연동을 위한 고민 스토리 바로가기](https://velog.io/@happyhyep/%EC%A7%80%EB%8F%84%EC%99%80-%ED%95%A8%EA%BB%98-%EC%9B%80%EC%A7%81%EC%9D%B4%EB%8A%94-%EC%BA%94%EB%B2%84%EC%8A%A4-%EA%B5%AC%ED%98%84-%EC%8A%A4%ED%86%A0%EB%A6%AC)
+[🗺️ 지도와 캔버스 연동을 위한 고민 스토리 바로가기](https://harsh-flier-3c0.notion.site/45f04fb981a74d55a3eb5b7326a61549?pvs=4)
 
 
 
@@ -90,7 +90,7 @@
 
 <br />
 
-[🔌 실시간 위치 파악 구현을 위한 고민 스토리](https://velog.io/@happyhyep/%EC%8B%A4%EC%8B%9C%EA%B0%84-%EC%86%8C%EC%BC%93-%ED%86%B5%EC%8B%A0%EC%9D%98-%EB%8F%84%EC%A0%84%EA%B8%B0-%EB%8B%A4%EC%96%91%ED%95%9C-%EC%A1%B0%EA%B1%B4%EC%9D%B4-%EC%A1%B4%EC%9E%AC%ED%95%98%EB%8A%94-%ED%86%B5%EC%8B%A0)
+[🔌 실시간 위치 파악 구현을 위한 고민 스토리](https://harsh-flier-3c0.notion.site/feat-2b5c2ffeceeb4269b2959632969b97fd?pvs=4)
 
 <br /><br />
 
