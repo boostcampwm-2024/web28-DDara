@@ -91,10 +91,12 @@
 
 - 캔버스 위에 그려둔 그림은 지도(캔버스)를 이동하거나 확대/축소하더라도 그린 위치(지도 기준)에 그대로 존재해야 함
 
-<br /><br />
-
+<br />
 <div align="center">
   <img width="800" alt="image" src="https://github.com/user-attachments/assets/4c9d25bc-89a5-4430-8e16-30ef78a1a9be" />
+  <br /><br />
+
+
 <img width="40%" alt="image" src="https://github.com/user-attachments/assets/a1cc5824-f30f-4e11-9cfc-b9279fc13e0d" />
 <img width="40%" alt="image" src="https://github.com/user-attachments/assets/63590a47-7b52-4413-8732-313a8dac58ff" />
 </div>
