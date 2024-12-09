@@ -24,6 +24,63 @@
 
 ![image](https://github.com/user-attachments/assets/55dacfcb-07b8-4c96-9c33-b35e13b42ecc)
 
+<br /><br />
+
+# ✨ 서비스 소개
+
+### 📳 온보딩 페이지
+
+
+<img height="400" alt="image" src="https://github.com/user-attachments/assets/f526a900-c892-4805-bebb-ec15c2f51c1f" />
+
+### 📳 회원가입/로그인
+
+|회원가입|로그인|
+|:--:|:--:|
+|<img height="400" alt="image" src="https://github.com/user-attachments/assets/4fb674a3-63e5-44c9-9bad-c7f271572b2d" />|<img height="400" alt="image" src="https://github.com/user-attachments/assets/95dd3604-71ea-4360-b82d-ba0c53f15e2c" />|
+
+### 📳 채널 생성 (호스트 기준)
+
+
+<img height="400" alt="image" src="https://github.com/user-attachments/assets/c408bed8-5108-497b-a54d-bb2eb0c78b92" />
+
+### 📳 채널 공유 (호스트 기준)
+
+<img height="400" alt="image" src="https://github.com/user-attachments/assets/695fab45-43fb-49a3-8984-e98b00afd2ff" />
+
+### 📳 채널 접속 (게스트 기준)
+
+|주원님 (게스트1) 화면|동율님 (게스트2) 화면|재도님 (게스트3) 화면|
+|:--:|:--:|:--:|
+|<img height="400" alt="image" src="https://github.com/user-attachments/assets/ae5acd50-f32b-4e11-98b8-1ab739b28a8e" />|<img height="400" alt="image" src="https://github.com/user-attachments/assets/0227abad-3059-43b2-99f0-0ddeafdb7ba6" />|<img height="400" alt="image" src="https://github.com/user-attachments/assets/7b3026ac-c7a8-4164-90d5-3235e9309388" />|
+
+
+
+
+### 📳 채널 및 게스트 현황 확인 (호스트 기준)
+
+|사용자 별로 필터링해서 보기|사용자 위치/방향 실시간 확인|
+|:--:|:--:|
+|<img height="400" alt="image" src="https://github.com/user-attachments/assets/05c0b0cc-1b35-4922-9f38-78123b71a9c2" />|<img height="400" alt="image" src="https://github.com/user-attachments/assets/ff7cc1b4-bd0a-4d61-ab85-fbd7e2a5d842" />|
+
+
+
+### 📳 모바일 접속시 데스크탑으로 유도
+
+<img height="400" alt="image" src="https://github.com/user-attachments/assets/4afb0401-dc24-4ada-9f79-60e1c495336c" />
+
+
+### 📳 메인 페이지로 리다이렉션
+
+|존재하지 않는 url 접속시|로그인하지 않았을 시|
+|:--:|:--:|
+|<img height="400" alt="image" src="https://github.com/user-attachments/assets/7aec458b-67a8-410e-825e-c54126ff6f02" />|<img height="400" alt="image" src="https://github.com/user-attachments/assets/16a27076-1d22-474f-950e-e2de1a48452f" />|
+
+### 📳 게스트가 이동 중일 때 호스트와 게스트 화면 비교
+
+|동율님(게스트)을 보고 있는 호스트 화면|동율님 (게스트) 실시간 위치와 방향 화면|
+|:--:|:--:|
+|<img height="400" alt="image" src="https://github.com/user-attachments/assets/3d8ffce1-c43c-43ab-8ed1-f38a83ebb863" />|<img height="400" alt="image" src="https://github.com/user-attachments/assets/47e49e76-f448-4019-836f-d0012ced8e29" />|
 
 
 <br /><br />
